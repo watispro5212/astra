@@ -1,0 +1,21 @@
+import os
+from typing import Optional
+from dotenv import load_dotenv
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+load_dotenv()
+
+class Config(BaseSettings):
+    """Configuration model for Astra Discord Bot."""
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
+
+    discord_token: str
+    guild_id: Optional[int] = None
+    
+    bot_name: str = "Astra"
+    bot_theme_color: int = 0x3498db
+    
+    database_url: str = "sqlite:///./data/astra.db"
+
+# Global config instance
+config = Config()
