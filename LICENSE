@@ -1,0 +1,84 @@
+ASTRA COMMUNITY LICENSE (ACL)
+Version 1.0 — April 2026
+
+Copyright (c) 2026 watispro5212 (Discord: watispro1)
+https://github.com/watispro5212
+
+---
+
+TERMS AND CONDITIONS
+
+1. DEFINITIONS
+
+   "Software" refers to the Astra Discord bot, including all source code, configuration
+   files, documentation, assets, and any associated materials in this repository.
+
+   "Author" refers to watispro5212, the sole copyright holder of this Software.
+
+   "You" refers to any individual or entity accessing, using, or distributing this Software.
+
+2. GRANT OF USE
+
+   Permission is hereby granted, free of charge, to any individual to:
+
+   (a) Download and use this Software for personal, non-commercial, self-hosted purposes.
+   (b) Review and study the source code for educational purposes.
+   (c) Submit bug reports and contributions via pull requests (subject to Author review).
+
+3. CONDITIONS
+
+   Any permitted use of this Software is subject to the following conditions:
+
+   (a) ATTRIBUTION — All copies, forks, or deployments of this Software must clearly
+       credit the original Author ("watispro5212") in any public-facing documentation,
+       README, or bot "about" output. Removing or obscuring attribution is prohibited.
+
+   (b) NO COMMERCIAL USE — You may not sell, license, rent, or otherwise monetise this
+       Software or any derivative work without explicit written permission from the Author.
+
+   (c) NO REDISTRIBUTION — You may not redistribute, re-publish, or re-upload this
+       Software (in whole or in part) to any public package registry, marketplace, or
+       GitHub repository as your own project without explicit written permission from
+       the Author.
+
+   (d) NO WARRANTY REMOVAL — This license notice must be included in all copies or
+       substantial portions of the Software.
+
+4. CONTRIBUTIONS
+
+   By submitting a pull request or contribution to this repository, you agree that your
+   contribution is made under the same terms as this license, and you grant the Author
+   a perpetual, irrevocable, royalty-free license to use, modify, and distribute your
+   contribution as part of this Software.
+
+5. MODIFICATIONS FOR PERSONAL USE
+
+   You may modify this Software for your own self-hosted instance. Modified versions
+   must not be represented as the official Astra release and must not be distributed
+   to third parties without the Author's written consent.
+
+6. DISCLAIMER OF WARRANTY
+
+   THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+   INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+   PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
+
+   IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY,
+   WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN
+   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+7. TERMINATION
+
+   Your rights under this license will terminate automatically if you fail to comply with
+   any of its terms. Upon termination, you must cease all use and destroy all copies of
+   the Software in your possession.
+
+8. CONTACT
+
+   For commercial licensing inquiries, special permissions, or any other questions,
+   contact the Author via GitHub:
+   https://github.com/watispro5212
+
+---
+
+By using this Software, you agree to these terms.
