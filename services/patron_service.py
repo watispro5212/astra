@@ -12,7 +12,7 @@ class PatronService:
         if user_id in self._cache:
             return self._cache[user_id]
 
-        row = await db.fetch_one("SELECT tier, expires_at FROM patrons WHERE user_id = ?", user_id)
+        row = await db.fetch_one("SELECT tier, expires_at, premium_color, custom_badge FROM patrons WHERE user_id = ?", user_id)
         if not row:
             self._cache[user_id] = None
             return None
@@ -25,7 +25,12 @@ class PatronService:
                 self._cache[user_id] = None
                 return None
 
-        data = {"tier": row['tier'], "expires_at": row['expires_at']}
+        data = {
+            "tier": row['tier'], 
+            "expires_at": row['expires_at'],
+            "premium_color": row['premium_color'],
+            "custom_badge": row['custom_badge']
+        }
         self._cache[user_id] = data
         return data
 
@@ -51,17 +56,42 @@ class PatronService:
             del self._cache[user_id]
 
     async def get_multiplier(self, user_id: int) -> float:
-        """Returns the XP multiplier based on tier."""
+        """Returns the XP multiplier based on tier (Buffed v3)."""
         patron = await self.get_patron(user_id)
         if not patron:
             return 1.0
         
         multipliers = {
-            1: 1.5, # Supporter
-            2: 2.0, # Patron
-            3: 3.0  # Elite
+            1: 2.5, # Orbit (Supporter)
+            2: 4.5, # Stellar (Elite)
+            3: 7.0  # Galactic (Ultra Prestige)
         }
         return multipliers.get(patron['tier'], 1.0)
+
+    async def get_cooldown_adjustment(self, user_id: int) -> float:
+        """Returns the XP cooldown reduction multiplier (e.g. 0.5 = half cooldown)."""
+        patron = await self.get_patron(user_id)
+        if not patron:
+            return 1.0
+            
+        # Reductions: Tier 1 (15%), Tier 2 (35%), Tier 3 (60%)
+        reductions = {
+            1: 0.85, 
+            2: 0.65, 
+            3: 0.40  
+        }
+        return reductions.get(patron['tier'], 1.0)
+
+    async def update_customization(self, user_id: int, color: Optional[str] = None, badge: Optional[str] = None):
+        """Updates a patron's visual identity fields."""
+        if color:
+            await db.execute("UPDATE patrons SET premium_color = ? WHERE user_id = ?", color, user_id)
+        if badge:
+            await db.execute("UPDATE patrons SET custom_badge = ? WHERE user_id = ?", badge, user_id)
+        
+        # Clear cache
+        if user_id in self._cache:
+            del self._cache[user_id]
 
     # ── ELITE GALLERY LOGIC ───────────────────────────────────────────────────
 

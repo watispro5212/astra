@@ -72,6 +72,10 @@ class Leveling(commands.Cog):
         await interaction.response.defer()
         target = member or interaction.user
         
+        # Patron Identity Fetch
+        from services.patron_service import patron_service
+        patron_data = await patron_service.get_patron(target.id)
+        
         xp, level, rank_pos = await xp_service.get_rank(target.id, interaction.guild_id)
         
         # Calculate progress to next level
@@ -88,12 +92,18 @@ class Leveling(commands.Cog):
         filled = int((percentage / 100) * segments)
         bar = "▰" * filled + "▱" * (segments - filled)
         
-        embed = AstraEmbed(title=f"Rank: {target.display_name}")
+        embed = AstraEmbed(title=f"Rank: {target.display_name}", patron=patron_data)
         embed.set_thumbnail(url=target.display_avatar.url)
         
         embed.add_field(name="Level", value=f"**{level}**", inline=True)
         embed.add_field(name="Rank", value=f"**#{rank_pos}**" if rank_pos else "N/A", inline=True)
-        embed.add_field(name="Total XP", value=f"{xp:,}", inline=True)
+        
+        if patron_data:
+            tier_names = {1: "Orbit", 2: "Stellar", 3: "Galactic"}
+            badge = patron_data.get('custom_badge') or ("💠" if patron_data['tier'] == 3 else "⭐" if patron_data['tier'] == 2 else "💎")
+            embed.add_field(name="Patronage", value=f"{badge} **{tier_names.get(patron_data['tier'], 'Supporter')}**", inline=True)
+        else:
+            embed.add_field(name="Total XP", value=f"{xp:,}", inline=True)
         
         embed.add_field(
             name=f"Progress to Level {level + 1}", 

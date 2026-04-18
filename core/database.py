@@ -264,9 +264,13 @@ class DatabaseManager:
                 user_id INTEGER PRIMARY KEY,
                 tier INTEGER DEFAULT 0,
                 expires_at DATETIME,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                premium_color TEXT,
+                custom_badge TEXT
             )
         """)
+        await self._safe_add_column("patrons", "premium_color", "TEXT")
+        await self._safe_add_column("patrons", "custom_badge", "TEXT")
 
         # ── ELITE GALLERY (v4) ────────────────────────────────────────────────
         await self.connection.execute("""

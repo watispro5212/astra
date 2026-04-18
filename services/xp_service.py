@@ -28,10 +28,13 @@ class XPService:
         if not guild_data or not guild_data['xp_enabled']:
             return False
 
-        # Check cooldown
+        # Check cooldown with Patron adjustment
+        cooldown_multiplier = await patron_service.get_cooldown_adjustment(user_id)
+        adjusted_cooldown = guild_data['xp_cooldown'] * cooldown_multiplier
+        
         last_time = self.cooldowns.get((user_id, guild_id))
         now = datetime.now()
-        if last_time and now < last_time + timedelta(seconds=guild_data['xp_cooldown']):
+        if last_time and now < last_time + timedelta(seconds=adjusted_cooldown):
             return False
 
         # Award XP with Patron Multiplier

@@ -112,10 +112,40 @@ class Patron(commands.Cog):
 
         embed = AstraEmbed(
             title="💎 Your Patron Status",
-            description=f"**Tier:** {tier} ({self.tier_roles.get(tier, 'Unknown')})\n**Status:** Active\n**{expiry_str}**"
+            description=f"**Tier:** {tier} ({self.tier_roles.get(tier, 'Unknown')})\n**Status:** Active\n**{expiry_str}**",
+            patron=status
         )
         embed.set_thumbnail(url=interaction.user.display_avatar.url)
         await interaction.response.send_message(embed=embed, ephemeral=True)
+
+    # ── CUSTOMIZATION COMMANDS ────────────────────────────────────────────────
+    
+    patron_customize = app_commands.Group(name="customize", description="Supporter-only profile customization.")
+
+    @patron_customize.command(name="color", description="💎 Tier 2+: Set a custom hex color for your bot embeds.")
+    @app_commands.describe(hex_code="The hex color code (e.g. #FF0000 or FF0000).")
+    async def customize_color(self, interaction: discord.Interaction, hex_code: str):
+        patron = await patron_service.get_patron(interaction.user.id)
+        if not patron or patron['tier'] < 2:
+            return await interaction.response.send_message("❌ This feature is reserved for **Stellar** patrons and above!", ephemeral=True)
+            
+        # Clean hex code
+        clean_hex = hex_code.strip().replace("#", "")
+        if len(clean_hex) != 6 or not all(c in "0123456789ABCDEFabcdef" for c in clean_hex):
+            return await interaction.response.send_message("❌ Invalid hex code! Please use format: `#FFFFFF` or `FFFFFF`.", ephemeral=True)
+            
+        await patron_service.update_customization(interaction.user.id, color=f"#{clean_hex}")
+        await interaction.response.send_message(embed=SuccessEmbed(f"Your profile theme color has been set to `#{clean_hex}`!"), ephemeral=True)
+
+    @patron_customize.command(name="badge", description="🌌 Tier 3: Choose an elite badge for your rank card.")
+    @app_commands.describe(badge="The emoji or icon for your badge.")
+    async def customize_badge(self, interaction: discord.Interaction, badge: str):
+        patron = await patron_service.get_patron(interaction.user.id)
+        if not patron or patron['tier'] < 3:
+            return await interaction.response.send_message("❌ This feature is reserved for **Galactic** patrons!", ephemeral=True)
+            
+        await patron_service.update_customization(interaction.user.id, badge=badge)
+        await interaction.response.send_message(embed=SuccessEmbed(f"Your custom badge has been set to: {badge}"), ephemeral=True)
 
     # ── ELITE GALLERY COMMANDS ────────────────────────────────────────────────
 
