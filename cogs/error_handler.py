@@ -1,5 +1,11 @@
-from ui.embeds import ErrorEmbed
+import discord
+import logging
 import traceback
+from discord.ext import commands
+from discord import app_commands
+from ui.embeds import ErrorEmbed
+
+logger = logging.getLogger("astra")
 
 class ErrorHandler(commands.Cog):
     """Global error handling for Astra bot."""

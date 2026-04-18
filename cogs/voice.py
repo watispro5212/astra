@@ -31,9 +31,7 @@ class Voice(commands.Cog):
                     except discord.Forbidden:
                         pass
 
-    @app_commands.group(name="voice", description="Manage temporary voice channels.")
-    async def voice_group(self, interaction: discord.Interaction):
-        pass
+    voice_group = app_commands.Group(name="voice", description="Manage temporary voice channels.")
 
     @voice_group.command(name="setup", description="Designate a hub channel (Join-to-Create).")
     @app_commands.describe(channel="The voice channel that will trigger temp VC creation.")

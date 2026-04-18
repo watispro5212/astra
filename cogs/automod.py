@@ -19,11 +19,7 @@ class Automod(commands.Cog):
     async def on_message_edit(self, before: discord.Message, after: discord.Message):
         await automod_service.check_message(after)
 
-    @app_commands.group(name="automod", description="Configure auto-moderation filters.")
-    @app_commands.checks.has_permissions(manage_guild=True)
-    async def automod_group(self, interaction: discord.Interaction):
-        """Automod command group."""
-        pass
+    automod_group = app_commands.Group(name="automod", description="Configure auto-moderation filters.", default_permissions=discord.Permissions(manage_guild=True))
 
     @automod_group.command(name="status", description="View current automod settings.")
     async def automod_status(self, interaction: discord.Interaction):
