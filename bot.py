@@ -95,7 +95,7 @@ class AstraBot(commands.Bot):
                 try:
                     user = self.get_user(rem['user_id']) or await self.fetch_user(rem['user_id'])
                     if user:
-                        await user.send(f"🔔 **Astra Reminder:** {rem['message']}")
+                        await user.send(f"🔔 **Chronos Alert:** Your reminder has been triggered: **{rem['message']}**")
                         logger.info(f"Delivered reminder {rem['id']} to user {rem['user_id']} via DM")
                     else:
                         logger.warning(f"Could not find user {rem['user_id']} for reminder {rem['id']}")
@@ -103,7 +103,7 @@ class AstraBot(commands.Bot):
                     logger.error(f"Failed to deliver reminder {rem['id']} via DM: {e}")
             else:
                 try:
-                    await channel.send(f"🔔 **Reminder for <@{rem['user_id']}>:** {rem['message']}")
+                    await channel.send(f"🔔 **Chronos Alert for <@{rem['user_id']}>:** {rem['message']}")
                     logger.info(f"Delivered reminder {rem['id']} to channel {rem['channel_id']}")
                 except Exception as e:
                     logger.error(f"Failed to send reminder {rem['id']} to channel: {e}")

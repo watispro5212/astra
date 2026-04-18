@@ -45,6 +45,7 @@ class Suggestions(commands.Cog):
         embed.add_field(name="Votes", value="👍 0 | 👎 0", inline=True)
         embed.set_author(name=interaction.user.display_name, icon_url=interaction.user.display_avatar.url)
         embed.color = discord.Color.gold()
+        embed.set_footer(text="🛰️ Mission proposal awaiting command evaluation.")
 
         msg = await channel.send(embed=embed)
         await msg.add_reaction("👍")

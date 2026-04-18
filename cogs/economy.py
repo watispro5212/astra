@@ -47,7 +47,7 @@ class Economy(commands.Cog):
                     embed=ErrorEmbed(f"You already claimed your daily! Come back in **{hours}h {minutes}m**."),
                     ephemeral=True
                 )
-        embed = SuccessEmbed(f"You claimed your daily reward of **{result:,}** coins!")
+        embed = SuccessEmbed(f"💎 **Daily Allowance Unlocked:** You claimed your daily reward of **{result:,}** coins! Invest them wisely.")
         await interaction.response.send_message(embed=embed)
 
     @economy.command(name="work", description="Work to earn some coins (1h cooldown).")
@@ -60,7 +60,7 @@ class Economy(commands.Cog):
                 ephemeral=True
             )
         job = random.choice(WORK_RESPONSES)
-        embed = SuccessEmbed(f"{job} and earned **{result:,}** coins!")
+        embed = SuccessEmbed(f"🛠️ **Shift Completed:** {job} and earned **{result:,}** coins!")
         await interaction.response.send_message(embed=embed)
 
     @economy.command(name="pay", description="Send coins to another member.")

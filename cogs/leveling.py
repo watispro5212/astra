@@ -63,7 +63,7 @@ class Leveling(commands.Cog):
                 if target_channel:
                     channel = target_channel
             
-            embed = SuccessEmbed(f"GG **{message.author.display_name}**, you just reached **Level {level}**!")
+            embed = SuccessEmbed(f"🏆 **Promotion Granted:** GG **{message.author.display_name}**, you've ascended to **Level {level}**! Your influence in the sector is growing.")
             await channel.send(embed=embed)
 
     @app_commands.command(name="rank", description="Check your or another member's rank.")

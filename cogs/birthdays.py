@@ -139,7 +139,7 @@ class Birthdays(commands.Cog):
             channel = guild.get_channel(row["channel_id"])
             if not channel:
                 continue
-            msg = (row["message"] or "Happy Birthday {user}! 🎂").replace("{user}", member.mention)
+            msg = (row["message"] or "🎈 **Plenary Alignment Detected:** Happy Birthday {user}! 🎂 We hope your journey around the sun this year is astronomical!").replace("{user}", member.mention)
             try:
                 await channel.send(msg)
                 if row["role_id"]:

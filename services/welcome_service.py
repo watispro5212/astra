@@ -25,7 +25,7 @@ class WelcomeService:
         if not channel:
             return
 
-        message_text = config['message'] or "Welcome to the server, {user}!"
+        message_text = config['message'] or "Welcome to **{server}**, {user}! 🛰️ You are our **{member_count}th** operative. We're thrilled to have you here!"
         formatted = await self.format_message(message_text, member)
 
         embed = AstraEmbed(
@@ -57,7 +57,7 @@ class WelcomeService:
         if not channel:
             return
 
-        message_text = config['farewell_message'] or "{username} has left the server."
+        message_text = config['farewell_message'] or "Operative **{username}** has departed the sector. 💔 Safety and success on your next mission!"
         formatted = await self.format_message(message_text, member)
 
         embed = AstraEmbed(
