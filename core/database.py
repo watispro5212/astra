@@ -129,6 +129,37 @@ class DatabaseManager:
             )
         """)
 
+        # Starboard Messages Table
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS starboard_messages (
+                original_id INTEGER PRIMARY KEY,
+                starboard_id INTEGER,
+                guild_id INTEGER,
+                star_count INTEGER DEFAULT 0
+            )
+        """)
+
+        # Ticket Configs Table
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS ticket_configs (
+                guild_id INTEGER PRIMARY KEY,
+                category_id INTEGER,
+                staff_role_id INTEGER,
+                log_channel_id INTEGER
+            )
+        """)
+
+        # Tickets Table
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS tickets (
+                channel_id INTEGER PRIMARY KEY,
+                guild_id INTEGER,
+                user_id INTEGER,
+                status TEXT DEFAULT 'open',
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
         await self.connection.commit()
         logger.info("Database tables initialized")
 
