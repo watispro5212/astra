@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commands — Astra Bot</title>
+  <meta name="description" content="Full slash command reference for Astra. Browse commands for moderation, polls, reminders, role menus, tickets, and server configuration.">
+  <meta property="og:title" content="Commands — Astra Bot">
+  <meta property="og:description" content="Complete slash command reference for the Astra Discord bot.">
+  <meta property="og:image" content="assets/images/og-preview.png">
+  <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-radial" aria-hidden="true"></div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <a href="index.html" class="navbar__brand">
+        <img src="assets/images/astra-logo.png" alt="Astra logo" width="36" height="36">
+        Astra
+      </a>
+      <button class="navbar__toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="navbar__links">
+        <a href="index.html" class="navbar__link">Home</a>
+        <a href="features.html" class="navbar__link">Features</a>
+        <a href="commands.html" class="navbar__link active">Commands</a>
+        <a href="support.html" class="navbar__link">Support</a>
+        <a href="faq.html" class="navbar__link">FAQ</a>
+        <span class="navbar__cta">
+          <a href="#" class="btn btn--primary btn--small">Invite Astra</a>
+        </span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <header class="page-header">
+    <div class="container">
+      <h1 class="animate-on-scroll"><span class="text-gradient">Commands</span></h1>
+      <p class="animate-on-scroll">All of Astra's slash commands at a glance. Every command uses Discord's native slash command system.</p>
+    </div>
+  </header>
+
+  <!-- COMMANDS CONTENT -->
+  <main class="section" style="padding-top:0;">
+    <div class="container container--narrow">
+
+      <!-- General -->
+      <div class="feature-category animate-on-scroll">
+        <h2 class="feature-category__title">🔧 General</h2>
+        <div style="display:flex;flex-direction:column;gap:var(--space-sm);">
+          <div class="command-card animate-on-scroll">
+            <div>
+              <div class="command-card__name">/ping</div>
+              <div class="command-card__desc">Check the bot's gateway and REST latency.</div>
+              <div class="command-card__meta">
+                <span class="badge badge--everyone">Everyone</span>
+              </div>
+            </div>
+          </div>
+          <div class="command-card animate-on-scroll">
+            <div>
+              <div class="command-card__name">/about</div>
+              <div class="command-card__desc">View information about Astra — framework, developer, and version details.</div>
+              <div class="command-card__meta">
+                <span class="badge badge--everyone">Everyone</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Moderation -->
+      <div class="feature-category animate-on-scroll">
+        <h2 class="feature-category__title">🛡️ Moderation</h2>
+        <div style="display:flex;flex-direction:column;gap:var(--space-sm);">
+          <div class="command-card animate-on-scroll">
+            <div>
+              <div class="command-card__name">/kick</div>
+              <div class="command-card__desc">Kick a member from the server. Logs the action as a moderation case.</div>
+              <div class="command-card__meta">
+                <span class="badge badge--mod">Kick Members</span>
+              </div>
+            </div>
+          </div>
+          <div class="command-card animate-on-scroll">
+            <div>
+              <div class="command-card__name">/ban</div>
+              <div class="command-card__desc">Ban a member with a confirmation prompt. Optionally delete recent message history (0–7 days).</div>
+              <div class="command-card__meta">
+                <span class="badge badge--mod">Ban Members</span>
+              </div>
+            </div>
+          </div>
+          <div class="command-card animate-on-scroll">
+            <div>
+              <div class="command-card__name">/warn</div>
+              <div class="command-card__desc">Issue a recorded warning to a member. The user is notified via DM.</div>
+              <div class="command-card__meta">
+                <span class="badge badge--mod">Manage Messages</span>
+              </div>
+            </div>
+          </div>
+          <div class="command-card animate-on-scroll">
+            <div>
+              <div class="command-card__name">/cases</div>
+              <div class="command-card__desc">View moderation history for a specific user — all kicks, bans, and warnings.</div>
+              <div class="command-card__meta">
+                <span class="badge badge--mod">Manage Messages</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Polls -->
+      <div class="feature-category animate-on-scroll">
+        <h2 class="feature-category__title">📊 Polls</h2>
+        <div style="display:flex;flex-direction:column;gap:var(--space-sm);">
+          <div class="command-card animate-on-scroll">
+            <div>
+              <div class="command-card__name">/poll</div>
+              <div class="command-card__desc">Create an interactive poll with up to 10 comma-separated options. Results are tracked with button-based voting.</div>
+              <div class="command-card__meta">
+                <span class="badge badge--everyone">Everyone</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reminders -->
+      <div class="feature-category animate-on-scroll">
+        <h2 class="feature-category__title">⏰ Reminders</h2>
+        <div style="display:flex;flex-direction:column;gap:var(--space-sm);">
+          <div class="command-card animate-on-scroll">
+            <div>
+              <div class="command-card__name">/remind</div>
+              <div class="command-card__desc">Set a personal reminder. Supports flexible time formats like <code>10m</code>, <code>1h</code>, <code>2d</code>.</div>
+              <div class="command-card__meta">
+                <span class="badge badge--everyone">Everyone</span>
+              </div>
+            </div>
+          </div>
+          <div class="command-card animate-on-scroll">
+            <div>
+              <div class="command-card__name">/reminders</div>
+              <div class="command-card__desc">List your active reminders with trigger times and messages.</div>
+              <div class="command-card__meta">
+                <span class="badge badge--everyone">Everyone</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Role Menu -->
+      <div class="feature-category animate-on-scroll">
+        <h2 class="feature-category__title">🏷️ Role Menus</h2>
+        <div style="display:flex;flex-direction:column;gap:var(--space-sm);">
+          <div class="command-card animate-on-scroll">
+            <div>
+              <div class="command-card__name">/role-menu create</div>
+              <div class="command-card__desc">Create a self-assignable role menu with buttons or a select dropdown. Format: <code>Label:@Role, Label2:@Role2</code>.</div>
+              <div class="command-card__meta">
+                <span class="badge badge--mod">Manage Roles</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tickets -->
+      <div class="feature-category animate-on-scroll">
+        <h2 class="feature-category__title">🎫 Tickets</h2>
+        <div style="display:flex;flex-direction:column;gap:var(--space-sm);">
+          <div class="command-card animate-on-scroll">
+            <div>
+              <div class="command-card__name">/ticket_setup</div>
+              <div class="command-card__desc">Configure the ticket category and staff role for your server's support system.</div>
+              <div class="command-card__meta">
+                <span class="badge badge--admin">Administrator</span>
+              </div>
+            </div>
+          </div>
+          <div class="command-card animate-on-scroll">
+            <div>
+              <div class="command-card__name">/ticket_panel</div>
+              <div class="command-card__desc">Send the "Open Ticket" button panel to a specified channel.</div>
+              <div class="command-card__meta">
+                <span class="badge badge--admin">Administrator</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Configuration -->
+      <div class="feature-category animate-on-scroll">
+        <h2 class="feature-category__title">⚙️ Server Configuration</h2>
+        <div style="display:flex;flex-direction:column;gap:var(--space-sm);">
+          <div class="command-card animate-on-scroll">
+            <div>
+              <div class="command-card__name">/config logging</div>
+              <div class="command-card__desc">Set the channel where Astra logs server events (joins, leaves, bans, edits, deletes).</div>
+              <div class="command-card__meta">
+                <span class="badge badge--admin">Administrator</span>
+              </div>
+            </div>
+          </div>
+          <div class="command-card animate-on-scroll">
+            <div>
+              <div class="command-card__name">/config starboard</div>
+              <div class="command-card__desc">Set the starboard channel where starred messages are reposted.</div>
+              <div class="command-card__meta">
+                <span class="badge badge--admin">Administrator</span>
+              </div>
+            </div>
+          </div>
+          <div class="command-card animate-on-scroll">
+            <div>
+              <div class="command-card__name">/config threshold</div>
+              <div class="command-card__desc">Set the number of ⭐ reactions required for a message to appear on the starboard.</div>
+              <div class="command-card__meta">
+                <span class="badge badge--admin">Administrator</span>
+              </div>
+            </div>
+          </div>
+          <div class="command-card animate-on-scroll">
+            <div>
+              <div class="command-card__name">/config view</div>
+              <div class="command-card__desc">View the current server configuration — logging channel, starboard channel, and threshold.</div>
+              <div class="command-card__meta">
+                <span class="badge badge--mod">Manage Server</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- CTA BANNER -->
+  <section class="section">
+    <div class="container">
+      <div class="cta-banner animate-on-scroll">
+        <h2>Ready to try these commands?</h2>
+        <p>Invite Astra and start using slash commands in your server right away.</p>
+        <div class="hero__actions">
+          <a href="#" class="btn btn--primary btn--large">✨ Invite Astra</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer__grid">
+        <div>
+          <div class="footer__brand">
+            <img src="assets/images/astra-logo.png" alt="Astra" width="28" height="28">
+            Astra
+          </div>
+          <p class="footer__desc">A polished utility and community assistant designed to make server management easy and interactive.</p>
+        </div>
+        <div>
+          <h4 class="footer__heading">Product</h4>
+          <a href="features.html" class="footer__link">Features</a>
+          <a href="commands.html" class="footer__link">Commands</a>
+          <a href="changelog.html" class="footer__link">Changelog</a>
+        </div>
+        <div>
+          <h4 class="footer__heading">Resources</h4>
+          <a href="support.html" class="footer__link">Support</a>
+          <a href="faq.html" class="footer__link">FAQ</a>
+          <a href="#" class="footer__link">GitHub</a>
+        </div>
+        <div>
+          <h4 class="footer__heading">Legal</h4>
+          <a href="privacy.html" class="footer__link">Privacy Policy</a>
+          <a href="terms.html" class="footer__link">Terms of Service</a>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>&copy; 2026 Astra. Built by Nexus &amp; Antigravity.</span>
+        <span>Made with ✨ for the Discord community</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

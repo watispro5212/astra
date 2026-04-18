@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Features — Astra Bot</title>
+  <meta name="description" content="Explore Astra's full feature set: moderation, polls, tickets, starboard, reminders, role menus, event logging, and server configuration.">
+  <meta property="og:title" content="Features — Astra Bot">
+  <meta property="og:description" content="Explore Astra's complete feature set for moderation, community engagement, and server management.">
+  <meta property="og:image" content="assets/images/og-preview.png">
+  <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-radial" aria-hidden="true"></div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <a href="index.html" class="navbar__brand">
+        <img src="assets/images/astra-logo.png" alt="Astra logo" width="36" height="36">
+        Astra
+      </a>
+      <button class="navbar__toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="navbar__links">
+        <a href="index.html" class="navbar__link">Home</a>
+        <a href="features.html" class="navbar__link active">Features</a>
+        <a href="commands.html" class="navbar__link">Commands</a>
+        <a href="support.html" class="navbar__link">Support</a>
+        <a href="faq.html" class="navbar__link">FAQ</a>
+        <span class="navbar__cta">
+          <a href="#" class="btn btn--primary btn--small">Invite Astra</a>
+        </span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <header class="page-header">
+    <div class="container">
+      <h1 class="animate-on-scroll"><span class="text-gradient">Features</span></h1>
+      <p class="animate-on-scroll">Everything Astra brings to your server — organized by category.</p>
+    </div>
+  </header>
+
+  <!-- FEATURES CONTENT -->
+  <main class="section" style="padding-top:0;">
+    <div class="container">
+
+      <!-- Moderation -->
+      <div class="feature-category animate-on-scroll">
+        <h2 class="feature-category__title">🛡️ Moderation</h2>
+        <div class="grid grid--2 stagger">
+          <div class="card animate-on-scroll">
+            <h3 class="card__title">Kick & Ban</h3>
+            <p class="card__text">Remove disruptive members instantly. Bans include a confirmation prompt to prevent accidents, with an option to delete recent message history. All actions are logged as moderation cases.</p>
+          </div>
+          <div class="card animate-on-scroll">
+            <h3 class="card__title">Warnings</h3>
+            <p class="card__text">Issue recorded warnings to members. Each warning is stored with a unique case number, reason, and moderator. Users receive a DM notification so they know what they did.</p>
+          </div>
+          <div class="card animate-on-scroll">
+            <h3 class="card__title">Case History</h3>
+            <p class="card__text">View a member's full moderation history with the cases command. See every kick, ban, and warning with dates, reasons, and which moderator took action.</p>
+          </div>
+          <div class="card animate-on-scroll">
+            <h3 class="card__title">Event Logging</h3>
+            <p class="card__text">Automatic logging for member joins, leaves, bans, message edits, and message deletions. All events post to a configurable log channel with rich embeds.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Community Engagement -->
+      <div class="feature-category animate-on-scroll">
+        <h2 class="feature-category__title">💬 Community Engagement</h2>
+        <div class="grid grid--2 stagger">
+          <div class="card animate-on-scroll">
+            <h3 class="card__title">Interactive Polls</h3>
+            <p class="card__text">Create polls with up to 10 options using button-based voting. Results update in real-time with vote counts and percentages. Persistent across bot restarts.</p>
+          </div>
+          <div class="card animate-on-scroll">
+            <h3 class="card__title">Starboard</h3>
+            <p class="card__text">The best messages rise to the top. When a message gets enough ⭐ reactions, it's automatically reposted to your starboard channel. Star counts update live as reactions change.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Server Management -->
+      <div class="feature-category animate-on-scroll">
+        <h2 class="feature-category__title">⚙️ Server Management</h2>
+        <div class="grid grid--2 stagger">
+          <div class="card animate-on-scroll">
+            <h3 class="card__title">Role Menus</h3>
+            <p class="card__text">Let members pick their own roles through interactive button or select menus. Supports unique mode, which removes other roles in the menu when a new one is selected.</p>
+          </div>
+          <div class="card animate-on-scroll">
+            <h3 class="card__title">Ticket System</h3>
+            <p class="card__text">A full support ticket system with a launcher panel, private ticket channels, and staff controls. Users click a button to open a ticket, and staff are notified with a control panel to close it.</p>
+          </div>
+          <div class="card animate-on-scroll">
+            <h3 class="card__title">Server Configuration</h3>
+            <p class="card__text">Configure logging channels, starboard channels, and star thresholds with simple slash commands. View your current settings at any time with a single command.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Utility -->
+      <div class="feature-category animate-on-scroll">
+        <h2 class="feature-category__title">🔧 Utility</h2>
+        <div class="grid grid--2 stagger">
+          <div class="card animate-on-scroll">
+            <h3 class="card__title">Reminders</h3>
+            <p class="card__text">Set personal reminders with flexible time formats like 10m, 1h, or 2d. Astra checks every minute and pings you in the channel when your reminder fires. Manage active reminders anytime.</p>
+          </div>
+          <div class="card animate-on-scroll">
+            <h3 class="card__title">Bot Info & Latency</h3>
+            <p class="card__text">Check Astra's response time with the ping command, which shows both gateway and REST latency. The about command gives you key info about the bot's framework and developer.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- CTA BANNER -->
+  <section class="section">
+    <div class="container">
+      <div class="cta-banner animate-on-scroll">
+        <h2>Like what you see?</h2>
+        <p>Add Astra to your server and start using these features today.</p>
+        <div class="hero__actions">
+          <a href="#" class="btn btn--primary btn--large">✨ Invite Astra</a>
+          <a href="commands.html" class="btn btn--secondary btn--large">View Commands →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer__grid">
+        <div>
+          <div class="footer__brand">
+            <img src="assets/images/astra-logo.png" alt="Astra" width="28" height="28">
+            Astra
+          </div>
+          <p class="footer__desc">A polished utility and community assistant designed to make server management easy and interactive.</p>
+        </div>
+        <div>
+          <h4 class="footer__heading">Product</h4>
+          <a href="features.html" class="footer__link">Features</a>
+          <a href="commands.html" class="footer__link">Commands</a>
+          <a href="changelog.html" class="footer__link">Changelog</a>
+        </div>
+        <div>
+          <h4 class="footer__heading">Resources</h4>
+          <a href="support.html" class="footer__link">Support</a>
+          <a href="faq.html" class="footer__link">FAQ</a>
+          <a href="#" class="footer__link">GitHub</a>
+        </div>
+        <div>
+          <h4 class="footer__heading">Legal</h4>
+          <a href="privacy.html" class="footer__link">Privacy Policy</a>
+          <a href="terms.html" class="footer__link">Terms of Service</a>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>&copy; 2026 Astra. Built by Nexus &amp; Antigravity.</span>
+        <span>Made with ✨ for the Discord community</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
