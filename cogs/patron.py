@@ -30,9 +30,37 @@ class Patron(commands.Cog):
                 await member.remove_roles(*[r for r in all_patron_roles if r and r in member.roles])
                 
                 # Add new role
-                await member.add_roles(role, reason=f"Patron Tier {tier} assigned.")
+                if role not in member.roles:
+                    await member.add_roles(role, reason=f"Patron Tier {tier} assigned.")
             except:
                 pass
+
+    @commands.Cog.listener()
+    async def on_member_update(self, before: discord.Member, after: discord.Member):
+        """
+        Listens for role changes (e.g. from Patreon's official bot) 
+        and syncs with Astra's internal patron database.
+        """
+        # Mapping role names back to tiers
+        reverse_map = {v: k for k, v in self.tier_roles.items()}
+        
+        # Check added roles
+        added_roles = [r for r in after.roles if r not in before.roles]
+        for role in added_roles:
+            if role.name in reverse_map:
+                tier = reverse_map[role.name]
+                await patron_service.set_patron(after.id, tier)
+                # No need to call roles helper, they already have the role
+        
+        # Check removed roles
+        removed_roles = [r for r in before.roles if r not in after.roles]
+        for role in removed_roles:
+            if role.name in reverse_map:
+                # Only remove if they don't have ANY other patron role left 
+                # (Patreon usually handles this, but we want to be safe)
+                has_any = any(r.name in reverse_map for r in after.roles)
+                if not has_any:
+                    await patron_service.remove_patron(after.id)
 
     @app_commands.command(name="patron_add", description="👑 Assign a patron tier to a user.")
     @app_commands.describe(
