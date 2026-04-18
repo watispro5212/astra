@@ -99,6 +99,10 @@ class ServerSetup(commands.Cog):
                 ("📋 mod-logs", "Internal audit logs and incident tracking."),
                 ("🗂️ support-tickets", "Archive of resolved support queries.")
             ]),
+            ("─── THE LOUNGE ───", "free_chat", [
+                ("💬 public-lounge", "The open lobby for everyone. No verification required!"),
+                ("🎭 guest-chat", "A place for visitors to ask quick questions.")
+            ]),
             ("─── SOCIAL MEDIA ───", "public_read", [
                 ("🎨 astra-gallery", "Fan art and bot setup screenshots."),
                 ("🐦 twitter-feed", "Automated updates from the Astra Twitter."),
@@ -132,6 +136,8 @@ class ServerSetup(commands.Cog):
                 elif p_type == 'restricted':
                     overwrites[guild.default_role] = discord.PermissionOverwrite(view_channel=False)
                     overwrites[roles["🧪 Bot Tester"]] = discord.PermissionOverwrite(view_channel=True, send_messages=True)
+                elif p_type == 'free_chat':
+                    overwrites[guild.default_role] = discord.PermissionOverwrite(view_channel=True, send_messages=True)
                 elif p_type == 'staff':
                     overwrites[guild.default_role] = discord.PermissionOverwrite(view_channel=False)
                     overwrites[roles["🛡️ Moderator"]] = discord.PermissionOverwrite(view_channel=True, send_messages=True)

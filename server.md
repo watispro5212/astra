@@ -117,6 +117,29 @@
 - `🆘 Support Staff`: Your go-to team for bot questions.
 - `🎖️ Community Guide`: Experienced users here to help you get started.
 
+### 🆕 NEW MEMBER TASKS (The Checklist)
+*Configure these in Discord Onboarding -> To-do list.*
+
+**Task 1: 🧪 Join the Laboratory**
+- **Description**: Become an official Astra Bot Tester.
+- **Action**: Follow instructions in `#🧪 bot-testing`.
+- **Goal**: Get the `Bot Tester` role and explore the Lab.
+
+**Task 2: 🎭 Set your Identity**
+- **Description**: Customize your mention preferences and community rank.
+- **Action**: Return to the `Onboarding` tab or visit `#🧩 choose-roles`.
+- **Goal**: Select your notification pings.
+
+**Task 3: 🧭 Complete the Orientation**
+- **Description**: Learn how to navigate the Astra Support Desk.
+- **Action**: Read the orientation guide in `#📢 server-guide`.
+- **Goal**: Understand how to open tickets and find FAQs.
+
+**Task 4: 👋 Break the Ice**
+- **Description**: Say hello to the Astra community.
+- **Action**: Introduce yourself in `#🎉 introductions`.
+- **Goal**: Post your first message in the hub.
+
 ---
 
 ## 🛡️ 6. AUTOMOD DEFENSE MATRIX
@@ -135,4 +158,27 @@
 - Only `Bot Tester` and above can upload files or post links in the Laboratory category.
 
 ---
-*Blueprint Version: 2.7.0 (Defense Hardened)*
+
+## ✅ POST-SETUP CHECKLIST
+*Complete these tasks after running the `/setup_server` command.*
+
+### 🛠️ Administrative Cleanup
+- [ ] **Restore Sovereignty**: Re-assign yourself the `👑 Owner` role (the setup bot may have deleted the old one).
+- [ ] **Hierarchy Check**: Verify that `👑 Owner` is at the very top of the roles list in Server Settings.
+
+### 🧩 Community & Onboarding
+- [ ] **Enable Community**: Go to `Server Settings -> Community -> Enable Community`.
+- [ ] **Setup Onboarding**: Follow the **Section 4** schematics to configure your native Discord onboarding questions.
+- [ ] **Rules Agreement**: Enable "Member Screening" and paste the rules from **Section 1**.
+
+### 💬 Channel Population
+- [ ] **Welcome Sign**: Copy-paste the **Section 2** template into `#👋 welcome`.
+- [ ] **Server Guide**: Copy-paste the **Section 3** template into `#📢 server-guide`.
+- [ ] **The Rules**: Post the full rule set from **Section 1** in `#📜 rules` and pin it.
+
+### 🛡️ Security Audit
+- [ ] **Verify AutoMod**: Check `Server Settings -> Safety Setup -> AutoMod` to ensure the Astra shields are active.
+- [ ] **Permissions Check**: Ensure that `@everyone` cannot send messages in the categories marked `public_read`.
+
+---
+*Blueprint Version: 2.10.0 (Launch Ready)*
