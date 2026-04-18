@@ -81,6 +81,9 @@ class Moderation(commands.Cog):
              return await interaction.response.send_message(embed=ErrorEmbed("You cannot mute someone with a role higher or equal to yours."), ephemeral=True)
 
         # Parse duration
+        if not duration[-1].isalpha():
+            return await interaction.response.send_message("❌ Missing unit! Use e.g. 10m, 1h, 1d.", ephemeral=True)
+            
         unit = duration[-1].lower()
         try:
             val = int(duration[:-1])
@@ -90,7 +93,7 @@ class Moderation(commands.Cog):
             elif unit == 'd': delta = datetime.timedelta(days=val)
             else: raise ValueError()
         except:
-            return await interaction.response.send_message("Invalid duration! Use e.g. 10m, 1h, 1d.", ephemeral=True)
+            return await interaction.response.send_message("❌ Invalid format! Use e.g. 10m, 1h, 1d.", ephemeral=True)
 
         try:
             await member.timeout(delta, reason=reason)

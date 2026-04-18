@@ -9,22 +9,27 @@ class ServerSetup(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @app_commands.command(name="setup_server", description="🛰️ SMART SYNC v2.9: Updates/Adds missing Roles, Channels & Permissions (Safe)")
+    def _normalize(self, text: str) -> str:
+        """Strips symbols, spaces, and emojis for robust matching."""
+        # Remove non-alphanumeric characters and lowercase
+        return "".join(c for c in text.lower() if c.isalnum())
+
+    @app_commands.command(name="setup_server", description="🛰️ ROBUST SYNC v2.13: Safe incremental update (Fixes Duplication)")
     @app_commands.checks.has_permissions(administrator=True)
     async def setup_server(self, interaction: discord.Interaction):
-        """Non-destructive server synchronization. Adds missing components and updates metadata."""
+        """Non-destructive server synchronization. Prevents duplication via name normalization."""
         await interaction.response.defer(ephemeral=True)
         
         status_embed = AstraEmbed(
-            title="🛰️ SMART SYNC INITIATED (v2.9.0)",
-            description="Starting incremental scan. This process is **safe** and will not delete existing work."
+            title="🛰️ ROBUST SYNC INITIATED (v2.13.0)",
+            description="Starting deep-scan. Using **Fuzzy Matching** to prevent channel duplication."
         )
         status_msg = await interaction.followup.send(embed=status_embed, ephemeral=True)
 
         guild = interaction.guild
         
-        # 1. ROLES SYNC (Bottom to Top for Hierarchy)
-        status_embed.description = "👥 Syncing Roles..."
+        # 1. ROLES SYNC
+        status_embed.description = "👥 Syncing Roles (Normalization Active)..."
         await status_msg.edit(embed=status_embed)
         
         role_data = [
@@ -50,7 +55,9 @@ class ServerSetup(commands.Cog):
         
         roles = {}
         for name, color, perms, hoist, mention in role_data:
-            role = discord.utils.get(guild.roles, name=name)
+            # Fuzzy match role
+            role = discord.utils.find(lambda r: self._normalize(r.name) == self._normalize(name), guild.roles)
+            
             if not role:
                 role = await guild.create_role(
                     name=name, 
@@ -58,8 +65,12 @@ class ServerSetup(commands.Cog):
                     permissions=perms, 
                     hoist=hoist, 
                     mentionable=mention,
-                    reason="Astra v2.9 Sync: Missing Role"
+                    reason="Astra v2.13 Sync: Missing"
                 )
+            else:
+                # Ensure name matches blueprint exactly
+                if role.name != name:
+                    await role.edit(name=name)
             roles[name] = role
 
         # 2. INFRASTRUCTURE SYNC (Categories & Channels)
@@ -127,8 +138,9 @@ class ServerSetup(commands.Cog):
             status_embed.description = f"🏗️ Syncing Category: **{cat_name}**..."
             await status_msg.edit(embed=status_embed)
             
-            # Find/Create Category
-            category = discord.utils.get(guild.categories, name=cat_name)
+            # Fuzzy find category
+            category = discord.utils.find(lambda c: self._normalize(c.name) == self._normalize(cat_name), guild.categories)
+            
             if not category:
                 overwrites = { guild.default_role: discord.PermissionOverwrite(view_channel=True, send_messages=False) }
                 if p_type == 'public_chat':
@@ -144,16 +156,22 @@ class ServerSetup(commands.Cog):
                     overwrites[roles["🆘 Support Staff"]] = discord.PermissionOverwrite(view_channel=True, send_messages=True)
 
                 category = await guild.create_category(name=cat_name, overwrites=overwrites)
+            else:
+                # Sync Category Name
+                if category.name != cat_name:
+                    await category.edit(name=cat_name)
             
-            # Find/Create/Update Channels
+            # Fuzzy find & update Channels
             for chan_name, topic in channels:
-                channel = discord.utils.get(category.text_channels, name=chan_name)
+                channel = discord.utils.find(lambda c: self._normalize(c.name) == self._normalize(chan_name), category.text_channels)
+                
                 if not channel:
                     await guild.create_text_channel(name=chan_name, category=category, topic=topic)
                     created_count += 1
                 else:
-                    if channel.topic != topic:
-                        await channel.edit(topic=topic)
+                    # Sync metadata
+                    if channel.name != chan_name or channel.topic != topic:
+                        await channel.edit(name=chan_name, topic=topic)
                         updated_count += 1
                 await asyncio.sleep(0.3)
 
@@ -166,12 +184,11 @@ class ServerSetup(commands.Cog):
 
         # 4. FINAL SUCCESS
         final_embed = SuccessEmbed(
-            f"🛰️ Smart Sync v2.9.0 Complete!\n\n"
+            f"🛰️ Robust Sync v2.13.0 Complete!\n\n"
             f"👤 Roles Balanced: **{len(roles)}**\n"
-            f"🏗️ Channels Added: **{created_count}**\n"
-            f"📝 Topics Updated: **{updated_count}**\n"
-            f"🛡️ AutoMod: **Synchronized**\n\n"
-            f"*Everything is now aligned with the Astra Blueprint.*"
+            f"🏗️ Channels Created: **{created_count}**\n"
+            f"🛠️ Items Refactored: **{updated_count}**\n\n"
+            f"*Auto-Rename and Fuzzy Matching successfully prevented duplication.*"
         )
         await interaction.followup.send(embed=final_embed, ephemeral=True)
 

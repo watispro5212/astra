@@ -3,13 +3,18 @@ from typing import Optional
 from discord import app_commands
 from discord.ext import commands
 from services.ticket_service import TicketService
-from ui.views.ticket_view import TicketLauncherView
+from ui.views.ticket_view import TicketLauncherView, TicketControlView
 from ui.embeds import SuccessEmbed, AstraEmbed
 
 class Tickets(commands.Cog):
     """Ticket system for private support and requests."""
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+
+    async def cog_load(self):
+        """Registers persistent views on startup."""
+        self.bot.add_view(TicketLauncherView())
+        self.bot.add_view(TicketControlView())
 
     @app_commands.command(name="ticket", description="Ticket system administration.")
     @app_commands.checks.has_permissions(administrator=True)
