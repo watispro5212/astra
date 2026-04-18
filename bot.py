@@ -3,6 +3,9 @@ from discord.ext import commands
 import os
 from core.logger import logger
 from core.config import config
+from core.database import db
+from ui.views.role_view import PersistentRoleView
+from ui.views.poll_view import PersistentPollView
 
 class AstraBot(commands.Bot):
     def __init__(self):
@@ -21,6 +24,13 @@ class AstraBot(commands.Bot):
     async def setup_hook(self) -> None:
         """Called when the bot is being set up."""
         logger.info("Setting up Astra Bot...")
+        
+        # Initialize Database
+        await db.initialize_tables()
+        
+        # Register Persistent Views
+        self.add_view(PersistentRoleView())
+        self.add_view(PersistentPollView())
         
         # Load extensions
         await self.load_extensions()

@@ -1,0 +1,41 @@
+import discord
+from discord import app_commands
+from discord.ext import commands
+from services.moderation_service import ModerationService
+from ui.embeds import SuccessEmbed, AstraEmbed
+
+class AdminConfig(commands.GroupCog, name="config"):
+    """Server configuration commands for administrators."""
+    def __init__(self, bot: commands.Bot):
+        self.bot = bot
+
+    @app_commands.command(name="logging", description="Set the channel where Astra logs server events.")
+    @app_commands.checks.has_permissions(administrator=True)
+    async def set_logging(self, interaction: discord.Interaction, channel: discord.TextChannel):
+        """Configures the audit logging channel."""
+        await ModerationService.update_guild_config(interaction.guild_id, log_channel_id=channel.id)
+        
+        embed = SuccessEmbed(f"Logging channel has been set to {channel.mention}")
+        await interaction.response.send_message(embed=embed)
+
+    @app_commands.command(name="view", description="View current server configuration.")
+    @app_commands.checks.has_permissions(manage_guild=True)
+    async def view_config(self, interaction: discord.Interaction):
+        """Displays current guild settings."""
+        config = await ModerationService.get_guild_config(interaction.guild_id)
+        
+        if not config:
+            await interaction.response.send_message("No configuration found for this server. Use `/config logging` to get started.", ephemeral=True)
+            return
+
+        embed = AstraEmbed(title=f"Configuration for {interaction.guild.name}")
+        
+        log_channel = interaction.guild.get_channel(config['log_channel_id']) if config['log_channel_id'] else None
+        embed.add_field(name="Logging Channel", value=log_channel.mention if log_channel else "Not set", inline=True)
+        
+        embed.add_field(name="Starboard", value="Coming Soon", inline=True)
+        
+        await interaction.response.send_message(embed=embed)
+
+async def setup(bot: commands.Bot):
+    await bot.add_cog(AdminConfig(bot))
