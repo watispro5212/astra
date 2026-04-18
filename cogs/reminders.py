@@ -1,0 +1,72 @@
+import discord
+from discord import app_commands
+from discord.ext import commands
+from services.reminder_service import ReminderService
+from ui.embeds import SuccessEmbed, ErrorEmbed, AstraEmbed
+import datetime
+from typing import Optional
+
+class Reminders(commands.Cog):
+    """Scheduling and reminder tools."""
+    def __init__(self, bot: commands.Bot):
+        self.bot = bot
+
+    @app_commands.command(name="remind", description="Set a reminder for yourself.")
+    @app_commands.describe(
+        time="How long from now (e.g. 10m, 1h, 2d)",
+        message="What you want to be reminded about"
+    )
+    async def set_reminder(self, interaction: discord.Interaction, time: str, message: str):
+        """Sets a personal reminder."""
+        seconds = ReminderService.parse_duration(time)
+        if not seconds:
+            return await interaction.response.send_message(
+                "❌ Invalid time format! Use something like `10m`, `1h 30m`, or `2d`.", 
+                ephemeral=True
+            )
+        
+        if seconds < 60:
+            return await interaction.response.send_message("❌ Minimum reminder duration is 1 minute.", ephemeral=True)
+
+        remind_at = datetime.datetime.now() + datetime.timedelta(seconds=seconds)
+        
+        await ReminderService.create_reminder(
+            guild_id=interaction.guild_id,
+            channel_id=interaction.channel_id,
+            user_id=interaction.user.id,
+            message=message,
+            remind_at=remind_at
+        )
+        
+        embed = SuccessEmbed(f"Reminder set for **{time}** from now.")
+        embed.add_field(name="Message", value=message)
+        embed.add_field(name="Trigger Time", value=f"<t:{int(remind_at.timestamp())}:F>")
+        
+        await interaction.response.send_message(embed=embed)
+
+    @app_commands.command(name="reminders", description="List or manage your active reminders.")
+    @app_commands.describe(action="Either 'list' or 'clear'")
+    async def list_reminders(self, interaction: discord.Interaction, action: str = "list"):
+        """Lists all active reminders for the user."""
+        if action == "clear":
+            # For simplicity, we'll just implement list and delete by ID in a real scenario
+            pass
+
+        reminders = await ReminderService.get_user_reminders(interaction.user.id)
+        
+        if not reminders:
+            return await interaction.response.send_message("You have no active reminders.", ephemeral=True)
+            
+        embed = AstraEmbed(title="🔔 Your Active Reminders")
+        for rem in reminders[:10]:
+            trigger_ts = datetime.datetime.fromisoformat(rem['remind_at'])
+            embed.add_field(
+                name=f"ID: #{rem['id']} | Triggering <t:{int(trigger_ts.timestamp())}:R>",
+                value=rem['message'],
+                inline=False
+            )
+            
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+
+async def setup(bot: commands.Bot):
+    await bot.add_cog(Reminders(bot))

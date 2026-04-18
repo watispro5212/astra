@@ -115,6 +115,20 @@ class DatabaseManager:
             )
         """)
 
+        # Reminders Table
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS reminders (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                guild_id INTEGER,
+                channel_id INTEGER,
+                user_id INTEGER,
+                message TEXT,
+                remind_at DATETIME,
+                is_recurring BOOLEAN DEFAULT 0,
+                interval_seconds INTEGER
+            )
+        """)
+
         await self.connection.commit()
         logger.info("Database tables initialized")
 

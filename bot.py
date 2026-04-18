@@ -1,11 +1,13 @@
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 import os
 from core.logger import logger
 from core.config import config
 from core.database import db
 from ui.views.role_view import PersistentRoleView
 from ui.views.poll_view import PersistentPollView
+from services.reminder_service import ReminderService
+import datetime
 
 class AstraBot(commands.Bot):
     def __init__(self):
@@ -31,6 +33,9 @@ class AstraBot(commands.Bot):
         # Register Persistent Views
         self.add_view(PersistentRoleView())
         self.add_view(PersistentPollView())
+        
+        # Start background tasks
+        self.check_reminders.start()
         
         # Load extensions
         await self.load_extensions()
@@ -62,3 +67,25 @@ class AstraBot(commands.Bot):
         
         game = discord.Game("Helping the community | /about")
         await self.change_presence(status=discord.Status.online, activity=game)
+
+    @tasks.loop(minutes=1.0)
+    async def check_reminders(self):
+        """Background task to check for and send due reminders."""
+        due_reminders = await ReminderService.get_due_reminders()
+        if not due_reminders:
+            return
+
+        for rem in due_reminders:
+            channel = self.get_channel(rem['channel_id'])
+            if channel:
+                try:
+                    await channel.send(f"🔔 **Reminder for <@{rem['user_id']}>:** {rem['message']}")
+                except Exception as e:
+                    logger.error(f"Failed to send reminder {rem['id']}: {e}")
+            
+            # Delete reminder after triggering
+            await ReminderService.delete_reminder(rem['id'])
+
+    @check_reminders.before_loop
+    async def before_check_reminders(self):
+        await self.wait_until_ready()
