@@ -90,6 +90,30 @@ class DatabaseManager:
             )
         """)
 
+        # ── AUTOMOD LOGS ──────────────────────────────────────────────────────
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS automod_logs (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                guild_id INTEGER NOT NULL,
+                user_id INTEGER NOT NULL,
+                rule_name TEXT NOT NULL,
+                content TEXT,
+                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
+        # ── TICKET EVENTS ─────────────────────────────────────────────────────
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS ticket_events (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                channel_id INTEGER NOT NULL,
+                guild_id INTEGER NOT NULL,
+                staff_id INTEGER,
+                event_type TEXT NOT NULL,
+                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
         # ── ROLE MENUS ────────────────────────────────────────────────────────
         await self.connection.execute("""
             CREATE TABLE IF NOT EXISTS role_menus (

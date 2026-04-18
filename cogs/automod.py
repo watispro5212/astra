@@ -19,6 +19,20 @@ class Automod(commands.Cog):
     async def on_message_edit(self, before: discord.Message, after: discord.Message):
         await automod_service.check_message(after)
 
+    @commands.Cog.listener()
+    async def on_automod_action(self, execution: discord.AutoModAction):
+        """Intercepts and logs native Discord AutoMod detections."""
+        guild_id = execution.guild_id
+        user_id = execution.user_id
+        rule_name = execution.rule_name or "Unknown Rule"
+        content = execution.matched_content or "Content Unavailable"
+        
+        await db.execute(
+            "INSERT INTO automod_logs (guild_id, user_id, rule_name, content) VALUES (?, ?, ?, ?)",
+            guild_id, user_id, rule_name, content
+        )
+        logger.info(f"Native AutoMod Triggered: {rule_name} by {user_id} in {guild_id}")
+
     automod_group = app_commands.Group(name="automod", description="Configure auto-moderation filters.", default_permissions=discord.Permissions(manage_guild=True))
 
     @automod_group.command(name="status", description="View current automod settings.")
@@ -150,6 +164,33 @@ class Automod(commands.Cog):
             return await interaction.response.send_message(f"❌ Rule **{name}** not found.", ephemeral=True)
             
         await interaction.response.send_message(embed=SuccessEmbed(f"Rule **{name}** has been removed."), ephemeral=True)
+
+    @automod_group.command(name="logs", description="📋 View recent AutoMod detections (Custom & Native).")
+    @app_commands.describe(limit="Number of logs to view (max 50).")
+    async def automod_logs(self, interaction: discord.Interaction, limit: int = 15):
+        """Displays a feed of recent security catches."""
+        limit = min(max(1, limit), 50)
+        
+        rows = await db.fetch_all(
+            "SELECT * FROM automod_logs WHERE guild_id = ? ORDER BY timestamp DESC LIMIT ?",
+            interaction.guild_id, limit
+        )
+        
+        if not rows:
+            return await interaction.response.send_message("No recent AutoMod detections found.", ephemeral=True)
+            
+        embed = AstraEmbed(title="📜 AutoMod Detection Logs")
+        for row in rows:
+            time_obj = datetime.fromisoformat(row['timestamp'].replace('Z', '+00:00')) if isinstance(row['timestamp'], str) else row['timestamp']
+            timestamp = f"<t:{int(time_obj.timestamp())}:R>"
+            
+            embed.add_field(
+                name=f"Rule: {row['rule_name']} | {timestamp}",
+                value=f"**User:** <@{row['user_id']}>\n**Content Snippet:** `{row['content'][:50]}...`",
+                inline=False
+            )
+            
+        await interaction.response.send_message(embed=embed, ephemeral=True)
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(Automod(bot))

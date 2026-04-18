@@ -30,6 +30,59 @@ class Tickets(commands.Cog):
         file = await transcript_service.generate_text_transcript(interaction.channel)
         await interaction.followup.send("✅ Transcript generated:", file=file)
 
+    @ticket_group.command(name="add", description="➕ Add a member to this ticket.")
+    @app_commands.describe(member="The member to add.")
+    async def ticket_add(self, interaction: discord.Interaction, member: discord.Member):
+        """Grants a member access to the current ticket."""
+        if "ticket-" not in interaction.channel.name:
+            return await interaction.response.send_message("❌ Not a ticket channel.", ephemeral=True)
+            
+        await interaction.channel.set_permissions(member, read_messages=True, send_messages=True, embed_links=True, attach_files=True)
+        await interaction.response.send_message(f"✅ Added {member.mention} to the ticket.")
+
+    @ticket_group.command(name="remove", description="➖ Remove a member from this ticket.")
+    @app_commands.describe(member="The member to remove.")
+    async def ticket_remove(self, interaction: discord.Interaction, member: discord.Member):
+        """Revokes a member's access to the current ticket."""
+        if "ticket-" not in interaction.channel.name:
+            return await interaction.response.send_message("❌ Not a ticket channel.", ephemeral=True)
+            
+        await interaction.channel.set_permissions(member, overwrite=None)
+        await interaction.response.send_message(f"✅ Removed {member.mention} from the ticket.")
+
+    @ticket_group.command(name="stats", description="📈 View support performance statistics.")
+    async def ticket_stats(self, interaction: discord.Interaction):
+        """Calculates and displays support team metrics."""
+        await interaction.response.defer(ephemeral=True)
+        
+        total_tickets = await db.fetch_one("SELECT COUNT(*) as count FROM tickets WHERE guild_id = ?", interaction.guild_id)
+        active_tickets = await db.fetch_one("SELECT COUNT(*) as count FROM tickets WHERE guild_id = ? AND status = 'open'", interaction.guild_id)
+        
+        # Performance metrics (Last 30 days)
+        stats_query = """
+            SELECT event_type, AVG(strftime('%s', timestamp)) as avg_time 
+            FROM ticket_events 
+            WHERE guild_id = ? 
+            GROUP BY event_type
+        """
+        # Note: Calculating claim time and resolution time accurately requires complex joins.
+        # For this version, we'll show high-level counts and totals.
+        
+        embed = AstraEmbed(title="📊 Support Performance Stats")
+        embed.add_field(name="Total Tickets", value=str(total_tickets['count']), inline=True)
+        embed.add_field(name="Active Tickets", value=str(active_tickets['count']), inline=True)
+        
+        staff_rank = await db.fetch_all(
+            "SELECT staff_id, COUNT(*) as count FROM tickets WHERE guild_id = ? AND staff_id IS NOT NULL GROUP BY staff_id ORDER BY count DESC LIMIT 5",
+            interaction.guild_id
+        )
+        
+        if staff_rank:
+            rank_text = "\n".join([f"<@{row['staff_id']}>: **{row['count']}** cases" for row in staff_rank])
+            embed.add_field(name="Top Staff (All Time)", value=rank_text, inline=False)
+            
+        await interaction.followup.send(embed=embed)
+
     @app_commands.command(name="ticket_setup", description="Configure ticket settings.")
     @app_commands.describe(
         category="The category where tickets will be created",

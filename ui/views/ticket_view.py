@@ -52,7 +52,7 @@ class TicketCloseModal(discord.ui.Modal, title="Close Ticket"):
         reason_text = self.reason.value or "No reason provided"
         
         # Save to DB
-        await TicketService.close_ticket(interaction.channel_id, reason=reason_text)
+        await TicketService.close_ticket(interaction.channel_id, interaction.guild_id, reason=reason_text, closed_by_id=interaction.user.id)
         
         # Log to staff channel if configured
         config = await TicketService.get_config(interaction.guild_id)
@@ -69,6 +69,27 @@ class TicketControlView(discord.ui.View):
     """A persistent view for managing an open ticket."""
     def __init__(self):
         super().__init__(timeout=None)
+
+    @discord.ui.button(
+        label="Claim Ticket",
+        style=discord.ButtonStyle.success,
+        custom_id="astra:ticket_claim",
+        emoji="👋"
+    )
+    async def claim(self, interaction: discord.Interaction, button: discord.ui.Button):
+        """Allows staff to claim a ticket."""
+        await TicketService.claim_ticket(interaction.channel, interaction.user)
+        
+        embed = AstraEmbed(
+            title="👋 Ticket Claimed",
+            description=f"This ticket has been claimed by {interaction.user.mention}.\nThey will be assisting you shortly."
+        )
+        
+        await interaction.response.send_message(embed=embed)
+        
+        # Disable the claim button
+        button.disabled = True
+        await interaction.message.edit(view=self)
 
     @discord.ui.button(
         label="Close Ticket",

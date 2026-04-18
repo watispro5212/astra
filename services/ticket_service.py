@@ -58,7 +58,26 @@ class TicketService:
             channel.id, guild.id, user.id
         )
 
+        await TicketService.log_event(channel.id, guild.id, "opened")
         return channel
+
+    @staticmethod
+    async def log_event(channel_id: int, guild_id: int, event_type: str, staff_id: int = None):
+        """Logs a ticket event in the database for analytics."""
+        await db.execute(
+            "INSERT INTO ticket_events (channel_id, guild_id, staff_id, event_type) VALUES (?, ?, ?, ?)",
+            channel_id, guild_id, staff_id, event_type
+        )
+
+    @staticmethod
+    async def claim_ticket(channel: discord.TextChannel, staff: discord.Member):
+        """Assigns a staff member to a ticket and logs the event."""
+        # Update permissions for the staff
+        await channel.set_permissions(staff, read_messages=True, send_messages=True, manage_messages=True)
+        await TicketService.log_event(channel.id, channel.guild.id, "claimed", staff.id)
+        
+        # Update ticket status in DB (optionally add staff_id to tickets table)
+        await db.execute("UPDATE tickets SET staff_id = ? WHERE channel_id = ?", staff.id, channel.id)
 
     @staticmethod
     async def generate_transcript(channel: discord.TextChannel) -> discord.File:
@@ -67,12 +86,13 @@ class TicketService:
         return await transcript_service.generate_text_transcript(channel)
 
     @staticmethod
-    async def close_ticket(channel_id: int, reason: str = "No reason provided"):
-        """Marks a ticket as closed in the database with a reason."""
+    async def close_ticket(channel_id: int, guild_id: int, reason: str = "No reason provided", closed_by_id: int = None):
+        """Marks a ticket as closed in the database and logs the event."""
         await db.execute(
             "UPDATE tickets SET status = 'closed', reason = ? WHERE channel_id = ?",
             reason, channel_id
         )
+        await TicketService.log_event(channel_id, guild_id, "closed", closed_by_id)
 
     @staticmethod
     async def is_ticket(channel_id: int) -> bool:
