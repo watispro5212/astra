@@ -6,6 +6,7 @@ from core.config import config
 from core.database import db
 from ui.views.role_view import PersistentRoleView
 from ui.views.poll_view import PersistentPollView
+from ui.views.ticket_view import TicketLauncherView, TicketControlView
 from services.reminder_service import ReminderService
 import datetime
 
@@ -33,6 +34,8 @@ class AstraBot(commands.Bot):
         # Register Persistent Views
         self.add_view(PersistentRoleView())
         self.add_view(PersistentPollView())
+        self.add_view(TicketLauncherView())
+        self.add_view(TicketControlView())
         
         # Start background tasks
         self.check_reminders.start()
