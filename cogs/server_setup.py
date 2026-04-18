@@ -9,64 +9,80 @@ class ServerSetup(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @app_commands.command(name="setup_server", description="🚀 ULTRA-SETUP v2.3: Configures Roles, Permissions, and detailed Channels.")
+    @app_commands.command(name="setup_server", description="🏰 MASTER SETUP v2.5: Full Server Reconstruction (Roles, Permissions, Channels)")
     @app_commands.checks.has_permissions(administrator=True)
     async def setup_server(self, interaction: discord.Interaction):
-        """Full server construction. Creates roles, permissions, and channels with descriptions."""
+        """Full server construction. WARNING: Deletes all existing channels and roles."""
         await interaction.response.defer(ephemeral=True)
         
         status_embed = AstraEmbed(
-            title="🏗️ Astra Server Setup v2.3",
-            description="Starting full server reconstruction. Sit tight..."
+            title="⚠️ MASTER SETUP INITIATED (v2.5.0)",
+            description="**WARNING**: This will delete ALL existing channels and roles (except integrations).\n\n"
+                        "Starting in **10 seconds**... You can dismiss this message to cancel (process will stop if bot is stopped)."
         )
         status_msg = await interaction.followup.send(embed=status_embed, ephemeral=True)
+        await asyncio.sleep(10)
 
         guild = interaction.guild
         
-        # 1. DELETE EXISTING STRUCTURE (Protecting current channel)
-        status_embed.description = "🗑️ Resetting channels (Keeping current channel safe)..."
+        # 1. DELETE EXISTING CHANNELS
+        status_embed.description = "🗑️ Wiping existing channels..."
         await status_msg.edit(embed=status_embed)
-        
         for channel in guild.channels:
-            if channel.id == interaction.channel_id:
-                continue
-            try:
-                await channel.delete(reason="Astra Setup: Reset")
-            except:
-                pass
+            if channel.id == interaction.channel_id: continue
+            try: await channel.delete()
+            except: pass
 
-        # 2. CREATE ROLES
-        status_embed.description = "👥 Generating role hierarchy and permissions..."
+        # 2. DELETE EXISTING ROLES (Skip @everyone and Integrations)
+        status_embed.description = "👤 Wiping existing roles..."
+        await status_msg.edit(embed=status_embed)
+        managed_roles = [r for r in guild.roles if not r.managed and r != guild.default_role]
+        for role in managed_roles:
+            try: await role.delete()
+            except: pass
+
+        # 3. DEFINE & CREATE ROLES (Created from Bottom to Top for Hierarchy)
+        status_embed.description = "👥 Creating Role Hierarchy & Hoisting..."
         await status_msg.edit(embed=status_embed)
         
+        # Order: Bottom to Top (Last one created is on top)
         role_data = [
-            ("👑 Owner", discord.Color.from_str("#E74C3C"), discord.Permissions.all()),
-            ("🔧 Admin", discord.Color.from_str("#C0392B"), discord.Permissions.all()),
-            ("🛡️ Moderator", discord.Color.from_str("#E67E22"), discord.Permissions(manage_messages=True, kick_members=True, ban_members=True, moderate_members=True, manage_threads=True, manage_nicknames=True)),
-            ("💻 Developer", discord.Color.from_str("#3498DB"), discord.Permissions(manage_webhooks=True, view_audit_log=True, manage_threads=True)),
-            ("🚑 Support Lead", discord.Color.from_str("#F39C12"), discord.Permissions(manage_messages=True, manage_threads=True, read_message_history=True)),
-            ("🆘 Support Staff", discord.Color.from_str("#F1C40F"), discord.Permissions(manage_messages=True, read_message_history=True)),
-            ("🎖️ Community Guide", discord.Color.from_str("#1ABC9C"), discord.Permissions(moderate_members=True, mute_members=True, move_members=True)),
-            ("🎉 Event Manager", discord.Color.from_str("#E91E63"), discord.Permissions(manage_events=True, mention_everyone=True)),
-            ("💎 Elite Patron", discord.Color.from_str("#EB459E"), discord.Permissions(use_external_emojis=True, use_external_stickers=True, create_public_threads=True)),
-            ("⭐ Premium", discord.Color.from_str("#F1C40F"), discord.Permissions(use_external_emojis=True, embed_links=True)),
-            ("🧪 Bot Tester", discord.Color.from_str("#9B59B6"), discord.Permissions(use_external_emojis=True, use_application_commands=True)),
-            ("📜 Astra Contributor", discord.Color.from_str("#A19D94"), discord.Permissions(attach_files=True, create_public_threads=True)),
-            ("👋 Verified", discord.Color.from_str("#2ECC71"), discord.Permissions(send_messages=True, read_message_history=True, use_application_commands=True, add_reactions=True, connect=True)),
-            ("🔒 Unverified", discord.Color.from_str("#99AAB5"), discord.Permissions(read_message_history=True)),
-            ("📢 News Ping", discord.Color.light_grey(), discord.Permissions.none()),
-            ("🚀 Update Ping", discord.Color.light_grey(), discord.Permissions.none()),
-            ("🧪 Lab Ping", discord.Color.light_grey(), discord.Permissions.none())
+            # Notification Roles (No Hoist, No Mention)
+            ("🧪 Lab Ping", "#99AAB5", discord.Permissions.none(), False, False),
+            ("🚀 Update Ping", "#99AAB5", discord.Permissions.none(), False, False),
+            ("📢 News Ping", "#99AAB5", discord.Permissions.none(), False, False),
+            # Member Roles
+            ("🔒 Unverified", "#99AAB5", discord.Permissions(read_message_history=True), False, False),
+            ("👋 Verified", "#2ECC71", discord.Permissions(send_messages=True, read_message_history=True, use_application_commands=True, add_reactions=True, connect=True), True, False),
+            ("📜 Astra Contributor", "#A19D94", discord.Permissions(attach_files=True, create_public_threads=True), True, False),
+            ("🧪 Bot Tester", "#9B59B6", discord.Permissions(use_external_emojis=True, use_application_commands=True), True, False),
+            ("⭐ Premium", "#F1C40F", discord.Permissions(use_external_emojis=True, embed_links=True), True, False),
+            ("💎 Elite Patron", "#EB459E", discord.Permissions(use_external_emojis=True, use_external_stickers=True, create_public_threads=True), True, False),
+            # Staff Roles
+            ("🎉 Event Manager", "#E91E63", discord.Permissions(manage_events=True, mention_everyone=True), True, True),
+            ("🎖️ Community Guide", "#1ABC9C", discord.Permissions(moderate_members=True, mute_members=True, move_members=True), True, True),
+            ("🆘 Support Staff", "#F1C40F", discord.Permissions(manage_messages=True, read_message_history=True), True, True),
+            ("🚑 Support Lead", "#F39C12", discord.Permissions(manage_messages=True, manage_threads=True, read_message_history=True), True, True),
+            ("💻 Developer", "#3498DB", discord.Permissions(manage_webhooks=True, view_audit_log=True, manage_threads=True), True, True),
+            ("🛡️ Moderator", "#E67E22", discord.Permissions(manage_messages=True, kick_members=True, ban_members=True, moderate_members=True, manage_threads=True, manage_nicknames=True), True, True),
+            ("🔧 Admin", "#C0392B", discord.Permissions.all(), True, True),
+            ("👑 Owner", "#E74C3C", discord.Permissions.all(), True, True)
         ]
         
         roles = {}
-        for name, color, perms in role_data:
-            role = discord.utils.get(guild.roles, name=name)
-            if not role:
-                role = await guild.create_role(name=name, color=color, permissions=perms, reason="Astra Setup")
+        for name, color, perms, hoist, mention in role_data:
+            role = await guild.create_role(
+                name=name, 
+                color=discord.Color.from_str(color), 
+                permissions=perms, 
+                hoist=hoist, 
+                mentionable=mention,
+                reason="Astra v2.5 Setup"
+            )
             roles[name] = role
+            await asyncio.sleep(0.5)
 
-        # 3. DEFINE STRUCTURE (Categories -> Channels with Topics)
+        # 4. DEFINE STRUCTURE
         structure = [
             ("─── WELCOME ZONE ───", "public_read", [
                 ("👋 welcome", "Official greetings for new Astra members."),
@@ -120,16 +136,13 @@ class ServerSetup(commands.Cog):
             ])
         ]
 
-        # 4. BUILD CATEGORIES & CHANNELS
+        # 5. BUILD CATEGORIES & CHANNELS
         created_channels = 0
         for cat_name, p_type, channels in structure:
             status_embed.description = f"🏗️ Building Category: **{cat_name}**..."
             await status_msg.edit(embed=status_embed)
             
-            # Category Permissions
-            overwrites = {
-                guild.default_role: discord.PermissionOverwrite(view_channel=True, send_messages=False)
-            }
+            overwrites = { guild.default_role: discord.PermissionOverwrite(view_channel=True, send_messages=False) }
             
             if p_type == 'public_chat':
                 overwrites[roles["👋 Verified"]] = discord.PermissionOverwrite(view_channel=True, send_messages=True)
@@ -142,18 +155,18 @@ class ServerSetup(commands.Cog):
                 overwrites[roles["🆘 Support Staff"]] = discord.PermissionOverwrite(view_channel=True, send_messages=True)
 
             category = await guild.create_category(name=cat_name, overwrites=overwrites)
-            
             for name, topic in channels:
                 await guild.create_text_channel(name=name, category=category, topic=topic)
                 created_channels += 1
                 await asyncio.sleep(0.3)
 
-        # 5. FINAL SUCCESS
+        # 6. FINAL SUCCESS
         final_embed = SuccessEmbed(
-            f"Server v2.3 Build Complete!\n\n"
-            f"👤 Created/Synced **{len(roles)}** Roles\n"
-            f"📁 Created **{len(structure)}** Categories\n"
-            f"💬 Created **{created_channels}** Channels with Topics"
+            f"🏰 Master Build v2.5.0 Complete!\n\n"
+            f"👤 Roles Rebuilt: **{len(roles)}** (Hoisted & Ordered)\n"
+            f"📁 Categories: **{len(structure)}**\n"
+            f"💬 Channels: **{created_channels}**\n\n"
+            f"**Action Required**: Roles have been reset. Please re-assign yourself the `👑 Owner` role."
         )
         await interaction.followup.send(embed=final_embed, ephemeral=True)
 

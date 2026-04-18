@@ -1,6 +1,11 @@
-# 🚀 Astra Discord: Production-Ready Asset Library (v2.5.0)
+# 🛰️ Astra Server Identity & Assets (v2.6.0)
 
-This document contains the exact text and logic to be used for the Astra Support Server. Copy and paste these into your channels to create a professional experience.
+## 🏆 Server Identity
+*Use these in your Server Settings -> Overview.*
+
+- **Server Name**: `Astra HQ | Official Support & Community`
+- **Server Description**: 
+  > The official central hub for Astra—the next-generation Discord automation engine. Connect with the architects, get precision support, and join the laboratory for future features. Explore the power of Astra.
 
 ---
 
