@@ -45,10 +45,11 @@ class General(commands.Cog):
         
         embed.add_field(name="Framework", value="`discord.py` 2.3+", inline=True)
         embed.add_field(name="Commands", value="Slash commands enabled", inline=True)
-        embed.add_field(name="Developer", value="Nexus & Antigravity", inline=True)
+        embed.add_field(name="Developer", value="watispro1", inline=True)
+        embed.add_field(name="GitHub", value="[watispro5212](https://github.com/watispro5212)", inline=True)
         
         # Use a premium-looking footer
-        embed.set_footer(text="Astra • Your reliable server companion", icon_url=self.bot.user.display_avatar.url if self.bot.user else None)
+        embed.set_footer(text="Astra • Built by watispro1", icon_url=self.bot.user.display_avatar.url if self.bot.user else None)
         
         await interaction.response.send_message(embed=embed)
 
