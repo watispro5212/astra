@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Changelog — Astra Bot</title>
+  <meta name="description" content="Stay up to date with Astra's latest features, improvements, and bug fixes.">
+  <meta property="og:title" content="Changelog — Astra Bot">
+  <meta property="og:description" content="See what's new in the latest version of Astra.">
+  <meta property="og:image" content="assets/images/og-preview.png">
+  <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-radial" aria-hidden="true"></div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <a href="index.html" class="navbar__brand">
+        <img src="assets/images/astra-logo.png" alt="Astra logo" width="36" height="36">
+        Astra
+      </a>
+      <button class="navbar__toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="navbar__links">
+        <a href="index.html" class="navbar__link">Home</a>
+        <a href="features.html" class="navbar__link">Features</a>
+        <a href="commands.html" class="navbar__link">Commands</a>
+        <a href="support.html" class="navbar__link">Support</a>
+        <a href="faq.html" class="navbar__link">FAQ</a>
+        <span class="navbar__cta">
+          <a href="#" class="btn btn--primary btn--small">Invite Astra</a>
+        </span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <header class="page-header">
+    <div class="container">
+      <h1 class="animate-on-scroll"><span class="text-gradient">Changelog</span></h1>
+      <p class="animate-on-scroll">Track every update, feature, and improvement.</p>
+    </div>
+  </header>
+
+  <!-- CHANGELOG CONTENT -->
+  <main class="section" style="padding-top:0;">
+    <div class="container container--narrow">
+
+      <!-- v1.0.0 -->
+      <article class="changelog-entry animate-on-scroll">
+        <div class="changelog-entry__header">
+          <span class="changelog-entry__version">v1.0.0</span>
+          <span class="changelog-entry__date">April 18, 2026</span>
+          <span class="changelog-entry__tag">Initial Release</span>
+        </div>
+        <ul>
+          <li><strong>Moderation:</strong> Added <code>/kick</code>, <code>/ban</code>, <code>/warn</code>, and <code>/cases</code> commands with persistent case tracking</li>
+          <li><strong>Polls:</strong> Interactive button-based polls with real-time vote tracking and up to 10 options</li>
+          <li><strong>Tickets:</strong> Full ticket support system with launcher panels, private channels, and staff controls</li>
+          <li><strong>Starboard:</strong> Automatic starboard with configurable threshold and live count updates</li>
+          <li><strong>Reminders:</strong> Personal reminders with flexible time parsing (<code>10m</code>, <code>1h</code>, <code>2d</code>)</li>
+          <li><strong>Role Menus:</strong> Self-assignable role menus with button and select menu styles</li>
+          <li><strong>Event Logging:</strong> Automatic logging for joins, leaves, bans, message edits, and deletions</li>
+          <li><strong>Server Configuration:</strong> Slash commands for configuring logging channel, starboard, and threshold</li>
+          <li><strong>General:</strong> <code>/ping</code> with gateway and REST latency, <code>/about</code> with bot info</li>
+          <li><strong>Architecture:</strong> Modular cog-based design with persistent SQLite database, discord.py 2.3+</li>
+        </ul>
+      </article>
+
+    </div>
+  </main>
+
+  <!-- CTA BANNER -->
+  <section class="section">
+    <div class="container">
+      <div class="cta-banner animate-on-scroll">
+        <h2>Want to see these features in action?</h2>
+        <p>Invite Astra to your server and try everything firsthand.</p>
+        <div class="hero__actions">
+          <a href="#" class="btn btn--primary btn--large">✨ Invite Astra</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer__grid">
+        <div>
+          <div class="footer__brand">
+            <img src="assets/images/astra-logo.png" alt="Astra" width="28" height="28">
+            Astra
+          </div>
+          <p class="footer__desc">A polished utility and community assistant designed to make server management easy and interactive.</p>
+        </div>
+        <div>
+          <h4 class="footer__heading">Product</h4>
+          <a href="features.html" class="footer__link">Features</a>
+          <a href="commands.html" class="footer__link">Commands</a>
+          <a href="changelog.html" class="footer__link">Changelog</a>
+        </div>
+        <div>
+          <h4 class="footer__heading">Resources</h4>
+          <a href="support.html" class="footer__link">Support</a>
+          <a href="faq.html" class="footer__link">FAQ</a>
+          <a href="#" class="footer__link">GitHub</a>
+        </div>
+        <div>
+          <h4 class="footer__heading">Legal</h4>
+          <a href="privacy.html" class="footer__link">Privacy Policy</a>
+          <a href="terms.html" class="footer__link">Terms of Service</a>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>&copy; 2026 Astra. Built by Nexus &amp; Antigravity.</span>
+        <span>Made with ✨ for the Discord community</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

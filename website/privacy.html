@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — Astra Bot</title>
+  <meta name="description" content="Astra's privacy policy. Learn what data Astra collects, why, and how it is used.">
+  <meta property="og:title" content="Privacy Policy — Astra Bot">
+  <meta property="og:description" content="Learn about Astra's data collection and privacy practices.">
+  <meta property="og:image" content="assets/images/og-preview.png">
+  <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-radial" aria-hidden="true"></div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <a href="index.html" class="navbar__brand">
+        <img src="assets/images/astra-logo.png" alt="Astra logo" width="36" height="36">
+        Astra
+      </a>
+      <button class="navbar__toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="navbar__links">
+        <a href="index.html" class="navbar__link">Home</a>
+        <a href="features.html" class="navbar__link">Features</a>
+        <a href="commands.html" class="navbar__link">Commands</a>
+        <a href="support.html" class="navbar__link">Support</a>
+        <a href="faq.html" class="navbar__link">FAQ</a>
+        <span class="navbar__cta">
+          <a href="#" class="btn btn--primary btn--small">Invite Astra</a>
+        </span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <header class="page-header">
+    <div class="container">
+      <h1 class="animate-on-scroll"><span class="text-gradient">Privacy Policy</span></h1>
+      <p class="animate-on-scroll">Last updated: April 18, 2026</p>
+    </div>
+  </header>
+
+  <!-- PRIVACY CONTENT -->
+  <main class="section" style="padding-top:0;">
+    <div class="container container--narrow">
+      <div class="content animate-on-scroll">
+
+        <h2>Introduction</h2>
+        <p>This privacy policy explains what data Astra ("the bot") collects, why it collects it, and how it is stored and used. By adding Astra to your Discord server, you agree to the practices described in this policy.</p>
+
+        <h2>Data We Collect</h2>
+        <p>Astra collects and stores the minimum data necessary to provide its features. This includes:</p>
+
+        <h3>Server Configuration</h3>
+        <ul>
+          <li>Guild (server) IDs</li>
+          <li>Channel IDs for logging and starboard</li>
+          <li>Role IDs for ticket staff and role menus</li>
+          <li>Category IDs for ticket channels</li>
+          <li>Starboard threshold settings</li>
+        </ul>
+
+        <h3>Moderation Data</h3>
+        <ul>
+          <li>User IDs of moderated members and moderators</li>
+          <li>Action type (kick, ban, warning)</li>
+          <li>Reason text provided by moderators</li>
+          <li>Timestamps of moderation actions</li>
+          <li>Case numbers</li>
+        </ul>
+
+        <h3>Feature Data</h3>
+        <ul>
+          <li><strong>Polls:</strong> Poll questions, options, voter user IDs, and vote counts</li>
+          <li><strong>Reminders:</strong> User IDs, channel IDs, reminder messages, and trigger times</li>
+          <li><strong>Starboard:</strong> Message IDs, starboard post IDs, star counts</li>
+          <li><strong>Tickets:</strong> Ticket configuration (category and staff role IDs)</li>
+          <li><strong>Role Menus:</strong> Message IDs, role IDs, menu options, and label text</li>
+        </ul>
+
+        <h2>What We Do Not Collect</h2>
+        <ul>
+          <li>Message content (except user-provided fields like moderation reasons, poll questions, and reminder messages)</li>
+          <li>Direct message content</li>
+          <li>User passwords or authentication tokens</li>
+          <li>Personal information beyond Discord user IDs</li>
+          <li>Voice channel data</li>
+        </ul>
+
+        <h2>Why We Collect Data</h2>
+        <p>All data is collected solely to provide Astra's features. For example:</p>
+        <ul>
+          <li>Moderation cases are stored so staff can review a member's history</li>
+          <li>Reminders require storing your message and trigger time</li>
+          <li>Polls require tracking votes to display accurate results</li>
+          <li>Server configs are stored so your settings persist between restarts</li>
+        </ul>
+
+        <h2>Data Storage</h2>
+        <p>Data is stored in a SQLite database on the server hosting Astra. The database is not shared with any third parties. Access to the database is restricted to the bot's operators.</p>
+
+        <h2>Data Sharing</h2>
+        <p>We do <strong>not</strong> sell, share, or distribute any collected data to third parties. Data is only used internally to provide Astra's functionality.</p>
+
+        <h2>Data Retention</h2>
+        <p>Data is retained as long as it is needed for its intended purpose:</p>
+        <ul>
+          <li>Moderation cases are stored indefinitely for accountability</li>
+          <li>Reminders are deleted after they fire</li>
+          <li>Poll data persists for the lifetime of the poll</li>
+          <li>Server configs persist until manually changed or the bot is removed</li>
+        </ul>
+
+        <h2>Data Deletion</h2>
+        <p>You can request deletion of your data by contacting us in our <a href="#">support server</a>. We will remove all data associated with your server ID or user ID upon verified request. Removing Astra from your server will stop future data collection, but existing records remain until a deletion request is processed.</p>
+
+        <h2>Children's Privacy</h2>
+        <p>Astra does not knowingly collect data from children under 13. Discord's Terms of Service already require users to be at least 13 years old.</p>
+
+        <h2>Changes to This Policy</h2>
+        <p>We may update this privacy policy from time to time. Significant changes will be announced in the support server. Continued use of Astra after changes constitutes acceptance of the updated policy.</p>
+
+        <h2>Contact</h2>
+        <p>For questions about this privacy policy or data requests, join our <a href="#">support server</a> and reach out to a team member.</p>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer__grid">
+        <div>
+          <div class="footer__brand">
+            <img src="assets/images/astra-logo.png" alt="Astra" width="28" height="28">
+            Astra
+          </div>
+          <p class="footer__desc">A polished utility and community assistant designed to make server management easy and interactive.</p>
+        </div>
+        <div>
+          <h4 class="footer__heading">Product</h4>
+          <a href="features.html" class="footer__link">Features</a>
+          <a href="commands.html" class="footer__link">Commands</a>
+          <a href="changelog.html" class="footer__link">Changelog</a>
+        </div>
+        <div>
+          <h4 class="footer__heading">Resources</h4>
+          <a href="support.html" class="footer__link">Support</a>
+          <a href="faq.html" class="footer__link">FAQ</a>
+          <a href="#" class="footer__link">GitHub</a>
+        </div>
+        <div>
+          <h4 class="footer__heading">Legal</h4>
+          <a href="privacy.html" class="footer__link">Privacy Policy</a>
+          <a href="terms.html" class="footer__link">Terms of Service</a>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>&copy; 2026 Astra. Built by Nexus &amp; Antigravity.</span>
+        <span>Made with ✨ for the Discord community</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
