@@ -324,8 +324,164 @@ class DatabaseManager:
             )
         """)
 
+        # ── ECONOMY (v3) ─────────────────────────────────────────────────────────
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS economy (
+                user_id INTEGER,
+                guild_id INTEGER,
+                balance INTEGER DEFAULT 0,
+                bank INTEGER DEFAULT 0,
+                last_daily DATETIME,
+                last_work DATETIME,
+                total_earned INTEGER DEFAULT 0,
+                PRIMARY KEY (user_id, guild_id)
+            )
+        """)
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS shop_items (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                guild_id INTEGER,
+                name TEXT,
+                description TEXT,
+                price INTEGER,
+                role_id INTEGER,
+                stock INTEGER DEFAULT -1,
+                is_active BOOLEAN DEFAULT 1
+            )
+        """)
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS economy_transactions (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                guild_id INTEGER,
+                user_id INTEGER,
+                amount INTEGER,
+                type TEXT,
+                description TEXT,
+                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
+        # ── WARNINGS (v3) ─────────────────────────────────────────────────────
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS warnings (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                guild_id INTEGER,
+                user_id INTEGER,
+                moderator_id INTEGER,
+                reason TEXT,
+                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+                is_active BOOLEAN DEFAULT 1
+            )
+        """)
+
+        # ── AFK (v3) ──────────────────────────────────────────────────────────
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS afk (
+                user_id INTEGER,
+                guild_id INTEGER,
+                reason TEXT DEFAULT 'AFK',
+                set_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (user_id, guild_id)
+            )
+        """)
+
+        # ── BIRTHDAYS (v3) ────────────────────────────────────────────────────
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS birthdays (
+                user_id INTEGER,
+                guild_id INTEGER,
+                birth_month INTEGER,
+                birth_day INTEGER,
+                timezone TEXT DEFAULT 'UTC',
+                PRIMARY KEY (user_id, guild_id)
+            )
+        """)
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS birthday_configs (
+                guild_id INTEGER PRIMARY KEY,
+                channel_id INTEGER,
+                role_id INTEGER,
+                message TEXT DEFAULT 'Happy Birthday {user}! 🎂'
+            )
+        """)
+
+        # ── SUGGESTIONS (v3) ──────────────────────────────────────────────────
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS suggestions (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                guild_id INTEGER,
+                channel_id INTEGER,
+                message_id INTEGER,
+                author_id INTEGER,
+                content TEXT,
+                status TEXT DEFAULT 'pending',
+                staff_note TEXT,
+                upvotes INTEGER DEFAULT 0,
+                downvotes INTEGER DEFAULT 0,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS suggestion_configs (
+                guild_id INTEGER PRIMARY KEY,
+                channel_id INTEGER,
+                staff_role_id INTEGER,
+                dm_on_update BOOLEAN DEFAULT 1
+            )
+        """)
+
+        # ── INVITE TRACKER (v3) ───────────────────────────────────────────────
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS invite_tracking (
+                guild_id INTEGER,
+                inviter_id INTEGER,
+                invitee_id INTEGER,
+                invite_code TEXT,
+                joined_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                is_fake BOOLEAN DEFAULT 0,
+                PRIMARY KEY (guild_id, invitee_id)
+            )
+        """)
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS invite_counts (
+                guild_id INTEGER,
+                user_id INTEGER,
+                total INTEGER DEFAULT 0,
+                fake INTEGER DEFAULT 0,
+                left INTEGER DEFAULT 0,
+                PRIMARY KEY (guild_id, user_id)
+            )
+        """)
+
+        # ── ANTI-RAID (v3) ────────────────────────────────────────────────────
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS antiraid_configs (
+                guild_id INTEGER PRIMARY KEY,
+                enabled BOOLEAN DEFAULT 0,
+                join_threshold INTEGER DEFAULT 10,
+                join_window INTEGER DEFAULT 10,
+                lockdown_active BOOLEAN DEFAULT 0,
+                alert_channel_id INTEGER,
+                action TEXT DEFAULT 'kick'
+            )
+        """)
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS antiraid_logs (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                guild_id INTEGER,
+                event_type TEXT,
+                description TEXT,
+                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
+        # ── v3 GUILD MIGRATIONS ───────────────────────────────────────────────
+        await self._safe_add_column("guilds", "suggestion_channel_id", "INTEGER")
+        await self._safe_add_column("guilds", "birthday_channel_id", "INTEGER")
+        await self._safe_add_column("guilds", "economy_enabled", "BOOLEAN DEFAULT 1")
+
         await self.connection.commit()
-        logger.info("Database tables initialized (v2)")
+        logger.info("Database tables initialized (v3)")
 
     async def execute(self, query: str, *args):
         """Executes a non-returning query."""

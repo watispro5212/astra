@@ -1,48 +1,55 @@
-<div align="center">
+# Astra
 
-<img src="assets/images/astra-logo.png" alt="Astra Logo" width="120" height="120" />
+**The ultimate all-in-one Discord community bot — built with `discord.py` 2.x**
 
-# ✨ Astra
-
-**A premium, modular Discord community bot built with `discord.py` 2.x**
-
-[![Version](https://img.shields.io/badge/version-2.1.0-blueviolet?style=for-the-badge)](https://github.com/watispro5212/astra/releases)
+[![Version](https://img.shields.io/badge/version-3.0.0-blueviolet?style=for-the-badge)](https://github.com/watispro5212/astra/releases)
 [![Python](https://img.shields.io/badge/python-3.11+-blue?style=for-the-badge&logo=python)](https://www.python.org/)
 [![discord.py](https://img.shields.io/badge/discord.py-2.3+-5865F2?style=for-the-badge&logo=discord)](https://discordpy.readthedocs.io/)
-[![License](https://img.shields.io/badge/license-Astra%20CL-orange?style=for-the-badge)](LICENSE)
+[![License](https://img.shields.io/badge/license-Astra%20CL%20v2-orange?style=for-the-badge)](LICENSE)
 
 [Features](#features) • [Commands](#commands) • [Setup](#setup) • [Changelog](#changelog) • [License](#license)
-
-</div>
 
 ---
 
 ## Overview
 
-Astra is a polished, fully modular Discord bot designed to be your server's all-in-one community platform. It handles moderation, engagement, automation, and server management — without being noisy or complicated to configure.
+Astra v3 is the most complete version yet — a fully modular Discord bot covering moderation, economy, leveling, anti-raid protection, community features, fun commands, and server management in one clean package.
 
-**v2.1 Update**: Now features a premium design system, advanced auto-moderation, and a comprehensive engagement suite.
+**v3.0**: Adds 10 new modules (economy, warnings, AFK, birthdays, suggestions, anti-raid, invite tracker, fun commands, server backup), a fully redesigned website with status page and command search, and updated legal docs.
 
 ---
 
 ## Features
 
 | Module | Description |
-|---|---|
-| 🛡️ **Advanced Moderation** | Auto-moderation filters, `/mute`, `/purge`, and case-tracked history |
-| 🏆 **Engagement Suite** | XP & Leveling system with leaderboard, rewards, and giveaways |
-| 📋 **Audit Logging** | Detailed event tracking for channels, members, and messages |
-| 🎭 **Reaction Roles** | Persistent button-based menus with unique-role swapping |
-| 📊 **Interactive Polls** | Timed and anonymous voting with live animated progress bars |
-| ⚙️ **Automation** | Join-to-Create temporary voice hubs and welcome systems |
-| ⭐ **Starboard** | Community highlights with media support and star thresholds |
-| 🎫 **Ticket System v2** | Categorized support channels with automated transcripts |
+| --- | --- |
+| **Moderation Suite** | Kick, ban, mute, warn, lock channels — full case tracking with appeals and export |
+| **Anti-Raid** | Real-time mass-join detection with automatic server lockdown |
+| **Economy System** | Coins, daily/work rewards, server shop with role rewards, leaderboard |
+| **Warning System** | Formal warnings with history, individual removal, and DM notifications |
+| **AFK System** | Set AFK status, auto-reply on mention, auto-remove on activity |
+| **Birthdays** | Auto announcements, birthday roles, upcoming calendar |
+| **Suggestions** | Community idea submission with staff approve/deny workflow |
+| **Invite Tracker** | Track who invited who, invite leaderboard, fake/leave detection |
+| **Fun Commands** | 8ball, trivia, RPS, roast, dice, coin flip, chooser |
+| **XP & Leveling** | Configurable XP system with role rewards and level-up announcements |
+| **Giveaways** | Button-based persistent giveaways with automated winner selection |
+| **Polls** | Timed and anonymous voting with live progress bars |
+| **Starboard** | Community highlights with configurable threshold |
+| **Ticket System** | Private support channels with HTML transcripts |
+| **Reaction Roles** | Persistent button/dropdown menus with unique-role mode |
+| **Server Backup** | Export/import full server configuration as JSON |
+| **Welcome System** | Custom join/farewell messages and auto-role assignment |
+| **Temp Voice** | Join-to-Create hubs for private voice channels |
+| **Audit Logging** | Detailed event tracking for all server actions |
+| **Reminders** | Flexible personal reminders with DM fallback |
 
 ---
 
 ## Setup
 
 ### Requirements
+
 - Python 3.11+
 - A Discord Bot Token from the [Discord Developer Portal](https://discord.com/developers/applications)
 
@@ -58,58 +65,74 @@ pip install -r requirements.txt
 
 # 3. Configure environment
 cp .env.example .env
-# Edit .env and fill in your DISCORD_TOKEN and GUILD_ID
+# Edit .env and fill in your DISCORD_TOKEN and optionally GUILD_ID
 
 # 4. Run the bot
 python main.py
 ```
 
-### Required Intents
+### Environment Variables
 
-Enable all three Privileged Gateway Intents in the Developer Portal:
-- ✅ **Server Members Intent**
-- ✅ **Message Content Intent**
-- ✅ **Presence Intent** (Required for Member Stats & XP tracking)
+| Variable | Required | Description |
+| --- | --- | --- |
+| `DISCORD_TOKEN` | Yes | Your bot token from the Developer Portal |
+| `GUILD_ID` | Optional | Dev server ID — syncs slash commands instantly |
+| `OWNER_ID` | Optional | Your Discord user ID for owner-only commands |
+| `DATABASE_URL` | Optional | SQLite path (default: `sqlite:///./data/astra.db`) |
+
+### Required Privileged Intents
+
+Enable all three in the [Developer Portal](https://discord.com/developers/applications) under your bot's settings:
+
+- **Server Members Intent** — Required for welcome, leveling, invite tracking
+- **Message Content Intent** — Required for automod, leveling, AFK, trivia
+- **Presence Intent** — Required for member stats
 
 ---
 
 ## Commands
 
 | Command | Description |
-|---|---|
-| `/ping` | Gateway and REST latency |
-| `/rank` | View your current XP and progression |
-| `/leaderboard` | Top 10 members in the server |
-| `/mute` | Timeout a member for a duration |
-| `/automod_config` | Setup specialized moderation filters |
-| `/giveaway` | Start a persistent, button-based giveaway |
-| `/voice hub` | Setup Join-to-Create voice channels |
-| `/stats guild/user` | View detailed server or member metrics |
-| `/purge` | Clear up to 100 messages at once |
-| `/ticket_setup` | Configure categories and log channels |
-| `/config view` | Review current server settings |
+| --- | --- |
+| `/mod kick/ban/mute/unmute` | Core moderation with case tracking |
+| `/warn` / `/warnings` / `/clearwarns` | Warning system |
+| `/lock` / `/unlock` | Channel lock/unlock |
+| `/economy balance/daily/work/pay` | Economy system |
+| `/economy shop/buy/additem` | Shop management |
+| `/antiraid config/unlock/status` | Anti-raid controls |
+| `/birthday set/check/upcoming` | Birthday system |
+| `/suggest` / `/suggestion approve/deny` | Suggestions |
+| `/invites check/leaderboard/whoinvited` | Invite tracker |
+| `/8ball` / `/trivia` / `/rps` / `/roast` | Fun commands |
+| `/backup export/import` | Config backup |
+| `/afk` | Set AFK status |
+| `/rank` / `/leaderboard` | XP system |
+| `/giveaway` / `/poll` | Engagement tools |
+| `/config` / `/ticket_setup` | Server configuration |
+
+See the [full command reference](https://watispro5212.github.io/astra/commands.html) for all 50+ commands.
 
 ---
 
 ## Changelog
 
-See [CHANGELOG.md](CHANGELOG.md) for a full version history.
+See [CHANGELOG.md](CHANGELOG.md) for full version history.
 
-**Latest: v2.1.0** — Massive visual overhaul with "Premium Glass" design system and synchronization of the v2.0 feature engine.
+**Latest: v3.0.0** — 10 new modules, redesigned website with status page and command search, updated legal docs.
 
 ---
 
 ## License
 
-This project is licensed under the **Astra Community License (ACL)**.  
+Licensed under the **Astra Community License v2 (ACL v2)**.
 See [LICENSE](LICENSE) for full terms.
 
-**Summary**: Free to use and self-host for non-commercial purposes. Attribution required. Redistribution and commercial use prohibited.
+**Summary**: Free for non-commercial self-hosting with attribution. No redistribution or commercial use without permission.
 
 ---
 
 ## Author
 
-Made with ❤️ by **watispro5212**  
-GitHub: [watispro5212](https://github.com/watispro5212)  
+Made with love by **watispro5212**
 Discord: `watispro1`
+Support Server: <https://discord.gg/NZ5Gr7eqE8>

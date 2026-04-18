@@ -1,13 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Support — Astra Bot</title>
-  <meta name="description" content="Get help with Astra. Find troubleshooting tips, join the support server, or report an issue.">
-  <meta property="og:title" content="Support — Astra Bot">
-  <meta property="og:description" content="Need help with Astra? Find support resources and troubleshooting tips.">
-  <meta property="og:image" content="assets/images/astra-banner.png">
+  <title>Support — Astra</title>
+  <meta name="description" content="Get help with Astra. Join the support server, browse the FAQ, or contact the developer.">
   <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
@@ -16,14 +13,14 @@
   <div class="bg-grid" aria-hidden="true"></div>
   <div class="bg-radial" aria-hidden="true"></div>
 
-  <!-- NAVBAR -->
-  <nav class="navbar" role="navigation" aria-label="Main navigation">
+  <nav class="navbar glass" role="navigation" aria-label="Main navigation">
     <div class="container">
       <a href="index.html" class="navbar__brand">
         <img src="assets/images/astra-logo.png" alt="Astra logo" width="36" height="36">
         Astra
+        <span class="navbar__version">v3.0</span>
       </a>
-      <button class="navbar__toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+      <button type="button" class="navbar__toggle" aria-label="Toggle navigation menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
       <div class="navbar__links">
@@ -31,8 +28,9 @@
         <a href="features.html" class="navbar__link">Features</a>
         <a href="commands.html" class="navbar__link">Commands</a>
         <a href="changelog.html" class="navbar__link">Changelog</a>
+        <a href="status.html" class="navbar__link">Status</a>
         <a href="support.html" class="navbar__link active">Support</a>
-        <a href="faq.html" class="navbar__link">FAQ</a>
+        <a href="https://patreon.com/watispro1" class="navbar__link" target="_blank" rel="noopener">Patreon</a>
         <span class="navbar__cta">
           <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=0&scope=bot+email+applications.commands+identify" class="btn btn--primary btn--small">Invite Astra</a>
         </span>
@@ -40,93 +38,78 @@
     </div>
   </nav>
 
-  <!-- PAGE HEADER -->
-  <header class="page-header">
+  <div class="page-header">
     <div class="container">
-      <h1 class="animate-on-scroll"><span class="text-gradient">Support</span></h1>
-      <p class="animate-on-scroll">Need help? We've got you covered. Find the right resource below.</p>
+      <span class="section-header__badge">Get Help</span>
+      <h1>We're here to <span class="text-gradient">help</span></h1>
+      <p>Choose the best way to get support for Astra.</p>
     </div>
-  </header>
+  </div>
 
-  <!-- SUPPORT CONTENT -->
-  <main class="section" style="padding-top:0;">
+  <section class="section" id="support">
     <div class="container">
+      <div class="grid grid--3 stagger">
 
-      <!-- Support Cards -->
-      <div class="grid grid--3 stagger" style="margin-bottom:var(--space-4xl);">
-        <div class="card animate-on-scroll">
-          <div class="card__icon">💬</div>
-          <h3 class="card__title">Discord Server</h3>
-          <p class="card__text">Join our official support server for real-time help from developers.</p>
-          <a href="https://discord.gg/NZ5Gr7eqE8" class="btn btn--primary btn--small">Join Server</a>
-        </div>
-        <div class="card animate-on-scroll">
-          <div class="card__icon">📖</div>
-          <h3 class="card__title">Documentation</h3>
-          <p class="card__text">Browse detailed command references and feature guides.</p>
-          <a href="commands.html" class="btn btn--secondary btn--small">View Commands</a>
-        </div>
-        <div class="card animate-on-scroll">
-          <div class="card__icon">🐛</div>
-          <h3 class="card__title">Report a Bug</h3>
-          <p class="card__text">Found a performance issue? Open a ticket on GitHub.</p>
-          <a href="#" class="btn btn--secondary btn--small">Open Issue</a>
+        <a href="https://discord.gg/NZ5Gr7eqE8" class="support-card glass animate-on-scroll" target="_blank" rel="noopener">
+          <div class="support-card__icon">💬</div>
+          <h3 class="support-card__title">Support Server</h3>
+          <p class="support-card__text">The fastest way to get help. Join the official Astra Discord server and ask in the support channel.</p>
+          <span class="btn btn--primary">Join Server →</span>
+        </a>
+
+        <a href="faq.html" class="support-card glass animate-on-scroll">
+          <div class="support-card__icon">❓</div>
+          <h3 class="support-card__title">FAQ</h3>
+          <p class="support-card__text">Browse common questions about setup, features, permissions, and troubleshooting.</p>
+          <span class="btn btn--secondary">Read FAQ →</span>
+        </a>
+
+        <a href="https://github.com/watispro5212/astra/issues" class="support-card glass animate-on-scroll" target="_blank" rel="noopener">
+          <div class="support-card__icon">🐛</div>
+          <h3 class="support-card__title">Bug Reports</h3>
+          <p class="support-card__text">Found a bug? Open an issue on GitHub and the developer will investigate it promptly.</p>
+          <span class="btn btn--secondary">Report Bug →</span>
+        </a>
+
+        <a href="https://patreon.com/watispro1" class="support-card glass animate-on-scroll" target="_blank" rel="noopener">
+          <div class="support-card__icon">🧡</div>
+          <h3 class="support-card__title">Support on Patreon</h3>
+          <p class="support-card__text">Help keep Astra online and get exclusive perks — custom embed colors, higher XP multipliers, and more.</p>
+          <span class="btn btn--secondary">View Tiers →</span>
+        </a>
+
+        <a href="commands.html" class="support-card glass animate-on-scroll">
+          <div class="support-card__icon">📋</div>
+          <h3 class="support-card__title">Command Reference</h3>
+          <p class="support-card__text">Browse all 50+ commands with descriptions, permissions, and examples. Searchable and filterable.</p>
+          <span class="btn btn--secondary">View Commands →</span>
+        </a>
+
+        <a href="status.html" class="support-card glass animate-on-scroll">
+          <div class="support-card__icon">📡</div>
+          <h3 class="support-card__title">System Status</h3>
+          <p class="support-card__text">Check if Astra is currently online. View per-service status and 30-day uptime history.</p>
+          <span class="btn btn--secondary">Check Status →</span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="cta-banner animate-on-scroll">
+        <div class="cta-banner__glow" aria-hidden="true"></div>
+        <h2>Still need help?</h2>
+        <p>Our support team is active in the Discord server daily. Come say hi!</p>
+        <div class="hero__actions">
+          <a href="https://discord.gg/NZ5Gr7eqE8" class="btn btn--primary btn--large" target="_blank" rel="noopener">Join Support Server →</a>
         </div>
       </div>
-
-      <!-- Troubleshooting -->
-      <div class="container--narrow" style="margin:0 auto;">
-        <div class="section-header animate-on-scroll">
-          <span class="section-header__badge">Troubleshooting</span>
-          <h2>Common Issues</h2>
-        </div>
-
-        <div class="content animate-on-scroll">
-          <h3>Astra isn't responding to commands</h3>
-          <ul>
-            <li>Ensure Astra has <strong>Use Application Commands</strong> permission.</li>
-            <li>Verify Astra is online. If not, join the support server for status updates.</li>
-            <li>Try running <code>/ping</code> to check if the bot is responsive.</li>
-          </ul>
-
-          <h3>XP & Leveling aren't working</h3>
-          <ul>
-            <li>Astra has a 1-minute XP cooldown per user to prevent spamming.</li>
-            <li>Ensure the "Level Notification" setting isn't disabled in your config.</li>
-            <li>Level roles must be <strong>below</strong> Astra's highest role for her to assign them.</li>
-          </ul>
-
-          <h3>Auto-Moderation is too strict/loose</h3>
-          <ul>
-            <li>Use <code>/automod_config</code> to recalibrate filters for caps, spam, and links.</li>
-            <li>Members with <strong>Manage Messages</strong> or <strong>Administrator</strong> are exempt by default.</li>
-            <li>Check if you have accidentally whitelisted certain roles.</li>
-          </ul>
-
-          <h3>Starboard isn't posting</h3>
-          <ul>
-            <li>Run <code>/config starboard</code> to set a destination channel.</li>
-            <li>Ensure <code>/config threshold</code> is set to a value greater than 0.</li>
-            <li>Astra excludes self-reactions and bot reactions from the star count.</li>
-          </ul>
-
-          <h3>Tickets aren't creating</h3>
-          <ul>
-            <li>Run <code>/ticket_setup</code> to configure the category and staff roles.</li>
-            <li>Astra must have <strong>Manage Channels</strong> in the chosen category.</li>
-            <li>Verify the category isn't at the 50-channel limit.</li>
-          </ul>
-
-          <h2>Still need help?</h2>
-          <p>If none of the above solve your issue, join our <a href="https://discord.gg/NZ5Gr7eqE8">support server</a> and describe the problem. Include your server ID and any error messages you see.</p>
-        </div>
-      </div>
-
     </div>
-  </main>
+  </section>
 
-  <!-- FOOTER -->
-  <footer class="footer" role="contentinfo">
+  <footer class="footer glass" role="contentinfo">
     <div class="container">
       <div class="footer__grid">
         <div>
@@ -134,7 +117,7 @@
             <img src="assets/images/astra-logo.png" alt="Astra" width="28" height="28">
             Astra
           </div>
-          <p class="footer__desc">A polished utility and community assistant designed to make server management easy and interactive.</p>
+          <p class="footer__desc">The ultimate all-in-one Discord bot.</p>
         </div>
         <div>
           <h4 class="footer__heading">Product</h4>
@@ -143,10 +126,9 @@
           <a href="changelog.html" class="footer__link">Changelog</a>
         </div>
         <div>
-          <h4 class="footer__heading">Resources</h4>
-          <a href="support.html" class="footer__link">Support</a>
+          <h4 class="footer__heading">Community</h4>
+          <a href="https://discord.gg/NZ5Gr7eqE8" class="footer__link" target="_blank" rel="noopener">Support Server</a>
           <a href="faq.html" class="footer__link">FAQ</a>
-          <a href="#" class="footer__link">GitHub</a>
         </div>
         <div>
           <h4 class="footer__heading">Legal</h4>
@@ -155,7 +137,7 @@
         </div>
       </div>
       <div class="footer__bottom">
-        <span>&copy; 2026 Astra. Built by Nexus &amp; Antigravity.</span>
+        <span>&copy; 2026 Astra. Made by <a href="https://github.com/watispro5212" class="footer__author-link">watispro1</a>.</span>
         <span>Made with ✨ for the Discord community</span>
       </div>
     </div>
@@ -164,4 +146,3 @@
   <script src="assets/js/main.js"></script>
 </body>
 </html>
-

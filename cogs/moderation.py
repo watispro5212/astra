@@ -249,5 +249,46 @@ class Moderation(commands.Cog):
         except Exception as e:
             await interaction.response.send_message(embed=ErrorEmbed(f"Failed to set slowmode: {e}"), ephemeral=True)
 
+    @app_commands.command(name="lock", description="Lock a channel so members cannot send messages.")
+    @app_commands.describe(channel="Channel to lock (defaults to current).", reason="Reason for the lock.")
+    @app_commands.checks.has_permissions(manage_channels=True)
+    async def lock(self, interaction: discord.Interaction, channel: Optional[discord.TextChannel] = None, reason: str = "No reason provided"):
+        target = channel or interaction.channel
+        overwrite = target.overwrites_for(interaction.guild.default_role)
+        overwrite.send_messages = False
+        try:
+            await target.set_permissions(interaction.guild.default_role, overwrite=overwrite, reason=reason)
+            await interaction.response.send_message(embed=SuccessEmbed(f"🔒 {target.mention} has been locked."))
+            await target.send(f"🔒 This channel has been locked by {interaction.user.mention}. Reason: *{reason}*")
+        except Exception as e:
+            await interaction.response.send_message(embed=ErrorEmbed(f"Failed to lock channel: {e}"), ephemeral=True)
+
+    @app_commands.command(name="unlock", description="Unlock a previously locked channel.")
+    @app_commands.describe(channel="Channel to unlock (defaults to current).", reason="Reason for the unlock.")
+    @app_commands.checks.has_permissions(manage_channels=True)
+    async def unlock(self, interaction: discord.Interaction, channel: Optional[discord.TextChannel] = None, reason: str = "No reason provided"):
+        target = channel or interaction.channel
+        overwrite = target.overwrites_for(interaction.guild.default_role)
+        overwrite.send_messages = None
+        try:
+            await target.set_permissions(interaction.guild.default_role, overwrite=overwrite, reason=reason)
+            await interaction.response.send_message(embed=SuccessEmbed(f"🔓 {target.mention} has been unlocked."))
+            await target.send(f"🔓 This channel has been unlocked by {interaction.user.mention}.")
+        except Exception as e:
+            await interaction.response.send_message(embed=ErrorEmbed(f"Failed to unlock channel: {e}"), ephemeral=True)
+
+    @app_commands.command(name="nick", description="Change a member's nickname.")
+    @app_commands.describe(member="The member to rename.", nickname="New nickname (leave empty to reset).")
+    @app_commands.checks.has_permissions(manage_nicknames=True)
+    async def nick(self, interaction: discord.Interaction, member: discord.Member, nickname: Optional[str] = None):
+        try:
+            await member.edit(nick=nickname)
+            if nickname:
+                await interaction.response.send_message(embed=SuccessEmbed(f"Set {member.mention}'s nickname to **{nickname}**."))
+            else:
+                await interaction.response.send_message(embed=SuccessEmbed(f"Reset {member.mention}'s nickname."))
+        except Exception as e:
+            await interaction.response.send_message(embed=ErrorEmbed(f"Failed to change nickname: {e}"), ephemeral=True)
+
 async def setup(bot: commands.Bot):
     await bot.add_cog(Moderation(bot))

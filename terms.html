@@ -1,13 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Terms of Service — Astra Bot</title>
-  <meta name="description" content="Terms of service for Astra. Understand the rules and limitations for using Astra in your Discord server.">
-  <meta property="og:title" content="Terms of Service — Astra Bot">
-  <meta property="og:description" content="Terms and conditions for using the Astra Discord bot.">
-  <meta property="og:image" content="assets/images/astra-banner.png">
+  <title>Terms of Service — Astra</title>
+  <meta name="description" content="Astra Terms of Service — rules for using the Astra Discord bot.">
   <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
@@ -16,23 +13,21 @@
   <div class="bg-grid" aria-hidden="true"></div>
   <div class="bg-radial" aria-hidden="true"></div>
 
-  <!-- NAVBAR -->
-  <nav class="navbar" role="navigation" aria-label="Main navigation">
+  <nav class="navbar glass" role="navigation" aria-label="Main navigation">
     <div class="container">
       <a href="index.html" class="navbar__brand">
         <img src="assets/images/astra-logo.png" alt="Astra logo" width="36" height="36">
         Astra
+        <span class="navbar__version">v3.0</span>
       </a>
-      <button class="navbar__toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+      <button type="button" class="navbar__toggle" aria-label="Toggle navigation menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
       <div class="navbar__links">
         <a href="index.html" class="navbar__link">Home</a>
         <a href="features.html" class="navbar__link">Features</a>
         <a href="commands.html" class="navbar__link">Commands</a>
-        <a href="changelog.html" class="navbar__link">Changelog</a>
         <a href="support.html" class="navbar__link">Support</a>
-        <a href="faq.html" class="navbar__link">FAQ</a>
         <span class="navbar__cta">
           <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=0&scope=bot+email+applications.commands+identify" class="btn btn--primary btn--small">Invite Astra</a>
         </span>
@@ -40,73 +35,72 @@
     </div>
   </nav>
 
-  <!-- PAGE HEADER -->
-  <header class="page-header">
+  <div class="page-header">
     <div class="container">
-      <h1 class="animate-on-scroll"><span class="text-gradient">Terms of Service</span></h1>
-      <p class="animate-on-scroll">Last updated: April 18, 2026</p>
+      <h1>Terms of <span class="text-gradient">Service</span></h1>
+      <p>Last updated: April 18, 2026 — Effective for Astra v3.0 and all subsequent versions.</p>
     </div>
-  </header>
+  </div>
 
-  <!-- TERMS CONTENT -->
-  <main class="section" style="padding-top:0;">
+  <section class="section legal-section">
     <div class="container container--narrow">
-      <div class="content animate-on-scroll">
+      <div class="content">
 
-        <h2>Acceptance of Terms</h2>
-        <p>By inviting Astra to your Discord server or interacting with its commands, you agree to these terms of service. If you do not agree, please remove the bot from your server.</p>
+        <h2>1. Acceptance of Terms</h2>
+        <p>By inviting Astra ("the Bot") to your Discord server or interacting with it in any way, you ("the User") agree to be bound by these Terms of Service ("Terms"). If you do not agree, do not use the Bot. These Terms apply to all users, server owners, and administrators who interact with the Bot.</p>
 
-        <h2>Description of Service</h2>
-        <p>Astra is a Discord bot that provides moderation, community engagement, and server management tools. Features include slash commands for kicks, bans, warnings, polls, reminders, role menus, starboard, tickets, event logging, and server configuration. The bot is provided as-is, free of charge.</p>
+        <h2>2. Description of Service</h2>
+        <p>Astra is a free, modular Discord bot providing moderation, economy, leveling, anti-raid protection, community engagement tools, and utility features. The service is provided "as is" and may be updated, modified, or discontinued at any time without notice.</p>
 
-        <h2>Acceptable Use</h2>
-        <p>You agree to use Astra in compliance with Discord's <a href="https://discord.com/terms" target="_blank" rel="noopener">Terms of Service</a> and <a href="https://discord.com/guidelines" target="_blank" rel="noopener">Community Guidelines</a>. You may not:</p>
+        <h2>3. Acceptable Use</h2>
+        <p>You agree not to use the Bot to:</p>
         <ul>
-          <li>Use Astra to harass, abuse, or target other users</li>
-          <li>Attempt to exploit or manipulate the bot's features</li>
-          <li>Use automated tools to interact with Astra at excessive rates</li>
-          <li>Reverse-engineer, decompile, or modify the bot's code without permission</li>
-          <li>Use the bot's features to violate any applicable laws</li>
-          <li>Attempt to access data belonging to other servers</li>
+          <li>Violate Discord's <a href="https://discord.com/terms" target="_blank" rel="noopener">Terms of Service</a> or Community Guidelines</li>
+          <li>Harass, threaten, or harm any individual</li>
+          <li>Spam or abuse Bot commands in ways that degrade performance for other users</li>
+          <li>Attempt to exploit, reverse-engineer, or interfere with the Bot's operation</li>
+          <li>Use moderation features (ban, kick, mute) to target individuals without legitimate server governance reasons</li>
+          <li>Circumvent or disable anti-raid protections in a way that facilitates server raids</li>
         </ul>
 
-        <h2>Availability</h2>
-        <p>We make reasonable efforts to keep Astra online and functional, but we do not guarantee 100% uptime. The bot may be temporarily unavailable due to:</p>
-        <ul>
-          <li>Scheduled maintenance or updates</li>
-          <li>Discord API outages</li>
-          <li>Infrastructure issues</li>
-          <li>Bug fixes requiring a restart</li>
-        </ul>
-        <p>We are not liable for any damages resulting from downtime or service interruptions.</p>
+        <h2>4. Economy System</h2>
+        <p>The in-bot economy (coins, shop items, balances) has no real-world monetary value. Virtual coins cannot be exchanged for real currency, goods, or services. The Developer reserves the right to reset, modify, or remove economy data at any time. Economy data is stored per-server and is not transferable between servers.</p>
 
-        <h2>Data</h2>
-        <p>By using Astra, you consent to the data collection practices described in our <a href="privacy.html">Privacy Policy</a>. Server administrators are responsible for informing their members that Astra is in use.</p>
+        <h2>5. Data Collection &amp; Privacy</h2>
+        <p>Astra collects limited data necessary for its features to function. This includes Discord user IDs, server IDs, message metadata (not content), and configuration settings. No personal information beyond what Discord provides via its API is collected. See our <a href="privacy.html">Privacy Policy</a> for full details.</p>
 
-        <h2>Moderation Responsibility</h2>
-        <p>Astra provides moderation tools, but the responsibility for moderation decisions lies with the server administrators and moderators who use them. We are not responsible for how moderation actions are applied in your server.</p>
+        <h2>6. Moderation Features</h2>
+        <p>Astra's moderation tools (warn, kick, ban, mute, lock) are provided to server administrators and moderators for legitimate server governance. The Developer is not responsible for how individual servers choose to apply these tools. Server owners are solely responsible for ensuring moderation actions comply with applicable laws and Discord's policies.</p>
 
-        <h2>Limitation of Liability</h2>
-        <p>Astra is provided "as is" without warranties of any kind. To the fullest extent permitted by law, we disclaim all warranties, express or implied. We are not liable for any direct, indirect, incidental, or consequential damages arising from the use or inability to use Astra.</p>
+        <h2>7. Anti-Raid System</h2>
+        <p>The anti-raid system is designed to protect servers from coordinated attacks. Automatic actions (kick/ban) triggered during a lockdown are performed based on join rate thresholds configured by server administrators. The Developer is not liable for any false positives that result in legitimate members being removed during a lockdown.</p>
 
-        <h2>Termination</h2>
-        <p>We reserve the right to restrict or terminate Astra's service to any server or user at our discretion, particularly in cases of abuse, spam, or violation of these terms. You may stop using Astra at any time by removing it from your server.</p>
+        <h2>8. Patreon &amp; Supporter Perks</h2>
+        <p>Patreon contributions are voluntary donations that unlock cosmetic perks. Perks are provided on a best-effort basis and may be changed or removed. Patreon payments are governed by <a href="https://www.patreon.com/policy/legal" target="_blank" rel="noopener">Patreon's Terms of Service</a>. No refunds are provided for Patreon pledges.</p>
 
-        <h2>Intellectual Property</h2>
-        <p>Astra's name, branding, and code are the intellectual property of its developers. You may not use the Astra brand, logo, or name in a way that implies endorsement without permission.</p>
+        <h2>9. Availability &amp; Uptime</h2>
+        <p>Astra is provided free of charge and without an uptime guarantee. The Developer will make reasonable efforts to maintain availability but is not liable for any downtime, data loss, or service interruptions. Scheduled maintenance or unplanned outages may occur without advance notice.</p>
 
-        <h2>Modifications</h2>
-        <p>We may update these terms at any time. Significant changes will be communicated through the support server or changelog. Continued use of Astra after changes constitutes acceptance of the updated terms.</p>
+        <h2>10. Disclaimer of Warranty</h2>
+        <p>THE BOT IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED. THE DEVELOPER MAKES NO WARRANTIES REGARDING MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT. USE OF THE BOT IS AT YOUR OWN RISK.</p>
 
-        <h2>Contact</h2>
-        <p>For questions about these terms, contact us in our <a href="#">support server</a>.</p>
+        <h2>11. Limitation of Liability</h2>
+        <p>TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, THE DEVELOPER SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES ARISING OUT OF OR RELATED TO YOUR USE OF THE BOT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.</p>
+
+        <h2>12. Changes to Terms</h2>
+        <p>The Developer reserves the right to modify these Terms at any time. Changes will be reflected by updating the "Last updated" date above. Continued use of the Bot after changes constitutes acceptance of the revised Terms.</p>
+
+        <h2>13. Termination</h2>
+        <p>The Developer reserves the right to deny access to the Bot to any user or server that violates these Terms or Discord's policies, at any time and without prior notice.</p>
+
+        <h2>14. Contact</h2>
+        <p>For questions about these Terms, contact the Developer via the <a href="https://discord.gg/NZ5Gr7eqE8" target="_blank" rel="noopener">Astra Support Server</a> or through <a href="https://github.com/watispro5212" target="_blank" rel="noopener">GitHub</a>.</p>
 
       </div>
     </div>
-  </main>
+  </section>
 
-  <!-- FOOTER -->
-  <footer class="footer" role="contentinfo">
+  <footer class="footer glass" role="contentinfo">
     <div class="container">
       <div class="footer__grid">
         <div>
@@ -114,7 +108,7 @@
             <img src="assets/images/astra-logo.png" alt="Astra" width="28" height="28">
             Astra
           </div>
-          <p class="footer__desc">A polished utility and community assistant designed to make server management easy and interactive.</p>
+          <p class="footer__desc">The ultimate all-in-one Discord bot.</p>
         </div>
         <div>
           <h4 class="footer__heading">Product</h4>
@@ -123,10 +117,9 @@
           <a href="changelog.html" class="footer__link">Changelog</a>
         </div>
         <div>
-          <h4 class="footer__heading">Resources</h4>
-          <a href="support.html" class="footer__link">Support</a>
+          <h4 class="footer__heading">Community</h4>
+          <a href="https://discord.gg/NZ5Gr7eqE8" class="footer__link" target="_blank" rel="noopener">Support Server</a>
           <a href="faq.html" class="footer__link">FAQ</a>
-          <a href="#" class="footer__link">GitHub</a>
         </div>
         <div>
           <h4 class="footer__heading">Legal</h4>
@@ -135,7 +128,7 @@
         </div>
       </div>
       <div class="footer__bottom">
-        <span>&copy; 2026 Astra. Built by Nexus &amp; Antigravity.</span>
+        <span>&copy; 2026 Astra. Made by <a href="https://github.com/watispro5212" class="footer__author-link">watispro1</a>.</span>
         <span>Made with ✨ for the Discord community</span>
       </div>
     </div>
@@ -144,4 +137,3 @@
   <script src="assets/js/main.js"></script>
 </body>
 </html>
-

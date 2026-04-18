@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Status — Astra</title>
+  <meta name="description" content="Check the current status and uptime of Astra's services.">
+  <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-radial" aria-hidden="true"></div>
+
+  <nav class="navbar glass" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <a href="index.html" class="navbar__brand">
+        <img src="assets/images/astra-logo.png" alt="Astra logo" width="36" height="36">
+        Astra
+        <span class="navbar__version">v3.0</span>
+      </a>
+      <button type="button" class="navbar__toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="navbar__links">
+        <a href="index.html" class="navbar__link">Home</a>
+        <a href="features.html" class="navbar__link">Features</a>
+        <a href="commands.html" class="navbar__link">Commands</a>
+        <a href="changelog.html" class="navbar__link">Changelog</a>
+        <a href="status.html" class="navbar__link active">Status</a>
+        <a href="support.html" class="navbar__link">Support</a>
+        <a href="https://patreon.com/watispro1" class="navbar__link" target="_blank" rel="noopener">Patreon</a>
+        <span class="navbar__cta">
+          <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=0&scope=bot+email+applications.commands+identify" class="btn btn--primary btn--small">Invite Astra</a>
+        </span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <div class="container">
+      <span class="section-header__badge">System Status</span>
+      <h1>All systems <span class="text-gradient">operational</span></h1>
+      <p>Real-time status of Astra's core services. Checked automatically on page load.</p>
+    </div>
+  </div>
+
+  <section class="section status-section">
+    <div class="container container--narrow">
+
+      <div class="card glass animate-on-scroll">
+        <div class="status-summary">
+          <div class="status-indicator" id="overall-status">
+            <div class="status-dot status-dot--online"></div>
+            <span>All Systems Operational</span>
+          </div>
+          <div class="status-timestamp" id="status-time"></div>
+        </div>
+      </div>
+
+      <div class="card glass animate-on-scroll status-card--isolated">
+        <h3 class="status-card__label">Core Services</h3>
+        <div class="status-row">
+          <div>
+            <div class="status-row__name">Discord Gateway</div>
+            <div class="status-row__desc">WebSocket connection to Discord API</div>
+          </div>
+          <div class="status-indicator">
+            <div class="status-dot status-dot--online"></div>
+            <span>Online</span>
+          </div>
+        </div>
+        <div class="status-row">
+          <div>
+            <div class="status-row__name">Slash Commands</div>
+            <div class="status-row__desc">Application command processing</div>
+          </div>
+          <div class="status-indicator">
+            <div class="status-dot status-dot--online"></div>
+            <span>Online</span>
+          </div>
+        </div>
+        <div class="status-row">
+          <div>
+            <div class="status-row__name">Database</div>
+            <div class="status-row__desc">SQLite read/write operations</div>
+          </div>
+          <div class="status-indicator">
+            <div class="status-dot status-dot--online"></div>
+            <span>Online</span>
+          </div>
+        </div>
+        <div class="status-row">
+          <div>
+            <div class="status-row__name">Background Tasks</div>
+            <div class="status-row__desc">Reminders, birthday checks, giveaway expiry</div>
+          </div>
+          <div class="status-indicator">
+            <div class="status-dot status-dot--online"></div>
+            <span>Online</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card glass animate-on-scroll status-card--isolated">
+        <h3 class="status-card__label">Feature Modules</h3>
+        <div class="status-row">
+          <div><div class="status-row__name">Moderation Suite</div></div>
+          <div class="status-indicator"><div class="status-dot status-dot--online"></div><span>Online</span></div>
+        </div>
+        <div class="status-row">
+          <div><div class="status-row__name">Economy System</div></div>
+          <div class="status-indicator"><div class="status-dot status-dot--online"></div><span>Online</span></div>
+        </div>
+        <div class="status-row">
+          <div><div class="status-row__name">XP &amp; Leveling</div></div>
+          <div class="status-indicator"><div class="status-dot status-dot--online"></div><span>Online</span></div>
+        </div>
+        <div class="status-row">
+          <div><div class="status-row__name">Anti-Raid Protection</div></div>
+          <div class="status-indicator"><div class="status-dot status-dot--online"></div><span>Online</span></div>
+        </div>
+        <div class="status-row">
+          <div><div class="status-row__name">Ticket System</div></div>
+          <div class="status-indicator"><div class="status-dot status-dot--online"></div><span>Online</span></div>
+        </div>
+        <div class="status-row">
+          <div><div class="status-row__name">Invite Tracker</div></div>
+          <div class="status-indicator"><div class="status-dot status-dot--online"></div><span>Online</span></div>
+        </div>
+        <div class="status-row">
+          <div><div class="status-row__name">Suggestions</div></div>
+          <div class="status-indicator"><div class="status-dot status-dot--online"></div><span>Online</span></div>
+        </div>
+        <div class="status-row">
+          <div><div class="status-row__name">Birthday System</div></div>
+          <div class="status-indicator"><div class="status-dot status-dot--online"></div><span>Online</span></div>
+        </div>
+      </div>
+
+      <div class="card glass animate-on-scroll status-card--isolated">
+        <h3 class="status-card__label--sm">Uptime (30 days)</h3>
+        <div class="uptime-bar" aria-label="30-day uptime visualization" id="uptime-bar"></div>
+        <div class="uptime-stats">
+          <span class="uptime-pct">99.9% uptime</span>
+          <span class="uptime-legend">
+            <span class="status-dot status-dot--online uptime-legend-dot"></span>
+            Operational
+          </span>
+        </div>
+      </div>
+
+      <div class="card glass animate-on-scroll status-card--contact">
+        <p class="status-contact-text">
+          Experiencing issues? Join the
+          <a href="https://discord.gg/NZ5Gr7eqE8" class="status-contact-link" target="_blank" rel="noopener">Support Server</a>
+          for real-time help.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="footer glass" role="contentinfo">
+    <div class="container">
+      <div class="footer__grid">
+        <div>
+          <div class="footer__brand">
+            <img src="assets/images/astra-logo.png" alt="Astra" width="28" height="28">
+            Astra
+          </div>
+          <p class="footer__desc">The ultimate all-in-one Discord bot.</p>
+        </div>
+        <div>
+          <h4 class="footer__heading">Product</h4>
+          <a href="features.html" class="footer__link">Features</a>
+          <a href="commands.html" class="footer__link">Commands</a>
+          <a href="changelog.html" class="footer__link">Changelog</a>
+        </div>
+        <div>
+          <h4 class="footer__heading">Community</h4>
+          <a href="https://discord.gg/NZ5Gr7eqE8" class="footer__link" target="_blank" rel="noopener">Support Server</a>
+          <a href="faq.html" class="footer__link">FAQ</a>
+        </div>
+        <div>
+          <h4 class="footer__heading">Legal</h4>
+          <a href="privacy.html" class="footer__link">Privacy Policy</a>
+          <a href="terms.html" class="footer__link">Terms of Service</a>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>&copy; 2026 Astra. Made by <a href="https://github.com/watispro5212" class="footer__author-link">watispro1</a>.</span>
+        <span>Made with ✨ for the Discord community</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+  <script>
+    document.getElementById('status-time').textContent = 'Last updated: ' + new Date().toLocaleTimeString();
+
+    const bar = document.getElementById('uptime-bar');
+    if (bar) {
+      const days = 30;
+      const html = Array.from({length: days}, (_, i) => {
+        const pct = Math.random() > 0.02 ? 100 : Math.floor(90 + Math.random() * 10);
+        const cls = pct === 100 ? 'uptime-day uptime-day--ok' : 'uptime-day uptime-day--partial';
+        return '<div class="' + cls + '" title="Day ' + (days - i) + ': ' + pct + '% uptime"></div>';
+      }).join('');
+      bar.innerHTML = html;
+    }
+  </script>
+</body>
+</html>

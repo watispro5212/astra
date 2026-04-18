@@ -1,7 +1,116 @@
 # Changelog
 
-All notable changes to Astra are documented here.  
+All notable changes to Astra are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+
+---
+
+## [3.0.0] — April 18, 2026
+
+The biggest Astra release to date. Ten new bot modules, a fully redesigned website, updated legal docs, and non-destructive database migrations for clean upgrades from v2.
+
+### Added
+
+#### Economy System
+
+- `/economy balance` — View your coin balance
+- `/economy daily` — Claim 200 coins every 24 hours
+- `/economy work` — Earn 50–150 coins every hour
+- `/economy pay` — Transfer coins to another member
+- `/economy leaderboard` — Top earners in the server
+- `/economy shop` — Browse purchasable items
+- `/economy buy` — Purchase a shop item
+- `/economy additem` / `/economy removeitem` — Staff shop management
+- In-bot economy has no real-world value; balances are per-server
+
+#### Warning System
+
+- `/warn` — Issue a formal warning with DM notification and running count
+- `/warnings` — View a user's full warning history
+- `/delwarn` — Remove a specific warning by ID
+- `/clearwarns` — Wipe all warnings for a user
+
+#### AFK System
+
+- `/afk` — Set an AFK message; bot auto-replies when you are mentioned
+- Auto-removes AFK status on next message; reports how long you were away
+
+#### Birthday System
+
+- `/birthday set` — Register your birthday (month/day)
+- `/birthday remove` — Remove your birthday
+- `/birthday check` — Check anyone's registered birthday
+- `/birthday upcoming` — Next 10 birthdays in the server
+- `/birthday config` — Set announcement channel and birthday role
+- Automatic 9 AM UTC daily check with announcements and role assignment
+
+#### Suggestions
+
+- `/suggest` — Submit a community suggestion; posted as embed with reactions
+- `/suggestion config` — Set the suggestions channel
+- `/suggestion approve` / `/suggestion deny` / `/suggestion implement` — Staff review workflow with embed status update and DM to author
+
+#### Anti-Raid Protection
+
+- Real-time mass-join detection using configurable join-rate thresholds
+- Automatic server lockdown on raid detection (overrides `@everyone` send permissions)
+- Configurable auto-kick or auto-ban of raiders during lockdown
+- Alert embed sent to a configured channel on lockdown trigger
+- `/antiraid config` — Set threshold, window, action type, and alert channel
+- `/antiraid unlock` — Manually lift a lockdown
+- `/antiraid status` — View current config and lockdown state
+
+#### Invite Tracker
+
+- Tracks which invite code each member used when joining
+- Records fake invites (left members) and net invite count
+- Invite cache rebuilt automatically on ready and on guild join
+- `/invites check` — View stats for a member (invited, left, fake)
+- `/invites leaderboard` — Top inviters in the server
+- `/invites whoinvited` — Who invited a specific member
+
+#### Fun Commands
+
+- `/8ball` — Magic 8-ball with 20 responses
+- `/coinflip` — Heads or tails
+- `/roll` — Roll a die with configurable sides
+- `/roast` — Roast a target member
+- `/trivia` — Live in-channel trivia with 20-second timer; tracked per-channel to prevent overlap
+- `/choose` — Pick randomly from a list of options
+- `/rps` — Rock, paper, scissors against the bot
+
+#### Server Backup
+
+- `/backup export` — Serializes server config (9 tables) to a downloadable JSON file
+- `/backup import` — Restores config from an uploaded JSON file; upserts rows non-destructively
+- `/backup info` — Shows metadata from a backup file before importing
+
+#### Channel Lock / Unlock
+
+- `/lock` — Deny `send_messages` for `@everyone` in the current channel
+- `/unlock` — Restore default `send_messages` permission
+
+### Website
+
+- Fully redesigned site with glassmorphism design system and dark theme
+- **Status page** (`status.html`) — Per-service status indicators and 30-day uptime bar
+- **Command search** (`commands.html`) — Live filter across 50+ commands by name or description
+- **FAQ page** (`faq.html`) — 11 accordion items covering setup, economy, anti-raid, birthdays, backup, and self-hosting
+- Patreon tier cards on landing page
+- Social footer links
+- All inline styles replaced with semantic CSS classes (linter-clean)
+
+### Legal & Docs
+
+- **LICENSE** updated to ACL v2.0 — added Section 6 (Data & Privacy), updated contact URLs
+- **Privacy Policy** updated for v3 data types (economy, warnings, AFK, birthdays, invites, anti-raid logs)
+- **Terms of Service** updated with economy disclaimer, anti-raid liability clause, Patreon section
+- **README** rewritten for v3 with full feature table, env vars, required intents, and commands table
+
+### Database
+
+- 13 new tables: `economy`, `shop_items`, `economy_transactions`, `warnings`, `afk`, `birthdays`, `birthday_configs`, `suggestions`, `suggestion_configs`, `invite_tracking`, `invite_counts`, `antiraid_configs`, `antiraid_logs`
+- Non-destructive migrations via `_safe_add_column()` — safe to upgrade from v2 without data loss
 
 ---
 

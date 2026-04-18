@@ -1,13 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Privacy Policy — Astra Bot</title>
-  <meta name="description" content="Astra's privacy policy. Learn what data Astra collects, why, and how it is used.">
-  <meta property="og:title" content="Privacy Policy — Astra Bot">
-  <meta property="og:description" content="Learn about Astra's data collection and privacy practices.">
-  <meta property="og:image" content="assets/images/astra-banner.png">
+  <title>Privacy Policy — Astra</title>
+  <meta name="description" content="Astra Privacy Policy — what data we collect, how we use it, and your rights.">
   <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
@@ -16,23 +13,21 @@
   <div class="bg-grid" aria-hidden="true"></div>
   <div class="bg-radial" aria-hidden="true"></div>
 
-  <!-- NAVBAR -->
-  <nav class="navbar" role="navigation" aria-label="Main navigation">
+  <nav class="navbar glass" role="navigation" aria-label="Main navigation">
     <div class="container">
       <a href="index.html" class="navbar__brand">
         <img src="assets/images/astra-logo.png" alt="Astra logo" width="36" height="36">
         Astra
+        <span class="navbar__version">v3.0</span>
       </a>
-      <button class="navbar__toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+      <button type="button" class="navbar__toggle" aria-label="Toggle navigation menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
       <div class="navbar__links">
         <a href="index.html" class="navbar__link">Home</a>
         <a href="features.html" class="navbar__link">Features</a>
         <a href="commands.html" class="navbar__link">Commands</a>
-        <a href="changelog.html" class="navbar__link">Changelog</a>
         <a href="support.html" class="navbar__link">Support</a>
-        <a href="faq.html" class="navbar__link">FAQ</a>
         <span class="navbar__cta">
           <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=0&scope=bot+email+applications.commands+identify" class="btn btn--primary btn--small">Invite Astra</a>
         </span>
@@ -40,103 +35,96 @@
     </div>
   </nav>
 
-  <!-- PAGE HEADER -->
-  <header class="page-header">
+  <div class="page-header">
     <div class="container">
-      <h1 class="animate-on-scroll"><span class="text-gradient">Privacy Policy</span></h1>
-      <p class="animate-on-scroll">Last updated: April 18, 2026</p>
+      <h1>Privacy <span class="text-gradient">Policy</span></h1>
+      <p>Last updated: April 18, 2026 — Effective for Astra v3.0 and all subsequent versions.</p>
     </div>
-  </header>
+  </div>
 
-  <!-- PRIVACY CONTENT -->
-  <main class="section" style="padding-top:0;">
+  <section class="section legal-section">
     <div class="container container--narrow">
-      <div class="content animate-on-scroll">
+      <div class="content">
 
-        <h2>Introduction</h2>
-        <p>This privacy policy explains what data Astra ("the bot") collects, why it collects it, and how it is stored and used. By adding Astra to your Discord server, you agree to the practices described in this policy.</p>
+        <h2>1. Overview</h2>
+        <p>Astra ("the Bot") is committed to protecting your privacy. This policy explains what data the Bot collects, why it's collected, how it's stored, and your rights regarding that data. By using the Bot, you consent to the practices described here.</p>
 
-        <h2>Data We Collect</h2>
-        <p>Astra collects and stores the minimum data necessary to provide its features. This includes:</p>
+        <h2>2. Data We Collect</h2>
+        <p>Astra collects only what is strictly necessary for its features to function. This includes:</p>
 
-        <h3>Server Configuration</h3>
+        <h3>Server Data</h3>
         <ul>
-          <li>Guild (server) IDs</li>
-          <li>Channel IDs for logging and starboard</li>
-          <li>Role IDs for ticket staff and role menus</li>
-          <li>Category IDs for ticket channels</li>
-          <li>Starboard threshold settings</li>
+          <li><strong>Guild (Server) IDs</strong> — Used to store per-server configuration (logging channels, automod settings, ticket setup, etc.)</li>
+          <li><strong>Channel IDs &amp; Role IDs</strong> — Used for feature configuration (e.g., log channels, welcome channels, ticket categories)</li>
         </ul>
 
-        <h3>Moderation Data</h3>
+        <h3>User Data</h3>
         <ul>
-          <li>User IDs of moderated members and moderators</li>
-          <li>Action type (kick, ban, warning)</li>
-          <li>Reason text provided by moderators</li>
-          <li>Timestamps of moderation actions</li>
-          <li>Case numbers</li>
+          <li><strong>User IDs</strong> — Required to track XP, economy balances, reminders, warnings, birthdays, AFK status, and invite counts</li>
+          <li><strong>Usernames &amp; Avatars</strong> — Fetched from Discord's API in real-time for display purposes; not permanently stored</li>
+          <li><strong>Join dates</strong> — Used for server statistics and invite tracking; sourced from Discord's API</li>
         </ul>
 
-        <h3>Feature Data</h3>
+        <h3>Activity Data</h3>
         <ul>
-          <li><strong>Polls:</strong> Poll questions, options, voter user IDs, and vote counts</li>
-          <li><strong>Reminders:</strong> User IDs, channel IDs, reminder messages, and trigger times</li>
-          <li><strong>Starboard:</strong> Message IDs, starboard post IDs, star counts</li>
-          <li><strong>Tickets:</strong> Ticket configuration (category and staff role IDs)</li>
-          <li><strong>Role Menus:</strong> Message IDs, role IDs, menu options, and label text</li>
+          <li><strong>Message metadata</strong> — Message IDs and timestamps are stored for starboard and poll tracking; message <em>content</em> is not permanently stored</li>
+          <li><strong>Automod</strong> — Messages are checked in real-time against configured rules. Content that triggers a rule is logged briefly for moderator review but is not stored long-term</li>
+          <li><strong>Moderation cases</strong> — Action type, reason, moderator ID, target ID, and timestamp for audit trails</li>
+          <li><strong>Economy transactions</strong> — Coin amounts and action types (no personal financial data)</li>
+          <li><strong>Invite data</strong> — Invite codes and join/leave events to support invite tracking leaderboards</li>
         </ul>
 
-        <h2>What We Do Not Collect</h2>
+        <h2>3. How We Use Your Data</h2>
+        <p>Data collected by Astra is used exclusively to provide and improve the Bot's features:</p>
         <ul>
-          <li>Message content (except user-provided fields like moderation reasons, poll questions, and reminder messages)</li>
-          <li>Direct message content</li>
-          <li>User passwords or authentication tokens</li>
-          <li>Personal information beyond Discord user IDs</li>
-          <li>Voice channel data</li>
+          <li>Persisting server configuration across restarts</li>
+          <li>Tracking XP, levels, economy balances, and leaderboards</li>
+          <li>Delivering reminders, birthday announcements, and giveaway results</li>
+          <li>Generating moderation case logs and audit trails</li>
+          <li>Enabling invite tracking and anti-raid protection</li>
+        </ul>
+        <p>We do not sell, share, rent, or otherwise transfer your data to third parties for marketing or commercial purposes.</p>
+
+        <h2>4. Data Storage &amp; Security</h2>
+        <p>All data is stored in a SQLite database on the server where Astra is hosted. If you are using the official hosted instance, data is stored on the Developer's private server. Access to the database is restricted to the Bot process and the Developer.</p>
+        <p>We use reasonable technical measures to protect stored data, but no system is 100% secure. Use of the Bot is at your own risk.</p>
+
+        <h2>5. Data Retention</h2>
+        <p>Data is retained for as long as it is needed for the feature it supports:</p>
+        <ul>
+          <li><strong>Server config</strong> — Retained until the Bot is removed from the server</li>
+          <li><strong>User data (XP, economy, birthdays)</strong> — Retained until a deletion request is submitted or the Bot is removed</li>
+          <li><strong>Moderation cases</strong> — Retained indefinitely for audit purposes</li>
+          <li><strong>Reminders</strong> — Deleted automatically once delivered</li>
+          <li><strong>AFK status</strong> — Deleted automatically when the user sends a message</li>
         </ul>
 
-        <h2>Why We Collect Data</h2>
-        <p>All data is collected solely to provide Astra's features. For example:</p>
+        <h2>6. Third-Party Services</h2>
+        <p>Astra interacts with Discord's API to function. Discord's own <a href="https://discord.com/privacy" target="_blank" rel="noopener">Privacy Policy</a> governs how Discord handles your data. Patreon supporters' data is governed by <a href="https://www.patreon.com/policy/privacy" target="_blank" rel="noopener">Patreon's Privacy Policy</a>. Astra does not use any other third-party data processors.</p>
+
+        <h2>7. Your Rights</h2>
+        <p>You have the right to:</p>
         <ul>
-          <li>Moderation cases are stored so staff can review a member's history</li>
-          <li>Reminders require storing your message and trigger time</li>
-          <li>Polls require tracking votes to display accurate results</li>
-          <li>Server configs are stored so your settings persist between restarts</li>
+          <li><strong>Request data deletion</strong> — Contact us to have your personal data removed from the database</li>
+          <li><strong>Request a data export</strong> — Request a copy of data stored about you</li>
+          <li><strong>Opt out</strong> — Stop using the Bot at any time; your data will remain until you request deletion</li>
         </ul>
+        <p>To exercise these rights, contact the Developer via the <a href="https://discord.gg/NZ5Gr7eqE8" target="_blank" rel="noopener">Support Server</a> or <a href="https://github.com/watispro5212" target="_blank" rel="noopener">GitHub</a>.</p>
 
-        <h2>Data Storage</h2>
-        <p>Data is stored in a SQLite database on the server hosting Astra. The database is not shared with any third parties. Access to the database is restricted to the bot's operators.</p>
+        <h2>8. Children's Privacy</h2>
+        <p>Astra is not directed at individuals under the age of 13 (or the minimum age required by your jurisdiction). If you believe a minor has provided personal data through the Bot, please contact us immediately.</p>
 
-        <h2>Data Sharing</h2>
-        <p>We do <strong>not</strong> sell, share, or distribute any collected data to third parties. Data is only used internally to provide Astra's functionality.</p>
+        <h2>9. Changes to This Policy</h2>
+        <p>This policy may be updated from time to time. The "Last updated" date at the top reflects the most recent revision. Continued use of the Bot after changes constitutes acceptance of the updated policy.</p>
 
-        <h2>Data Retention</h2>
-        <p>Data is retained as long as it is needed for its intended purpose:</p>
-        <ul>
-          <li>Moderation cases are stored indefinitely for accountability</li>
-          <li>Reminders are deleted after they fire</li>
-          <li>Poll data persists for the lifetime of the poll</li>
-          <li>Server configs persist until manually changed or the bot is removed</li>
-        </ul>
-
-        <h2>Data Deletion</h2>
-        <p>You can request deletion of your data by contacting us in our <a href="#">support server</a>. We will remove all data associated with your server ID or user ID upon verified request. Removing Astra from your server will stop future data collection, but existing records remain until a deletion request is processed.</p>
-
-        <h2>Children's Privacy</h2>
-        <p>Astra does not knowingly collect data from children under 13. Discord's Terms of Service already require users to be at least 13 years old.</p>
-
-        <h2>Changes to This Policy</h2>
-        <p>We may update this privacy policy from time to time. Significant changes will be announced in the support server. Continued use of Astra after changes constitutes acceptance of the updated policy.</p>
-
-        <h2>Contact</h2>
-        <p>For questions about this privacy policy or data requests, join our <a href="#">support server</a> and reach out to a team member.</p>
+        <h2>10. Contact</h2>
+        <p>For privacy-related inquiries, contact the Developer via the <a href="https://discord.gg/NZ5Gr7eqE8" target="_blank" rel="noopener">Astra Support Server</a> or <a href="https://github.com/watispro5212" target="_blank" rel="noopener">GitHub</a>.</p>
 
       </div>
     </div>
-  </main>
+  </section>
 
-  <!-- FOOTER -->
-  <footer class="footer" role="contentinfo">
+  <footer class="footer glass" role="contentinfo">
     <div class="container">
       <div class="footer__grid">
         <div>
@@ -144,7 +132,7 @@
             <img src="assets/images/astra-logo.png" alt="Astra" width="28" height="28">
             Astra
           </div>
-          <p class="footer__desc">A polished utility and community assistant designed to make server management easy and interactive.</p>
+          <p class="footer__desc">The ultimate all-in-one Discord bot.</p>
         </div>
         <div>
           <h4 class="footer__heading">Product</h4>
@@ -153,10 +141,9 @@
           <a href="changelog.html" class="footer__link">Changelog</a>
         </div>
         <div>
-          <h4 class="footer__heading">Resources</h4>
-          <a href="support.html" class="footer__link">Support</a>
+          <h4 class="footer__heading">Community</h4>
+          <a href="https://discord.gg/NZ5Gr7eqE8" class="footer__link" target="_blank" rel="noopener">Support Server</a>
           <a href="faq.html" class="footer__link">FAQ</a>
-          <a href="#" class="footer__link">GitHub</a>
         </div>
         <div>
           <h4 class="footer__heading">Legal</h4>
@@ -165,7 +152,7 @@
         </div>
       </div>
       <div class="footer__bottom">
-        <span>&copy; 2026 Astra. Built by Nexus &amp; Antigravity.</span>
+        <span>&copy; 2026 Astra. Made by <a href="https://github.com/watispro5212" class="footer__author-link">watispro1</a>.</span>
         <span>Made with ✨ for the Discord community</span>
       </div>
     </div>
@@ -174,4 +161,3 @@
   <script src="assets/js/main.js"></script>
 </body>
 </html>
-

@@ -1,13 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FAQ — Astra Bot</title>
-  <meta name="description" content="Frequently asked questions about Astra. Learn about setup, permissions, data storage, and compatibility.">
-  <meta property="og:title" content="FAQ — Astra Bot">
-  <meta property="og:description" content="Answers to common questions about the Astra Discord bot.">
-  <meta property="og:image" content="assets/images/astra-banner.png">
+  <title>FAQ — Astra</title>
+  <meta name="description" content="Frequently asked questions about Astra — setup, features, permissions, and more.">
   <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
@@ -16,14 +13,14 @@
   <div class="bg-grid" aria-hidden="true"></div>
   <div class="bg-radial" aria-hidden="true"></div>
 
-  <!-- NAVBAR -->
-  <nav class="navbar" role="navigation" aria-label="Main navigation">
+  <nav class="navbar glass" role="navigation" aria-label="Main navigation">
     <div class="container">
       <a href="index.html" class="navbar__brand">
         <img src="assets/images/astra-logo.png" alt="Astra logo" width="36" height="36">
         Astra
+        <span class="navbar__version">v3.0</span>
       </a>
-      <button class="navbar__toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+      <button type="button" class="navbar__toggle" aria-label="Toggle navigation menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
       <div class="navbar__links">
@@ -31,8 +28,9 @@
         <a href="features.html" class="navbar__link">Features</a>
         <a href="commands.html" class="navbar__link">Commands</a>
         <a href="changelog.html" class="navbar__link">Changelog</a>
+        <a href="status.html" class="navbar__link">Status</a>
         <a href="support.html" class="navbar__link">Support</a>
-        <a href="faq.html" class="navbar__link active">FAQ</a>
+        <a href="https://patreon.com/watispro1" class="navbar__link" target="_blank" rel="noopener">Patreon</a>
         <span class="navbar__cta">
           <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=0&scope=bot+email+applications.commands+identify" class="btn btn--primary btn--small">Invite Astra</a>
         </span>
@@ -40,170 +38,155 @@
     </div>
   </nav>
 
-  <!-- PAGE HEADER -->
-  <header class="page-header">
+  <div class="page-header">
     <div class="container">
-      <h1 class="animate-on-scroll"><span class="text-gradient">Frequently Asked Questions</span></h1>
-      <p class="animate-on-scroll">Quick answers to the questions we hear most.</p>
+      <span class="section-header__badge">FAQ</span>
+      <h1>Frequently Asked <span class="text-gradient">Questions</span></h1>
+      <p>Can't find your answer? Join the <a href="https://discord.gg/NZ5Gr7eqE8" target="_blank" rel="noopener" class="status-contact-link">support server</a>.</p>
     </div>
-  </header>
+  </div>
 
-  <!-- FAQ CONTENT -->
-  <main class="section" style="padding-top:0;">
+  <section class="section faq-section">
     <div class="container container--narrow">
+      <div class="accordion">
 
-      <div class="accordion animate-on-scroll">
-
-        <!-- Q1 -->
         <div class="accordion__item">
-          <button class="accordion__header" aria-expanded="false">
-            How do I add Astra to my server?
-            <span class="accordion__icon" aria-hidden="true">▼</span>
+          <button type="button" class="accordion__header">
+            How do I invite Astra to my server?
+            <span class="accordion__icon">▼</span>
           </button>
           <div class="accordion__body">
             <div class="accordion__content">
-              Click the "Invite Astra" button on this website. You'll be taken to Discord's OAuth2 authorization page where you can select the server you want to add Astra to. Make sure you have the <strong>Manage Server</strong> permission in the target server.
+              Click any "Invite Astra" button on this site, or use the direct invite link. You'll need the <strong>Manage Server</strong> permission on the target server. Astra requests Administrator by default for full functionality — you can downscope this but some features may not work.
             </div>
           </div>
         </div>
 
-        <!-- Q2 -->
         <div class="accordion__item">
-          <button class="accordion__header" aria-expanded="false">
+          <button type="button" class="accordion__header">
             What permissions does Astra need?
-            <span class="accordion__icon" aria-hidden="true">▼</span>
+            <span class="accordion__icon">▼</span>
           </button>
           <div class="accordion__body">
             <div class="accordion__content">
-              Astra works best with these permissions: <strong>Send Messages</strong>, <strong>Embed Links</strong>, <strong>Manage Messages</strong>, <strong>Kick Members</strong>, <strong>Ban Members</strong>, <strong>Manage Roles</strong>, <strong>Manage Channels</strong>, and <strong>Read Message History</strong>. You can customize permissions based on which features you want to use. For example, if you don't need moderation, you can skip Kick/Ban permissions.
+              Astra requests Administrator for the simplest setup. If you prefer minimal permissions, the core requirements are: <em>Manage Messages, Manage Channels, Manage Roles, Kick/Ban Members, Moderate Members, Send Messages, Embed Links, Read Message History, View Channels, and Add Reactions</em>. Some modules (like anti-raid lockdown) require Administrator to modify channel permissions at scale.
             </div>
           </div>
         </div>
 
-        <!-- Q3 -->
         <div class="accordion__item">
-          <button class="accordion__header" aria-expanded="false">
-            Does Astra use prefix commands?
-            <span class="accordion__icon" aria-hidden="true">▼</span>
+          <button type="button" class="accordion__header">
+            Why aren't slash commands showing up?
+            <span class="accordion__icon">▼</span>
           </button>
           <div class="accordion__body">
             <div class="accordion__content">
-              No. Astra uses Discord's native <strong>slash command</strong> system exclusively. Type <code>/</code> in any channel where Astra has access and you'll see all available commands in the autocomplete menu. This provides better discoverability, validation, and permission control.
+              Slash commands can take up to 1 hour to propagate globally after a new deployment. If you're self-hosting, make sure to run <code>/dev sync</code> (owner-only) or set a <code>GUILD_ID</code> in your <code>.env</code> to sync instantly to a specific server. Make sure Astra has the <strong>applications.commands</strong> scope in its invite link.
             </div>
           </div>
         </div>
 
-        <!-- Q4 -->
         <div class="accordion__item">
-          <button class="accordion__header" aria-expanded="false">
+          <button type="button" class="accordion__header">
+            Is Astra free to use?
+            <span class="accordion__icon">▼</span>
+          </button>
+          <div class="accordion__body">
+            <div class="accordion__content">
+              Yes — all core features are completely free. Patreon supporters unlock cosmetic perks like custom embed colors, higher XP multipliers, and reduced cooldowns, but no essential functionality is paywalled.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion__item">
+          <button type="button" class="accordion__header">
+            How do I set up the economy system?
+            <span class="accordion__icon">▼</span>
+          </button>
+          <div class="accordion__body">
+            <div class="accordion__content">
+              The economy is enabled by default. Members can immediately use <code>/economy daily</code> and <code>/economy work</code> to earn coins. To create shop items, use <code>/economy additem</code> (requires Manage Server). To view the shop, use <code>/economy shop</code>.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion__item">
+          <button type="button" class="accordion__header">
+            How do I enable anti-raid protection?
+            <span class="accordion__icon">▼</span>
+          </button>
+          <div class="accordion__body">
+            <div class="accordion__content">
+              Run <code>/antiraid config enabled:True</code> to activate it. You can set the join threshold (default 10 joins), time window (default 10 seconds), alert channel, and the action taken on raiders (kick or ban). Use <code>/antiraid unlock</code> to lift a lockdown after a raid is resolved.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion__item">
+          <button type="button" class="accordion__header">
+            How do suggestions work?
+            <span class="accordion__icon">▼</span>
+          </button>
+          <div class="accordion__body">
+            <div class="accordion__content">
+              First, run <code>/suggestion config channel:#your-channel</code> to set up the suggestion channel. Members then use <code>/suggest</code> to submit ideas — Astra posts an embed with 👍/👎 reactions. Staff can use <code>/suggestion approve</code>, <code>/suggestion deny</code>, or <code>/suggestion implement</code> to update the status. The suggestion author gets a DM whenever their suggestion is reviewed.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion__item">
+          <button type="button" class="accordion__header">
+            How do I set up birthday announcements?
+            <span class="accordion__icon">▼</span>
+          </button>
+          <div class="accordion__body">
+            <div class="accordion__content">
+              Use <code>/birthday config channel:#announcements</code> to set where birthdays are announced. Optionally add a <code>role:</code> that gets assigned on someone's birthday. Members set their own birthday with <code>/birthday set</code>. Astra checks at 9 AM UTC daily and announces any birthdays for that day.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion__item">
+          <button type="button" class="accordion__header">
+            Can I back up my server configuration?
+            <span class="accordion__icon">▼</span>
+          </button>
+          <div class="accordion__body">
+            <div class="accordion__content">
+              Yes! Use <code>/backup export</code> to download a JSON file containing all your server's Astra configuration (channels, roles, automod settings, ticket config, economy settings, etc.). Use <code>/backup import</code> to restore from that file on the same server or a different one.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion__item">
+          <button type="button" class="accordion__header">
             What data does Astra store?
-            <span class="accordion__icon" aria-hidden="true">▼</span>
+            <span class="accordion__icon">▼</span>
           </button>
           <div class="accordion__body">
             <div class="accordion__content">
-              Astra stores only what's needed to provide its features: server configuration settings (channel IDs, thresholds), moderation cases (user IDs, reasons, timestamps), poll data (votes), reminder data (message, trigger time), starboard entries, ticket configurations, and role menu settings. Messages content is <strong>not</strong> stored. See our <a href="privacy.html">Privacy Policy</a> for full details.
+              Astra stores only what's necessary to function: server configuration, moderation cases, XP data, economy balances, reminders, and similar feature data. No message content is permanently stored — automod checks messages in real-time and discards them. See the <a href="privacy.html" class="status-contact-link">Privacy Policy</a> for full details.
             </div>
           </div>
         </div>
 
-        <!-- Q5 -->
         <div class="accordion__item">
-          <button class="accordion__header" aria-expanded="false">
-            Is Astra free?
-            <span class="accordion__icon" aria-hidden="true">▼</span>
+          <button type="button" class="accordion__header">
+            How do I self-host Astra?
+            <span class="accordion__icon">▼</span>
           </button>
           <div class="accordion__body">
             <div class="accordion__content">
-              Yes — completely free. All features are available to every server with no premium tiers, subscriptions, or paywalls.
+              Clone the repository, install dependencies with <code>pip install -r requirements.txt</code>, create a <code>.env</code> file with your <code>DISCORD_TOKEN</code>, and run <code>python main.py</code>. Python 3.11+ required. Enable all three Privileged Gateway Intents (Members, Message Content, Presence) in the Discord Developer Portal. See the README for full setup instructions.
             </div>
           </div>
         </div>
 
-        <!-- Q6 -->
-        <div class="accordion__item">
-          <button class="accordion__header" aria-expanded="false">
-            Can I use Astra in multiple servers?
-            <span class="accordion__icon" aria-hidden="true">▼</span>
-          </button>
-          <div class="accordion__body">
-            <div class="accordion__content">
-              Yes. Astra supports multi-server operation. Each server has its own independent configuration, moderation cases, and settings. Changes in one server never affect another.
-            </div>
-          </div>
-        </div>
-
-        <!-- Q7 -->
-        <div class="accordion__item">
-          <button class="accordion__header" aria-expanded="false">
-            How do I set up the starboard?
-            <span class="accordion__icon" aria-hidden="true">▼</span>
-          </button>
-          <div class="accordion__body">
-            <div class="accordion__content">
-              Use <code>/config starboard #your-channel</code> to set the starboard channel, then <code>/config threshold 3</code> to set how many ⭐ reactions a message needs. Once set, Astra will automatically repost qualifying messages. Stars from bots and the message author are excluded from the count.
-            </div>
-          </div>
-        </div>
-
-        <!-- Q8 -->
-        <div class="accordion__item">
-          <button class="accordion__header" aria-expanded="false">
-            How do I set up the ticket system?
-            <span class="accordion__icon" aria-hidden="true">▼</span>
-          </button>
-          <div class="accordion__body">
-            <div class="accordion__content">
-              First, run <code>/ticket_setup</code> and select the category where tickets should be created and the staff role that gets access. Then run <code>/ticket_panel #channel</code> to send the ticket launcher button to a channel. Users click the button to open a private support ticket.
-            </div>
-          </div>
-        </div>
-
-        <!-- Q9 -->
-        <div class="accordion__item">
-          <button class="accordion__header" aria-expanded="false">
-            How do I request data deletion?
-            <span class="accordion__icon" aria-hidden="true">▼</span>
-          </button>
-          <div class="accordion__body">
-            <div class="accordion__content">
-              Join our <a href="#">support server</a> and contact a team member. We can remove all stored data associated with your server or user ID upon request. You can also remove Astra from your server, which will stop all data collection — though existing records will remain until a deletion request is made.
-            </div>
-          </div>
-        </div>
-
-        <!-- Q10 -->
-        <div class="accordion__item">
-          <button class="accordion__header" aria-expanded="false">
-            Can I contribute or self-host Astra?
-            <span class="accordion__icon" aria-hidden="true">▼</span>
-          </button>
-          <div class="accordion__body">
-            <div class="accordion__content">
-              Astra's source code is available on GitHub. Contributions are welcome — feel free to submit issues, feature requests, or pull requests. Self-hosting is also possible if you prefer to run your own instance.
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </main>
-
-  <!-- CTA BANNER -->
-  <section class="section">
-    <div class="container">
-      <div class="cta-banner animate-on-scroll">
-        <h2>Still have questions?</h2>
-        <p>Join our support server and ask the community or dev team directly.</p>
-        <div class="hero__actions">
-          <a href="#" class="btn btn--primary btn--large">Join Support Server</a>
-          <a href="support.html" class="btn btn--secondary btn--large">More Help →</a>
-        </div>
       </div>
     </div>
   </section>
 
-  <!-- FOOTER -->
-  <footer class="footer" role="contentinfo">
+  <footer class="footer glass" role="contentinfo">
     <div class="container">
       <div class="footer__grid">
         <div>
@@ -211,7 +194,7 @@
             <img src="assets/images/astra-logo.png" alt="Astra" width="28" height="28">
             Astra
           </div>
-          <p class="footer__desc">A polished utility and community assistant designed to make server management easy and interactive.</p>
+          <p class="footer__desc">The ultimate all-in-one Discord bot.</p>
         </div>
         <div>
           <h4 class="footer__heading">Product</h4>
@@ -220,10 +203,9 @@
           <a href="changelog.html" class="footer__link">Changelog</a>
         </div>
         <div>
-          <h4 class="footer__heading">Resources</h4>
-          <a href="support.html" class="footer__link">Support</a>
+          <h4 class="footer__heading">Community</h4>
+          <a href="https://discord.gg/NZ5Gr7eqE8" class="footer__link" target="_blank" rel="noopener">Support Server</a>
           <a href="faq.html" class="footer__link">FAQ</a>
-          <a href="#" class="footer__link">GitHub</a>
         </div>
         <div>
           <h4 class="footer__heading">Legal</h4>
@@ -232,13 +214,29 @@
         </div>
       </div>
       <div class="footer__bottom">
-        <span>&copy; 2026 Astra. Built by Nexus &amp; Antigravity.</span>
+        <span>&copy; 2026 Astra. Made by <a href="https://github.com/watispro5212" class="footer__author-link">watispro1</a>.</span>
         <span>Made with ✨ for the Discord community</span>
       </div>
     </div>
   </footer>
 
   <script src="assets/js/main.js"></script>
+  <script>
+    document.querySelectorAll('.accordion__header').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.accordion__item');
+        const body = item.querySelector('.accordion__body');
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.accordion__item.open').forEach(i => {
+          i.classList.remove('open');
+          i.querySelector('.accordion__body').style.maxHeight = null;
+        });
+        if (!isOpen) {
+          item.classList.add('open');
+          body.style.maxHeight = body.scrollHeight + 'px';
+        }
+      });
+    });
+  </script>
 </body>
 </html>
-

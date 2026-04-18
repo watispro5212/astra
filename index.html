@@ -1,44 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Astra — Your Reliable Server Companion</title>
-  <meta name="description" content="Astra is a polished Discord bot for moderation, community engagement, and server management. Fast, clean, and easy to use.">
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="Astra — Your Reliable Server Companion">
-  <meta property="og:description" content="Moderation, utility, and community tools in one place. Built to help your server stay organized.">
+  <title>Astra — The Ultimate Discord Bot</title>
+  <meta name="description" content="Astra v3 — The ultimate all-in-one Discord bot. Moderation, economy, leveling, anti-raid, fun commands, and much more. Free, fast, and always online.">
+  <meta property="og:title" content="Astra — The Ultimate Discord Bot">
+  <meta property="og:description" content="All-in-one Discord community bot. Moderation, economy, leveling, anti-raid & more.">
   <meta property="og:image" content="assets/images/astra-banner.png">
   <meta property="og:type" content="website">
-
-  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Astra — Your Reliable Server Companion">
-  <meta name="twitter:description" content="Moderation, utility, and community tools in one place.">
-  <meta name="twitter:image" content="assets/images/astra-banner.png">
-
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
-
-  <!-- Styles -->
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
 </head>
 <body>
-
-  <!-- Background Effects -->
   <div class="bg-grid" aria-hidden="true"></div>
   <div class="bg-radial" aria-hidden="true"></div>
+  <div class="bg-radial-2" aria-hidden="true"></div>
 
-  <!-- ═══ NAVBAR ═══ -->
+  <!-- NAVBAR -->
   <nav class="navbar glass" role="navigation" aria-label="Main navigation">
     <div class="container">
       <a href="index.html" class="navbar__brand" aria-label="Astra home">
         <img src="assets/images/astra-logo.png" alt="Astra logo" width="36" height="36">
         Astra
+        <span class="navbar__version">v3.0</span>
       </a>
-      <button class="navbar__toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+      <button type="button" class="navbar__toggle" aria-label="Toggle navigation menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
       <div class="navbar__links">
@@ -46,175 +35,222 @@
         <a href="features.html" class="navbar__link">Features</a>
         <a href="commands.html" class="navbar__link">Commands</a>
         <a href="changelog.html" class="navbar__link">Changelog</a>
+        <a href="status.html" class="navbar__link">Status</a>
         <a href="support.html" class="navbar__link">Support</a>
-        <a href="faq.html" class="navbar__link">FAQ</a>
         <a href="https://patreon.com/watispro1" class="navbar__link" target="_blank" rel="noopener">Patreon</a>
         <span class="navbar__cta">
-          <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=0&scope=bot+email+applications.commands+identify" class="btn btn--primary btn--small" id="nav-invite-btn">Invite Astra</a>
+          <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=0&scope=bot+email+applications.commands+identify" class="btn btn--primary btn--small">Invite Astra</a>
         </span>
       </div>
     </div>
   </nav>
 
-  <!-- ═══ HERO ═══ -->
-  <section class="section section--hero" id="hero" style="position:relative;">
-    <div class="hero__banner" aria-hidden="true">
-      <img src="assets/images/astra-banner.png" alt="" width="1024" height="576">
-    </div>
+  <!-- HERO -->
+  <section class="section section--hero" id="hero">
+    <div class="hero__particles" aria-hidden="true" id="particles"></div>
     <div class="container hero">
+      <div class="hero__badge animate-on-scroll">
+        <span class="badge badge--new">🚀 v3.0 Released</span>
+      </div>
       <img src="assets/images/astra-logo.png" alt="Astra logo" class="hero__logo" width="120" height="120">
       <h1 class="hero__title">
-        Meet <span class="text-gradient">Astra</span>
+        The Ultimate<br><span class="text-gradient">Discord Bot</span>
       </h1>
       <p class="hero__subtitle">
-        Your reliable server companion. Moderation, engagement, and utility tools — fast, clean, and easy to use.
+        Astra brings everything your server needs into one powerful, elegant package.<br>
+        Moderation, economy, leveling, anti-raid, fun commands, and so much more.
       </p>
       <div class="hero__actions">
-        <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=0&scope=bot+email+applications.commands+identify" class="btn btn--primary btn--large" id="hero-invite-btn">
-          ✨ Invite Astra
+        <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=0&scope=bot+email+applications.commands+identify" class="btn btn--primary btn--large">
+          ✨ Invite Astra — Free
         </a>
-        <a href="https://patreon.com/watispro1" class="btn btn--patreon btn--large" target="_blank" rel="noopener">
-          🧡 Support on Patreon
-        </a>
-        <a href="features.html" class="btn btn--secondary btn--large" id="hero-features-btn">
+        <a href="features.html" class="btn btn--secondary btn--large">
           Explore Features
+        </a>
+        <a href="https://discord.gg/NZ5Gr7eqE8" class="btn btn--ghost btn--large" target="_blank" rel="noopener">
+          Join Support Server
         </a>
       </div>
       <div class="hero__stats animate-on-scroll">
         <div class="hero__stat">
-          <div class="hero__stat-value">10+</div>
+          <div class="hero__stat-value counter" data-target="50">50+</div>
           <div class="hero__stat-label">Slash Commands</div>
         </div>
         <div class="hero__stat">
-          <div class="hero__stat-value">6</div>
+          <div class="hero__stat-value counter" data-target="20">20+</div>
           <div class="hero__stat-label">Feature Modules</div>
         </div>
         <div class="hero__stat">
           <div class="hero__stat-value">24/7</div>
           <div class="hero__stat-label">Uptime</div>
         </div>
+        <div class="hero__stat">
+          <div class="hero__stat-value">Free</div>
+          <div class="hero__stat-label">Always</div>
+        </div>
       </div>
+    </div>
+    <div class="hero__scroll-hint" aria-hidden="true">
+      <span></span>
     </div>
   </section>
 
-  <!-- ═══ FEATURES OVERVIEW ═══ -->
+  <!-- FEATURE HIGHLIGHTS -->
   <section class="section" id="features">
     <div class="container">
       <div class="section-header animate-on-scroll">
         <span class="section-header__badge">Features</span>
         <h2>Everything your server needs</h2>
-        <p>From moderation to community engagement — Astra handles it all with a clean, intuitive experience.</p>
+        <p>From moderation to community engagement — Astra v3 handles it all with a clean, intuitive experience.</p>
       </div>
-
       <div class="grid grid--3 stagger">
-        <div class="card glass animate-on-scroll">
+        <div class="card glass card--featured animate-on-scroll">
           <div class="card__icon">🛡️</div>
-          <h3 class="card__title">Moderation</h3>
-          <p class="card__text">Kick, ban, and warn with full case tracking. Every action is logged with a case number for accountability.</p>
+          <h3 class="card__title">Advanced Moderation</h3>
+          <p class="card__text">Kick, ban, warn, mute, lock channels, purge messages — full case tracking with appeals and CSV export.</p>
+          <span class="card__tag">Updated</span>
         </div>
         <div class="card glass animate-on-scroll">
-          <div class="card__icon">📊</div>
-          <h3 class="card__title">Interactive Polls</h3>
-          <p class="card__text">Create button-based polls with real-time vote tracking. Up to 10 options per poll with persistent results.</p>
+          <div class="card__icon">💰</div>
+          <h3 class="card__title">Economy System</h3>
+          <p class="card__text">Full coin economy with daily rewards, work command, shop with role rewards, leaderboards, and transfers.</p>
+          <span class="card__tag card__tag--new">New</span>
+        </div>
+        <div class="card glass animate-on-scroll">
+          <div class="card__icon">🏆</div>
+          <h3 class="card__title">XP & Leveling</h3>
+          <p class="card__text">Earn XP by chatting with configurable rates, level-up announcements, and automatic role rewards at milestones.</p>
+        </div>
+        <div class="card glass animate-on-scroll">
+          <div class="card__icon">🚨</div>
+          <h3 class="card__title">Anti-Raid</h3>
+          <p class="card__text">Real-time mass-join detection with automatic server lockdown, configurable thresholds, and instant staff alerts.</p>
+          <span class="card__tag card__tag--new">New</span>
+        </div>
+        <div class="card glass animate-on-scroll">
+          <div class="card__icon">💡</div>
+          <h3 class="card__title">Suggestions</h3>
+          <p class="card__text">Community feedback system with vote reactions, staff approve/deny workflow, and DM notifications to authors.</p>
+          <span class="card__tag card__tag--new">New</span>
+        </div>
+        <div class="card glass animate-on-scroll">
+          <div class="card__icon">🎂</div>
+          <h3 class="card__title">Birthday System</h3>
+          <p class="card__text">Auto birthday announcements, optional role assignment, and an upcoming birthdays calendar for your server.</p>
+          <span class="card__tag card__tag--new">New</span>
+        </div>
+        <div class="card glass animate-on-scroll">
+          <div class="card__icon">💤</div>
+          <h3 class="card__title">AFK System</h3>
+          <p class="card__text">Set custom AFK messages with auto-reply on mention and seamless removal when you return to chat.</p>
+          <span class="card__tag card__tag--new">New</span>
+        </div>
+        <div class="card glass animate-on-scroll">
+          <div class="card__icon">📨</div>
+          <h3 class="card__title">Invite Tracker</h3>
+          <p class="card__text">Track who invited who with invite leaderboards, fake/leave detection, and per-user invite statistics.</p>
+          <span class="card__tag card__tag--new">New</span>
+        </div>
+        <div class="card glass animate-on-scroll">
+          <div class="card__icon">🎮</div>
+          <h3 class="card__title">Fun Commands</h3>
+          <p class="card__text">8ball, trivia, RPS, dice rolls, roast generator, coin flip, chooser — keep your community entertained.</p>
+          <span class="card__tag card__tag--new">New</span>
         </div>
         <div class="card glass animate-on-scroll">
           <div class="card__icon">🎫</div>
           <h3 class="card__title">Ticket System</h3>
-          <p class="card__text">Private support channels with one-click setup. Staff get notified instantly, and tickets stay organized.</p>
+          <p class="card__text">Private support channels with one-click setup, staff controls, and automated HTML transcripts on close.</p>
         </div>
         <div class="card glass animate-on-scroll">
           <div class="card__icon">⭐</div>
           <h3 class="card__title">Starboard</h3>
-          <p class="card__text">Highlight the best messages in your community automatically. Configurable star threshold and live count updates.</p>
+          <p class="card__text">Community highlights with configurable star thresholds, media support, and live count updates.</p>
         </div>
         <div class="card glass animate-on-scroll">
-          <div class="card__icon">⏰</div>
-          <h3 class="card__title">Reminders</h3>
-          <p class="card__text">Set personal reminders with flexible time formats. Astra checks every minute and pings you when it's time.</p>
+          <div class="card__icon">📦</div>
+          <h3 class="card__title">Server Backup</h3>
+          <p class="card__text">Export your entire server configuration to JSON and restore it with one command. Never lose your setup.</p>
+          <span class="card__tag card__tag--new">New</span>
         </div>
-        <div class="card glass animate-on-scroll">
-          <div class="card__icon">🏷️</div>
-          <h3 class="card__title">Role Menus</h3>
-          <p class="card__text">Self-assignable roles with button or dropdown menus. Supports unique mode for mutually exclusive roles.</p>
-        </div>
+      </div>
+      <div class="section-cta animate-on-scroll">
+        <a href="features.html" class="btn btn--primary btn--large">View All Features →</a>
       </div>
     </div>
   </section>
 
-  <!-- ═══ HOW IT WORKS ═══ -->
-  <section class="section" id="how-it-works">
+  <!-- HOW IT WORKS -->
+  <section class="section section--alt" id="how-it-works">
     <div class="container">
       <div class="section-header animate-on-scroll">
         <span class="section-header__badge">Getting Started</span>
-        <h2>Up and running in minutes</h2>
-        <p>No complex setup required. Astra works out of the box with simple slash commands.</p>
+        <h2>Up and running in 3 steps</h2>
+        <p>No complex setup. Astra works out of the box.</p>
       </div>
-
       <div class="steps stagger">
         <div class="step animate-on-scroll">
           <div class="step__number">1</div>
           <h3 class="step__title">Invite Astra</h3>
-          <p class="step__text">Add Astra to your server with one click. <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238" style="color:var(--color-primary-light);">Click here</a> to use the standard invite.</p>
+          <p class="step__text">Click the invite button and authorize Astra with the recommended permissions. It takes 10 seconds.</p>
         </div>
         <div class="step animate-on-scroll">
           <div class="step__number">2</div>
           <h3 class="step__title">Configure</h3>
-          <p class="step__text">Use <code>/config</code> to set your logging channel, starboard, and ticket system. Takes seconds.</p>
+          <p class="step__text">Use <code>/config</code> to set your channels and preferences. Every module has its own setup command.</p>
         </div>
         <div class="step animate-on-scroll">
           <div class="step__number">3</div>
           <h3 class="step__title">Enjoy</h3>
-          <p class="step__text">Start using slash commands. Astra handles the rest — moderation, polls, reminders, and more.</p>
+          <p class="step__text">Start using slash commands. Astra handles moderation, economy, leveling, and more — automatically.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ═══ PATREON TIERS ═══ -->
+  <!-- PATREON TIERS -->
   <section class="section" id="pricing">
     <div class="container">
       <div class="section-header animate-on-scroll">
         <span class="section-header__badge">Support Astra</span>
-        <h2>Choose your tier</h2>
-        <p>Support our mission and lock in elite perks across the Astra ecosystem.</p>
+        <h2>Unlock elite perks</h2>
+        <p>Support the mission and get exclusive benefits across the Astra ecosystem.</p>
       </div>
-
       <div class="grid grid--3 stagger">
-        <!-- Tier 1 -->
         <div class="card glass animate-on-scroll">
           <div class="card__icon">💎</div>
           <h3 class="card__title">Orbit</h3>
-          <ul class="card__list" style="list-style:none; padding:0; margin:var(--space-md) 0;">
-            <li style="margin-bottom:0.5rem;">✨ 2.5x XP Multiplier</li>
-            <li style="margin-bottom:0.5rem;">🎖️ Supporter Badge</li>
-            <li style="margin-bottom:0.5rem;">⚡ 15% Faster Cooldown</li>
-            <li style="margin-bottom:0.5rem;">🏙️ Premium Footer Mark</li>
+          <div class="card__price">Supporter</div>
+          <ul class="card__list">
+            <li>✨ 2.5× XP Multiplier</li>
+            <li>🎖️ Supporter Badge</li>
+            <li>⚡ 15% Faster Cooldown</li>
+            <li>🏙️ Premium Footer Mark</li>
           </ul>
-          <a href="https://patreon.com/watispro1" class="btn btn--secondary btn--full" target="_blank" rel="noopener">Join Supporter</a>
+          <a href="https://patreon.com/watispro1" class="btn btn--secondary btn--full" target="_blank" rel="noopener">Join Orbit</a>
         </div>
-
-        <!-- Tier 2 -->
-        <div class="card glass animate-on-scroll" style="border: 1px solid var(--color-primary-light);">
+        <div class="card glass card--highlighted animate-on-scroll">
+          <div class="card__badge-popular">Most Popular</div>
           <div class="card__icon">⭐</div>
-          <h3 class="card__title" style="color:var(--color-primary-light);">Stellar</h3>
-          <ul class="card__list" style="list-style:none; padding:0; margin:var(--space-md) 0;">
-            <li style="margin-bottom:0.5rem;">✨ 4.5x XP Multiplier</li>
-            <li style="margin-bottom:0.5rem;">🎖️ Elite Badge</li>
-            <li style="margin-bottom:0.5rem;">⚡ 35% Faster Cooldown</li>
-            <li style="margin-bottom:0.5rem;">🎨 Custom Embed Color</li>
+          <h3 class="card__title card__title--accent">Stellar</h3>
+          <div class="card__price">Elite</div>
+          <ul class="card__list">
+            <li>✨ 4.5× XP Multiplier</li>
+            <li>🎖️ Elite Badge</li>
+            <li>⚡ 35% Faster Cooldown</li>
+            <li>🎨 Custom Embed Color</li>
           </ul>
-          <a href="https://patreon.com/watispro1" class="btn btn--primary btn--full" target="_blank" rel="noopener">Become Elite</a>
+          <a href="https://patreon.com/watispro1" class="btn btn--primary btn--full" target="_blank" rel="noopener">Become Stellar</a>
         </div>
-
-        <!-- Tier 3 -->
         <div class="card glass animate-on-scroll">
           <div class="card__icon">🌌</div>
           <h3 class="card__title">Galactic</h3>
-          <ul class="card__list" style="list-style:none; padding:0; margin:var(--space-md) 0;">
-            <li style="margin-bottom:0.5rem;">✨ 7.0x XP Multiplier</li>
-            <li style="margin-bottom:0.5rem;">🖼️ Galactic Gallery</li>
-            <li style="margin-bottom:0.5rem;">⚡ 60% Faster Cooldown</li>
-            <li style="margin-bottom:0.5rem;">🔱 Custom Badge Choice</li>
+          <div class="card__price">Premium</div>
+          <ul class="card__list">
+            <li>✨ 7.0× XP Multiplier</li>
+            <li>🖼️ Galactic Gallery</li>
+            <li>⚡ 60% Faster Cooldown</li>
+            <li>🔱 Custom Badge Choice</li>
           </ul>
           <a href="https://patreon.com/watispro1" class="btn btn--secondary btn--full" target="_blank" rel="noopener">Reach Galactic</a>
         </div>
@@ -222,55 +258,55 @@
     </div>
   </section>
 
-  <!-- ═══ WHY ASTRA ═══ -->
-  <section class="section" id="why-astra">
+  <!-- WHY ASTRA -->
+  <section class="section section--alt" id="why-astra">
     <div class="container">
       <div class="section-header animate-on-scroll">
         <span class="section-header__badge">Why Astra</span>
         <h2>Built different</h2>
-        <p>Astra is designed to be fast, minimal, and reliable — no bloat, no confusion.</p>
+        <p>Fast, clean, and built to last — no bloat, no confusion.</p>
       </div>
-
       <div class="grid grid--4 stagger">
-        <div class="card glass animate-on-scroll" style="text-align:center;">
-          <div class="card__icon" style="margin:0 auto var(--space-lg);">⚡</div>
-          <h3 class="card__title">Fast</h3>
-          <p class="card__text">Optimized for low-latency responses. Every command responds instantly.</p>
+        <div class="card glass card--centered animate-on-scroll">
+          <div class="card__icon card__icon--centered">⚡</div>
+          <h3 class="card__title">Instant</h3>
+          <p class="card__text">Every command responds in milliseconds. Built async from the ground up.</p>
         </div>
-        <div class="card glass animate-on-scroll" style="text-align:center;">
-          <div class="card__icon" style="margin:0 auto var(--space-lg);">🧱</div>
+        <div class="card glass card--centered animate-on-scroll">
+          <div class="card__icon card__icon--centered">🧱</div>
           <h3 class="card__title">Modular</h3>
-          <p class="card__text">Features are built as independent modules. Only use what you need.</p>
+          <p class="card__text">Features are independent modules. Use only what you need.</p>
         </div>
-        <div class="card glass animate-on-scroll" style="text-align:center;">
-          <div class="card__icon" style="margin:0 auto var(--space-lg);">🔒</div>
+        <div class="card glass card--centered animate-on-scroll">
+          <div class="card__icon card__icon--centered">🔒</div>
           <h3 class="card__title">Secure</h3>
-          <p class="card__text">Role-based permissions on every command. No unauthorized access.</p>
+          <p class="card__text">Role-based permissions on every command. Your data stays private.</p>
         </div>
-        <div class="card glass animate-on-scroll" style="text-align:center;">
-          <div class="card__icon" style="margin:0 auto var(--space-lg);">🧡</div>
-          <h3 class="card__title">Support Driven</h3>
-          <p class="card__text">Unlock elite perks like the Galactic Gallery and high XP multipliers by supporting our mission.</p>
+        <div class="card glass card--centered animate-on-scroll">
+          <div class="card__icon card__icon--centered">🆓</div>
+          <h3 class="card__title">Free Forever</h3>
+          <p class="card__text">All core features are free. Patreon unlocks exclusive cosmetic perks.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ═══ CTA BANNER ═══ -->
+  <!-- CTA BANNER -->
   <section class="section" id="cta">
     <div class="container">
       <div class="cta-banner animate-on-scroll">
-        <h2>Ready to upgrade your server?</h2>
-        <p>Join the servers already using Astra to keep things organized, safe, and fun.</p>
+        <div class="cta-banner__glow" aria-hidden="true"></div>
+        <h2>Ready to power up your server?</h2>
+        <p>Join thousands of servers already running Astra v3.</p>
         <div class="hero__actions">
-          <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=0&scope=bot+email+applications.commands+identify" class="btn btn--primary btn--large" id="cta-invite-btn">✨ Invite Astra</a>
-          <a href="https://discord.gg/NZ5Gr7eqE8" class="btn btn--secondary btn--large" id="cta-support-btn">Join Support Server</a>
+          <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=0&scope=bot+email+applications.commands+identify" class="btn btn--primary btn--large">✨ Invite Astra — Free</a>
+          <a href="https://discord.gg/NZ5Gr7eqE8" class="btn btn--secondary btn--large" target="_blank" rel="noopener">Join Support Server</a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ═══ FOOTER ═══ -->
+  <!-- FOOTER -->
   <footer class="footer glass" role="contentinfo">
     <div class="container">
       <div class="footer__grid">
@@ -279,29 +315,39 @@
             <img src="assets/images/astra-logo.png" alt="Astra" width="28" height="28">
             Astra
           </div>
-          <p class="footer__desc">A polished utility and community assistant designed to make server management easy and interactive.</p>
+          <p class="footer__desc">The ultimate all-in-one Discord bot for moderation, community engagement, and server management.</p>
+          <div class="footer__social">
+            <a href="https://discord.gg/NZ5Gr7eqE8" class="footer__social-link" target="_blank" rel="noopener" aria-label="Discord">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+            </a>
+            <a href="https://patreon.com/watispro1" class="footer__social-link" target="_blank" rel="noopener" aria-label="Patreon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M14.82 2.41C18.78 2.41 22 5.65 22 9.62c0 3.96-3.22 7.19-7.18 7.19-3.95 0-7.17-3.23-7.17-7.19 0-3.97 3.22-7.21 7.17-7.21M2 21.6h3.5V2.41H2V21.6z"/></svg>
+            </a>
+          </div>
         </div>
         <div>
           <h4 class="footer__heading">Product</h4>
           <a href="features.html" class="footer__link">Features</a>
           <a href="commands.html" class="footer__link">Commands</a>
           <a href="changelog.html" class="footer__link">Changelog</a>
+          <a href="status.html" class="footer__link">Status</a>
         </div>
         <div>
-          <h4 class="footer__heading">Resources</h4>
-          <a href="https://discord.gg/NZ5Gr7eqE8" class="footer__link">Support Server</a>
+          <h4 class="footer__heading">Community</h4>
+          <a href="https://discord.gg/NZ5Gr7eqE8" class="footer__link" target="_blank" rel="noopener">Support Server</a>
           <a href="faq.html" class="footer__link">FAQ</a>
-          <a href="https://patreon.com/watispro1" class="footer__link">Support on Patreon</a>
-          <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238" class="footer__link">Standard Invite</a>
+          <a href="https://patreon.com/watispro1" class="footer__link" target="_blank" rel="noopener">Patreon</a>
+          <a href="support.html" class="footer__link">Contact</a>
         </div>
         <div>
           <h4 class="footer__heading">Legal</h4>
           <a href="privacy.html" class="footer__link">Privacy Policy</a>
           <a href="terms.html" class="footer__link">Terms of Service</a>
+          <a href="LICENSE" class="footer__link">License</a>
         </div>
       </div>
       <div class="footer__bottom">
-        <span>&copy; 2026 Astra. Built by Nexus &amp; Antigravity.</span>
+        <span>&copy; 2026 Astra. Made by <a href="https://github.com/watispro5212" class="footer__author-link">watispro1</a>.</span>
         <span>Made with ✨ for the Discord community</span>
       </div>
     </div>
@@ -310,4 +356,3 @@
   <script src="assets/js/main.js"></script>
 </body>
 </html>
-
