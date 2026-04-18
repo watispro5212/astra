@@ -1,6 +1,4 @@
-import discord
-from core.database import db
-from datetime import datetime, timedelta
+from services.patron_service import patron_service
 import random
 
 class XPService:
@@ -33,8 +31,10 @@ class XPService:
         if last_time and now < last_time + timedelta(seconds=guild_data['xp_cooldown']):
             return False
 
-        # Award XP
-        xp_to_add = guild_data['xp_rate'] + random.randint(-2, 2) # Slight variation
+        # Award XP with Patron Multiplier
+        multiplier = await patron_service.get_multiplier(user_id)
+        base_xp = guild_data['xp_rate'] + random.randint(-2, 2)
+        xp_to_add = int(base_xp * multiplier)
         
         async with db.connection.execute(
             """

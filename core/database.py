@@ -258,6 +258,16 @@ class DatabaseManager:
             )
         """)
 
+        # ── PATRONS (v3) ──────────────────────────────────────────────────────
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS patrons (
+                user_id INTEGER PRIMARY KEY,
+                tier INTEGER DEFAULT 0,
+                expires_at DATETIME,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
         await self.connection.commit()
         logger.info("Database tables initialized (v2)")
 
