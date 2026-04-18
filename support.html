@@ -30,6 +30,7 @@
         <a href="index.html" class="navbar__link">Home</a>
         <a href="features.html" class="navbar__link">Features</a>
         <a href="commands.html" class="navbar__link">Commands</a>
+        <a href="changelog.html" class="navbar__link">Changelog</a>
         <a href="support.html" class="navbar__link active">Support</a>
         <a href="faq.html" class="navbar__link">FAQ</a>
         <span class="navbar__cta">
@@ -53,23 +54,23 @@
 
       <!-- Support Cards -->
       <div class="grid grid--3 stagger" style="margin-bottom:var(--space-4xl);">
-        <div class="support-card animate-on-scroll">
-          <div class="support-card__icon">💬</div>
-          <h3 class="support-card__title">Discord Server</h3>
-          <p class="support-card__text">Join our support server for real-time help from the community and dev team.</p>
-          <a href="#" class="btn btn--primary btn--small" id="support-discord-btn">Join Server</a>
+        <div class="card animate-on-scroll">
+          <div class="card__icon">💬</div>
+          <h3 class="card__title">Discord Server</h3>
+          <p class="card__text">Join our official support server for real-time help from developers.</p>
+          <a href="#" class="btn btn--primary btn--small">Join Server</a>
         </div>
-        <div class="support-card animate-on-scroll">
-          <div class="support-card__icon">📖</div>
-          <h3 class="support-card__title">Documentation</h3>
-          <p class="support-card__text">Browse the command reference and feature guides to learn how Astra works.</p>
-          <a href="commands.html" class="btn btn--secondary btn--small" id="support-docs-btn">View Commands</a>
+        <div class="card animate-on-scroll">
+          <div class="card__icon">📖</div>
+          <h3 class="card__title">Documentation</h3>
+          <p class="card__text">Browse detailed command references and feature guides.</p>
+          <a href="commands.html" class="btn btn--secondary btn--small">View Commands</a>
         </div>
-        <div class="support-card animate-on-scroll">
-          <div class="support-card__icon">🐛</div>
-          <h3 class="support-card__title">Report a Bug</h3>
-          <p class="support-card__text">Found something broken? Open an issue on GitHub so we can fix it.</p>
-          <a href="#" class="btn btn--secondary btn--small" id="support-github-btn">Open Issue</a>
+        <div class="card animate-on-scroll">
+          <div class="card__icon">🐛</div>
+          <h3 class="card__title">Report a Bug</h3>
+          <p class="card__text">Found a performance issue? Open a ticket on GitHub.</p>
+          <a href="#" class="btn btn--secondary btn--small">Open Issue</a>
         </div>
       </div>
 
@@ -81,34 +82,39 @@
         </div>
 
         <div class="content animate-on-scroll">
-          <h2>Astra isn't responding to commands</h2>
+          <h3>Astra isn't responding to commands</h3>
           <ul>
-            <li>Make sure Astra is online in your server's member list.</li>
-            <li>Check that Astra has the <strong>Use Application Commands</strong> permission in the channel you're using.</li>
-            <li>Try running <code>/ping</code> to verify connectivity.</li>
-            <li>If commands don't appear, the bot may need to re-sync. Try kicking and re-inviting Astra.</li>
+            <li>Ensure Astra has <strong>Use Application Commands</strong> permission.</li>
+            <li>Verify Astra is online. If not, join the support server for status updates.</li>
+            <li>Try running <code>/ping</code> to check if the bot is responsive.</li>
           </ul>
 
-          <h2>Astra can't kick/ban members</h2>
+          <h3>XP & Leveling aren't working</h3>
           <ul>
-            <li>Astra's role must be <strong>higher</strong> than the target member's highest role in the server role hierarchy.</li>
-            <li>Ensure Astra has the <strong>Kick Members</strong> or <strong>Ban Members</strong> permission.</li>
-            <li>Astra cannot moderate the server owner or members with equal/higher roles.</li>
+            <li>Astra has a 1-minute XP cooldown per user to prevent spamming.</li>
+            <li>Ensure the "Level Notification" setting isn't disabled in your config.</li>
+            <li>Level roles must be <strong>below</strong> Astra's highest role for her to assign them.</li>
           </ul>
 
-          <h2>Starboard isn't working</h2>
+          <h3>Auto-Moderation is too strict/loose</h3>
           <ul>
-            <li>Run <code>/config starboard</code> to set the starboard channel.</li>
-            <li>Run <code>/config threshold</code> to set the required number of stars.</li>
-            <li>Stars from bots and the message author are excluded from the count.</li>
-            <li>Make sure Astra can send messages and embed links in the starboard channel.</li>
+            <li>Use <code>/automod_config</code> to recalibrate filters for caps, spam, and links.</li>
+            <li>Members with <strong>Manage Messages</strong> or <strong>Administrator</strong> are exempt by default.</li>
+            <li>Check if you have accidentally whitelisted certain roles.</li>
           </ul>
 
-          <h2>Tickets aren't creating</h2>
+          <h3>Starboard isn't posting</h3>
           <ul>
-            <li>Run <code>/ticket_setup</code> to configure the ticket category and staff role first.</li>
-            <li>Ensure Astra has <strong>Manage Channels</strong> permission in the ticket category.</li>
-            <li>Check that the ticket category isn't full (Discord has a 50-channel limit per category).</li>
+            <li>Run <code>/config starboard</code> to set a destination channel.</li>
+            <li>Ensure <code>/config threshold</code> is set to a value greater than 0.</li>
+            <li>Astra excludes self-reactions and bot reactions from the star count.</li>
+          </ul>
+
+          <h3>Tickets aren't creating</h3>
+          <ul>
+            <li>Run <code>/ticket_setup</code> to configure the category and staff roles.</li>
+            <li>Astra must have <strong>Manage Channels</strong> in the chosen category.</li>
+            <li>Verify the category isn't at the 50-channel limit.</li>
           </ul>
 
           <h2>Still need help?</h2>

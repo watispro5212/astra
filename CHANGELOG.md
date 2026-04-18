@@ -5,21 +5,47 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
-## [Unreleased] — v2.0.0
+## [2.1.0] — April 18, 2026
 
-> Major overhaul. Planned features coming in the next release.
+### ✨ Branding & UI Overhaul
+- **New Design System**: Transitioned to a "Premium Glass" aesthetic with Outfit & Inter typography.
+- **Enhanced Glassmorphism**: Refined backdrop blur, vibrant color tokens, and subtle internal glows for cards and buttons.
+- **Improved Navigation**: Added "Changelog" to the global navbar and overhauled all 8 website pages.
+- **Responsive Layouts**: Optimized grid systems for better mobile and tablet viewing.
+- **Performance**: Improved animation smoothness using cubic-bezier transitions.
 
-### Planned
-- XP Leveling & leaderboard system
-- Welcome messages with card embeds
-- Auto-moderation (anti-spam, link filtering, caps lock)
-- Giveaway system
-- Temporary voice channels
-- Per-user server statistics (`/stats`)
-- Advanced poll options (timed auto-close, anonymous voting)
-- Thread-based ticket transcripts
-- Server backup and restore (config only)
-- Multi-guild support improvements
+---
+
+## [2.0.0] — April 18, 2026
+
+Major feature expansion and core system refactor. Astra is now a complete community management platform.
+
+### Added
+
+#### 🏆 Engagement & Leveling
+- **XP/Leveling System**: Earn XP by chatting. Features configurable role rewards and level-up announcements.
+- **Giveaways**: Button-based persistent giveaways with automated winner selection and reroll capabilities.
+- **Leaderboards**: View the top members in your server with `/leaderboard`.
+
+#### 🛡️ Advanced Security
+- **Auto-Moderation**: Automated filters for spam, link invites, excessive caps, and more.
+- **Timeout Management**: Integrated `/mute` and `/unmute` using Discord's native timeout system.
+- **Mass Removal**: `/purge` and `/slowmode` tools for managing high-activity channels.
+
+#### ⚙️ Automation & Tools
+- **Temporary Voice**: "Join-to-Create" hubs that automatically create and delete member voice channels.
+- **Welcome System**: Automated join/leave messages and auto-role assignment for new members.
+- **Server Stats**: Real-time dashboards showing member growth and activity.
+
+#### 🎫 Ticket System v2
+- **Transcripts**: Automated HTML transcripts for closed tickets, sent to staff logs.
+- **Categorized Tickets**: Support for multiple ticket types (Support, Report, Inquiry).
+- **Audit Logs**: Enhanced logging for all ticket operations.
+
+### Improved
+- **Error Handling**: Standardized recovery for database locks and permission errors.
+- **Database**: Implemented non-destructive schema migrations for easier updates.
+- **UI Components**: Updated all embeds to use `AstraEmbed` for brand consistency.
 
 ---
 

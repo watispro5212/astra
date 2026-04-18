@@ -1,4 +1,8 @@
+import discord
 import io
+import asyncio
+from services.ticket_service import TicketService
+from ui.embeds import AstraEmbed
 
 class TicketTypeSelect(discord.ui.Select):
     def __init__(self):
