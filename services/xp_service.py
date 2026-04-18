@@ -1,3 +1,6 @@
+import discord
+from core.database import db
+from datetime import datetime, timedelta
 from services.patron_service import patron_service
 import random
 
@@ -36,7 +39,7 @@ class XPService:
         base_xp = guild_data['xp_rate'] + random.randint(-2, 2)
         xp_to_add = int(base_xp * multiplier)
         
-        async with db.connection.execute(
+        await db.execute(
             """
             INSERT INTO user_xp (user_id, guild_id, xp, level, last_message_at)
             VALUES (?, ?, ?, 0, ?)
@@ -44,9 +47,8 @@ class XPService:
                 xp = xp + ?,
                 last_message_at = ?
             """,
-            (user_id, guild_id, xp_to_add, now, xp_to_add, now)
-        ) as cursor:
-            await db.connection.commit()
+            user_id, guild_id, xp_to_add, now, xp_to_add, now
+        )
 
         self.cooldowns[(user_id, guild_id)] = now
         

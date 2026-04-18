@@ -9,6 +9,18 @@ class AutomodService:
     def __init__(self):
         self.message_counts = {} # (user_id, guild_id) -> list of timestamps
 
+    async def cleanup_cache(self):
+        """Purges inactive users from the anti-spam cache to prevent memory leaks."""
+        now = datetime.now()
+        keys_to_delete = []
+        for key, timestamps in self.message_counts.items():
+            # If no messages in the last hour, clear entry
+            if not timestamps or now - timestamps[-1] > timedelta(hours=1):
+                keys_to_delete.append(key)
+        
+        for key in keys_to_delete:
+            del self.message_counts[key]
+            
     async def get_config(self, guild_id: int):
         return await db.fetch_one("SELECT * FROM automod_configs WHERE guild_id = ?", guild_id)
 
@@ -108,9 +120,13 @@ class AutomodService:
         return False
 
     async def _check_bad_words(self, message: discord.Message, config) -> bool:
-        words = [w.strip() for w in config['bad_words'].split(',') if w.strip()]
+        # Normalization: Remove common separators to catch bypasses like w.o.r.d
+        content_low = message.content.lower()
+        normalized = re.sub(r'[^a-z0-9\s]', '', content_low)
+        
+        words = [w.strip().lower() for w in config['bad_words'].split(',') if w.strip()]
         for word in words:
-            if word.lower() in message.content.lower():
+            if word in normalized or word in content_low:
                 await message.delete()
                 await self._warn_user(message, "Forbidden Language")
                 return True

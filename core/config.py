@@ -11,6 +11,7 @@ class Config(BaseSettings):
 
     discord_token: str
     guild_id: Optional[int] = None
+    owner_id: int = 1320058519642177668
     
     bot_name: str = "Astra"
     bot_theme_color: int = 0x3498db

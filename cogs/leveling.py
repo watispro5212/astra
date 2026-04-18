@@ -22,24 +22,34 @@ class Leveling(commands.Cog):
             # Get current level
             xp, level, _ = await xp_service.get_rank(message.author.id, message.guild.id)
             
-            # Check for role rewards
+            # Check for role rewards (Highest Only Logic)
             role_data = await db.fetch_all(
-                "SELECT role_id FROM level_roles WHERE guild_id = ? AND level <= ?",
-                message.guild.id, level
+                "SELECT role_id, level FROM level_roles WHERE guild_id = ?",
+                message.guild.id
             )
             
             if role_data:
-                roles_to_add = []
-                for row in role_data:
-                    role = message.guild.get_role(row['role_id'])
-                    if role and role not in message.author.roles:
-                        roles_to_add.append(role)
+                highest_role_id = None
+                max_level = -1
+                all_level_role_ids = []
                 
-                if roles_to_add:
-                    try:
-                        await message.author.add_roles(*roles_to_add)
-                    except discord.Forbidden:
-                        pass # Bot lacks permission
+                for row in role_data:
+                    all_level_role_ids.append(row['role_id'])
+                    if row['level'] <= level and row['level'] > max_level:
+                        max_level = row['level']
+                        highest_role_id = row['role_id']
+                
+                if highest_role_id:
+                    target_role = message.guild.get_role(highest_role_id)
+                    if target_role:
+                        # Clean up lower roles
+                        to_remove = [message.guild.get_role(rid) for rid in all_level_role_ids if rid != highest_role_id]
+                        to_remove = [r for r in to_remove if r and r in message.author.roles]
+                        
+                        try:
+                            if to_remove: await message.author.remove_roles(*to_remove)
+                            if target_role not in message.author.roles: await message.author.add_roles(target_role)
+                        except discord.Forbidden: pass
 
             # Announce level up
             guild_config = await db.fetch_one(
@@ -59,6 +69,7 @@ class Leveling(commands.Cog):
     @app_commands.command(name="rank", description="Check your or another member's rank.")
     @app_commands.describe(member="The member to check rank for.")
     async def rank(self, interaction: discord.Interaction, member: Optional[discord.Member] = None):
+        await interaction.response.defer()
         target = member or interaction.user
         
         xp, level, rank_pos = await xp_service.get_rank(target.id, interaction.guild_id)
@@ -94,20 +105,26 @@ class Leveling(commands.Cog):
 
     @app_commands.command(name="leaderboard", description="View the server's top members by XP.")
     async def leaderboard(self, interaction: discord.Interaction):
+        await interaction.response.defer()
         top_users = await db.fetch_all(
             "SELECT user_id, xp, level FROM user_xp WHERE guild_id = ? ORDER BY xp DESC LIMIT 10",
             interaction.guild_id
         )
         
         if not top_users:
-            await interaction.response.send_message("No one has earned any XP yet!", ephemeral=True)
+            await interaction.followup.send("No one has earned any XP yet!", ephemeral=True)
             return
             
         embed = AstraEmbed(title=f"🏆 {interaction.guild.name} Leaderboard")
         
         description = ""
         for i, row in enumerate(top_users, 1):
+            # Try to get member, with fetch fallback
             user = interaction.guild.get_member(row['user_id'])
+            if not user:
+                try: user = await interaction.guild.fetch_member(row['user_id'])
+                except: user = None
+            
             name = user.display_name if user else f"User ID {row['user_id']}"
             medal = "🥇" if i == 1 else "🥈" if i == 2 else "🥉" if i == 3 else f"`#{i}`"
             description += f"{medal} **{name}** — Level {row['level']} ({row['xp']:,} XP)\n"

@@ -42,6 +42,7 @@ class AstraBot(commands.Bot):
         
         # Start background tasks
         self.check_reminders.start()
+        self.cleanup_automod_cache.start()
         
         # Load extensions
         await self.load_extensions()
@@ -99,3 +100,9 @@ class AstraBot(commands.Bot):
     @check_reminders.before_loop
     async def before_check_reminders(self):
         await self.wait_until_ready()
+
+    @tasks.loop(minutes=30.0)
+    async def cleanup_automod_cache(self):
+        """Background task to clear stale anti-spam data."""
+        from services.automod_service import automod_service
+        await automod_service.cleanup_cache()

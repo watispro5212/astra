@@ -143,6 +143,29 @@
   border-radius: var(--radius-md);
 }
 
+.btn--patreon {
+  background: var(--color-patreon);
+  color: #fff !important;
+  box-shadow: 0 4px 15px rgba(255, 66, 77, 0.3);
+}
+
+.btn--patreon:hover {
+  background: #e03b44;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(255, 66, 77, 0.45);
+}
+
+/* ═══════════════════════════════════════════
+   UTILITIES
+   ══════════════════════════════════════════ */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
 /* ═══════════════════════════════════════════
    HERO
    ══════════════════════════════════════════ */
