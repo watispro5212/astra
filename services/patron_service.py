@@ -63,4 +63,37 @@ class PatronService:
         }
         return multipliers.get(patron['tier'], 1.0)
 
+    # ── ELITE GALLERY LOGIC ───────────────────────────────────────────────────
+
+    async def add_gallery_image(self, user_id: int, url: str) -> bool:
+        """Adds an image for an Elite Patron. Limit 5 per user."""
+        patron = await self.get_patron(user_id)
+        if not patron or patron['tier'] < 3:
+            return False # Not elite
+            
+        # Check count
+        count_row = await db.fetch_one("SELECT COUNT(*) as count FROM elite_images WHERE user_id = ?", user_id)
+        if count_row['count'] >= 5:
+            return False # Limit reached
+            
+        await db.execute("INSERT INTO elite_images (user_id, image_url) VALUES (?, ?)", user_id, url)
+        return True
+
+    async def get_random_gallery_image(self) -> Optional[dict]:
+        """Returns a random image record from the gallery."""
+        row = await db.fetch_one("SELECT user_id, image_url FROM elite_images ORDER BY RANDOM() LIMIT 1")
+        return dict(row) if row else None
+
+    async def get_user_gallery(self, user_id: int):
+        """Returns all gallery images for a specific user."""
+        return await db.fetch_all("SELECT id, image_url FROM elite_images WHERE user_id = ?", user_id)
+
+    async def delete_gallery_image(self, user_id: int, image_id: int):
+        """Deletes a gallery image (must be owned by the user)."""
+        await db.execute("DELETE FROM elite_images WHERE id = ? AND user_id = ?", image_id, user_id)
+
+    async def purge_gallery_image(self, image_id: int):
+        """Admin-only: Purge any image by ID."""
+        await db.execute("DELETE FROM elite_images WHERE id = ?", image_id)
+
 patron_service = PatronService()

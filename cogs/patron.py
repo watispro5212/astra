@@ -117,5 +117,52 @@ class Patron(commands.Cog):
         embed.set_thumbnail(url=interaction.user.display_avatar.url)
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
+    # ── ELITE GALLERY COMMANDS ────────────────────────────────────────────────
+
+    elite_gallery = app_commands.Group(name="elite_gallery", description="Elite Patron image gallery management.")
+
+    @elite_gallery.command(name="add", description="👑 Elite Only: Add an image to the bot's global gallery.")
+    @app_commands.describe(url="Direct link to a high-quality (16:9) image/art.")
+    async def gallery_add(self, interaction: discord.Interaction, url: str):
+        # Basic URL check
+        if not any(url.lower().endswith(ext) for ext in ['.jpg', '.jpeg', '.png', '.gif', '.webp']):
+             return await interaction.response.send_message("❌ Image must be a direct link (.jpg, .png, etc.)", ephemeral=True)
+
+        success = await patron_service.add_gallery_image(interaction.user.id, url)
+        if not success:
+            return await interaction.response.send_message(
+                "❌ **Failed!** You must be an **Elite Patron** to use this, or you have reached your 5-image limit.", 
+                ephemeral=True
+            )
+
+        embed = SuccessEmbed("Successfully added your artwork to the **Galactic Gallery**! It will now cycle through Astra's global commands.")
+        embed.set_image(url=url)
+        await interaction.response.send_message(embed=embed)
+
+    @elite_gallery.command(name="list", description="List your currently contributed gallery images.")
+    async def gallery_list(self, interaction: discord.Interaction):
+        images = await patron_service.get_user_gallery(interaction.user.id)
+        if not images:
+            return await interaction.response.send_message("You haven't contributed any images yet. 🌌", ephemeral=True)
+
+        description = ""
+        for img in images:
+            description += f"**ID:** `{img['id']}` | [View Image]({img['image_url']})\n"
+
+        embed = AstraEmbed(title="🖼️ Your Gallery Contributions", description=description)
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+
+    @elite_gallery.command(name="remove", description="Remove one of your gallery images.")
+    @app_commands.describe(image_id="The ID of the image (find it in /elite_gallery list).")
+    async def gallery_remove(self, interaction: discord.Interaction, image_id: int):
+        await patron_service.delete_gallery_image(interaction.user.id, image_id)
+        await interaction.response.send_message(embed=SuccessEmbed(f"Image `{image_id}` removed from the gallery."), ephemeral=True)
+
+    @app_commands.command(name="gallery_purge", description="🚨 Admin Only: Emergency removal of any gallery image.")
+    @app_commands.checks.has_permissions(administrator=True)
+    async def gallery_purge(self, interaction: discord.Interaction, image_id: int):
+        await patron_service.purge_gallery_image(image_id)
+        await interaction.response.send_message(embed=SuccessEmbed(f"Successfully purged image `{image_id}` from the global gallery."), ephemeral=True)
+
 async def setup(bot: commands.Bot):
     await bot.add_cog(Patron(bot))

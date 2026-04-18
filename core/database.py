@@ -268,6 +268,16 @@ class DatabaseManager:
             )
         """)
 
+        # ── ELITE GALLERY (v4) ────────────────────────────────────────────────
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS elite_images (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER,
+                image_url TEXT,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
         await self.connection.commit()
         logger.info("Database tables initialized (v2)")
 

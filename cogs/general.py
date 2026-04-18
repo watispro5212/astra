@@ -2,6 +2,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 from core.config import config
+from services.patron_service import patron_service
 import time
 
 class General(commands.Cog):
@@ -48,8 +49,18 @@ class General(commands.Cog):
         embed.add_field(name="Developer", value="watispro1", inline=True)
         embed.add_field(name="GitHub", value="[watispro5212](https://github.com/watispro5212)", inline=True)
         
-        # Use a premium-looking footer
-        embed.set_footer(text="Astra • Built by watispro1", icon_url=self.bot.user.display_avatar.url if self.bot.user else None)
+        # Handle Elite Gallery Spotlight
+        gallery_data = await patron_service.get_random_gallery_image()
+        footer_text = f"{config.bot_name} • Built by watispro1"
+        
+        if gallery_data:
+            embed.set_image(url=gallery_data['image_url'])
+            # Credit the contributor
+            contributor = self.bot.get_user(gallery_data['user_id'])
+            name = contributor.display_name if contributor else "Elite Supporter"
+            footer_text = f"✨ High Elevation Contributor: {name} | Built by watispro1"
+
+        embed.set_footer(text=footer_text, icon_url=self.bot.user.display_avatar.url if self.bot.user else None)
         
         await interaction.response.send_message(embed=embed)
 
