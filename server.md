@@ -1,170 +1,116 @@
-# 🏛️ Astra Support Server: Master Architecture & Permission Guide
+# 🚀 Astra Discord: Production-Ready Asset Library (v2.5.0)
 
-This document defines the **v2.1 Master Configuration** for the Astra Support Server. It is designed for maximum security, scalability, and ease of management using Category Syncing and Role-Based Access Control (RBAC).
-
----
-
-## ─── I. ROLE HIERARCHY & PERMISSION MATRIX ───
-
-Roles are ordered from highest to lowest. Emojis must be used in the names for better visibility.
-
-### 👑 Management Roles
-| Role | Color | Scope | Key Permissions |
-| :--- | :--- | :--- | :--- |
-| `👑 Owner` | #E74C3C | Full access | **Administrator** |
-| `🔧 Admin` | #C0392B | High-level ops | Administrator (or Manage Server/Channels/Roles/Webhooks) |
-| `💻 Developer` | #3498DB | Technical | View Audit Logs, Manage Webhooks, Manage Threads |
-| `🛡️ Moderator` | #E67E22 | Security | Timeout, Kick/Ban, Manage Messages, Manage Threads |
-
-### 🛠️ Staff & Community Roles
-| Role | Color | Job | Permissions |
-| :--- | :--- | :--- | :--- |
-| `🚑 Support Lead` | #F39C12 | Head of Tickets | Manage Messages, View All Tickets |
-| `🆘 Support Staff` | #F1C40F | Ticket Response | Manage Messages (in Tickets), View Tickets |
-| `🎖️ Community Guide`| #1ABC9C | Mentorship | Manage Messages (General only), Move Members |
-| `🎉 Event Manager` | #E91E63 | Server Events | Manage Events, Mention @everyone (restricted to events) |
-
-### ⭐ Contributor & Membership Tiers
-| Role | Color | Access | Benefit |
-| :--- | :--- | :--- | :--- |
-| `💎 Elite Patron` | #EB459E | High Supporter | Priority Support, External Stickers, Custom Thread Creation |
-| `⭐ Premium` | #F1C40F | Supporter | External Emojis, Embed Links |
-| `🧪 Bot Tester` | #9B59B6 | QA Access | Use Application Commands, View Lab Category |
-| `📜 Astra Contributor`| #A19D94 | Code/Docs | Attach Files, Create Public Threads |
-| `👋 Verified` | #2ECC71 | Base Member | Send Messages, Add Reactions, Use Voice |
-| `🔒 Unverified` | #99AAB5 | Entry | **View Channel only** (Welcome/Verify only) |
-
-### 🔔 Notification Roles (Self-Assignable)
-- `📢 News Ping`: Pings for major announcements.
-- `🚀 Update Ping`: Pings for bot releases/patch notes.
-- `🧪 Lab Ping`: Pings for beta testing opportunities.
+This document contains the exact text and logic to be used for the Astra Support Server. Copy and paste these into your channels to create a professional experience.
 
 ---
 
-## ─── II. CATEGORY PERMISSION GUIDE ───
+## 1. 📜 THE MASTER RULES
+*Post these in `#📜 rules` as a single, clean message.*
 
-*For a clean setup: 1. Configure the Category. 2. Create Channels. 3. Click "Sync to Category".*
-
-### 1. ── WELCOME & ENTRY ──
-| Role | View | Send Messages | Use App Commands |
-| :--- | :---: | :---: | :---: |
-| `@everyone` | ✅ | ❌ | ❌ |
-| `Unverified` | ✅ | ❌ | ❌ |
-| `Verified` | ❌ | ❌ | ❌ |
-*Hide this category from members once they are verified to keep their list clean.*
-
-### 2. ── SUPPORT DESK 🆘 ──
-| Role | View | Send Messages | Use App Commands |
-| :--- | :---: | :---: | :---: |
-| `@everyone` | ✅ | ❌ | ❌ |
-| `Verified` | ✅ | ❌ | ❌ |
-| `Support Seeker`| ✅ | ✅ (In #🆘) | ✅ |
-*Permissions for `#🎫 open-a-ticket` must be Read-Only for everyone.*
-
-### 3. ── COMMUNITY 💬 ──
-| Role | View | Send | Embed/Files |
-| :--- | :---: | :---: | :---: |
-| `@everyone` | ❌ | ❌ | ❌ |
-| `Verified` | ✅ | ✅ | ❌ (Global Default) |
-| `Patron/Contrib`| ✅ | ✅ | ✅ |
-
-### 4. ── THE LABORATORY 🧪 ──
-| Role | View | Send | Use App Commands |
-| :--- | :---: | :---: | :---: |
-| `Bot Tester` | ✅ | ✅ | ✅ |
-| `Developer` | ✅ | ✅ | ✅ |
-| `Verified` | ❌ | ❌ | ❌ |
-
-### 5. ── STAFF OFFICE 🏢 ──
-| Role | View | Send | Manage Messages |
-| :--- | :---: | :---: | :---: |
-| `@everyone` | ❌ | ❌ | ❌ |
-| `Support Staff` | ✅ | ✅ | ✅ |
-| `Moderator` | ✅ | ✅ | ✅ |
+> ### 🛑 Server Rules & Guidelines
+> 
+> **1. Respect Above All**
+> Treat everyone with kindness. Harassment, hate speech, or discrimination of any kind will result in an immediate and permanent ban.
+> 
+> **2. No Spamming or Self-Promotion**
+> Avoid excessive pings, emoji spam, or flooding. Do not advertise other servers or services without explicit staff permission.
+> 
+> **3. Support Channels Only**
+> Only ask for bot help in the **Support Desk** category. This keeps general chat clean for general discussion.
+> 
+> **4. Keep it Professional**
+> Astra is a community-focused bot. All content should be Safe For Work (SFW) and professional in nature.
+> 
+> **5. No Malicious Content**
+> Do not share links to phishing sites, malware, or illegal content. We have zero tolerance for security risks.
+> 
+> **6. Staff Authority**
+> The decision of a Moderator or Admin is final. If you have a dispute, open a ticket for a private appeal.
+> 
+> **7. English Language**
+> To ensure our staff can provide consistent support, we ask that all public conversations remain in English.
+> 
+> **8. No Impersonation**
+> Do not impersonate Astra staff, other bots, or members. 
+> 
+> **9. Follow Discord ToS**
+> You must adhere to the [Discord Terms of Service](https://discord.com/terms) at all times.
+> 
+> **10. Privacy & Safety**
+> Do not share private transcripts, personal info (doxing), or staff-only logs.
 
 ---
 
-## ─── III. EXPANDED CHANNEL LISTING ───
+## 2. 👋 THE WELCOME SIGN
+*Stylized message for `#👋 welcome`.*
 
-### Category: INFO & UPDATES
-- `#📢 announcements`: (News Ping)
-- `#🚀 updates`: (Update Ping)
-- `#📝 changelog`: Automated from GitHub
-- `#📌 important-links`: Invite link, Website, Vote links
-- `#📜 developer-roadmap`: Trello/GitHub Project embeds
-
-### Category: SUPPORT
-- `#❓ support-faq`: Searchable forum channel or message list
-- `#🎫 open-a-ticket`: Button panel only
-- `#🆘 community-help`: Peer-to-peer chat support
-- `#🐞 bug-reports`: Thread-based reports
-- `#💡 feature-requests`: Upvote system channel
-
-### Category: DEVELOPER CORNER
-- `#🛠️ api-discussion`: Technical chat for bot integrators
-- `#🧠 brainstorm`: Ideas for the next version
-- `#🧾 documentation-drafts`: Reviewing new `Astra` docs
-- `#📊 bot-health`: Uptime robot/Grafana status updates
-
-### Category: COMMUNITY HUB 
-- `#💬 general`: Standard chat
-- `#🤖 bot-commands`: Command usage only
-- `#🎉 introductions`: New member intros
-- `#📷 server-showcase`: Media-only channel for bot setups
-- `#🗣️ off-topic`: Relaxed chat
-- `#🔊 lounge-1`: Voice channel
-- `#🎮 gaming-hub`: Voice channel
+> ### ✨ Welcome to Astra, {user}!
+> You've just landed in the official laboratory and support hub for the **Astra Bot**. 
+> 
+> **Your Next Steps:**
+> 1. ✅ **Verification**: Finish the onboarding flow or head to `#✅ verify`.
+> 2. 🧭 **Navigation**: Check `#📢 server-guide` to see what's happening.
+> 3. 🚀 **Updates**: Get the `Announcement Ping` role in `#🧩 choose-roles` to stay in the loop.
+> 
+> **Need the Bot?**
+> [Invite Astra to your server](https://astra-bot.com/invite) | [Read the Documentation](https://astra-bot.com/docs)
+> 
+> *Welcome to the collective!*
 
 ---
 
-## ─── IV. MASTER PERMISSION MATRIX (DETAILED) ───
+## 🧭 3. THE NAVIGATOR (SERVER GUIDE)
+*Post this in `#📢 server-guide` to help people find their way.*
 
-Detailed toggle setup for the **`Verified`** role (Baseline):
-- **View Channels**: ✅
-- **Send Messages**: ✅
-- **Create Public Threads**: ❌ (Restricted to Contributors)
-- **Create Private Threads**: ❌
-- **Embed Links**: ❌ (Prevents spam, allowed via Patron/Premium)
-- **Attach Files**: ❌ (Restricted to Contributor+)
-- **Add Reactions**: ✅
-- **Use External Emojis/Stickers**: ❌ (Patron/Premium benefit)
-- **Mention @everyone/@here**: ❌ (Admin Only)
-- **Mention All Roles**: ❌
-- **Manage Messages**: ❌
-- **Read Message History**: ✅
-- **Use Application Commands**: ✅ (Essential for Astra)
+> ### 🛰️ How to Navigate Astra Support
+> 
+> **🆘 Need Help?**
+> - Read `#❓ support-faq` first for instant fixes.
+> - Open a private thread in `#🎫 open-a-ticket` for technical issues.
+> - Chat with other users in `#🆘 community-help`.
+> 
+> **📢 Stay Informed**
+> - `#📢 announcements`: Critical news only.
+> - `#🚀 updates`: Every new feature and patch.
+> - `#📝 changelog`: Raw technical logs.
+> 
+> **🧪 Get Involved**
+> - Become a `Bot Tester` to access `#🧪 bot-testing`.
+> - Report glitches in `#🐞 bug-reports`.
+> - Share your setup in `#📷 server-showcase`.
+
+---
+
+## 🧩 4. ONBOARDING SCHEMATIC
+*Use these settings in: Server Settings -> Onboarding.*
+
+### Question 1: What brings you here today?
+*Goal: Assign access roles.*
+- **Option 1**: 🆘 "I need help with the Astra bot."
+  - **Action**: Assign `Support Seeker` role.
+- **Option 2**: 🚀 "I want to stay updated on new features."
+  - **Action**: Assign `News Ping` role.
+- **Option 3**: 🧪 "I want to help test new experimental versions."
+  - **Action**: Assign `Bot Tester` role + Show `The Laboratory` category.
+- **Option 4**: 💬 "I just want to hang out with the community."
+  - **Action**: Assign `Verified` role.
+
+### Question 2: Which notifications would you like?
+*Goal: Assign ping roles.*
+- **Option 1**: 🔔 "Major Project Announcements" -> `News Ping`
+- **Option 2**: 🛠️ "Developer & Hackathon News" -> `Update Ping`
+- **Option 3**: 🧪 "Beta Testing Alerts" -> `Lab Ping`
 
 ---
 
-## ─── V. LAUNCH STEPS (PERFORM IN ORDER) ───
+## 🎭 5. THE STATUS KEY
+*A guide to the staff you might see around the server.*
 
-1.  **Safety First**: Set `@everyone` baseline permissions to **View Channels: OFF** globally.
-2.  **Role Setup**: Create roles from bottom-to-top (Verified -> Patron -> staff...).
-3.  **Category Mapping**: Create categories and set the permissions as defined in Section II.
-4.  **Channel Creation**: Create channels inside and click **"Sync Permissions"**.
-5.  **Astra Bot Setup**:
-    - Invite Astra with `Administrator` temporarily to sync commands.
-    - Set logging channel to `#📋 mod-logs`.
-    - Setup Reaction Role for `#✅ verify` to grant `Verified` and remove `Unverified`.
-    - Setup Ticket Panel in `#🎫 open-a-ticket` with transcripts going to `#🗂️ support-tickets`.
-6.  **Discord Onboarding**: Enable Community, then setup the "Onboarding" tab with the questions from Section III.
-
-### Category: ─── SOCIAL MEDIA ───
-- `#🎨 astra-gallery`: Creative fan art or bot setup screenshots
-- `#🐦 twitter-feed`: Automated bot for @AstraBot news
-- `#🎥 video-highlights`: Youtube/TikTok community content
-- `#🌐 official-socials`: Master list of links
-
-### Category: ─── PARTNERS & GROWTH ───
-- `#🤝 partner-info`: Requirements and benefits
-- `#⭐ affiliate-showcase`: Featured partner servers
-- `#📈 server-growth`: Insights for server owners using Astra
-- `#📣 community-promo`: Ad-hoc partner announcements
-
-### Category: ─── MISCELLANEOUS ───
-- `#🗳️ community-polls`: Public server decisions
-- `#🔔 reminder-logs`: Public bot reminder notifications (if configured)
-- `#⭐ hall-of-fame`: Synced Starboard highlights
+- `👑 Owner / 🔧 Admin`: The lead architects of Astra.
+- `💻 Developer`: The wizards writing the code.
+- `🛡️ Moderator`: Keeping the server safe and clean.
+- `🆘 Support Staff`: Your go-to team for bot questions.
+- `🎖️ Community Guide`: Experienced users here to help you get started.
 
 ---
-*Blueprint Version: 2.3.0 (Mega-Server Extension)*
+*Blueprint Version: 2.5.0 (Production Stable)*
