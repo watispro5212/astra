@@ -1,22 +1,24 @@
 import discord
 from discord.ext import commands, tasks
 import os
+import datetime
 from core.logger import logger
 from core.config import config
 from core.database import db
 from ui.views.role_view import PersistentRoleView
 from ui.views.poll_view import PersistentPollView
 from ui.views.ticket_view import TicketLauncherView, TicketControlView
+from ui.views.giveaway_view import GiveawayView
 from services.reminder_service import ReminderService
-import datetime
 
 class AstraBot(commands.Bot):
     def __init__(self):
         intents = discord.Intents.default()
         intents.guilds = True
         intents.messages = True
-        # Explicitly setting message_content to False as requested
-        intents.message_content = False
+        intents.members = True # Required for Welcome/Leveling/Stats
+        intents.message_content = True # Required for Automod/Leveling
+        intents.presences = True # Required for Online Status stats
         
         super().__init__(
             command_prefix=commands.when_mentioned,
@@ -36,6 +38,7 @@ class AstraBot(commands.Bot):
         self.add_view(PersistentPollView())
         self.add_view(TicketLauncherView())
         self.add_view(TicketControlView())
+        self.add_view(GiveawayView())
         
         # Start background tasks
         self.check_reminders.start()
@@ -55,6 +58,10 @@ class AstraBot(commands.Bot):
 
     async def load_extensions(self) -> None:
         """Discovers and loads cogs from the cogs directory."""
+        if not os.path.exists("./cogs"):
+            logger.error("Cogs directory not found")
+            return
+
         for filename in os.listdir("./cogs"):
             if filename.endswith(".py") and not filename.startswith("__"):
                 extension = f"cogs.{filename[:-3]}"

@@ -73,25 +73,77 @@ class Moderation(commands.Cog):
             ephemeral=True
         )
 
-    @app_commands.command(name="warn", description="Issue a warning to a member.")
-    @app_commands.checks.has_permissions(manage_messages=True)
-    async def warn(self, interaction: discord.Interaction, member: discord.Member, reason: str):
-        """Issues a warning and records it in the database."""
-        case_id = await ModerationService.create_case(
-            interaction.guild_id, member.id, interaction.user.id, "warning", reason
-        )
-        
-        # Try to DM the user
+    @app_commands.command(name="mute", description="Timeout a member.")
+    @app_commands.describe(member="The member to mute.", duration="Duration (e.g. 10m, 1h, 1d).", reason="Reason for the mute.")
+    @app_commands.checks.has_permissions(moderate_members=True)
+    async def mute(self, interaction: discord.Interaction, member: discord.Member, duration: str, reason: str = "No reason provided"):
+        if member.top_role >= interaction.user.top_role:
+             return await interaction.response.send_message(embed=ErrorEmbed("You cannot mute someone with a role higher or equal to yours."), ephemeral=True)
+
+        # Parse duration
+        unit = duration[-1].lower()
         try:
-            dm_embed = ModerationEmbed("Warning", member, interaction.user, reason, case_id)
-            dm_embed.description = f"You have been warned in **{interaction.guild.name}**."
-            await member.send(embed=dm_embed)
+            val = int(duration[:-1])
+            if unit == 's': delta = datetime.timedelta(seconds=val)
+            elif unit == 'm': delta = datetime.timedelta(minutes=val)
+            elif unit == 'h': delta = datetime.timedelta(hours=val)
+            elif unit == 'd': delta = datetime.timedelta(days=val)
+            else: raise ValueError()
         except:
-            pass # DM failed
+            return await interaction.response.send_message("Invalid duration! Use e.g. 10m, 1h, 1d.", ephemeral=True)
+
+        try:
+            await member.timeout(delta, reason=reason)
+            case_id = await ModerationService.create_case(interaction.guild_id, member.id, interaction.user.id, "mute", reason, duration)
+            await interaction.response.send_message(embed=SuccessEmbed(f"Muted {member.mention} for {duration} (Case #{case_id})"))
+        except Exception as e:
+            await interaction.response.send_message(embed=ErrorEmbed(f"Failed to mute: {e}"), ephemeral=True)
+
+    @app_commands.command(name="unmute", description="Remove timeout from a member.")
+    @app_commands.checks.has_permissions(moderate_members=True)
+    async def unmute(self, interaction: discord.Interaction, member: discord.Member, reason: str = "No reason provided"):
+        try:
+            await member.timeout(None, reason=reason)
+            case_id = await ModerationService.create_case(interaction.guild_id, member.id, interaction.user.id, "unmute", reason)
+            await interaction.response.send_message(embed=SuccessEmbed(f"Unmuted {member.mention} (Case #{case_id})"))
+        except Exception as e:
+            await interaction.response.send_message(embed=ErrorEmbed(f"Failed to unmute: {e}"), ephemeral=True)
+
+    @app_commands.command(name="unban", description="Unban a user from the server.")
+    @app_commands.describe(user_id="The ID of the user to unban.")
+    @app_commands.checks.has_permissions(ban_members=True)
+    async def unban(self, interaction: discord.Interaction, user_id: str, reason: str = "No reason provided"):
+        try:
+            user = await self.bot.fetch_user(int(user_id))
+            await interaction.guild.unban(user, reason=reason)
+            case_id = await ModerationService.create_case(interaction.guild_id, user.id, interaction.user.id, "unban", reason)
+            await interaction.response.send_message(embed=SuccessEmbed(f"Unbanned {user.name} (Case #{case_id})"))
+        except Exception as e:
+            await interaction.response.send_message(embed=ErrorEmbed(f"Failed to unban: {e}"), ephemeral=True)
+
+    @app_commands.command(name="purge", description="Clear a number of messages from the channel.")
+    @app_commands.describe(amount="Number of messages to delete (max 100).")
+    @app_commands.checks.has_permissions(manage_messages=True)
+    async def purge(self, interaction: discord.Interaction, amount: int):
+        if amount < 1 or amount > 100:
+            return await interaction.response.send_message("Please specify between 1 and 100 messages.", ephemeral=True)
             
-        await interaction.response.send_message(embed=SuccessEmbed(f"Warned {member.mention} (Case #{case_id})"))
+        await interaction.response.defer(ephemeral=True)
+        deleted = await interaction.channel.purge(limit=amount)
+        await interaction.followup.send(embed=SuccessEmbed(f"Deleted {len(deleted)} messages."))
+
+    @app_commands.command(name="slowmode", description="Set a slowmode for the channel.")
+    @app_commands.describe(seconds="Slowmode delay (in seconds). Set to 0 to disable.")
+    @app_commands.checks.has_permissions(manage_channels=True)
+    async def slowmode(self, interaction: discord.Interaction, seconds: int):
+        try:
+            await interaction.channel.edit(slowmode_delay=seconds)
+            await interaction.response.send_message(embed=SuccessEmbed(f"Slowmode set to {seconds} seconds.") if seconds > 0 else SuccessEmbed("Slowmode disabled."))
+        except Exception as e:
+            await interaction.response.send_message(embed=ErrorEmbed(f"Failed to set slowmode: {e}"), ephemeral=True)
 
     @app_commands.command(name="cases", description="View moderation history for a user.")
+    @app_commands.describe(user="The user to check.")
     @app_commands.checks.has_permissions(manage_messages=True)
     async def cases(self, interaction: discord.Interaction, user: discord.User):
         """Displays all moderation cases for a user in this guild."""
@@ -104,12 +156,18 @@ class Moderation(commands.Cog):
         if user.display_avatar:
             embed.set_thumbnail(url=user.display_avatar.url)
             
-        for case in cases[:10]: # Limit to 10 for display
-            type_emoji = "⚠️" if case['type'] == "warning" else "🔨"
+        # Helper for emojis
+        emojis = {"warning": "⚠️", "mute": "🔇", "unmute": "🔊", "kick": "👞", "ban": "🔨", "unban": "🔓"}
+            
+        for case in cases[:10]:
+            action = case['type']
+            emoji = emojis.get(action, "📝")
             date = datetime.datetime.fromisoformat(case['timestamp'].replace('Z', '+00:00')).strftime("%Y-%m-%d")
+            duration_info = f"\n**Duration:** {case['duration']}" if case['duration'] else ""
+            
             embed.add_field(
-                name=f"Case #{case['case_number']} | {case['type'].title()} {type_emoji}",
-                value=f"**Reason:** {case['reason']}\n**Mod:** <@{case['moderator_id']}>\n**Date:** {date}",
+                name=f"Case #{case['case_number']} | {action.title()} {emoji}",
+                value=f"**Reason:** {case['reason']}{duration_info}\n**Mod:** <@{case['moderator_id']}>\n**Date:** {date}",
                 inline=False
             )
             

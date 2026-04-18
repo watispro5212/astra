@@ -44,29 +44,35 @@ class Reminders(commands.Cog):
         
         await interaction.response.send_message(embed=embed)
 
-    @app_commands.command(name="reminders", description="List or manage your active reminders.")
-    @app_commands.describe(action="Either 'list' or 'clear'")
-    async def list_reminders(self, interaction: discord.Interaction, action: str = "list"):
+    @app_commands.command(name="reminders_list", description="List your active reminders.")
+    async def list_reminders(self, interaction: discord.Interaction):
         """Lists all active reminders for the user."""
-        if action == "clear":
-            # For simplicity, we'll just implement list and delete by ID in a real scenario
-            pass
-
         reminders = await ReminderService.get_user_reminders(interaction.user.id)
         
         if not reminders:
             return await interaction.response.send_message("You have no active reminders.", ephemeral=True)
             
         embed = AstraEmbed(title="🔔 Your Active Reminders")
-        for rem in reminders[:10]:
+        for rem in reminders[:15]:
             trigger_ts = datetime.datetime.fromisoformat(rem['remind_at'])
             embed.add_field(
-                name=f"ID: #{rem['id']} | Triggering <t:{int(trigger_ts.timestamp())}:R>",
-                value=rem['message'],
+                name=f"ID: #{rem['id']}",
+                value=f"📅 <t:{int(trigger_ts.timestamp())}:R>\n📝 {rem['message']}",
                 inline=False
             )
             
         await interaction.response.send_message(embed=embed, ephemeral=True)
+
+    @app_commands.command(name="remind_delete", description="Delete an active reminder.")
+    @app_commands.describe(reminder_id="The ID of the reminder to delete.")
+    async def delete_reminder(self, interaction: discord.Interaction, reminder_id: int):
+        # Fetch to verify ownership
+        reminders = await ReminderService.get_user_reminders(interaction.user.id)
+        if not any(r['id'] == reminder_id for r in reminders):
+             return await interaction.response.send_message("❌ Reminder not found or doesn't belong to you.", ephemeral=True)
+             
+        await ReminderService.delete_reminder(reminder_id)
+        await interaction.response.send_message(embed=SuccessEmbed(f"Reminder #{reminder_id} has been deleted."), ephemeral=True)
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(Reminders(bot))
