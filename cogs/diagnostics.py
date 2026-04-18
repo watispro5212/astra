@@ -13,7 +13,10 @@ class Diagnostics(commands.Cog):
         self.bot = bot
         self.start_time = time.time()
 
-    @app_commands.command(name="bot_stats", description="📊 Show high-level technical metrics for Astra.")
+    bot_group = app_commands.Group(name="bot", description="Bot-level diagnostics and info.")
+    server_group = app_commands.Group(name="server", description="Server-level audit and snapshots.")
+
+    @bot_group.command(name="stats", description="📊 Show high-level technical metrics for Astra.")
     @app_commands.checks.has_permissions(manage_guild=True)
     async def bot_stats(self, interaction: discord.Interaction):
         """Displays technical health and shard metrics."""
@@ -29,12 +32,12 @@ class Diagnostics(commands.Cog):
         embed.add_field(name="🧠 Memory Usage", value=f"`{round(memory_usage, 2)} MB`", inline=True)
         
         embed.add_field(name="🏙️ Total Guilds", value=f"`{len(self.bot.guilds)}`", inline=True)
-        embed.add_field(name="👥 Total Users", value=f"`{sum(g.member_count for g in self.bot.guilds)}`", inline=True)
-        embed.add_field(name="🤖 Shard ID", value=f"`{interaction.guild.shard_id}`", inline=True)
+        embed.add_field(name="👥 Total Users", value=f"`{sum(g.member_count or 0 for g in self.bot.guilds)}`", inline=True)
+        embed.add_field(name="🤖 Shard ID", value=f"`{interaction.guild.shard_id or 0}`", inline=True)
         
         await interaction.response.send_message(embed=embed)
 
-    @app_commands.command(name="server_snapshot", description="🏙️ Generate a health and structure summary for this server.")
+    @server_group.command(name="snapshot", description="🏙️ Generate a health and structure summary for this server.")
     @app_commands.checks.has_permissions(manage_guild=True)
     async def server_snapshot(self, interaction: discord.Interaction):
         """Provides a detailed overview of the server's structure."""
