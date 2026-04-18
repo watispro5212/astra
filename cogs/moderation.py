@@ -3,8 +3,11 @@ from discord import app_commands
 from discord.ext import commands
 from services.moderation_service import ModerationService
 from ui.embeds import SuccessEmbed, ErrorEmbed, ModerationEmbed, AstraEmbed
-from typing import Optional
+from typing import Optional, Literal
 import datetime
+import json
+import io
+import csv
 
 class BanConfirmView(discord.ui.View):
     """View for confirming a ban action."""
@@ -39,11 +42,14 @@ class BanConfirmView(discord.ui.View):
         await interaction.response.edit_message(content="Ban cancelled.", embed=None, view=None)
 
 class Moderation(commands.Cog):
-    """Core moderation tools for staff."""
+    """Advanced moderation suite for staff."""
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @app_commands.command(name="kick", description="Kick a member from the server.")
+    mod = app_commands.Group(name="mod", description="Advanced moderation suite.")
+
+    @mod.command(name="kick", description="Kick a member from the server.")
+    @app_commands.describe(member="The member to kick.", reason="Reason for the kick.")
     @app_commands.checks.has_permissions(kick_members=True)
     async def kick(self, interaction: discord.Interaction, member: discord.Member, reason: str = "No reason provided"):
         """Kicks a member and logs the action."""
@@ -59,7 +65,8 @@ class Moderation(commands.Cog):
         except Exception as e:
             await interaction.response.send_message(embed=ErrorEmbed(f"Failed to kick: {e}"), ephemeral=True)
 
-    @app_commands.command(name="ban", description="Ban a member from the server.")
+    @mod.command(name="ban", description="Ban a member from the server.")
+    @app_commands.describe(member="The member to ban.", reason="Reason for the ban.", delete_days="Days of messages to delete.")
     @app_commands.checks.has_permissions(ban_members=True)
     async def ban(self, interaction: discord.Interaction, member: discord.Member, reason: str = "No reason provided", delete_days: int = 0):
         """Initiates a ban request with a confirmation prompt."""
@@ -73,7 +80,7 @@ class Moderation(commands.Cog):
             ephemeral=True
         )
 
-    @app_commands.command(name="mute", description="Timeout a member.")
+    @mod.command(name="mute", description="Timeout a member.")
     @app_commands.describe(member="The member to mute.", duration="Duration (e.g. 10m, 1h, 1d).", reason="Reason for the mute.")
     @app_commands.checks.has_permissions(moderate_members=True)
     async def mute(self, interaction: discord.Interaction, member: discord.Member, duration: str, reason: str = "No reason provided"):
@@ -102,7 +109,8 @@ class Moderation(commands.Cog):
         except Exception as e:
             await interaction.response.send_message(embed=ErrorEmbed(f"Failed to mute: {e}"), ephemeral=True)
 
-    @app_commands.command(name="unmute", description="Remove timeout from a member.")
+    @mod.command(name="unmute", description="Remove timeout from a member.")
+    @app_commands.describe(member="The member to unmute.", reason="Reason for the unmute.")
     @app_commands.checks.has_permissions(moderate_members=True)
     async def unmute(self, interaction: discord.Interaction, member: discord.Member, reason: str = "No reason provided"):
         try:
@@ -112,8 +120,8 @@ class Moderation(commands.Cog):
         except Exception as e:
             await interaction.response.send_message(embed=ErrorEmbed(f"Failed to unmute: {e}"), ephemeral=True)
 
-    @app_commands.command(name="unban", description="Unban a user from the server.")
-    @app_commands.describe(user_id="The ID of the user to unban.")
+    @mod.command(name="unban", description="Unban a user from the server.")
+    @app_commands.describe(user_id="The ID of the user to unban.", reason="Reason for the unban.")
     @app_commands.checks.has_permissions(ban_members=True)
     async def unban(self, interaction: discord.Interaction, user_id: str, reason: str = "No reason provided"):
         try:
@@ -124,6 +132,102 @@ class Moderation(commands.Cog):
         except Exception as e:
             await interaction.response.send_message(embed=ErrorEmbed(f"Failed to unban: {e}"), ephemeral=True)
 
+    @mod.command(name="history", description="View moderation history for a user or specific case.")
+    @app_commands.describe(user="The user to check.", case_number="A specific case number to view.")
+    @app_commands.checks.has_permissions(manage_messages=True)
+    async def history(self, interaction: discord.Interaction, user: Optional[discord.User] = None, case_number: Optional[int] = None):
+        """Advanced moderation history lookup."""
+        if case_number:
+            case = await ModerationService.get_case(interaction.guild_id, case_number)
+            if not case:
+                return await interaction.response.send_message(f"❌ Case #{case_number} not found.", ephemeral=True)
+            
+            embed = AstraEmbed(title=f"Case #{case_number} | {case['type'].title()}")
+            embed.description = f"**Target:** <@{case['target_id']}>\n**Moderator:** <@{case['moderator_id']}>\n**Status:** `{case['case_status']}`"
+            embed.add_field(name="Reason", value=case['reason'], inline=False)
+            if case['is_appealed']:
+                embed.add_field(name="Appeal Info", value=case['appeal_reason'] or "No reason provided.", inline=False)
+            embed.timestamp = datetime.datetime.fromisoformat(case['timestamp'].replace('Z', '+00:00'))
+            return await interaction.response.send_message(embed=embed)
+
+        target = user or interaction.user
+        cases = await ModerationService.get_user_cases(interaction.guild_id, target.id)
+        
+        if not cases:
+            return await interaction.response.send_message(f"No cases found for {target.mention}.", ephemeral=True)
+            
+        embed = AstraEmbed(title=f"Moderation History: {target}")
+        if target.display_avatar:
+            embed.set_thumbnail(url=target.display_avatar.url)
+            
+        emojis = {"warning": "⚠️", "mute": "🔇", "unmute": "🔊", "kick": "👞", "ban": "🔨", "unban": "🔓"}
+            
+        for case in cases[:10]:
+            action = case['type']
+            emoji = emojis.get(action, "📝")
+            status = f" [`{case['case_status']}`]" if case['case_status'] != 'active' else ""
+            date = datetime.datetime.fromisoformat(case['timestamp'].replace('Z', '+00:00')).strftime("%Y-%m-%d")
+            
+            embed.add_field(
+                name=f"Case #{case['case_number']} | {action.title()} {emoji}{status}",
+                value=f"**Reason:** {case['reason']}\n**Mod:** <@{case['moderator_id']}>\n**Date:** {date}",
+                inline=False
+            )
+            
+        if len(cases) > 10:
+            embed.set_footer(text=f"Showing 10 of {len(cases)} total cases")
+
+        await interaction.response.send_message(embed=embed)
+
+    @mod.command(name="appeal", description="Mark a case as appealed or resolved.")
+    @app_commands.describe(case_number="The ID of the case to appeal.", reason="Reason/notes for the appeal.")
+    @app_commands.checks.has_permissions(administrator=True)
+    async def appeal(self, interaction: discord.Interaction, case_number: int, reason: str):
+        case = await ModerationService.get_case(interaction.guild_id, case_number)
+        if not case:
+            return await interaction.response.send_message(f"❌ Case #{case_number} not found.", ephemeral=True)
+            
+        await ModerationService.update_case(
+            interaction.guild_id, 
+            case_number, 
+            is_appealed=True, 
+            appeal_reason=reason,
+            case_status="appealed"
+        )
+        await interaction.response.send_message(embed=SuccessEmbed(f"Case #{case_number} has been marked as appealed."))
+
+    @mod.command(name="export", description="Export moderation cases for this guild.")
+    @app_commands.describe(format="The format for export (json/csv).", limit="Number of cases to export (max 500).")
+    @app_commands.checks.has_permissions(administrator=True)
+    async def export(self, interaction: discord.Interaction, format: Literal["json", "csv"] = "json", limit: int = 100):
+        """Generates a downloadable file of moderation logs."""
+        await interaction.response.defer(ephemeral=True)
+        limit = min(max(1, limit), 500)
+        
+        cases = await ModerationService.get_all_cases(interaction.guild_id, limit)
+        if not cases:
+            return await interaction.followup.send("❌ No cases found to export.")
+
+        file_data = io.BytesIO()
+        if format == "json":
+            content = json.dumps(cases, indent=4, default=str)
+            file_data.write(content.encode('utf-8'))
+            filename = f"mod_export_{interaction.guild_id}.json"
+        else:
+            # CSV Export
+            keys = cases[0].keys()
+            output = io.StringIO()
+            dict_writer = csv.DictWriter(output, fieldnames=keys)
+            dict_writer.writeheader()
+            dict_writer.writerows(cases)
+            file_data.write(output.getvalue().encode('utf-8'))
+            filename = f"mod_export_{interaction.guild_id}.csv"
+
+        file_data.seek(0)
+        discord_file = discord.File(file_data, filename=filename)
+        await interaction.followup.send(f"✅ Successfully exported **{len(cases)}** cases as `{format.upper()}`.", file=discord_file)
+
+    # ── UTILITY COMMANDS ──────────────────────────────────────────────────────
     @app_commands.command(name="purge", description="Clear a number of messages from the channel.")
     @app_commands.describe(amount="Number of messages to delete (max 100).")
     @app_commands.checks.has_permissions(manage_messages=True)
@@ -144,40 +248,6 @@ class Moderation(commands.Cog):
             await interaction.response.send_message(embed=SuccessEmbed(f"Slowmode set to {seconds} seconds.") if seconds > 0 else SuccessEmbed("Slowmode disabled."))
         except Exception as e:
             await interaction.response.send_message(embed=ErrorEmbed(f"Failed to set slowmode: {e}"), ephemeral=True)
-
-    @app_commands.command(name="cases", description="View moderation history for a user.")
-    @app_commands.describe(user="The user to check.")
-    @app_commands.checks.has_permissions(manage_messages=True)
-    async def cases(self, interaction: discord.Interaction, user: discord.User):
-        """Displays all moderation cases for a user in this guild."""
-        cases = await ModerationService.get_user_cases(interaction.guild_id, user.id)
-        
-        if not cases:
-            return await interaction.response.send_message(f"No cases found for {user.mention}.", ephemeral=True)
-            
-        embed = AstraEmbed(title=f"Moderation History: {user}")
-        if user.display_avatar:
-            embed.set_thumbnail(url=user.display_avatar.url)
-            
-        # Helper for emojis
-        emojis = {"warning": "⚠️", "mute": "🔇", "unmute": "🔊", "kick": "👞", "ban": "🔨", "unban": "🔓"}
-            
-        for case in cases[:10]:
-            action = case['type']
-            emoji = emojis.get(action, "📝")
-            date = datetime.datetime.fromisoformat(case['timestamp'].replace('Z', '+00:00')).strftime("%Y-%m-%d")
-            duration_info = f"\n**Duration:** {case['duration']}" if case['duration'] else ""
-            
-            embed.add_field(
-                name=f"Case #{case['case_number']} | {action.title()} {emoji}",
-                value=f"**Reason:** {case['reason']}{duration_info}\n**Mod:** <@{case['moderator_id']}>\n**Date:** {date}",
-                inline=False
-            )
-            
-        if len(cases) > 10:
-            embed.set_footer(text=f"Showing 10 of {len(cases)} total cases")
-
-        await interaction.response.send_message(embed=embed)
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(Moderation(bot))

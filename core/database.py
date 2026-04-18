@@ -71,6 +71,9 @@ class DatabaseManager:
             )
         """)
         await self._safe_add_column("moderation_cases", "note", "TEXT")
+        await self._safe_add_column("moderation_cases", "is_appealed", "BOOLEAN DEFAULT 0")
+        await self._safe_add_column("moderation_cases", "appeal_reason", "TEXT")
+        await self._safe_add_column("moderation_cases", "case_status", "TEXT DEFAULT 'active'")
 
         # ── ROLE MENUS ────────────────────────────────────────────────────────
         await self.connection.execute("""

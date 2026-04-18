@@ -34,6 +34,33 @@ class ModerationService:
         return [dict(row) for row in rows]
 
     @staticmethod
+    async def get_case(guild_id: int, case_number: int) -> Optional[Dict]:
+        """Retrieves a specific moderation case."""
+        row = await db.fetch_one(
+            "SELECT * FROM moderation_cases WHERE guild_id = ? AND case_number = ?",
+            guild_id, case_number
+        )
+        return dict(row) if row else None
+
+    @staticmethod
+    async def update_case(guild_id: int, case_number: int, **kwargs):
+        """Updates a specific moderation case (e.g. for appeals)."""
+        columns = ", ".join([f"{k} = ?" for k in kwargs.keys()])
+        values = list(kwargs.values())
+        
+        query = f"UPDATE moderation_cases SET {columns} WHERE guild_id = ? AND case_number = ?"
+        await db.execute(query, *values, guild_id, case_number)
+
+    @staticmethod
+    async def get_all_cases(guild_id: int, limit: int = 100) -> List[Dict]:
+        """Retrieves a bulk list of cases for export."""
+        rows = await db.fetch_all(
+            "SELECT * FROM moderation_cases WHERE guild_id = ? ORDER BY case_number DESC LIMIT ?",
+            guild_id, limit
+        )
+        return [dict(row) for row in rows]
+
+    @staticmethod
     async def get_guild_config(guild_id: int) -> Optional[Dict]:
         """Retrieves configuration for a specific guild."""
         row = await db.fetch_one("SELECT * FROM guilds WHERE guild_id = ?", guild_id)
