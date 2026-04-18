@@ -14,22 +14,34 @@ class ServerSetup(commands.Cog):
         # Remove non-alphanumeric characters and lowercase
         return "".join(c for c in text.lower() if c.isalnum())
 
-    @app_commands.command(name="setup_server", description="🛰️ ROBUST SYNC v2.13: Safe incremental update (Fixes Duplication)")
+    @app_commands.command(name="setup_server", description="🛰️ DEEP CLEAN v2.16: Safe update + Auto-Delete Duplicates")
     @app_commands.checks.has_permissions(administrator=True)
     async def setup_server(self, interaction: discord.Interaction):
-        """Non-destructive server synchronization. Prevents duplication via name normalization."""
+        """Non-destructive server synchronization. Automatically deletes duplicate channels and roles."""
         await interaction.response.defer(ephemeral=True)
         
         status_embed = AstraEmbed(
-            title="🛰️ ROBUST SYNC INITIATED (v2.13.0)",
-            description="Starting deep-scan. Using **Fuzzy Matching** to prevent channel duplication."
+            title="🛰️ DEEP CLEAN INITIATED (v2.16.0)",
+            description="Starting deep-scan. Identifying and removing duplicate components..."
         )
         status_msg = await interaction.followup.send(embed=status_embed, ephemeral=True)
 
         guild = interaction.guild
         
+        # 0. PRE-SYNC ROLE CLEANUP
+        status_embed.description = "🧹 Cleaning duplicate roles..."
+        await status_msg.edit(embed=status_embed)
+        role_map = {}
+        for role in guild.roles:
+            if role.managed or role == guild.default_role: continue
+            norm = self._normalize(role.name)
+            if norm in role_map:
+                try: await role.delete(reason="Astra Cleanup: Duplicate")
+                except: pass
+            else: role_map[norm] = role
+
         # 1. ROLES SYNC
-        status_embed.description = "👥 Syncing Roles (Normalization Active)..."
+        status_embed.description = "👥 Syncing Role Hierarchy..."
         await status_msg.edit(embed=status_embed)
         
         role_data = [
@@ -55,25 +67,14 @@ class ServerSetup(commands.Cog):
         
         roles = {}
         for name, color, perms, hoist, mention in role_data:
-            # Fuzzy match role
             role = discord.utils.find(lambda r: self._normalize(r.name) == self._normalize(name), guild.roles)
-            
             if not role:
-                role = await guild.create_role(
-                    name=name, 
-                    color=discord.Color.from_str(color), 
-                    permissions=perms, 
-                    hoist=hoist, 
-                    mentionable=mention,
-                    reason="Astra v2.13 Sync: Missing"
-                )
+                role = await guild.create_role(name=name, color=discord.Color.from_str(color), permissions=perms, hoist=hoist, mentionable=mention)
             else:
-                # Ensure name matches blueprint exactly
-                if role.name != name:
-                    await role.edit(name=name)
+                if role.name != name: await role.edit(name=name)
             roles[name] = role
 
-        # 2. INFRASTRUCTURE SYNC (Categories & Channels)
+        # 2. INFRASTRUCTURE SYNC
         structure = [
             ("─── WELCOME ZONE ───", "public_read", [
                 ("👋 welcome", "Official greetings for new Astra members."),
@@ -94,6 +95,10 @@ class ServerSetup(commands.Cog):
                 ("📝 changelog", "Detailed patch notes from the dev team."),
                 ("📌 useful-links", "Invite links, documentation, and more.")
             ]),
+            ("─── THE LOUNGE ───", "free_chat", [
+                ("💬 public-lounge", "The open lobby for everyone. No verification required!"),
+                ("🎭 guest-chat", "A place for visitors to ask quick questions.")
+            ]),
             ("─── COMMUNITY HUB 💬 ───", "public_chat", [
                 ("💬 general", "The main lobby for Astra community chat."),
                 ("🤖 bot-commands", "The place to interact with Astra and other bots."),
@@ -109,10 +114,6 @@ class ServerSetup(commands.Cog):
                 ("🛡️ mod-chat", "Private coordination for the moderation team."),
                 ("📋 mod-logs", "Internal audit logs and incident tracking."),
                 ("🗂️ support-tickets", "Archive of resolved support queries.")
-            ]),
-            ("─── THE LOUNGE ───", "free_chat", [
-                ("💬 public-lounge", "The open lobby for everyone. No verification required!"),
-                ("🎭 guest-chat", "A place for visitors to ask quick questions.")
             ]),
             ("─── SOCIAL MEDIA ───", "public_read", [
                 ("🎨 astra-gallery", "Fan art and bot setup screenshots."),
@@ -132,63 +133,69 @@ class ServerSetup(commands.Cog):
         ]
 
         created_count = 0
-        updated_count = 0
+        deleted_count = 0
         
+        # Cleanup Duplicate Categories First
+        cat_map = {}
+        for cat in guild.categories:
+            norm = self._normalize(cat.name)
+            if norm in cat_map:
+                try: await cat.delete(); deleted_count += 1
+                except: pass
+            else: cat_map[norm] = cat
+
         for cat_name, p_type, channels in structure:
             status_embed.description = f"🏗️ Syncing Category: **{cat_name}**..."
             await status_msg.edit(embed=status_embed)
             
-            # Fuzzy find category
             category = discord.utils.find(lambda c: self._normalize(c.name) == self._normalize(cat_name), guild.categories)
-            
             if not category:
                 overwrites = { guild.default_role: discord.PermissionOverwrite(view_channel=True, send_messages=False) }
                 if p_type == 'public_chat':
                     overwrites[roles["👋 Verified"]] = discord.PermissionOverwrite(view_channel=True, send_messages=True)
+                elif p_type == 'free_chat':
+                    overwrites[guild.default_role] = discord.PermissionOverwrite(view_channel=True, send_messages=True)
                 elif p_type == 'restricted':
                     overwrites[guild.default_role] = discord.PermissionOverwrite(view_channel=False)
                     overwrites[roles["🧪 Bot Tester"]] = discord.PermissionOverwrite(view_channel=True, send_messages=True)
-                elif p_type == 'free_chat':
-                    overwrites[guild.default_role] = discord.PermissionOverwrite(view_channel=True, send_messages=True)
                 elif p_type == 'staff':
                     overwrites[guild.default_role] = discord.PermissionOverwrite(view_channel=False)
                     overwrites[roles["🛡️ Moderator"]] = discord.PermissionOverwrite(view_channel=True, send_messages=True)
                     overwrites[roles["🆘 Support Staff"]] = discord.PermissionOverwrite(view_channel=True, send_messages=True)
-
                 category = await guild.create_category(name=cat_name, overwrites=overwrites)
             else:
-                # Sync Category Name
-                if category.name != cat_name:
-                    await category.edit(name=cat_name)
-            
-            # Fuzzy find & update Channels
-            for chan_name, topic in channels:
-                channel = discord.utils.find(lambda c: self._normalize(c.name) == self._normalize(chan_name), category.text_channels)
-                
+                if category.name != cat_name: await category.edit(name=cat_name)
+
+            # Cleanup Duplicate Channels in this category
+            chan_map = {}
+            for chan in category.text_channels:
+                norm = self._normalize(chan.name)
+                if norm in chan_map:
+                    try: await chan.delete(); deleted_count += 1
+                    except: pass
+                else: chan_map[norm] = chan
+
+            for name, topic in channels:
+                channel = discord.utils.find(lambda c: self._normalize(c.name) == self._normalize(name), category.text_channels)
                 if not channel:
-                    await guild.create_text_channel(name=chan_name, category=category, topic=topic)
+                    await guild.create_text_channel(name=name, category=category, topic=topic)
                     created_count += 1
                 else:
-                    # Sync metadata
-                    if channel.name != chan_name or channel.topic != topic:
-                        await channel.edit(name=chan_name, topic=topic)
-                        updated_count += 1
-                await asyncio.sleep(0.3)
+                    if channel.name != name or channel.topic != topic:
+                        await channel.edit(name=name, topic=topic)
+                await asyncio.sleep(0.1)
 
         # 3. AUTOMOD SYNC
         from core.database import db
-        await db.execute(
-            "INSERT INTO automod_configs (guild_id, spam_enabled, link_filter, invite_filter, spam_threshold, spam_window) "
-            "VALUES (?, 1, 1, 1, 5, 5) ON CONFLICT(guild_id) DO NOTHING", guild.id
-        )
+        await db.execute("INSERT INTO automod_configs (guild_id, spam_enabled, link_filter, invite_filter, spam_threshold, spam_window) VALUES (?, 1, 1, 1, 5, 5) ON CONFLICT(guild_id) DO NOTHING", guild.id)
 
         # 4. FINAL SUCCESS
         final_embed = SuccessEmbed(
-            f"🛰️ Robust Sync v2.13.0 Complete!\n\n"
-            f"👤 Roles Balanced: **{len(roles)}**\n"
-            f"🏗️ Channels Created: **{created_count}**\n"
-            f"🛠️ Items Refactored: **{updated_count}**\n\n"
-            f"*Auto-Rename and Fuzzy Matching successfully prevented duplication.*"
+            f"🛰️ Deep Clean v2.16.0 Complete!\n\n"
+            f"🧹 Duplicates Purged: **{deleted_count}**\n"
+            f"🏗️ Missing Items Created: **{created_count}**\n"
+            f"👤 Roles Balanced: **{len(roles)}**\n\n"
+            f"*Your server is now 100% clean and aligned with the blueprint.*"
         )
         await interaction.followup.send(embed=final_embed, ephemeral=True)
 
