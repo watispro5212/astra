@@ -3,6 +3,7 @@ from typing import Optional
 from discord import app_commands
 from discord.ext import commands
 from services.ticket_service import TicketService
+from services.transcript_service import transcript_service
 from ui.views.ticket_view import TicketLauncherView, TicketControlView
 from ui.embeds import SuccessEmbed, AstraEmbed
 
@@ -16,11 +17,18 @@ class Tickets(commands.Cog):
         self.bot.add_view(TicketLauncherView())
         self.bot.add_view(TicketControlView())
 
-    @app_commands.command(name="ticket", description="Ticket system administration.")
-    @app_commands.checks.has_permissions(administrator=True)
-    async def ticket_cmd(self, interaction: discord.Interaction):
-        """Root command for tickets."""
-        pass
+    ticket_group = app_commands.Group(name="ticket", description="Ticket system administration.", default_permissions=discord.Permissions(administrator=True))
+
+    @ticket_group.command(name="transcript", description="📄 Generate a transcript for this ticket.")
+    @app_commands.checks.has_permissions(manage_messages=True)
+    async def ticket_transcript(self, interaction: discord.Interaction):
+        """Generates a text archive of the current ticket channel."""
+        if "ticket-" not in interaction.channel.name:
+            return await interaction.response.send_message("❌ This command can only be used in ticket channels.", ephemeral=True)
+            
+        await interaction.response.defer()
+        file = await transcript_service.generate_text_transcript(interaction.channel)
+        await interaction.followup.send("✅ Transcript generated:", file=file)
 
     @app_commands.command(name="ticket_setup", description="Configure ticket settings.")
     @app_commands.describe(

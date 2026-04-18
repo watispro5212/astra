@@ -75,6 +75,21 @@ class DatabaseManager:
         await self._safe_add_column("moderation_cases", "appeal_reason", "TEXT")
         await self._safe_add_column("moderation_cases", "case_status", "TEXT DEFAULT 'active'")
 
+        # ── AUTOMOD RULES ─────────────────────────────────────────────────────
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS automod_rules (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                guild_id INTEGER NOT NULL,
+                name TEXT NOT NULL,
+                trigger_type TEXT NOT NULL,
+                trigger_data TEXT,
+                action TEXT DEFAULT 'delete',
+                exempt_roles TEXT,
+                exempt_channels TEXT,
+                is_enabled BOOLEAN DEFAULT 1
+            )
+        """)
+
         # ── ROLE MENUS ────────────────────────────────────────────────────────
         await self.connection.execute("""
             CREATE TABLE IF NOT EXISTS role_menus (

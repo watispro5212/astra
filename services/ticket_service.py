@@ -61,20 +61,10 @@ class TicketService:
         return channel
 
     @staticmethod
-    async def generate_transcript(channel: discord.TextChannel) -> str:
-        """Generates a simple text transcript of the channel."""
-        transcript = f"Transcript for ticket: {channel.name}\n"
-        transcript += f"Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
-        transcript += "-" * 50 + "\n\n"
-        
-        # Limit to 500 messages to avoid huge files
-        messages = [msg async for msg in channel.history(limit=500, oldest_first=True)]
-        for msg in messages:
-            timestamp = msg.created_at.strftime('%H:%M:%S')
-            content = msg.content if msg.content else "[No Content/Embed/Attachment]"
-            transcript += f"[{timestamp}] {msg.author}: {content}\n"
-            
-        return transcript
+    async def generate_transcript(channel: discord.TextChannel) -> discord.File:
+        """Generates a professional text transcript of the channel."""
+        from services.transcript_service import transcript_service
+        return await transcript_service.generate_text_transcript(channel)
 
     @staticmethod
     async def close_ticket(channel_id: int, reason: str = "No reason provided"):

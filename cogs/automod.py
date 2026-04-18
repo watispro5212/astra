@@ -4,7 +4,7 @@ from discord import app_commands
 from services.automod_service import automod_service
 from core.database import db
 from ui.embeds import SuccessEmbed, AstraEmbed
-from typing import Optional
+from typing import Optional, Literal
 
 class Automod(commands.Cog):
     """Automated moderation filters and anti-spam."""
@@ -86,6 +86,70 @@ class Automod(commands.Cog):
         await db.execute("INSERT OR IGNORE INTO automod_configs (guild_id) VALUES (?)", interaction.guild_id)
         await db.execute("UPDATE automod_configs SET bad_words = ? WHERE guild_id = ?", words, interaction.guild_id)
         await interaction.response.send_message(embed=SuccessEmbed("Bad words filter updated."), ephemeral=True)
+
+    rule_group = app_commands.Group(name="rule", description="Dynamic AutoMod rules.", parent=automod_group)
+
+    @rule_group.command(name="create", description="🛡️ Create a new dynamic AutoMod rule.")
+    @app_commands.describe(
+        name="A unique name for this rule.",
+        trigger="The type of trigger (word, link, invite, spam).",
+        data="Trigger data (e.g. words separated by commas).",
+        action="Action to take when triggered.",
+        exempt_roles="Optional: comma-separated role IDs to exempt.",
+        exempt_channels="Optional: comma-separated channel IDs to exempt."
+    )
+    async def rule_create(
+        self, 
+        interaction: discord.Interaction, 
+        name: str, 
+        trigger: Literal["word", "link", "invite", "spam"],
+        data: Optional[str] = None,
+        action: Literal["delete", "warn", "mute"] = "delete",
+        exempt_roles: Optional[str] = None,
+        exempt_channels: Optional[str] = None
+    ):
+        """Creates a new dynamic rule in the database."""
+        await db.execute(
+            """
+            INSERT INTO automod_rules (guild_id, name, trigger_type, trigger_data, action, exempt_roles, exempt_channels)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            """,
+            interaction.guild_id, name, trigger, data, action, exempt_roles, exempt_channels
+        )
+        await interaction.response.send_message(embed=SuccessEmbed(f"Custom rule **{name}** has been created and activated."), ephemeral=True)
+
+    @rule_group.command(name="list", description="📋 List all dynamic AutoMod rules for this server.")
+    async def rule_list(self, interaction: discord.Interaction):
+        """Displays all custom rules."""
+        rules = await automod_service.get_rules(interaction.guild_id)
+        if not rules:
+            return await interaction.response.send_message("No custom rules found for this server.", ephemeral=True)
+            
+        embed = AstraEmbed(title="🛡️ Dynamic AutoMod Rules")
+        for rule in rules:
+            exemptions = []
+            if rule['exempt_roles']: exemptions.append(f"Roles: {len(rule['exempt_roles'].split(','))}")
+            if rule['exempt_channels']: exemptions.append(f"Channels: {len(rule['exempt_channels'].split(','))}")
+            
+            ex_text = f" | Exempt: {', '.join(exemptions)}" if exemptions else ""
+            
+            embed.add_field(
+                name=f"Rule: {rule['name']} ({rule['trigger_type'].title()})",
+                value=f"**Action:** `{rule['action'].upper()}`{ex_text}\n**Data:** `{rule['trigger_data'] or 'N/A'}`",
+                inline=False
+            )
+            
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+
+    @rule_group.command(name="remove", description="🗑️ Remove a dynamic AutoMod rule.")
+    @app_commands.describe(name="The name of the rule to remove.")
+    async def rule_remove(self, interaction: discord.Interaction, name: str):
+        """Deletes a rule by name."""
+        res = await db.execute("DELETE FROM automod_rules WHERE guild_id = ? AND name = ?", interaction.guild_id, name)
+        if res.rowcount == 0:
+            return await interaction.response.send_message(f"❌ Rule **{name}** not found.", ephemeral=True)
+            
+        await interaction.response.send_message(embed=SuccessEmbed(f"Rule **{name}** has been removed."), ephemeral=True)
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(Automod(bot))

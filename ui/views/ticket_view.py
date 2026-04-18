@@ -47,8 +47,8 @@ class TicketCloseModal(discord.ui.Modal, title="Close Ticket"):
     async def on_submit(self, interaction: discord.Interaction):
         await interaction.response.send_message("Generating transcript and closing ticket...")
         
-        # Generator transcript
-        transcript_text = await TicketService.generate_transcript(interaction.channel)
+        # Generate transcript file
+        file = await TicketService.generate_transcript(interaction.channel)
         reason_text = self.reason.value or "No reason provided"
         
         # Save to DB
@@ -60,7 +60,6 @@ class TicketCloseModal(discord.ui.Modal, title="Close Ticket"):
             log_channel = interaction.guild.get_channel(config['log_channel_id'])
             if log_channel:
                 embed = AstraEmbed(title="🎫 Ticket Transcript", description=f"**User:** <@{interaction.channel.name.split('-')[-1]}>\n**Closed By:** {interaction.user.mention}\n**Reason:** {reason_text}")
-                file = discord.File(io.BytesIO(transcript_text.encode()), filename=f"transcript-{interaction.channel.name}.txt")
                 await log_channel.send(embed=embed, file=file)
 
         await asyncio.sleep(3)
