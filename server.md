@@ -1,4 +1,4 @@
-# 🛰️ Astra Server Identity & Assets (v2.6.0)
+# 🛰️ Astra Server Identity & Assets (v2.8.0)
 
 ## 🏆 Server Identity
 *Use these in your Server Settings -> Overview.*

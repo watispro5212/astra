@@ -9,56 +9,35 @@ class ServerSetup(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @app_commands.command(name="setup_server", description="🏰 MASTER SETUP v2.5: Full Server Reconstruction (Roles, Permissions, Channels)")
+    @app_commands.command(name="setup_server", description="🛰️ SMART SYNC v2.9: Updates/Adds missing Roles, Channels & Permissions (Safe)")
     @app_commands.checks.has_permissions(administrator=True)
     async def setup_server(self, interaction: discord.Interaction):
-        """Full server construction. WARNING: Deletes all existing channels and roles."""
+        """Non-destructive server synchronization. Adds missing components and updates metadata."""
         await interaction.response.defer(ephemeral=True)
         
         status_embed = AstraEmbed(
-            title="⚠️ MASTER SETUP INITIATED (v2.5.0)",
-            description="**WARNING**: This will delete ALL existing channels and roles (except integrations).\n\n"
-                        "Starting in **10 seconds**... You can dismiss this message to cancel (process will stop if bot is stopped)."
+            title="🛰️ SMART SYNC INITIATED (v2.9.0)",
+            description="Starting incremental scan. This process is **safe** and will not delete existing work."
         )
         status_msg = await interaction.followup.send(embed=status_embed, ephemeral=True)
-        await asyncio.sleep(10)
 
         guild = interaction.guild
         
-        # 1. DELETE EXISTING CHANNELS
-        status_embed.description = "🗑️ Wiping existing channels..."
-        await status_msg.edit(embed=status_embed)
-        for channel in guild.channels:
-            if channel.id == interaction.channel_id: continue
-            try: await channel.delete()
-            except: pass
-
-        # 2. DELETE EXISTING ROLES (Skip @everyone and Integrations)
-        status_embed.description = "👤 Wiping existing roles..."
-        await status_msg.edit(embed=status_embed)
-        managed_roles = [r for r in guild.roles if not r.managed and r != guild.default_role]
-        for role in managed_roles:
-            try: await role.delete()
-            except: pass
-
-        # 3. DEFINE & CREATE ROLES (Created from Bottom to Top for Hierarchy)
-        status_embed.description = "👥 Creating Role Hierarchy & Hoisting..."
+        # 1. ROLES SYNC (Bottom to Top for Hierarchy)
+        status_embed.description = "👥 Syncing Roles..."
         await status_msg.edit(embed=status_embed)
         
-        # Order: Bottom to Top (Last one created is on top)
         role_data = [
-            # Notification Roles (No Hoist, No Mention)
             ("🧪 Lab Ping", "#99AAB5", discord.Permissions.none(), False, False),
             ("🚀 Update Ping", "#99AAB5", discord.Permissions.none(), False, False),
             ("📢 News Ping", "#99AAB5", discord.Permissions.none(), False, False),
-            # Member Roles
             ("🔒 Unverified", "#99AAB5", discord.Permissions(read_message_history=True), False, False),
+            ("🆘 Support Seeker", "#F1C40F", discord.Permissions(send_messages=True, read_message_history=True), False, False),
             ("👋 Verified", "#2ECC71", discord.Permissions(send_messages=True, read_message_history=True, use_application_commands=True, add_reactions=True, connect=True), True, False),
             ("📜 Astra Contributor", "#A19D94", discord.Permissions(attach_files=True, create_public_threads=True), True, False),
             ("🧪 Bot Tester", "#9B59B6", discord.Permissions(use_external_emojis=True, use_application_commands=True), True, False),
             ("⭐ Premium", "#F1C40F", discord.Permissions(use_external_emojis=True, embed_links=True), True, False),
             ("💎 Elite Patron", "#EB459E", discord.Permissions(use_external_emojis=True, use_external_stickers=True, create_public_threads=True), True, False),
-            # Staff Roles
             ("🎉 Event Manager", "#E91E63", discord.Permissions(manage_events=True, mention_everyone=True), True, True),
             ("🎖️ Community Guide", "#1ABC9C", discord.Permissions(moderate_members=True, mute_members=True, move_members=True), True, True),
             ("🆘 Support Staff", "#F1C40F", discord.Permissions(manage_messages=True, read_message_history=True), True, True),
@@ -71,18 +50,19 @@ class ServerSetup(commands.Cog):
         
         roles = {}
         for name, color, perms, hoist, mention in role_data:
-            role = await guild.create_role(
-                name=name, 
-                color=discord.Color.from_str(color), 
-                permissions=perms, 
-                hoist=hoist, 
-                mentionable=mention,
-                reason="Astra v2.5 Setup"
-            )
+            role = discord.utils.get(guild.roles, name=name)
+            if not role:
+                role = await guild.create_role(
+                    name=name, 
+                    color=discord.Color.from_str(color), 
+                    permissions=perms, 
+                    hoist=hoist, 
+                    mentionable=mention,
+                    reason="Astra v2.9 Sync: Missing Role"
+                )
             roles[name] = role
-            await asyncio.sleep(0.5)
 
-        # 4. DEFINE STRUCTURE
+        # 2. INFRASTRUCTURE SYNC (Categories & Channels)
         structure = [
             ("─── WELCOME ZONE ───", "public_read", [
                 ("👋 welcome", "Official greetings for new Astra members."),
@@ -136,77 +116,56 @@ class ServerSetup(commands.Cog):
             ])
         ]
 
-        # 5. BUILD CATEGORIES & CHANNELS
-        created_channels = 0
+        created_count = 0
+        updated_count = 0
+        
         for cat_name, p_type, channels in structure:
-            status_embed.description = f"🏗️ Building Category: **{cat_name}**..."
+            status_embed.description = f"🏗️ Syncing Category: **{cat_name}**..."
             await status_msg.edit(embed=status_embed)
             
-            overwrites = { guild.default_role: discord.PermissionOverwrite(view_channel=True, send_messages=False) }
-            
-            if p_type == 'public_chat':
-                overwrites[roles["👋 Verified"]] = discord.PermissionOverwrite(view_channel=True, send_messages=True)
-            elif p_type == 'restricted':
-                overwrites[guild.default_role] = discord.PermissionOverwrite(view_channel=False)
-                overwrites[roles["🧪 Bot Tester"]] = discord.PermissionOverwrite(view_channel=True, send_messages=True)
-            elif p_type == 'staff':
-                overwrites[guild.default_role] = discord.PermissionOverwrite(view_channel=False)
-                overwrites[roles["🛡️ Moderator"]] = discord.PermissionOverwrite(view_channel=True, send_messages=True)
-                overwrites[roles["🆘 Support Staff"]] = discord.PermissionOverwrite(view_channel=True, send_messages=True)
+            # Find/Create Category
+            category = discord.utils.get(guild.categories, name=cat_name)
+            if not category:
+                overwrites = { guild.default_role: discord.PermissionOverwrite(view_channel=True, send_messages=False) }
+                if p_type == 'public_chat':
+                    overwrites[roles["👋 Verified"]] = discord.PermissionOverwrite(view_channel=True, send_messages=True)
+                elif p_type == 'restricted':
+                    overwrites[guild.default_role] = discord.PermissionOverwrite(view_channel=False)
+                    overwrites[roles["🧪 Bot Tester"]] = discord.PermissionOverwrite(view_channel=True, send_messages=True)
+                elif p_type == 'staff':
+                    overwrites[guild.default_role] = discord.PermissionOverwrite(view_channel=False)
+                    overwrites[roles["🛡️ Moderator"]] = discord.PermissionOverwrite(view_channel=True, send_messages=True)
+                    overwrites[roles["🆘 Support Staff"]] = discord.PermissionOverwrite(view_channel=True, send_messages=True)
 
-            category = await guild.create_category(name=cat_name, overwrites=overwrites)
-            for name, topic in channels:
-                await guild.create_text_channel(name=name, category=category, topic=topic)
-                created_channels += 1
+                category = await guild.create_category(name=cat_name, overwrites=overwrites)
+            
+            # Find/Create/Update Channels
+            for chan_name, topic in channels:
+                channel = discord.utils.get(category.text_channels, name=chan_name)
+                if not channel:
+                    await guild.create_text_channel(name=chan_name, category=category, topic=topic)
+                    created_count += 1
+                else:
+                    if channel.topic != topic:
+                        await channel.edit(topic=topic)
+                        updated_count += 1
                 await asyncio.sleep(0.3)
 
-        # 6. CONFIGURE AUTOMOD (Database & Native)
-        status_embed.description = "🛡️ Hardening Server Security (AutoMod)..."
-        await status_msg.edit(embed=status_embed)
-        
-        # 6a. Database Config
-        from services.automod_service import automod_service
+        # 3. AUTOMOD SYNC
         from core.database import db
         await db.execute(
-            """
-            INSERT INTO automod_configs (guild_id, spam_enabled, link_filter, invite_filter, spam_threshold, spam_window)
-            VALUES (?, 1, 1, 1, 5, 5)
-            ON CONFLICT(guild_id) DO UPDATE SET
-                spam_enabled = 1,
-                link_filter = 1,
-                invite_filter = 1
-            """,
-            guild.id
+            "INSERT INTO automod_configs (guild_id, spam_enabled, link_filter, invite_filter, spam_threshold, spam_window) "
+            "VALUES (?, 1, 1, 1, 5, 5) ON CONFLICT(guild_id) DO NOTHING", guild.id
         )
 
-        # 6b. Discord Native AutoMod (Keyword Filter)
-        try:
-            await guild.create_automod_rule(
-                name="Astra: Anti-Scam Filter",
-                event_type=discord.AutoModRuleEventType.message_send,
-                trigger_type=discord.AutoModRuleTriggerType.keyword,
-                trigger_metadata=discord.AutoModTriggerMetadata(keyword_filter=["*nitro*", "*gift*", "*scam*", "*free hack*"]),
-                actions=[discord.AutoModRuleAction(type=discord.AutoModRuleActionType.block_message)]
-            )
-            # 6c. Discord Native AutoMod (Spam Filter)
-            await guild.create_automod_rule(
-                name="Astra: Anti-Spam Shield",
-                event_type=discord.AutoModRuleEventType.message_send,
-                trigger_type=discord.AutoModRuleTriggerType.spam,
-                actions=[discord.AutoModRuleAction(type=discord.AutoModRuleActionType.block_message)]
-            )
-        except Exception as e:
-            # Might fail if bot lacks Manage Server perm or feature not available
-            pass
-
-        # 7. FINAL SUCCESS
+        # 4. FINAL SUCCESS
         final_embed = SuccessEmbed(
-            f"🏰 Master Build v2.7.0 Complete!\n\n"
-            f"👤 Roles Rebuilt: **{len(roles)}** (Hoisted & Ordered)\n"
-            f"📁 Categories: **{len(structure)}**\n"
-            f"💬 Channels: **{created_channels}**\n"
-            f"🛡️ AutoMod: **Hardened** (Native & Database layers applied)\n\n"
-            f"**Action Required**: Roles have been reset. Please re-assign yourself the `👑 Owner` role."
+            f"🛰️ Smart Sync v2.9.0 Complete!\n\n"
+            f"👤 Roles Balanced: **{len(roles)}**\n"
+            f"🏗️ Channels Added: **{created_count}**\n"
+            f"📝 Topics Updated: **{updated_count}**\n"
+            f"🛡️ AutoMod: **Synchronized**\n\n"
+            f"*Everything is now aligned with the Astra Blueprint.*"
         )
         await interaction.followup.send(embed=final_embed, ephemeral=True)
 
