@@ -10,9 +10,7 @@ class Stats(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @app_commands.group(name="stats", description="View server or member statistics.")
-    async def stats_group(self, interaction: discord.Interaction):
-        pass
+    stats_group = app_commands.Group(name="stats", description="View server or member statistics.")
 
     @stats_group.command(name="server", description="View detailed server statistics.")
     async def server_stats(self, interaction: discord.Interaction):
