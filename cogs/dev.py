@@ -31,20 +31,37 @@ class Developer(commands.Cog):
 
     @dev.command(name="sync", description="📑 Sync slash commands to local or global guild.")
     @app_commands.describe(scope="Whether to sync to 'global' or 'guild'.")
-    async def sync(self, interaction: discord.Interaction, scope: str = "guild"):
+    async def sync_group(self, interaction: discord.Interaction, scope: str = "guild"):
+        """Developer group sync command."""
+        await self._perform_sync(interaction, scope)
+
+    @app_commands.command(name="sync", description="🚀 Execute global command synchronization.")
+    @app_commands.describe(scope="Whether to sync to 'global' or 'guild'.")
+    async def sync_standalone(self, interaction: discord.Interaction, scope: str = "global"):
+        """Top-level standalone sync command."""
+        await self._perform_sync(interaction, scope)
+
+    async def _perform_sync(self, interaction: discord.Interaction, scope: str):
+        """Unified internal synchronization logic."""
         if interaction.user.id != config.owner_id:
             return await interaction.response.send_message("❌ This command is restricted to the bot owner.", ephemeral=True)
             
         await interaction.response.defer(ephemeral=True)
         
-        if scope == "guild":
-            guild = discord.Object(id=interaction.guild_id)
-            self.bot.tree.copy_global_to(guild=guild)
-            synced = await self.bot.tree.sync(guild=guild)
-            await interaction.followup.send(f"✅ Synced {len(synced)} commands to this guild.")
-        else:
-            synced = await self.bot.tree.sync()
-            await interaction.followup.send(f"✅ Synced {len(synced)} commands globally.")
+        try:
+            if scope == "guild":
+                guild = discord.Object(id=interaction.guild_id)
+                self.bot.tree.copy_global_to(guild=guild)
+                synced = await self.bot.tree.sync(guild=guild)
+                await interaction.followup.send(f"✅ Synced **{len(synced)}** commands to this guild context.")
+            else:
+                synced = await self.bot.tree.sync()
+                await interaction.followup.send(f"✅ Successfully synchronized **{len(synced)}** commands across all global contexts (Guilds & User-Apps).")
+            
+            logger.info(f"Dev: Synchronized {len(synced)} commands (Scope: {scope})")
+        except Exception as e:
+            await interaction.followup.send(f"❌ Synchronization failed: {e}")
+            logger.error(f"Sync Error: {e}")
 
     @dev.command(name="shards", description="📡 View detailed shard health and latency.")
     async def shards(self, interaction: discord.Interaction):

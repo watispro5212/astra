@@ -13,10 +13,10 @@ class Diagnostics(commands.Cog):
         self.bot = bot
         self.start_time = time.time()
 
-    bot_group = app_commands.Group(name="bot", description="Bot-level diagnostics and info.")
+    core_group = app_commands.Group(name="bot", description="Bot-level diagnostics and info.")
     server_group = app_commands.Group(name="server", description="Server-level audit and snapshots.")
     
-    @bot_group.command(name="stats", description="📊 Show high-level technical metrics for Astra.")
+    @core_group.command(name="stats", description="📊 Show high-level technical metrics for Astra.")
     @app_commands.describe()
     @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
