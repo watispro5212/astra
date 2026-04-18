@@ -118,4 +118,21 @@
 - `🎖️ Community Guide`: Experienced users here to help you get started.
 
 ---
-*Blueprint Version: 2.5.0 (Production Stable)*
+
+## 🛡️ 6. AUTOMOD DEFENSE MATRIX
+*These layers are automatically configured by the `/setup_server` command.*
+
+### Layer 1: Discord Native Protection
+- **Anti-Spam Filter**: Blocks messages containing repetitive text or excessive emojis.
+- **Phishing Protection**: Automatically blocks known malicious links from the Discord global database.
+
+### Layer 2: Astra Custom Filters
+- **Spam Threshold**: 5 messages per 5 seconds. Violations result in a 1-hour timeout.
+- **Link Blocker**: Only `Premium` and `Astra Contributor` roles can post links in general chat.
+- **Invite Blocker**: Disallows posting invites to other Discord servers.
+
+### Layer 3: The "Laboratory" Lockdown
+- Only `Bot Tester` and above can upload files or post links in the Laboratory category.
+
+---
+*Blueprint Version: 2.7.0 (Defense Hardened)*

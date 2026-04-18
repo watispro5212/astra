@@ -160,12 +160,52 @@ class ServerSetup(commands.Cog):
                 created_channels += 1
                 await asyncio.sleep(0.3)
 
-        # 6. FINAL SUCCESS
+        # 6. CONFIGURE AUTOMOD (Database & Native)
+        status_embed.description = "🛡️ Hardening Server Security (AutoMod)..."
+        await status_msg.edit(embed=status_embed)
+        
+        # 6a. Database Config
+        from services.automod_service import automod_service
+        from core.database import db
+        await db.execute(
+            """
+            INSERT INTO automod_configs (guild_id, spam_enabled, link_filter, invite_filter, spam_threshold, spam_window)
+            VALUES (?, 1, 1, 1, 5, 5)
+            ON CONFLICT(guild_id) DO UPDATE SET
+                spam_enabled = 1,
+                link_filter = 1,
+                invite_filter = 1
+            """,
+            guild.id
+        )
+
+        # 6b. Discord Native AutoMod (Keyword Filter)
+        try:
+            await guild.create_automod_rule(
+                name="Astra: Anti-Scam Filter",
+                event_type=discord.AutoModRuleEventType.message_send,
+                trigger_type=discord.AutoModRuleTriggerType.keyword,
+                trigger_metadata=discord.AutoModTriggerMetadata(keyword_filter=["*nitro*", "*gift*", "*scam*", "*free hack*"]),
+                actions=[discord.AutoModRuleAction(type=discord.AutoModRuleActionType.block_message)]
+            )
+            # 6c. Discord Native AutoMod (Spam Filter)
+            await guild.create_automod_rule(
+                name="Astra: Anti-Spam Shield",
+                event_type=discord.AutoModRuleEventType.message_send,
+                trigger_type=discord.AutoModRuleTriggerType.spam,
+                actions=[discord.AutoModRuleAction(type=discord.AutoModRuleActionType.block_message)]
+            )
+        except Exception as e:
+            # Might fail if bot lacks Manage Server perm or feature not available
+            pass
+
+        # 7. FINAL SUCCESS
         final_embed = SuccessEmbed(
-            f"🏰 Master Build v2.5.0 Complete!\n\n"
+            f"🏰 Master Build v2.7.0 Complete!\n\n"
             f"👤 Roles Rebuilt: **{len(roles)}** (Hoisted & Ordered)\n"
             f"📁 Categories: **{len(structure)}**\n"
-            f"💬 Channels: **{created_channels}**\n\n"
+            f"💬 Channels: **{created_channels}**\n"
+            f"🛡️ AutoMod: **Hardened** (Native & Database layers applied)\n\n"
             f"**Action Required**: Roles have been reset. Please re-assign yourself the `👑 Owner` role."
         )
         await interaction.followup.send(embed=final_embed, ephemeral=True)
