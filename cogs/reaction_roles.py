@@ -69,10 +69,8 @@ class RoleMenuCog(commands.GroupCog, name="role-menu"):
             # I'll modify the view to accept options in __init__ if needed, but it must be recreateable.
             pass
 
-        embed = AstraEmbed(title=title, description="Select your roles below:")
-        
         # Send message
-        await interaction.response.send_message("Creating menu...", ephemeral=True)
+        await interaction.response.defer(ephemeral=True)
         message = await interaction.channel.send(embed=embed, view=view)
         
         # Save to DB
@@ -80,7 +78,7 @@ class RoleMenuCog(commands.GroupCog, name="role-menu"):
         for r_data in parsed_roles:
             await RoleService.add_option(message.id, r_data['role'].id, r_data['label'])
 
-        await interaction.edit_original_response(content="✅ Role menu created successfully!")
+        await interaction.followup.send("✅ Role menu created successfully!", ephemeral=True)
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(RoleMenuCog(bot))

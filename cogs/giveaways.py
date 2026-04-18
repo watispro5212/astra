@@ -61,7 +61,7 @@ class Giveaways(commands.Cog):
         try:
             val = int(duration[:-1])
         except:
-            await interaction.response.send_message("Invalid duration format! Use e.g. 1h, 30m, 1d.", ephemeral=True)
+            await interaction.response.send_message("❌ Invalid duration format! Use e.g. 1h, 30m, 1d.", ephemeral=True)
             return
             
         if unit == 's': delta = timedelta(seconds=val)
@@ -69,9 +69,10 @@ class Giveaways(commands.Cog):
         elif unit == 'h': delta = timedelta(hours=val)
         elif unit == 'd': delta = timedelta(days=val)
         else:
-            await interaction.response.send_message("Invalid time unit! Use s, m, h, or d.", ephemeral=True)
+            await interaction.response.send_message("❌ Invalid time unit! Use s, m, h, or d.", ephemeral=True)
             return
 
+        await interaction.response.defer(ephemeral=True)
         ends_at = datetime.now() + delta
         
         embed = AstraEmbed(
@@ -80,12 +81,14 @@ class Giveaways(commands.Cog):
         )
         embed.set_footer(text="Good luck everyone!")
         
-        await interaction.response.send_message("Giveaway starting...", ephemeral=True)
+        # Create message first
         message = await interaction.channel.send(embed=embed, view=GiveawayView())
         
         await giveaway_service.create_giveaway(
             message.id, interaction.guild_id, interaction.channel_id, interaction.user.id, prize, winners, ends_at
         )
+        
+        await interaction.followup.send("✅ Giveaway has been successfully started!", ephemeral=True)
 
     @app_commands.command(name="reroll", description="Pick a new winner for a finished giveaway.")
     @app_commands.describe(message_id="The ID of the giveaway message.")
@@ -97,14 +100,15 @@ class Giveaways(commands.Cog):
             await interaction.response.send_message("Invalid message ID.", ephemeral=True)
             return
             
+        await interaction.response.defer(ephemeral=True)
         # Reset ended status for reroll logic simple hack
         await db.execute("UPDATE giveaways SET is_ended = 0 WHERE message_id = ?", m_id)
         winners = await giveaway_service.pick_winners(m_id)
         
         if winners:
-            await interaction.response.send_message(f"New winner(s) picked: {', '.join([f'<@{w}>' for w in winners])} 🥳")
+            await interaction.followup.send(f"✅ New winner(s) picked: {', '.join([f'<@{w}>' for w in winners])} 🥳")
         else:
-            await interaction.response.send_message("Could not pick new winners (maybe no participants).", ephemeral=True)
+            await interaction.followup.send("❌ Could not pick new winners (maybe no participants).", ephemeral=True)
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(Giveaways(bot))
