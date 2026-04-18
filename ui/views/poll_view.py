@@ -13,8 +13,16 @@ class PersistentPollView(discord.ui.View):
             custom_id = interaction.data.get('custom_id', '')
             if custom_id.startswith("astra:poll:vote:"):
                 # Format: astra:poll:vote:OPTION_ID
-                option_id = int(custom_id.split(':')[-1])
-                
+                # Fetch poll to check status
+                poll = await PollService.get_poll(interaction.message.id)
+                if not poll:
+                    await interaction.response.send_message("This poll no longer exists in my records.", ephemeral=True)
+                    return False
+                    
+                if poll['is_closed']:
+                    await interaction.response.send_message("This poll is already closed!", ephemeral=True)
+                    return False
+
                 # Cast vote
                 result = await PollService.cast_vote(
                     poll_id=interaction.message.id,

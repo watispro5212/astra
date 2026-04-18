@@ -26,7 +26,7 @@ class TicketService:
             await db.execute(query, guild_id, *values)
 
     @staticmethod
-    async def create_ticket(guild: discord.Guild, user: discord.Member) -> Optional[discord.TextChannel]:
+    async def create_ticket(guild: discord.Guild, user: discord.Member, ticket_type: str = "Support") -> Optional[discord.TextChannel]:
         """Creates a private ticket channel with correct permission overwrites."""
         config = await TicketService.get_config(guild.id)
         if not config:
@@ -46,10 +46,10 @@ class TicketService:
 
         # Create channel
         channel = await guild.create_text_channel(
-            name=f"ticket-{user.name}",
+            name=f"{ticket_type.lower()}-{user.name}",
             category=category,
             overwrites=overwrites,
-            reason=f"Astra: Ticket opened by {user}"
+            reason=f"Astra: {ticket_type} ticket opened by {user}"
         )
 
         # Record in DB
@@ -61,9 +61,28 @@ class TicketService:
         return channel
 
     @staticmethod
-    async def close_ticket(channel_id: int):
-        """Marks a ticket as closed in the database."""
-        await db.execute("UPDATE tickets SET status = 'closed' WHERE channel_id = ?", channel_id)
+    async def generate_transcript(channel: discord.TextChannel) -> str:
+        """Generates a simple text transcript of the channel."""
+        transcript = f"Transcript for ticket: {channel.name}\n"
+        transcript += f"Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
+        transcript += "-" * 50 + "\n\n"
+        
+        # Limit to 500 messages to avoid huge files
+        messages = [msg async for msg in channel.history(limit=500, oldest_first=True)]
+        for msg in messages:
+            timestamp = msg.created_at.strftime('%H:%M:%S')
+            content = msg.content if msg.content else "[No Content/Embed/Attachment]"
+            transcript += f"[{timestamp}] {msg.author}: {content}\n"
+            
+        return transcript
+
+    @staticmethod
+    async def close_ticket(channel_id: int, reason: str = "No reason provided"):
+        """Marks a ticket as closed in the database with a reason."""
+        await db.execute(
+            "UPDATE tickets SET status = 'closed', reason = ? WHERE channel_id = ?",
+            reason, channel_id
+        )
 
     @staticmethod
     async def is_ticket(channel_id: int) -> bool:

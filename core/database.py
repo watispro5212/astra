@@ -24,11 +24,20 @@ class DatabaseManager:
             self.connection = None
             logger.info("Disconnected from database")
 
+    async def _safe_add_column(self, table: str, column: str, definition: str):
+        """Adds a column to an existing table if it doesn't already exist."""
+        try:
+            await self.connection.execute(f"ALTER TABLE {table} ADD COLUMN {column} {definition}")
+            await self.connection.commit()
+            logger.info(f"Migration: added column '{column}' to '{table}'")
+        except Exception:
+            pass  # Column already exists
+
     async def initialize_tables(self):
-        """Creates initial tables if they don't exist."""
+        """Creates all tables if they don't exist, and runs non-destructive migrations."""
         await self.connect()
-        
-        # Guild Config Table
+
+        # ── GUILD CONFIG ──────────────────────────────────────────────────────
         await self.connection.execute("""
             CREATE TABLE IF NOT EXISTS guilds (
                 guild_id INTEGER PRIMARY KEY,
@@ -39,8 +48,13 @@ class DatabaseManager:
                 mute_role_id INTEGER
             )
         """)
+        # v2 guild migrations
+        await self._safe_add_column("guilds", "xp_enabled", "BOOLEAN DEFAULT 1")
+        await self._safe_add_column("guilds", "xp_rate", "INTEGER DEFAULT 15")
+        await self._safe_add_column("guilds", "xp_cooldown", "INTEGER DEFAULT 60")
+        await self._safe_add_column("guilds", "xp_announce_channel_id", "INTEGER")
 
-        # Moderation Cases Table
+        # ── MODERATION CASES ──────────────────────────────────────────────────
         await self.connection.execute("""
             CREATE TABLE IF NOT EXISTS moderation_cases (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -52,11 +66,13 @@ class DatabaseManager:
                 reason TEXT,
                 timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
                 duration TEXT,
+                note TEXT,
                 UNIQUE(guild_id, case_number)
             )
         """)
+        await self._safe_add_column("moderation_cases", "note", "TEXT")
 
-        # Role Menus Table
+        # ── ROLE MENUS ────────────────────────────────────────────────────────
         await self.connection.execute("""
             CREATE TABLE IF NOT EXISTS role_menus (
                 message_id INTEGER PRIMARY KEY,
@@ -67,8 +83,6 @@ class DatabaseManager:
                 unique_roles BOOLEAN DEFAULT 0
             )
         """)
-
-        # Role Options Table
         await self.connection.execute("""
             CREATE TABLE IF NOT EXISTS role_options (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -80,7 +94,7 @@ class DatabaseManager:
             )
         """)
 
-        # Polls Table
+        # ── POLLS ─────────────────────────────────────────────────────────────
         await self.connection.execute("""
             CREATE TABLE IF NOT EXISTS polls (
                 message_id INTEGER PRIMARY KEY,
@@ -88,11 +102,12 @@ class DatabaseManager:
                 channel_id INTEGER,
                 question TEXT,
                 is_closed BOOLEAN DEFAULT 0,
+                is_anonymous BOOLEAN DEFAULT 0,
                 ends_at DATETIME
             )
         """)
+        await self._safe_add_column("polls", "is_anonymous", "BOOLEAN DEFAULT 0")
 
-        # Poll Options Table
         await self.connection.execute("""
             CREATE TABLE IF NOT EXISTS poll_options (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -102,8 +117,6 @@ class DatabaseManager:
                 FOREIGN KEY (message_id) REFERENCES polls (message_id) ON DELETE CASCADE
             )
         """)
-
-        # Poll Votes Table
         await self.connection.execute("""
             CREATE TABLE IF NOT EXISTS poll_votes (
                 message_id INTEGER,
@@ -115,7 +128,7 @@ class DatabaseManager:
             )
         """)
 
-        # Reminders Table
+        # ── REMINDERS ─────────────────────────────────────────────────────────
         await self.connection.execute("""
             CREATE TABLE IF NOT EXISTS reminders (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -125,11 +138,13 @@ class DatabaseManager:
                 message TEXT,
                 remind_at DATETIME,
                 is_recurring BOOLEAN DEFAULT 0,
-                interval_seconds INTEGER
+                interval_seconds INTEGER,
+                role_id INTEGER
             )
         """)
+        await self._safe_add_column("reminders", "role_id", "INTEGER")
 
-        # Starboard Messages Table
+        # ── STARBOARD ─────────────────────────────────────────────────────────
         await self.connection.execute("""
             CREATE TABLE IF NOT EXISTS starboard_messages (
                 original_id INTEGER PRIMARY KEY,
@@ -139,7 +154,7 @@ class DatabaseManager:
             )
         """)
 
-        # Ticket Configs Table
+        # ── TICKETS ───────────────────────────────────────────────────────────
         await self.connection.execute("""
             CREATE TABLE IF NOT EXISTS ticket_configs (
                 guild_id INTEGER PRIMARY KEY,
@@ -148,20 +163,103 @@ class DatabaseManager:
                 log_channel_id INTEGER
             )
         """)
-
-        # Tickets Table
         await self.connection.execute("""
             CREATE TABLE IF NOT EXISTS tickets (
                 channel_id INTEGER PRIMARY KEY,
                 guild_id INTEGER,
                 user_id INTEGER,
                 status TEXT DEFAULT 'open',
+                reason TEXT,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        await self._safe_add_column("tickets", "reason", "TEXT")
+
+        # ── XP / LEVELING (v2) ────────────────────────────────────────────────
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS user_xp (
+                user_id INTEGER,
+                guild_id INTEGER,
+                xp INTEGER DEFAULT 0,
+                level INTEGER DEFAULT 0,
+                last_message_at DATETIME,
+                PRIMARY KEY (user_id, guild_id)
+            )
+        """)
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS level_roles (
+                guild_id INTEGER,
+                level INTEGER,
+                role_id INTEGER,
+                PRIMARY KEY (guild_id, level)
+            )
+        """)
+
+        # ── WELCOME / FAREWELL (v2) ───────────────────────────────────────────
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS welcome_configs (
+                guild_id INTEGER PRIMARY KEY,
+                channel_id INTEGER,
+                message TEXT,
+                auto_role_id INTEGER,
+                farewell_channel_id INTEGER,
+                farewell_message TEXT
+            )
+        """)
+
+        # ── AUTO-MODERATION (v2) ──────────────────────────────────────────────
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS automod_configs (
+                guild_id INTEGER PRIMARY KEY,
+                spam_enabled BOOLEAN DEFAULT 0,
+                spam_threshold INTEGER DEFAULT 5,
+                spam_window INTEGER DEFAULT 5,
+                link_filter BOOLEAN DEFAULT 0,
+                invite_filter BOOLEAN DEFAULT 0,
+                caps_filter BOOLEAN DEFAULT 0,
+                caps_percent INTEGER DEFAULT 70,
+                bad_words TEXT DEFAULT ''
+            )
+        """)
+
+        # ── GIVEAWAYS (v2) ────────────────────────────────────────────────────
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS giveaways (
+                message_id INTEGER PRIMARY KEY,
+                guild_id INTEGER,
+                channel_id INTEGER,
+                host_id INTEGER,
+                prize TEXT,
+                winner_count INTEGER DEFAULT 1,
+                ends_at DATETIME,
+                is_ended BOOLEAN DEFAULT 0
+            )
+        """)
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS giveaway_entries (
+                message_id INTEGER,
+                user_id INTEGER,
+                PRIMARY KEY (message_id, user_id)
+            )
+        """)
+
+        # ── TEMP VOICE CHANNELS (v2) ──────────────────────────────────────────
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS temp_voice_configs (
+                guild_id INTEGER PRIMARY KEY,
+                hub_channel_id INTEGER
+            )
+        """)
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS temp_voice_channels (
+                channel_id INTEGER PRIMARY KEY,
+                guild_id INTEGER,
+                owner_id INTEGER
             )
         """)
 
         await self.connection.commit()
-        logger.info("Database tables initialized")
+        logger.info("Database tables initialized (v2)")
 
     async def execute(self, query: str, *args):
         """Executes a non-returning query."""

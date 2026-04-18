@@ -1,8 +1,5 @@
-import discord
-from discord.ext import commands
-from discord import app_commands
-from core.logger import logger
-from core.config import config
+from ui.embeds import ErrorEmbed
+import traceback
 
 class ErrorHandler(commands.Cog):
     """Global error handling for Astra bot."""
@@ -17,27 +14,46 @@ class ErrorHandler(commands.Cog):
         error: app_commands.AppCommandError
     ):
         """Global error handler for slash commands."""
-        embed = discord.Embed(
-            title="❌ Command Error",
-            color=discord.Color.red(),
-            description="An error occurred while executing the command."
-        )
+        # Extract the original error if it's a CommandInvokeError
+        if isinstance(error, app_commands.CommandInvokeError):
+            error = error.original
 
         if isinstance(error, app_commands.CommandOnCooldown):
-            embed.description = f"This command is on cooldown. Please try again in {error.retry_after:.2f}s."
+            embed = ErrorEmbed(f"This command is on cooldown. Please try again in **{error.retry_after:.1f}s**.")
+            embed.set_footer(text="Error Code: COOLDOWN")
         elif isinstance(error, app_commands.MissingPermissions):
-            embed.description = "You don't have the required permissions to run this command."
+            perms = ", ".join([f"`{p}`" for p in error.missing_permissions])
+            embed = ErrorEmbed(f"You don't have the required permissions to run this command: {perms}")
+            embed.set_footer(text="Error Code: FORBIDDEN")
         elif isinstance(error, app_commands.BotMissingPermissions):
-            embed.description = "I don't have the required permissions to run this command."
+            perms = ", ".join([f"`{p}`" for p in error.missing_permissions])
+            embed = ErrorEmbed(f"I don't have the required permissions to run this: {perms}")
+            embed.set_footer(text="Error Code: BOT_FORBIDDEN")
+        elif isinstance(error, app_commands.NoPrivateMessage):
+            embed = ErrorEmbed("This command cannot be used in Direct Messages.")
+            embed.set_footer(text="Error Code: NO_DM")
+        elif isinstance(error, app_commands.CheckFailure):
+            embed = ErrorEmbed("You do not meet the requirements to run this command.")
+            embed.set_footer(text="Error Code: CHECK_FAILED")
         else:
-            logger.error(f"Unexpected error in command '{interaction.command.name}': {error}")
-            embed.description = "An unexpected error occurred. The developers have been notified."
+            logger.error(f"Unexpected error in command '{interaction.command.name if interaction.command else 'Unknown'}': {error}")
+            traceback.print_exception(type(error), error, error.__traceback__)
+            embed = ErrorEmbed("An unexpected error occurred. The developers have been notified.")
+            embed.set_footer(text="Error Code: INTERNAL_SERVER_ERROR")
 
         # Try to respond to the interaction
-        if interaction.response.is_done():
-            await interaction.followup.send(embed=embed, ephemeral=True)
-        else:
-            await interaction.response.send_message(embed=embed, ephemeral=True)
+        try:
+            if interaction.response.is_done():
+                await interaction.followup.send(embed=embed, ephemeral=True)
+            else:
+                await interaction.on_error(interaction, error) # Let discord.py's internal handle if possible, or send manual
+                await interaction.response.send_message(embed=embed, ephemeral=True)
+        except Exception:
+            # If all fails, try sending a followup
+            try:
+                await interaction.followup.send(embed=embed, ephemeral=True)
+            except Exception:
+                pass
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(ErrorHandler(bot))

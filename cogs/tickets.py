@@ -19,24 +19,29 @@ class Tickets(commands.Cog):
     @app_commands.command(name="ticket_setup", description="Configure ticket settings.")
     @app_commands.describe(
         category="The category where tickets will be created",
-        staff_role="The role that can access tickets"
+        staff_role="The role that can access tickets",
+        logs_channel="Channel for ticket transcripts"
     )
     @app_commands.checks.has_permissions(administrator=True)
     async def setup_tickets(
         self, 
         interaction: discord.Interaction, 
         category: discord.CategoryChannel, 
-        staff_role: discord.Role
+        staff_role: discord.Role,
+        logs_channel: Optional[discord.TextChannel] = None
     ):
-        """Sets the ticket category and staff role."""
+        """Sets the ticket category, staff role, and log channel."""
         await TicketService.update_config(
             interaction.guild_id, 
             category_id=category.id, 
-            staff_role_id=staff_role.id
+            staff_role_id=staff_role.id,
+            log_channel_id=logs_channel.id if logs_channel else None
         )
-        await interaction.response.send_message(
-            embed=SuccessEmbed(f"Ticket system configured!\nCategory: {category}\nStaff Role: {staff_role.mention}")
-        )
+        msg = f"Ticket system configured!\nCategory: {category}\nStaff Role: {staff_role.mention}"
+        if logs_channel:
+            msg += f"\nLogs: {logs_channel.mention}"
+            
+        await interaction.response.send_message(embed=SuccessEmbed(msg))
 
     @app_commands.command(name="ticket_panel", description="Send the ticket opening panel.")
     @app_commands.describe(channel="The channel to send the panel in")

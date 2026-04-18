@@ -34,6 +34,24 @@ class SuccessEmbed(AstraEmbed):
         kwargs["color"] = discord.Color.green()
         super().__init__(description=f"✅ {description}", **kwargs)
 
+class InfoEmbed(AstraEmbed):
+    """Embed for informational messages."""
+    def __init__(self, description: str, **kwargs):
+        kwargs["color"] = discord.Color.blue()
+        super().__init__(description=f"ℹ️ {description}", **kwargs)
+
+class WarnEmbed(AstraEmbed):
+    """Embed for warning messages."""
+    def __init__(self, title: str, description: str, **kwargs):
+        kwargs["color"] = discord.Color.gold()
+        super().__init__(title=f"⚠️ {title}", description=description, **kwargs)
+
+class DangerEmbed(AstraEmbed):
+    """Embed for critical errors or dangerous actions."""
+    def __init__(self, title: str, description: str, **kwargs):
+        kwargs["color"] = discord.Color.red()
+        super().__init__(title=f"🚨 {title}", description=description, **kwargs)
+
 class ErrorEmbed(AstraEmbed):
     """Embed for failed command execution."""
     def __init__(self, description: str, **kwargs):
