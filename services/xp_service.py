@@ -93,8 +93,20 @@ class XPService:
             
         return False
 
-    async def get_rank(self, user_id: int, guild_id: int):
+    async def get_rank(self, user_id: int, guild_id: int = None):
         """Returns (xp, level, rank_position)"""
+        if guild_id is None:
+            # Aggregate stats across all guilds for Global Rank
+            data = await db.fetch_one(
+                "SELECT SUM(xp) as total_xp, SUM(level) as total_level FROM user_xp WHERE user_id = ?",
+                user_id
+            )
+            if not data or data['total_xp'] is None:
+                return 0, 0, 0
+                
+            # For global rank, we don't have a specific position easily, so we return 0 for pos
+            return data['total_xp'], data['total_level'], 0
+
         data = await db.fetch_one(
             "SELECT xp, level FROM user_xp WHERE user_id = ? AND guild_id = ?",
             user_id, guild_id

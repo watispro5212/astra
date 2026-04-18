@@ -87,12 +87,26 @@ class AstraBot(commands.Bot):
             return
 
         for rem in due_reminders:
+            # Try to get the channel
             channel = self.get_channel(rem['channel_id'])
-            if channel:
+            
+            # If not in cache, try to fetch the user for DM delivery
+            if not channel:
+                try:
+                    user = self.get_user(rem['user_id']) or await self.fetch_user(rem['user_id'])
+                    if user:
+                        await user.send(f"🔔 **Astra Reminder:** {rem['message']}")
+                        logger.info(f"Delivered reminder {rem['id']} to user {rem['user_id']} via DM")
+                    else:
+                        logger.warning(f"Could not find user {rem['user_id']} for reminder {rem['id']}")
+                except Exception as e:
+                    logger.error(f"Failed to deliver reminder {rem['id']} via DM: {e}")
+            else:
                 try:
                     await channel.send(f"🔔 **Reminder for <@{rem['user_id']}>:** {rem['message']}")
+                    logger.info(f"Delivered reminder {rem['id']} to channel {rem['channel_id']}")
                 except Exception as e:
-                    logger.error(f"Failed to send reminder {rem['id']}: {e}")
+                    logger.error(f"Failed to send reminder {rem['id']} to channel: {e}")
             
             # Delete reminder after triggering
             await ReminderService.delete_reminder(rem['id'])

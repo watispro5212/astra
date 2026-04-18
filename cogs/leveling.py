@@ -68,7 +68,9 @@ class Leveling(commands.Cog):
 
     @app_commands.command(name="rank", description="Check your or another member's rank.")
     @app_commands.describe(member="The member to check rank for.")
-    async def rank(self, interaction: discord.Interaction, member: Optional[discord.Member] = None):
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    async def rank(self, interaction: discord.Interaction, member: Optional[discord.User] = None):
         await interaction.response.defer()
         target = member or interaction.user
         
@@ -92,7 +94,8 @@ class Leveling(commands.Cog):
         filled = int((percentage / 100) * segments)
         bar = "▰" * filled + "▱" * (segments - filled)
         
-        embed = AstraEmbed(title=f"Rank: {target.display_name}", patron=patron_data)
+        title = f"Rank: {target.display_name}" if interaction.guild else f"Global Rank: {target.display_name}"
+        embed = AstraEmbed(title=title, patron=patron_data)
         embed.set_thumbnail(url=target.display_avatar.url)
         
         embed.add_field(name="Level", value=f"**{level}**", inline=True)

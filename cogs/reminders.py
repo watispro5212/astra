@@ -16,6 +16,8 @@ class Reminders(commands.Cog):
         time="How long from now (e.g. 10m, 1h, 2d)",
         message="What you want to be reminded about"
     )
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def set_reminder(self, interaction: discord.Interaction, time: str, message: str):
         """Sets a personal reminder."""
         seconds = ReminderService.parse_duration(time)
@@ -45,6 +47,8 @@ class Reminders(commands.Cog):
         await interaction.response.send_message(embed=embed)
 
     @app_commands.command(name="reminders_list", description="List your active reminders.")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def list_reminders(self, interaction: discord.Interaction):
         """Lists all active reminders for the user."""
         reminders = await ReminderService.get_user_reminders(interaction.user.id)
@@ -65,6 +69,8 @@ class Reminders(commands.Cog):
 
     @app_commands.command(name="remind_delete", description="Delete an active reminder.")
     @app_commands.describe(reminder_id="The ID of the reminder to delete.")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def delete_reminder(self, interaction: discord.Interaction, reminder_id: int):
         # Fetch to verify ownership
         reminders = await ReminderService.get_user_reminders(interaction.user.id)
