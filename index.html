@@ -355,21 +355,105 @@
 
   <script src="assets/js/main.js"></script>
 
+  <!-- Particles.js Library -->
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  
   <div class="global-notification" id="global-notify">
     <span class="global-notification__icon">✨</span>
-    <span class="global-notification__text">Astra v4.0.0 is officially live! Enjoy the new features.</span>
+    <span class="global-notification__text">Astra v4.1 is officially live! Enjoy the new features.</span>
     <button class="global-notification__close" onclick="document.getElementById('global-notify').style.display='none'">&times;</button>
   </div>
+  
   <button class="back-to-top" id="backToTop" aria-label="Back to top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
     &uarr;
   </button>
+
+  <!-- Vanguard Welcome Overlay (v4.1) -->
+  <div id="vanguard-welcome" class="welcome-overlay">
+    <div class="welcome-content">
+      <img src="assets/images/astra-logo.png" alt="Astra V4" width="80" height="80">
+      <h2>Welcome to Astra <span class="text-gradient">v4.1</span></h2>
+      <p>The global overhaul is complete. Featuring new Bank economy, reputation karma, and a live web API.</p>
+      <button class="btn btn--primary btn--large" id="btn-enter-site">Enter Site</button>
+    </div>
+  </div>
+
   <script>
     window.addEventListener('scroll', () => {
       const btn = document.getElementById('backToTop');
       if (window.scrollY > 300) btn.classList.add('visible');
       else btn.classList.remove('visible');
     });
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      // 1. Welcome Screen Logic (Only show once via localStorage)
+      const welcomeOverlay = document.getElementById('vanguard-welcome');
+      const enterBtn = document.getElementById('btn-enter-site');
+      if (!localStorage.getItem('astra_v41_welcome')) {
+        welcomeOverlay.style.display = 'flex';
+        // Minor delay to let flex establish before animating opacity if we wanted
+        setTimeout(() => welcomeOverlay.classList.add('show'), 50);
+      } else {
+        welcomeOverlay.style.display = 'none';
+      }
+
+      enterBtn.addEventListener('click', () => {
+        welcomeOverlay.classList.remove('show');
+        localStorage.setItem('astra_v41_welcome', 'true');
+        setTimeout(() => welcomeOverlay.style.display = 'none', 500); // Wait for transition
+      });
+
+      // 2. Load Particles inside Hero Header specifically
+      particlesJS("particles", {
+        "particles": {
+          "number": {"value": 60, "density": {"enable": true, "value_area": 800}},
+          "color": {"value": "#3b82f6"},
+          "shape": {"type": "circle"},
+          "opacity": {"value": 0.5, "random": false, "anim": {"enable": true, "speed": 1, "opacity_min": 0.1, "sync": false}},
+          "size": {"value": 3, "random": true, "anim": {"enable": false}},
+          "line_linked": {"enable": true, "distance": 150, "color": "#8b5cf6", "opacity": 0.3, "width": 1},
+          "move": {"enable": true, "speed": 1.5, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false}
+        },
+        "interactivity": {
+          "detect_on": "canvas",
+          "events": {
+            "onhover": {"enable": true, "mode": "grab"},
+            "onclick": {"enable": true, "mode": "push"},
+            "resize": true
+          },
+          "modes": {
+            "grab": {"distance": 140, "line_linked": {"opacity": 0.8}},
+            "push": {"particles_nb": 3}
+          }
+        },
+        "retina_detect": true
+      });
+
+      // 3. Dynamic Homepage Stats Fetching
+      const API_URL = 'http://localhost:8080/api/status';
+      try {
+        const res = await fetch(API_URL);
+        const data = await res.json();
+        
+        if (data.status === "online") {
+          // Find the counters
+          const statValues = document.querySelectorAll('.hero__stat-value');
+          if (statValues.length >= 2) {
+            statValues[0].setAttribute('data-target', data.guilds); // Guilds
+            statValues[0].innerHTML = data.guilds;
+            statValues[1].setAttribute('data-target', data.users); // Users
+            statValues[1].innerHTML = data.users.toLocaleString();
+            
+            // Adjust labels
+            const statLabels = document.querySelectorAll('.hero__stat-label');
+            statLabels[0].innerHTML = "Servers";
+            statLabels[1].innerHTML = "Global Users";
+          }
+        }
+      } catch (err) {
+        console.warn("Could not fetch Astra live stats for homepage.", err);
+      }
+    });
   </script>
 </body>
-
 </html>

@@ -6,8 +6,8 @@ Currently, only the latest major release of Astra is actively supported with sec
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 4.0.0   | :white_check_mark: |
-| < 4.0.0 | :x:                |
+| 4.1.0   | :white_check_mark: |
+| < 4.1.0 | :x:                |
 
 ## Reporting a Vulnerability
 
