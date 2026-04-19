@@ -3,9 +3,9 @@
    ═══════════════════════════════════════════════════════════════════════════ */
 
 // ── CONFIGURATION ──────────────────────────────────────────────────────────
-// Change this to your deployed bot's public URL when hosting remotely.
+// This should point to your BOT's API (Railway), not the dashboard host (Vercel).
 // For local development, use http://localhost:8080
-const API_BASE = 'http://localhost:8080';
+const API_BASE = 'https://astra-production-e103.up.railway.app';
 
 const REFRESH_INTERVAL = 30; // seconds
 
