@@ -35,12 +35,6 @@ class Developer(commands.Cog):
         """Developer group sync command."""
         await self._perform_sync(interaction, scope)
 
-    @app_commands.command(name="sync", description="🚀 Execute global command synchronization.")
-    @app_commands.describe(scope="Whether to sync to 'global' or 'guild'.")
-    async def sync_standalone(self, interaction: discord.Interaction, scope: str = "global"):
-        """Top-level standalone sync command."""
-        await self._perform_sync(interaction, scope)
-
     async def _perform_sync(self, interaction: discord.Interaction, scope: str):
         """Unified internal synchronization logic."""
         if interaction.user.id != config.owner_id:
