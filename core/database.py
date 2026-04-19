@@ -244,10 +244,12 @@ class DatabaseManager:
                 channel_id INTEGER,
                 message TEXT,
                 auto_role_id INTEGER,
+                auto_bot_role_id INTEGER,
                 farewell_channel_id INTEGER,
                 farewell_message TEXT
             )
         """)
+        await self._safe_add_column("welcome_configs", "auto_bot_role_id", "INTEGER")
 
         # ── AUTO-MODERATION (v2) ──────────────────────────────────────────────
         await self.connection.execute("""
