@@ -20,10 +20,13 @@ function saveToken(t) {
   token = t;
   localStorage.setItem('astra_token', t);
   try {
-    const [data] = t.split('.');
-    const pad = data + '='.repeat((4 - data.length % 4) % 4);
+    const parts = t.split('.');
+    if (parts.length < 2) throw new Error('Invalid token format');
+    const payload = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+    const pad = payload + '='.repeat((4 - payload.length % 4) % 4);
     currentUser = JSON.parse(atob(pad));
-  } catch {
+  } catch (err) {
+    console.error('Token parse error:', err);
     currentUser = null;
   }
 }
@@ -32,9 +35,12 @@ function loadStoredToken() {
   const stored = localStorage.getItem('astra_token');
   if (!stored) return false;
   try {
-    const [data] = stored.split('.');
-    const pad = data + '='.repeat((4 - data.length % 4) % 4);
+    const parts = stored.split('.');
+    if (parts.length < 2) return false;
+    const payloadBase64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+    const pad = payloadBase64 + '='.repeat((4 - payloadBase64.length % 4) % 4);
     const payload = JSON.parse(atob(pad));
+    
     if (payload.exp && payload.exp < Math.floor(Date.now() / 1000)) {
       localStorage.removeItem('astra_token');
       return false;
@@ -42,7 +48,8 @@ function loadStoredToken() {
     token = stored;
     currentUser = payload;
     return true;
-  } catch {
+  } catch (err) {
+    console.error('Stored token error:', err);
     return false;
   }
 }
@@ -372,9 +379,9 @@ async function loadModeration() {
     if (!data?.cases?.length) { el.innerHTML = '<tr><td colspan="5" class="empty-state">No recent cases</td></tr>'; return; }
     el.innerHTML = data.cases.slice(0, 8).map(c => `
       <tr class="fade-in">
-        <td>#${c.case_number || '—'}</td>
-        <td><span class="action-badge action-badge--${c.type}">${c.type}</span></td>
-        <td>${c.target_id}</td>
+        <td>#${escapeHtml(c.case_number || '—')}</td>
+        <td><span class="action-badge action-badge--${escapeHtml(c.type)}">${escapeHtml(c.type)}</span></td>
+        <td>${escapeHtml(c.target_id)}</td>
         <td title="${escapeHtml(c.reason || '')}">${escapeHtml((c.reason || '').substring(0, 30))}${(c.reason || '').length > 30 ? '…' : ''}</td>
         <td>${timeAgo(c.timestamp)}</td>
       </tr>`).join('');
@@ -389,7 +396,8 @@ async function loadEconomy() {
     if (!data?.leaderboard?.length) { el.innerHTML = '<div class="empty-state"><div class="empty-state__icon">💰</div>No economy data</div>'; return; }
     el.innerHTML = data.leaderboard.map((e, i) => {
       const cls = i === 0 ? 'leader-row__rank--gold' : i === 1 ? 'leader-row__rank--silver' : i === 2 ? 'leader-row__rank--bronze' : '';
-      return `<div class="leader-row fade-in"><div class="leader-row__rank ${cls}">${i + 1}</div><div class="leader-row__info"><span class="leader-row__name">User …${e.user_id.slice(-4)}</span></div><span class="leader-row__coins">🪙 ${formatNum(e.balance)}</span></div>`;
+      const displayId = String(e.user_id).length > 8 ? `…${String(e.user_id).slice(-6)}` : e.user_id;
+      return `<div class="leader-row fade-in"><div class="leader-row__rank ${cls}">${i + 1}</div><div class="leader-row__info"><span class="leader-row__name">User ${escapeHtml(displayId)}</span></div><span class="leader-row__coins">🪙 ${formatNum(e.balance)}</span></div>`;
     }).join('');
   } catch { el.innerHTML = '<div class="empty-state"><div class="empty-state__icon">⚠️</div>Could not load economy</div>'; }
 }

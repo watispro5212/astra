@@ -108,6 +108,7 @@ class WebStatus(commands.Cog):
         self.app.router.add_post("/api/config/{gid}/suggestions",  self.handle_config_suggestions)
         self.app.router.add_post("/api/config/{gid}/leveling",     self.handle_config_leveling)
         self.app.router.add_post("/api/config/{gid}/starboard",    self.handle_config_starboard)
+        self.app.router.add_post("/api/config/{gid}/economy",      self.handle_config_economy)
 
         # ── CORS ─────────────────────────────────────────────────────────────
         async def on_prepare(request, response):
