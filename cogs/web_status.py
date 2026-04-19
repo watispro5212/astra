@@ -56,9 +56,10 @@ class WebStatus(commands.Cog):
         self.runner = web.AppRunner(self.app)
         await self.runner.setup()
         
-        # Determine port from env or default to 8080
+        # Determine port from env (Railway uses 'PORT', local uses 'STATUS_PORT' or 8080)
         import os
-        port = int(os.getenv("STATUS_PORT", 8080))
+        port_env = os.getenv("PORT") or os.getenv("STATUS_PORT", "8080")
+        port = int(port_env)
         
         try:
             self.site = web.TCPSite(self.runner, '0.0.0.0', port)
