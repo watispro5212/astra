@@ -26,7 +26,7 @@
             height="36"
           />
           Astra
-          <span class="navbar__version">v4.0.0</span>
+          <span class="navbar__version">v4.1.0</span>
         </a>
         <button
           type="button"
@@ -240,53 +240,58 @@
     <script src="assets/js/main.js"></script>
     <script>
       async function updateStatus() {
-        // For local testing use 'https://astra-production-e103.up.railway.app/', for prod update this to your domain hosting the bot
-        const API_URL = "https://astra-production-e103.up.railway.app/";
+        // Update this URL to your bot's live API endpoint
+        const API_URL = 'http://localhost:8080/api/status';
 
         try {
           const response = await fetch(API_URL);
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
           const data = await response.json();
 
-          if (data.status === "online") {
-            document.getElementById("overall-status").innerHTML =
-              '<div class="status-dot status-dot--online"></div><span>All Systems Operational (Ping: ' +
-              data.ping +
-              "ms)</span>";
-            document.getElementById("status-time").textContent =
-              "Last updated: " +
-              new Date().toLocaleTimeString() +
-              " | Servers: " +
-              data.guilds;
+          if (data.status === 'online') {
+            document.getElementById('overall-status').innerHTML =
+              '<div class="status-dot status-dot--online"></div><span>All Systems Operational (Ping: ' + data.ping + 'ms)</span>';
+            document.getElementById('status-time').textContent =
+              'Last updated: ' + new Date().toLocaleTimeString() + ' | Servers: ' + data.guilds + ' | Users: ' + (data.users || '—');
 
-            const container = document.getElementById(
-              "dynamic-services-container",
-            );
+            const container = document.getElementById('dynamic-services-container');
             if (container && data.services) {
-              container.innerHTML = "";
+              container.innerHTML = '';
               for (const [service, status] of Object.entries(data.services)) {
-                let dotClass =
-                  status === "online"
-                    ? "status-dot--online"
-                    : "status-dot--offline";
+                const dotClass = status === 'online' ? 'status-dot--online' : 'status-dot--offline';
+                const icon = status === 'online' ? '✅' : '⚠️';
                 container.innerHTML += `
-                <div class="status-row">
-                  <div><div class="status-row__name">${service}</div></div>
-                  <div class="status-indicator"><div class="status-dot ${dotClass}"></div><span style="text-transform: capitalize;">${status}</span></div>
-                </div>
-              `;
+                  <div class="status-row">
+                    <div><div class="status-row__name">${icon} ${service}</div></div>
+                    <div class="status-indicator"><div class="status-dot ${dotClass}"></div><span style="text-transform:capitalize">${status}</span></div>
+                  </div>`;
               }
             }
           }
         } catch (err) {
-          console.warn("Status API unreachable, using fallback UI", err);
-          document.getElementById("status-time").textContent =
-            "Last updated: " +
-            new Date().toLocaleTimeString() +
-            " (Static Fallback)";
+          console.warn('Status API unreachable:', err);
+          // Show offline fallback instead of infinite skeleton
+          document.getElementById('overall-status').innerHTML =
+            '<div class="status-dot status-dot--offline"></div><span>API Unreachable — Bot may be offline</span>';
+          document.getElementById('status-time').textContent =
+            'Last checked: ' + new Date().toLocaleTimeString() + ' (could not connect)';
+
+          const container = document.getElementById('dynamic-services-container');
+          if (container) {
+            const fallbackServices = ['Gateway API','Database','Economy','Moderation','Leveling/XP','Reputation','Ticket System','Anti-Raid'];
+            container.innerHTML = fallbackServices.map(name =>
+              `<div class="status-row">
+                <div><div class="status-row__name">⚠️ ${name}</div></div>
+                <div class="status-indicator"><div class="status-dot status-dot--offline"></div><span>Unknown</span></div>
+              </div>`
+            ).join('');
+          }
         }
       }
 
       updateStatus();
+      // Auto-refresh every 30 seconds
+      setInterval(updateStatus, 30000);
 
       const bar = document.getElementById("uptime-bar");
       if (bar) {
@@ -315,7 +320,7 @@
     <div class="global-notification" id="global-notify">
       <span class="global-notification__icon">✨</span>
       <span class="global-notification__text"
-        >Astra v4.0.0 is officially live! Enjoy the new features.</span
+        >Astra v4.1.0 is officially live! Enjoy the new features.</span
       >
       <button
         class="global-notification__close"
