@@ -135,5 +135,22 @@
   </footer>
 
   <script src="assets/js/main.js"></script>
+
+  <div class="global-notification" id="global-notify">
+    <span class="global-notification__icon">✨</span>
+    <span class="global-notification__text">Astra v4.0.0 is officially live! Enjoy the new features.</span>
+    <button class="global-notification__close" onclick="document.getElementById('global-notify').style.display='none'">&times;</button>
+  </div>
+  <button class="back-to-top" id="backToTop" aria-label="Back to top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+    &uarr;
+  </button>
+  <script>
+    window.addEventListener('scroll', () => {
+      const btn = document.getElementById('backToTop');
+      if (window.scrollY > 300) btn.classList.add('visible');
+      else btn.classList.remove('visible');
+    });
+  </script>
 </body>
+
 </html>

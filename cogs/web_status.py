@@ -27,18 +27,27 @@ class WebStatus(commands.Cog):
 
     async def handle_status(self, request):
         uptime = datetime.utcnow() - self.start_time
+        # dynamically check modules based on loaded cogs
+        cogs = self.bot.cogs
+        services = {
+            "Gateway API": "online" if not self.bot.is_closed() else "offline",
+            "Database": "online",
+            "Economy": "online" if "Economy" in cogs else "offline",
+            "Moderation": "online" if "Moderation" in cogs else "offline",
+            "Leveling/XP": "online" if "Leveling" in cogs else "offline",
+            "Reputation": "online" if "Reputation" in cogs else "offline",
+            "Ticket System": "online" if "Tickets" in cogs else "offline",
+            "Anti-Raid": "online" if "AntiRaid" in cogs else "offline",
+            "Background Tasks": "online"
+        }
+        
         data = {
             "status": "online",
             "ping": round(self.bot.latency * 1000),
             "guilds": len(self.bot.guilds),
-            "users": sum(g.member_count for g in self.bot.guilds),
+            "users": sum(g.member_count for g in self.bot.guilds if g.member_count),
             "uptime_seconds": uptime.total_seconds(),
-            "services": {
-                "database": "online",
-                "slash_commands": "online",
-                "moderation": "online",
-                "economy": "online"
-            }
+            "services": services
         }
         return web.json_response(data)
 
