@@ -1,227 +1,423 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Astra — Admin Dashboard</title>
-    <meta
-      name="description"
-      content="Real-time admin dashboard for the Astra Discord bot. Monitor servers, modules, moderation, and economy."
-    />
-    <link rel="icon" type="image/png" href="../assets/images/astra-logo.png" />
-    <link rel="stylesheet" href="assets/css/dashboard.css" />
-  </head>
-  <body>
-    <div class="bg-grid" aria-hidden="true"></div>
-    <div class="bg-glow" aria-hidden="true"></div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Astra — Dashboard</title>
+  <meta name="description" content="Manage your Discord server settings with Astra's web dashboard." />
+  <link rel="icon" type="image/png" href="../assets/images/astra-logo.png" />
+  <link rel="stylesheet" href="assets/css/dashboard.css" />
+</head>
+<body>
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-glow" aria-hidden="true"></div>
 
-    <div class="dashboard">
-      <!-- ═══ TOP BAR ═══════════════════════════════════════════════════════ -->
-      <header class="topbar">
-        <a href="../index.html" class="topbar__brand">
-          <img
-            src="../assets/images/astra-logo.png"
-            alt="Astra"
-            class="topbar__logo"
-          />
-          <div>
-            <span class="topbar__title">Astra Dashboard</span>
-            <span class="topbar__version">v4.1.0</span>
-          </div>
-        </a>
-        <div class="topbar__right">
-          <div class="topbar__status">
-            <div
-              class="topbar__dot topbar__dot--connecting"
-              id="conn-dot"
-            ></div>
-            <span id="conn-label">Connecting...</span>
-          </div>
-          <div class="topbar__refresh">
-            🔄 <span id="refresh-timer" class="topbar__refresh-timer">30s</span>
-          </div>
-        </div>
-      </header>
+<!-- ═══ VIEW: LOGIN ══════════════════════════════════════════════════════════ -->
+<div id="view-login" class="view">
+  <div class="login-wrap">
+    <div class="login-card glass-card">
+      <img src="../assets/images/astra-logo.png" alt="Astra" class="login-logo" />
+      <h1 class="login-title">Astra Dashboard</h1>
+      <p class="login-sub">Sign in with Discord to manage your server settings.</p>
+      <a id="login-btn" href="#" class="btn-discord">
+        <svg width="20" height="20" viewBox="0 0 71 55" fill="currentColor" aria-hidden="true"><path d="M60.1 4.9A58.5 58.5 0 0 0 45.5.7a40.5 40.5 0 0 0-1.8 3.7 54.2 54.2 0 0 0-16.3 0A40 40 0 0 0 25.6.7 58.4 58.4 0 0 0 11 4.9C1.6 19 -1 32.7.3 46.2a59 59 0 0 0 17.9 9 44 44 0 0 0 3.8-6.2 38.4 38.4 0 0 1-6-2.9l1.5-1.2a42 42 0 0 0 36 0l1.5 1.2a38.4 38.4 0 0 1-6 2.9 44 44 0 0 0 3.8 6.2 58.8 58.8 0 0 0 17.9-9C72 30.6 68.2 17 60.1 4.9ZM23.8 38c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.3 6.4 7.2c0 4-2.8 7.2-6.4 7.2Zm23.4 0c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2 6.5 3.3 6.4 7.2c0 4-2.8 7.2-6.4 7.2Z"/></svg>
+        Login with Discord
+      </a>
+      <p class="login-note">Only servers where you have <strong>Manage Server</strong> permission will appear.</p>
+    </div>
+  </div>
+</div>
 
-      <!-- ═══ STAT CARDS ════════════════════════════════════════════════════ -->
-      <section>
-        <div class="section-header">
-          <h2 class="section-header__title">📊 System Overview</h2>
+<!-- ═══ VIEW: GUILD PICKER ═══════════════════════════════════════════════════ -->
+<div id="view-guilds" class="view hidden">
+  <header class="topbar">
+    <div class="topbar__brand">
+      <img src="../assets/images/astra-logo.png" alt="Astra" class="topbar__logo" />
+      <div><span class="topbar__title">Astra Dashboard</span><span class="topbar__version">v4.1.0</span></div>
+    </div>
+    <div class="topbar__right">
+      <div class="topbar__user" id="topbar-user"></div>
+      <button type="button" class="btn-logout" id="logout-btn">Logout</button>
+    </div>
+  </header>
+  <div class="guilds-wrap">
+    <div class="guilds-header">
+      <h2 class="guilds-title">Select a Server</h2>
+      <p class="guilds-sub">Choose the server you want to configure.</p>
+    </div>
+    <div class="guilds-grid" id="guilds-grid"></div>
+  </div>
+</div>
+
+<!-- ═══ VIEW: MAIN DASHBOARD ════════════════════════════════════════════════ -->
+<div id="view-dashboard" class="view hidden">
+
+  <!-- Topbar -->
+  <header class="topbar topbar--dash">
+    <div class="topbar__brand">
+      <img src="../assets/images/astra-logo.png" alt="Astra" class="topbar__logo" />
+      <div><span class="topbar__title">Astra Dashboard</span><span class="topbar__version">v4.1.0</span></div>
+    </div>
+    <div class="topbar__center">
+      <button type="button" class="guild-switcher" id="guild-switcher">
+        <img id="gs-icon" src="" alt="" class="gs-icon hidden" />
+        <span id="gs-name">Loading…</span>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M6 8L1 3h10z"/></svg>
+      </button>
+    </div>
+    <div class="topbar__right">
+      <div class="topbar__status">
+        <div class="topbar__dot topbar__dot--connecting" id="conn-dot"></div>
+        <span id="conn-label">Connecting…</span>
+      </div>
+      <div class="topbar__refresh">🔄 <span id="refresh-timer" class="topbar__refresh-timer">30s</span></div>
+      <div class="topbar__user" id="topbar-user-dash"></div>
+      <button type="button" class="btn-logout" id="logout-btn-dash">Logout</button>
+    </div>
+  </header>
+
+  <div class="dash-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <nav class="sidebar__nav">
+        <a href="#" class="sidebar__link active" data-page="overview">📊 Overview</a>
+        <div class="sidebar__divider">Configuration</div>
+        <a href="#" class="sidebar__link" data-page="general">⚙️ General</a>
+        <a href="#" class="sidebar__link" data-page="welcome">👋 Welcome</a>
+        <a href="#" class="sidebar__link" data-page="automod">🛡️ AutoMod</a>
+        <a href="#" class="sidebar__link" data-page="tickets">🎫 Tickets</a>
+        <a href="#" class="sidebar__link" data-page="antiraid">🚨 Anti-Raid</a>
+        <a href="#" class="sidebar__link" data-page="birthdays">🎂 Birthdays</a>
+        <a href="#" class="sidebar__link" data-page="suggestions">💡 Suggestions</a>
+        <a href="#" class="sidebar__link" data-page="economy">💰 Economy</a>
+        <a href="#" class="sidebar__link" data-page="leveling">🏆 Leveling</a>
+        <a href="#" class="sidebar__link" data-page="starboard">⭐ Starboard</a>
+      </nav>
+    </aside>
+
+    <!-- Main content -->
+    <main class="dash-main">
+
+      <!-- ── Overview ──────────────────────────────────────────────────────── -->
+      <div id="page-overview" class="dash-page">
+        <div class="page-header">
+          <h2 class="page-title">📊 Overview</h2>
           <div>
             <span class="section-header__badge" id="meta-python">Python</span>
             <span class="section-header__badge" id="meta-dpy">discord.py</span>
           </div>
         </div>
-
         <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-card__icon">🏙️</div>
-            <div class="stat-card__value" id="stat-guilds">
-              <div class="skeleton skeleton-stat"></div>
-            </div>
-            <div class="stat-card__label">Servers</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-card__icon">👥</div>
-            <div class="stat-card__value" id="stat-users">
-              <div class="skeleton skeleton-stat"></div>
-            </div>
-            <div class="stat-card__label">Total Users</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-card__icon">💬</div>
-            <div class="stat-card__value" id="stat-channels">
-              <div class="skeleton skeleton-stat"></div>
-            </div>
-            <div class="stat-card__label">Channels</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-card__icon">⚡</div>
-            <div class="stat-card__value" id="stat-commands">
-              <div class="skeleton skeleton-stat"></div>
-            </div>
-            <div class="stat-card__label">Commands</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-card__icon">🧠</div>
-            <div class="stat-card__value" id="stat-memory">
-              <div class="skeleton skeleton-stat"></div>
-            </div>
-            <div class="stat-card__label">Memory</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-card__icon">📡</div>
-            <div class="stat-card__value" id="stat-latency">
-              <div class="skeleton skeleton-stat"></div>
-            </div>
-            <div class="stat-card__label">Latency</div>
-          </div>
+          <div class="stat-card"><div class="stat-card__icon">🏙️</div><div class="stat-card__value" id="stat-guilds"><div class="skeleton skeleton-stat"></div></div><div class="stat-card__label">Servers</div></div>
+          <div class="stat-card"><div class="stat-card__icon">👥</div><div class="stat-card__value" id="stat-users"><div class="skeleton skeleton-stat"></div></div><div class="stat-card__label">Total Users</div></div>
+          <div class="stat-card"><div class="stat-card__icon">💬</div><div class="stat-card__value" id="stat-channels"><div class="skeleton skeleton-stat"></div></div><div class="stat-card__label">Channels</div></div>
+          <div class="stat-card"><div class="stat-card__icon">⚡</div><div class="stat-card__value" id="stat-commands"><div class="skeleton skeleton-stat"></div></div><div class="stat-card__label">Commands</div></div>
+          <div class="stat-card"><div class="stat-card__icon">🧠</div><div class="stat-card__value" id="stat-memory"><div class="skeleton skeleton-stat"></div></div><div class="stat-card__label">Memory</div></div>
+          <div class="stat-card"><div class="stat-card__icon">📡</div><div class="stat-card__value" id="stat-latency"><div class="skeleton skeleton-stat"></div></div><div class="stat-card__label">Latency</div></div>
         </div>
-
-        <!-- Uptime bar -->
-        <div
-          class="stats-grid"
-          style="grid-template-columns: 1fr; margin-bottom: 32px"
-        >
-          <div
-            class="stat-card"
-            style="
-              display: flex;
-              align-items: center;
-              gap: 24px;
-              padding: 18px 24px;
-            "
-          >
-            <div>
-              <div class="stat-card__label" style="margin: 0 0 4px">UPTIME</div>
-              <div
-                class="stat-card__value"
-                id="stat-uptime"
-                style="font-size: 1.6rem"
-              >
-                <div class="skeleton skeleton-stat"></div>
-              </div>
-            </div>
-            <div style="flex: 1; font-size: 0.82rem; color: var(--text-muted)">
-              Time since last restart. The bot auto-reconnects on network
-              interruptions.
-            </div>
-          </div>
+        <div class="content-grid">
+          <section class="glass-card">
+            <div class="section-header"><h3 class="section-header__title">🧩 Loaded Modules</h3><span class="section-header__badge" id="modules-count">loading…</span></div>
+            <div id="modules-list"><div class="skeleton skeleton-row"></div><div class="skeleton skeleton-row"></div><div class="skeleton skeleton-row"></div><div class="skeleton skeleton-row"></div></div>
+          </section>
+          <section class="glass-card">
+            <div class="section-header"><h3 class="section-header__title">💰 Economy Leaderboard</h3><span class="section-header__badge">Top 10</span></div>
+            <div id="economy-list"><div class="skeleton skeleton-row"></div><div class="skeleton skeleton-row"></div><div class="skeleton skeleton-row"></div></div>
+          </section>
         </div>
-      </section>
-
-      <!-- ═══ MODULES + ECONOMY ════════════════════════════════════════════ -->
-      <div class="content-grid">
-        <!-- Modules Panel -->
         <section class="glass-card">
-          <div class="section-header">
-            <h2 class="section-header__title">🧩 Loaded Modules</h2>
-            <span class="section-header__badge" id="modules-count"
-              >loading...</span
-            >
-          </div>
-          <div id="modules-list">
-            <div class="skeleton skeleton-row"></div>
-            <div class="skeleton skeleton-row"></div>
-            <div class="skeleton skeleton-row"></div>
-            <div class="skeleton skeleton-row"></div>
-            <div class="skeleton skeleton-row"></div>
-            <div class="skeleton skeleton-row"></div>
-          </div>
-        </section>
-
-        <!-- Economy Panel -->
-        <section class="glass-card">
-          <div class="section-header">
-            <h2 class="section-header__title">💰 Economy Leaderboard</h2>
-            <span class="section-header__badge">Top 10</span>
-          </div>
-          <div id="economy-list">
-            <div class="skeleton skeleton-row"></div>
-            <div class="skeleton skeleton-row"></div>
-            <div class="skeleton skeleton-row"></div>
-            <div class="skeleton skeleton-row"></div>
-            <div class="skeleton skeleton-row"></div>
+          <div class="section-header"><h3 class="section-header__title">🛡️ Recent Moderation</h3><span class="section-header__badge">Last 8 cases</span></div>
+          <div style="overflow-x:auto">
+            <table class="activity-table">
+              <thead><tr><th>Case</th><th>Action</th><th>Target</th><th>Reason</th><th>When</th></tr></thead>
+              <tbody id="mod-table-body"><tr><td colspan="5"><div class="skeleton skeleton-row"></div></td></tr></tbody>
+            </table>
           </div>
         </section>
       </div>
 
-      <!-- ═══ MODERATION LOG ═══════════════════════════════════════════════ -->
-      <section class="glass-card" style="margin-bottom: 32px">
-        <div class="section-header">
-          <h2 class="section-header__title">🛡️ Recent Moderation Activity</h2>
-          <span class="section-header__badge">Last 8 cases</span>
-        </div>
-        <div style="overflow-x: auto">
-          <table class="activity-table">
-            <thead>
-              <tr>
-                <th>Case</th>
-                <th>Action</th>
-                <th>Target</th>
-                <th>Reason</th>
-                <th>When</th>
-              </tr>
-            </thead>
-            <tbody id="mod-table-body">
-              <tr>
-                <td colspan="5"><div class="skeleton skeleton-row"></div></td>
-              </tr>
-              <tr>
-                <td colspan="5"><div class="skeleton skeleton-row"></div></td>
-              </tr>
-              <tr>
-                <td colspan="5"><div class="skeleton skeleton-row"></div></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
+      <!-- ── General Config ────────────────────────────────────────────────── -->
+      <div id="page-general" class="dash-page hidden">
+        <div class="page-header"><h2 class="page-title">⚙️ General Settings</h2><p class="page-sub">Core logging and role configuration.</p></div>
+        <form id="form-general" class="config-form glass-card" data-endpoint="general">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Audit Log Channel</label>
+              <select name="log_channel_id" class="form-select" data-type="text-channels"><option value="">None</option></select>
+              <span class="form-hint">Where moderation actions are logged.</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Mute Role</label>
+              <select name="mute_role_id" class="form-select" data-type="roles"><option value="">None</option></select>
+              <span class="form-hint">Role assigned when a member is timed out via older method.</span>
+            </div>
+          </div>
+          <div class="form-actions"><button type="submit" class="btn-save">Save Changes</button><span class="save-status" id="save-general"></span></div>
+        </form>
+      </div>
 
-      <!-- ═══ FOOTER ═══════════════════════════════════════════════════════ -->
-      <footer
-        style="
-          text-align: center;
-          padding: 20px 0;
-          font-size: 0.8rem;
-          color: var(--text-muted);
-        "
-      >
-        Astra Dashboard v4.1.0 — Built by
-        <a
-          href="https://github.com/watispro5212"
-          style="color: var(--accent-primary); text-decoration: none"
-          >watispro1</a
-        >
-        &middot;
-        <a
-          href="https://watispro5212.github.io/astra/index.html"
-          style="color: var(--accent-secondary); text-decoration: none"
-          >Back to Website</a
-        >
-      </footer>
-    </div>
+      <!-- ── Welcome Config ────────────────────────────────────────────────── -->
+      <div id="page-welcome" class="dash-page hidden">
+        <div class="page-header"><h2 class="page-title">👋 Welcome & Farewell</h2><p class="page-sub">Auto messages and role assignment for new members.</p></div>
+        <form id="form-welcome" class="config-form glass-card" data-endpoint="welcome">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Welcome Channel</label>
+              <select name="channel_id" class="form-select" data-type="text-channels"><option value="">None</option></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Auto-Assign Role</label>
+              <select name="auto_role_id" class="form-select" data-type="roles"><option value="">None</option></select>
+              <span class="form-hint">Given to every new member automatically.</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Welcome Message</label>
+            <textarea name="message" class="form-textarea" rows="3" placeholder="Welcome {user} to {server}! You are member #{count}."></textarea>
+            <span class="form-hint">Variables: <code>{user}</code> <code>{server}</code> <code>{count}</code></span>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Farewell Channel</label>
+              <select name="farewell_channel_id" class="form-select" data-type="text-channels"><option value="">None</option></select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Farewell Message</label>
+            <textarea name="farewell_message" class="form-textarea" rows="3" placeholder="Goodbye {user}, we'll miss you!"></textarea>
+          </div>
+          <div class="form-actions"><button type="submit" class="btn-save">Save Changes</button><span class="save-status" id="save-welcome"></span></div>
+        </form>
+      </div>
 
-    <script src="assets/js/dashboard.js"></script>
-  </body>
+      <!-- ── AutoMod Config ────────────────────────────────────────────────── -->
+      <div id="page-automod" class="dash-page hidden">
+        <div class="page-header"><h2 class="page-title">🛡️ AutoMod</h2><p class="page-sub">Automated in-bot message filtering.</p></div>
+        <form id="form-automod" class="config-form glass-card" data-endpoint="automod">
+          <div class="form-section-title">Anti-Spam</div>
+          <div class="form-row form-row--align">
+            <div class="form-toggle-group">
+              <label class="toggle-switch"><input type="checkbox" name="spam_enabled" /><span class="toggle-slider"></span></label>
+              <span class="toggle-label">Enable Anti-Spam</span>
+            </div>
+            <div class="form-group form-group--small">
+              <label class="form-label">Max Messages</label>
+              <input type="number" name="spam_threshold" class="form-input" min="2" max="50" value="5" />
+            </div>
+            <div class="form-group form-group--small">
+              <label class="form-label">Window (seconds)</label>
+              <input type="number" name="spam_window" class="form-input" min="1" max="60" value="5" />
+            </div>
+          </div>
+          <div class="form-section-title">Filters</div>
+          <div class="form-toggle-row">
+            <div class="form-toggle-group"><label class="toggle-switch"><input type="checkbox" name="link_filter" /><span class="toggle-slider"></span></label><span class="toggle-label">Block all links</span></div>
+            <div class="form-toggle-group"><label class="toggle-switch"><input type="checkbox" name="invite_filter" /><span class="toggle-slider"></span></label><span class="toggle-label">Block Discord invites</span></div>
+            <div class="form-toggle-group"><label class="toggle-switch"><input type="checkbox" name="caps_filter" /><span class="toggle-slider"></span></label><span class="toggle-label">Caps filter</span></div>
+            <div class="form-group form-group--small">
+              <label class="form-label">Max Caps %</label>
+              <input type="number" name="caps_percent" class="form-input" min="10" max="100" value="80" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Blocked Words <span class="form-hint-inline">(comma-separated)</span></label>
+            <textarea name="bad_words" class="form-textarea" rows="2" placeholder="word1, word2, phrase three"></textarea>
+          </div>
+          <div class="form-actions"><button type="submit" class="btn-save">Save Changes</button><span class="save-status" id="save-automod"></span></div>
+        </form>
+      </div>
+
+      <!-- ── Tickets Config ────────────────────────────────────────────────── -->
+      <div id="page-tickets" class="dash-page hidden">
+        <div class="page-header"><h2 class="page-title">🎫 Ticket System</h2><p class="page-sub">Support ticket channel configuration.</p></div>
+        <form id="form-tickets" class="config-form glass-card" data-endpoint="tickets">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Ticket Category</label>
+              <select name="category_id" class="form-select" data-type="categories"><option value="">None</option></select>
+              <span class="form-hint">New ticket channels are created inside this category.</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Staff Role</label>
+              <select name="staff_role_id" class="form-select" data-type="roles"><option value="">None</option></select>
+              <span class="form-hint">This role can see and manage all tickets.</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Transcript Log Channel</label>
+            <select name="log_channel_id" class="form-select" data-type="text-channels"><option value="">None</option></select>
+            <span class="form-hint">HTML transcripts are posted here when a ticket is closed.</span>
+          </div>
+          <div class="form-actions"><button type="submit" class="btn-save">Save Changes</button><span class="save-status" id="save-tickets"></span></div>
+        </form>
+      </div>
+
+      <!-- ── Anti-Raid Config ──────────────────────────────────────────────── -->
+      <div id="page-antiraid" class="dash-page hidden">
+        <div class="page-header"><h2 class="page-title">🚨 Anti-Raid</h2><p class="page-sub">Automatic lockdown when mass joins are detected.</p></div>
+        <form id="form-antiraid" class="config-form glass-card" data-endpoint="antiraid">
+          <div class="form-row form-row--align">
+            <div class="form-toggle-group">
+              <label class="toggle-switch"><input type="checkbox" name="enabled" /><span class="toggle-slider"></span></label>
+              <span class="toggle-label">Enable Anti-Raid</span>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group form-group--small">
+              <label class="form-label">Join Threshold</label>
+              <input type="number" name="join_threshold" class="form-input" min="2" max="500" value="10" />
+              <span class="form-hint">Number of joins that triggers lockdown.</span>
+            </div>
+            <div class="form-group form-group--small">
+              <label class="form-label">Window (seconds)</label>
+              <input type="number" name="join_window" class="form-input" min="1" max="300" value="10" />
+              <span class="form-hint">Time window to count joins within.</span>
+            </div>
+            <div class="form-group form-group--small">
+              <label class="form-label">Action</label>
+              <select name="action" class="form-select">
+                <option value="kick">Kick</option>
+                <option value="ban">Ban</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Alert Channel</label>
+            <select name="alert_channel_id" class="form-select" data-type="text-channels"><option value="">None</option></select>
+            <span class="form-hint">Bot posts a lockdown alert embed here.</span>
+          </div>
+          <div class="form-actions"><button type="submit" class="btn-save">Save Changes</button><span class="save-status" id="save-antiraid"></span></div>
+        </form>
+      </div>
+
+      <!-- ── Birthdays Config ──────────────────────────────────────────────── -->
+      <div id="page-birthdays" class="dash-page hidden">
+        <div class="page-header"><h2 class="page-title">🎂 Birthday System</h2><p class="page-sub">Automatic announcements at 9 AM UTC daily.</p></div>
+        <form id="form-birthdays" class="config-form glass-card" data-endpoint="birthdays">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Announcement Channel</label>
+              <select name="channel_id" class="form-select" data-type="text-channels"><option value="">None</option></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Birthday Role</label>
+              <select name="role_id" class="form-select" data-type="roles"><option value="">None</option></select>
+              <span class="form-hint">Assigned for the day, removed the next day.</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Announcement Message</label>
+            <textarea name="message" class="form-textarea" rows="2" placeholder="🎂 Happy Birthday {user}!"></textarea>
+            <span class="form-hint">Variable: <code>{user}</code></span>
+          </div>
+          <div class="form-actions"><button type="submit" class="btn-save">Save Changes</button><span class="save-status" id="save-birthdays"></span></div>
+        </form>
+      </div>
+
+      <!-- ── Suggestions Config ────────────────────────────────────────────── -->
+      <div id="page-suggestions" class="dash-page hidden">
+        <div class="page-header"><h2 class="page-title">💡 Suggestions</h2><p class="page-sub">Community idea submission channel.</p></div>
+        <form id="form-suggestions" class="config-form glass-card" data-endpoint="suggestions">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Suggestions Channel</label>
+              <select name="channel_id" class="form-select" data-type="text-channels"><option value="">None</option></select>
+              <span class="form-hint">Suggestions are posted here as embeds with reactions.</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Staff Role</label>
+              <select name="staff_role_id" class="form-select" data-type="roles"><option value="">None</option></select>
+              <span class="form-hint">Can approve, deny, or implement suggestions.</span>
+            </div>
+          </div>
+          <div class="form-row form-row--align">
+            <div class="form-toggle-group">
+              <label class="toggle-switch"><input type="checkbox" name="dm_on_update" /><span class="toggle-slider"></span></label>
+              <span class="toggle-label">DM author when a suggestion is reviewed</span>
+            </div>
+          </div>
+          <div class="form-actions"><button type="submit" class="btn-save">Save Changes</button><span class="save-status" id="save-suggestions"></span></div>
+        </form>
+      </div>
+
+      <!-- ── Economy Config ────────────────────────────────────────────────── -->
+      <div id="page-economy" class="dash-page hidden">
+        <div class="page-header"><h2 class="page-title">💰 Economy</h2><p class="page-sub">Enable or disable the in-server economy system.</p></div>
+        <form id="form-economy" class="config-form glass-card" data-endpoint="economy">
+          <div class="form-row form-row--align">
+            <div class="form-toggle-group">
+              <label class="toggle-switch"><input type="checkbox" name="economy_enabled" /><span class="toggle-slider"></span></label>
+              <span class="toggle-label">Enable Economy System</span>
+            </div>
+          </div>
+          <p class="form-hint" style="margin-top:8px">Disabling economy hides all <code>/economy</code> commands for this server. Existing balances are preserved.</p>
+          <div class="form-actions"><button type="submit" class="btn-save">Save Changes</button><span class="save-status" id="save-economy"></span></div>
+        </form>
+      </div>
+
+      <!-- ── Leveling Config ───────────────────────────────────────────────── -->
+      <div id="page-leveling" class="dash-page hidden">
+        <div class="page-header"><h2 class="page-title">🏆 XP & Leveling</h2><p class="page-sub">Configure the XP gain rate and announcements.</p></div>
+        <form id="form-leveling" class="config-form glass-card" data-endpoint="leveling">
+          <div class="form-row form-row--align">
+            <div class="form-toggle-group">
+              <label class="toggle-switch"><input type="checkbox" name="xp_enabled" /><span class="toggle-slider"></span></label>
+              <span class="toggle-label">Enable XP System</span>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group form-group--small">
+              <label class="form-label">XP Rate (multiplier)</label>
+              <input type="number" name="xp_rate" class="form-input" min="1" max="10" value="1" />
+              <span class="form-hint">Base XP per message is multiplied by this value.</span>
+            </div>
+            <div class="form-group form-group--small">
+              <label class="form-label">Cooldown (seconds)</label>
+              <input type="number" name="xp_cooldown" class="form-input" min="1" max="3600" value="60" />
+              <span class="form-hint">Minimum time between XP awards per user.</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Level-Up Announce Channel</label>
+            <select name="xp_announce_channel_id" class="form-select" data-type="text-channels"><option value="">Same channel as message</option></select>
+          </div>
+          <div class="form-actions"><button type="submit" class="btn-save">Save Changes</button><span class="save-status" id="save-leveling"></span></div>
+        </form>
+      </div>
+
+      <!-- ── Starboard Config ──────────────────────────────────────────────── -->
+      <div id="page-starboard" class="dash-page hidden">
+        <div class="page-header"><h2 class="page-title">⭐ Starboard</h2><p class="page-sub">Community highlights based on star reactions.</p></div>
+        <form id="form-starboard" class="config-form glass-card" data-endpoint="starboard">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Starboard Channel</label>
+              <select name="starboard_channel_id" class="form-select" data-type="text-channels"><option value="">None</option></select>
+              <span class="form-hint">Starred messages are reposted here.</span>
+            </div>
+            <div class="form-group form-group--small">
+              <label class="form-label">Star Threshold</label>
+              <input type="number" name="starboard_threshold" class="form-input" min="1" max="50" value="3" />
+              <span class="form-hint">Minimum ⭐ reactions to qualify.</span>
+            </div>
+          </div>
+          <div class="form-actions"><button type="submit" class="btn-save">Save Changes</button><span class="save-status" id="save-starboard"></span></div>
+        </form>
+      </div>
+
+    </main><!-- /dash-main -->
+  </div><!-- /dash-layout -->
+
+  <footer class="dash-footer">
+    Astra Dashboard v4.1.0 — Built by <a href="https://github.com/watispro5212">watispro1</a>
+    &middot; <a href="https://watispro5212.github.io/astra/index.html">Back to Website</a>
+  </footer>
+
+</div><!-- /view-dashboard -->
+
+<div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+<script src="assets/js/dashboard.js"></script>
+</body>
 </html>
