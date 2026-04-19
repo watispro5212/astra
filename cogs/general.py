@@ -1,11 +1,8 @@
 import discord
 from discord import app_commands
 from discord.ext import commands
-from core.config import config
-from services.patron_service import patron_service
 from ui.embeds import AstraEmbed
 from typing import Optional
-import time
 
 
 # Help data — one source of truth for all categories shown in /help

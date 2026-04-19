@@ -71,6 +71,7 @@ class RoleMenuCog(commands.GroupCog, name="role-menu"):
 
         # Send message
         await interaction.response.defer(ephemeral=True)
+        embed = AstraEmbed(title=title, description="Click a button below to assign yourself a role.")
         message = await interaction.channel.send(embed=embed, view=view)
         
         # Save to DB

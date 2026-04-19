@@ -42,22 +42,7 @@ class ServerSetup(commands.Cog):
                 except: pass
             else: role_map[norm] = role
 
-        # 0.2 PRE-SYNC CHANNEL CLEANUP (ORPHAN SCAN)
-        status_embed.description = "🔍 Performing Orphan Scan (Cleaning un-categorized duplicates)..."
-        await status_msg.edit(embed=status_embed)
-        
-        # Flatten all potential channel names from the blueprint
-        blueprint_names = {self._normalize(n) for _, _, channels in structure for n, _ in channels}
-        
-        for chan in guild.text_channels:
-            if chan.category is None: # Orphan
-                norm = self._normalize(chan.name)
-                if norm in blueprint_names:
-                    try: 
-                        await chan.delete(reason="Astra Cleanup: Orphan Duplicate")
-                        deleted_count += 1
-                        await asyncio.sleep(0.25) # Latency Guard
-                    except: pass
+        # 0.2 PRE-SYNC CHANNEL CLEANUP (Orphan scan happens after structure is defined)
 
         # 1. ROLES SYNC
         status_embed.description = "👥 Syncing Role Hierarchy..."
@@ -162,6 +147,20 @@ class ServerSetup(commands.Cog):
                 try: await cat.delete(); deleted_count += 1
                 except: pass
             else: cat_map[norm] = cat
+
+        # Orphan Scan: remove uncategorized channels that duplicate blueprint names
+        status_embed.description = "🔍 Performing Orphan Scan..."
+        await status_msg.edit(embed=status_embed)
+        blueprint_names = {self._normalize(n) for _, _, channels in structure for n, _ in channels}
+        for chan in guild.text_channels:
+            if chan.category is None:
+                norm = self._normalize(chan.name)
+                if norm in blueprint_names:
+                    try:
+                        await chan.delete(reason="Astra Cleanup: Orphan Duplicate")
+                        deleted_count += 1
+                        await asyncio.sleep(0.25)
+                    except: pass
 
         for cat_name, p_type, channels in structure:
             status_embed.description = f"🏗️ Syncing Category: **{cat_name}**..."

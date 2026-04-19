@@ -4,6 +4,7 @@ from discord import app_commands
 from discord.ext import commands
 from services.ticket_service import TicketService
 from services.transcript_service import transcript_service
+from core.database import db
 from ui.views.ticket_view import TicketLauncherView, TicketControlView
 from ui.embeds import SuccessEmbed, AstraEmbed
 
