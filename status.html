@@ -18,7 +18,7 @@
       <a href="index.html" class="navbar__brand">
         <img src="assets/images/astra-logo.png" alt="Astra logo" width="36" height="36">
         Astra
-        <span class="navbar__version">v3.0</span>
+        <span class="navbar__version">v4.0.0</span>
       </a>
       <button type="button" class="navbar__toggle" aria-label="Toggle navigation menu" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -198,7 +198,25 @@
 
   <script src="assets/js/main.js"></script>
   <script>
-    document.getElementById('status-time').textContent = 'Last updated: ' + new Date().toLocaleTimeString();
+    async function updateStatus() {
+      // For local testing use 'http://localhost:8080/api/status', for prod update this to your domain hosting the bot
+      const API_URL = 'http://localhost:8080/api/status';
+      
+      try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
+        
+        if (data.status === "online") {
+          document.getElementById('overall-status').innerHTML = '<div class="status-dot status-dot--online"></div><span>All Systems Operational (Ping: ' + data.ping + 'ms)</span>';
+          document.getElementById('status-time').textContent = 'Last updated: ' + new Date().toLocaleTimeString() + ' | Servers: ' + data.guilds;
+        }
+      } catch (err) {
+        console.warn("Status API unreachable, using fallback UI", err);
+        document.getElementById('status-time').textContent = 'Last updated: ' + new Date().toLocaleTimeString() + ' (Static Fallback)';
+      }
+    }
+    
+    updateStatus();
 
     const bar = document.getElementById('uptime-bar');
     if (bar) {

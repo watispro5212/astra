@@ -77,6 +77,30 @@ class Economy(commands.Cog):
             embed=SuccessEmbed(f"Sent **{amount:,}** coins to {user.mention}.")
         )
 
+    @economy.command(name="deposit", description="Deposit coins into your bank.")
+    @app_commands.describe(amount="Amount to deposit.")
+    async def deposit(self, interaction: discord.Interaction, amount: int):
+        if amount <= 0:
+            return await interaction.response.send_message(embed=ErrorEmbed("Amount must be positive."), ephemeral=True)
+        success = await EconomyService.deposit(interaction.user.id, interaction.guild_id, amount)
+        if not success:
+            return await interaction.response.send_message(embed=ErrorEmbed("You don't have enough coins in your wallet."), ephemeral=True)
+        await interaction.response.send_message(
+            embed=SuccessEmbed(f"Deposited **{amount:,}** coins into your bank. 🏦")
+        )
+
+    @economy.command(name="withdraw", description="Withdraw coins from your bank.")
+    @app_commands.describe(amount="Amount to withdraw.")
+    async def withdraw(self, interaction: discord.Interaction, amount: int):
+        if amount <= 0:
+            return await interaction.response.send_message(embed=ErrorEmbed("Amount must be positive."), ephemeral=True)
+        success = await EconomyService.withdraw(interaction.user.id, interaction.guild_id, amount)
+        if not success:
+            return await interaction.response.send_message(embed=ErrorEmbed("You don't have enough coins in your bank."), ephemeral=True)
+        await interaction.response.send_message(
+            embed=SuccessEmbed(f"Withdrew **{amount:,}** coins from your bank. 🏦")
+        )
+
     @economy.command(name="leaderboard", description="View the richest members in the server.")
     async def leaderboard(self, interaction: discord.Interaction):
         await interaction.response.defer()

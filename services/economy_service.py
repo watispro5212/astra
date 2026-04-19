@@ -49,7 +49,32 @@ class EconomyService:
         return True
 
     @staticmethod
-    async def claim_daily(user_id: int, guild_id: int) -> Optional[int]:
+    async def deposit(user_id: int, guild_id: int, amount: int) -> bool:
+        row = await db.fetch_one(
+            "SELECT balance FROM economy WHERE user_id = ? AND guild_id = ?", user_id, guild_id
+        )
+        if not row or row["balance"] < amount or amount <= 0:
+            return False
+            
+        await db.execute(
+            "UPDATE economy SET balance = balance - ?, bank = bank + ? WHERE user_id = ? AND guild_id = ?",
+            amount, amount, user_id, guild_id
+        )
+        return True
+
+    @staticmethod
+    async def withdraw(user_id: int, guild_id: int, amount: int) -> bool:
+        row = await db.fetch_one(
+            "SELECT bank FROM economy WHERE user_id = ? AND guild_id = ?", user_id, guild_id
+        )
+        if not row or row["bank"] < amount or amount <= 0:
+            return False
+            
+        await db.execute(
+            "UPDATE economy SET bank = bank - ?, balance = balance + ? WHERE user_id = ? AND guild_id = ?",
+            amount, amount, user_id, guild_id
+        )
+        return True
         """Returns coins awarded or None if on cooldown."""
         row = await db.fetch_one(
             "SELECT last_daily FROM economy WHERE user_id = ? AND guild_id = ?", user_id, guild_id

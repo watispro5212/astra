@@ -482,8 +482,19 @@ class DatabaseManager:
         await self._safe_add_column("guilds", "birthday_channel_id", "INTEGER")
         await self._safe_add_column("guilds", "economy_enabled", "BOOLEAN DEFAULT 1")
 
+        # ── REPUTATION (v4) ───────────────────────────────────────────────────
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS reputation (
+                user_id INTEGER,
+                guild_id INTEGER,
+                rep_score INTEGER DEFAULT 0,
+                last_rep_given DATETIME,
+                PRIMARY KEY (user_id, guild_id)
+            )
+        """)
+
         await self.connection.commit()
-        logger.info("Database tables initialized (v3)")
+        logger.info("Database tables initialized (v4)")
 
     async def execute(self, query: str, *args):
         """Executes a non-returning query."""

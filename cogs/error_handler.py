@@ -49,12 +49,15 @@ class ErrorHandler(commands.Cog):
 
         # Try to respond to the interaction
         try:
+            if isinstance(error, discord.NotFound) and error.code == 10062:
+                # Interaction has expired (Unknown Interaction)
+                return
+                
             if interaction.response.is_done():
                 await interaction.followup.send(embed=embed, ephemeral=True)
             else:
-                await interaction.on_error(interaction, error) # Let discord.py's internal handle if possible, or send manual
                 await interaction.response.send_message(embed=embed, ephemeral=True)
-        except Exception:
+        except Exception as e:
             # If all fails, try sending a followup
             try:
                 await interaction.followup.send(embed=embed, ephemeral=True)

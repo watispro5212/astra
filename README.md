@@ -2,7 +2,7 @@
 
 **The ultimate all-in-one Discord community bot — built with `discord.py` 2.x**
 
-[![Version](https://img.shields.io/badge/version-3.0.0-blueviolet?style=for-the-badge)](https://github.com/watispro5212/astra/releases)
+[![Version](https://img.shields.io/badge/version-4.0.0-blueviolet?style=for-the-badge)](https://github.com/watispro5212/astra/releases)
 [![Python](https://img.shields.io/badge/python-3.11+-blue?style=for-the-badge&logo=python)](https://www.python.org/)
 [![discord.py](https://img.shields.io/badge/discord.py-2.3+-5865F2?style=for-the-badge&logo=discord)](https://discordpy.readthedocs.io/)
 [![License](https://img.shields.io/badge/license-Astra%20CL%20v2-orange?style=for-the-badge)](LICENSE)
@@ -15,7 +15,7 @@
 
 Astra v3 is the most complete version yet — a fully modular Discord bot covering moderation, economy, leveling, anti-raid protection, community features, fun commands, and server management in one clean package.
 
-**v3.0**: Adds 10 new modules (economy, warnings, AFK, birthdays, suggestions, anti-raid, invite tracker, fun commands, server backup), a fully redesigned website with status page and command search, and updated legal docs.
+**v4.0.0**: Adds 10 new modules (economy, warnings, AFK, birthdays, suggestions, anti-raid, invite tracker, fun commands, server backup), a fully redesigned website with status page and command search, and updated legal docs.
 
 ---
 
@@ -26,6 +26,7 @@ Astra v3 is the most complete version yet — a fully modular Discord bot coveri
 | **Moderation Suite** | Kick, ban, mute, warn, lock channels — full case tracking with appeals and export |
 | **Anti-Raid** | Real-time mass-join detection with automatic server lockdown |
 | **Economy System** | Coins, daily/work rewards, server shop with role rewards, leaderboard |
+| **Reputation** | Reputation / Karma system granting Coins and XP bonuses |
 | **Warning System** | Formal warnings with history, individual removal, and DM notifications |
 | **AFK System** | Set AFK status, auto-reply on mention, auto-remove on activity |
 | **Birthdays** | Auto announcements, birthday roles, upcoming calendar |
@@ -118,7 +119,7 @@ See the [full command reference](https://watispro5212.github.io/astra/commands.h
 
 See [CHANGELOG.md](CHANGELOG.md) for full version history.
 
-**Latest: v3.0.0** — 10 new modules, redesigned website with status page and command search, updated legal docs.
+**Latest: v4.0.0** — 10 new modules, redesigned website with status page and command search, updated legal docs.
 
 ---
 
