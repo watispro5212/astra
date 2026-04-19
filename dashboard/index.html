@@ -1,167 +1,227 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Astra — Admin Dashboard</title>
-  <meta name="description" content="Real-time admin dashboard for the Astra Discord bot. Monitor servers, modules, moderation, and economy.">
-  <link rel="icon" type="image/png" href="../assets/images/astra-logo.png">
-  <link rel="stylesheet" href="assets/css/dashboard.css">
-</head>
-<body>
-  <div class="bg-grid" aria-hidden="true"></div>
-  <div class="bg-glow" aria-hidden="true"></div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Astra — Admin Dashboard</title>
+    <meta
+      name="description"
+      content="Real-time admin dashboard for the Astra Discord bot. Monitor servers, modules, moderation, and economy."
+    />
+    <link rel="icon" type="image/png" href="../assets/images/astra-logo.png" />
+    <link rel="stylesheet" href="assets/css/dashboard.css" />
+  </head>
+  <body>
+    <div class="bg-grid" aria-hidden="true"></div>
+    <div class="bg-glow" aria-hidden="true"></div>
 
-  <div class="dashboard">
-
-    <!-- ═══ TOP BAR ═══════════════════════════════════════════════════════ -->
-    <header class="topbar">
-      <a href="../index.html" class="topbar__brand">
-        <img src="../assets/images/astra-logo.png" alt="Astra" class="topbar__logo">
-        <div>
-          <span class="topbar__title">Astra Dashboard</span>
-          <span class="topbar__version">v4.1.0</span>
-        </div>
-      </a>
-      <div class="topbar__right">
-        <div class="topbar__status">
-          <div class="topbar__dot topbar__dot--connecting" id="conn-dot"></div>
-          <span id="conn-label">Connecting...</span>
-        </div>
-        <div class="topbar__refresh">
-          🔄 <span id="refresh-timer" class="topbar__refresh-timer">30s</span>
-        </div>
-      </div>
-    </header>
-
-    <!-- ═══ STAT CARDS ════════════════════════════════════════════════════ -->
-    <section>
-      <div class="section-header">
-        <h2 class="section-header__title">📊 System Overview</h2>
-        <div>
-          <span class="section-header__badge" id="meta-python">Python</span>
-          <span class="section-header__badge" id="meta-dpy">discord.py</span>
-        </div>
-      </div>
-
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-card__icon">🏙️</div>
-          <div class="stat-card__value" id="stat-guilds"><div class="skeleton skeleton-stat"></div></div>
-          <div class="stat-card__label">Servers</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card__icon">👥</div>
-          <div class="stat-card__value" id="stat-users"><div class="skeleton skeleton-stat"></div></div>
-          <div class="stat-card__label">Total Users</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card__icon">💬</div>
-          <div class="stat-card__value" id="stat-channels"><div class="skeleton skeleton-stat"></div></div>
-          <div class="stat-card__label">Channels</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card__icon">⚡</div>
-          <div class="stat-card__value" id="stat-commands"><div class="skeleton skeleton-stat"></div></div>
-          <div class="stat-card__label">Commands</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card__icon">🧠</div>
-          <div class="stat-card__value" id="stat-memory"><div class="skeleton skeleton-stat"></div></div>
-          <div class="stat-card__label">Memory</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card__icon">📡</div>
-          <div class="stat-card__value" id="stat-latency"><div class="skeleton skeleton-stat"></div></div>
-          <div class="stat-card__label">Latency</div>
-        </div>
-      </div>
-
-      <!-- Uptime bar -->
-      <div class="stats-grid" style="grid-template-columns: 1fr; margin-bottom: 32px;">
-        <div class="stat-card" style="display: flex; align-items: center; gap: 24px; padding: 18px 24px;">
+    <div class="dashboard">
+      <!-- ═══ TOP BAR ═══════════════════════════════════════════════════════ -->
+      <header class="topbar">
+        <a href="../index.html" class="topbar__brand">
+          <img
+            src="../assets/images/astra-logo.png"
+            alt="Astra"
+            class="topbar__logo"
+          />
           <div>
-            <div class="stat-card__label" style="margin: 0 0 4px;">UPTIME</div>
-            <div class="stat-card__value" id="stat-uptime" style="font-size: 1.6rem;"><div class="skeleton skeleton-stat"></div></div>
+            <span class="topbar__title">Astra Dashboard</span>
+            <span class="topbar__version">v4.1.0</span>
           </div>
-          <div style="flex:1; font-size: 0.82rem; color: var(--text-muted);">
-            Time since last restart. The bot auto-reconnects on network interruptions.
+        </a>
+        <div class="topbar__right">
+          <div class="topbar__status">
+            <div
+              class="topbar__dot topbar__dot--connecting"
+              id="conn-dot"
+            ></div>
+            <span id="conn-label">Connecting...</span>
+          </div>
+          <div class="topbar__refresh">
+            🔄 <span id="refresh-timer" class="topbar__refresh-timer">30s</span>
           </div>
         </div>
+      </header>
+
+      <!-- ═══ STAT CARDS ════════════════════════════════════════════════════ -->
+      <section>
+        <div class="section-header">
+          <h2 class="section-header__title">📊 System Overview</h2>
+          <div>
+            <span class="section-header__badge" id="meta-python">Python</span>
+            <span class="section-header__badge" id="meta-dpy">discord.py</span>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-card__icon">🏙️</div>
+            <div class="stat-card__value" id="stat-guilds">
+              <div class="skeleton skeleton-stat"></div>
+            </div>
+            <div class="stat-card__label">Servers</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card__icon">👥</div>
+            <div class="stat-card__value" id="stat-users">
+              <div class="skeleton skeleton-stat"></div>
+            </div>
+            <div class="stat-card__label">Total Users</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card__icon">💬</div>
+            <div class="stat-card__value" id="stat-channels">
+              <div class="skeleton skeleton-stat"></div>
+            </div>
+            <div class="stat-card__label">Channels</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card__icon">⚡</div>
+            <div class="stat-card__value" id="stat-commands">
+              <div class="skeleton skeleton-stat"></div>
+            </div>
+            <div class="stat-card__label">Commands</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card__icon">🧠</div>
+            <div class="stat-card__value" id="stat-memory">
+              <div class="skeleton skeleton-stat"></div>
+            </div>
+            <div class="stat-card__label">Memory</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card__icon">📡</div>
+            <div class="stat-card__value" id="stat-latency">
+              <div class="skeleton skeleton-stat"></div>
+            </div>
+            <div class="stat-card__label">Latency</div>
+          </div>
+        </div>
+
+        <!-- Uptime bar -->
+        <div
+          class="stats-grid"
+          style="grid-template-columns: 1fr; margin-bottom: 32px"
+        >
+          <div
+            class="stat-card"
+            style="
+              display: flex;
+              align-items: center;
+              gap: 24px;
+              padding: 18px 24px;
+            "
+          >
+            <div>
+              <div class="stat-card__label" style="margin: 0 0 4px">UPTIME</div>
+              <div
+                class="stat-card__value"
+                id="stat-uptime"
+                style="font-size: 1.6rem"
+              >
+                <div class="skeleton skeleton-stat"></div>
+              </div>
+            </div>
+            <div style="flex: 1; font-size: 0.82rem; color: var(--text-muted)">
+              Time since last restart. The bot auto-reconnects on network
+              interruptions.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ MODULES + ECONOMY ════════════════════════════════════════════ -->
+      <div class="content-grid">
+        <!-- Modules Panel -->
+        <section class="glass-card">
+          <div class="section-header">
+            <h2 class="section-header__title">🧩 Loaded Modules</h2>
+            <span class="section-header__badge" id="modules-count"
+              >loading...</span
+            >
+          </div>
+          <div id="modules-list">
+            <div class="skeleton skeleton-row"></div>
+            <div class="skeleton skeleton-row"></div>
+            <div class="skeleton skeleton-row"></div>
+            <div class="skeleton skeleton-row"></div>
+            <div class="skeleton skeleton-row"></div>
+            <div class="skeleton skeleton-row"></div>
+          </div>
+        </section>
+
+        <!-- Economy Panel -->
+        <section class="glass-card">
+          <div class="section-header">
+            <h2 class="section-header__title">💰 Economy Leaderboard</h2>
+            <span class="section-header__badge">Top 10</span>
+          </div>
+          <div id="economy-list">
+            <div class="skeleton skeleton-row"></div>
+            <div class="skeleton skeleton-row"></div>
+            <div class="skeleton skeleton-row"></div>
+            <div class="skeleton skeleton-row"></div>
+            <div class="skeleton skeleton-row"></div>
+          </div>
+        </section>
       </div>
-    </section>
 
-    <!-- ═══ MODULES + ECONOMY ════════════════════════════════════════════ -->
-    <div class="content-grid">
-
-      <!-- Modules Panel -->
-      <section class="glass-card">
+      <!-- ═══ MODERATION LOG ═══════════════════════════════════════════════ -->
+      <section class="glass-card" style="margin-bottom: 32px">
         <div class="section-header">
-          <h2 class="section-header__title">🧩 Loaded Modules</h2>
-          <span class="section-header__badge" id="modules-count">loading...</span>
+          <h2 class="section-header__title">🛡️ Recent Moderation Activity</h2>
+          <span class="section-header__badge">Last 8 cases</span>
         </div>
-        <div id="modules-list">
-          <div class="skeleton skeleton-row"></div>
-          <div class="skeleton skeleton-row"></div>
-          <div class="skeleton skeleton-row"></div>
-          <div class="skeleton skeleton-row"></div>
-          <div class="skeleton skeleton-row"></div>
-          <div class="skeleton skeleton-row"></div>
+        <div style="overflow-x: auto">
+          <table class="activity-table">
+            <thead>
+              <tr>
+                <th>Case</th>
+                <th>Action</th>
+                <th>Target</th>
+                <th>Reason</th>
+                <th>When</th>
+              </tr>
+            </thead>
+            <tbody id="mod-table-body">
+              <tr>
+                <td colspan="5"><div class="skeleton skeleton-row"></div></td>
+              </tr>
+              <tr>
+                <td colspan="5"><div class="skeleton skeleton-row"></div></td>
+              </tr>
+              <tr>
+                <td colspan="5"><div class="skeleton skeleton-row"></div></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </section>
 
-      <!-- Economy Panel -->
-      <section class="glass-card">
-        <div class="section-header">
-          <h2 class="section-header__title">💰 Economy Leaderboard</h2>
-          <span class="section-header__badge">Top 10</span>
-        </div>
-        <div id="economy-list">
-          <div class="skeleton skeleton-row"></div>
-          <div class="skeleton skeleton-row"></div>
-          <div class="skeleton skeleton-row"></div>
-          <div class="skeleton skeleton-row"></div>
-          <div class="skeleton skeleton-row"></div>
-        </div>
-      </section>
+      <!-- ═══ FOOTER ═══════════════════════════════════════════════════════ -->
+      <footer
+        style="
+          text-align: center;
+          padding: 20px 0;
+          font-size: 0.8rem;
+          color: var(--text-muted);
+        "
+      >
+        Astra Dashboard v4.1.0 — Built by
+        <a
+          href="https://github.com/watispro5212"
+          style="color: var(--accent-primary); text-decoration: none"
+          >watispro1</a
+        >
+        &middot;
+        <a
+          href="https://watispro5212.github.io/astra/index.html"
+          style="color: var(--accent-secondary); text-decoration: none"
+          >Back to Website</a
+        >
+      </footer>
     </div>
 
-    <!-- ═══ MODERATION LOG ═══════════════════════════════════════════════ -->
-    <section class="glass-card" style="margin-bottom: 32px;">
-      <div class="section-header">
-        <h2 class="section-header__title">🛡️ Recent Moderation Activity</h2>
-        <span class="section-header__badge">Last 8 cases</span>
-      </div>
-      <div style="overflow-x: auto;">
-        <table class="activity-table">
-          <thead>
-            <tr>
-              <th>Case</th>
-              <th>Action</th>
-              <th>Target</th>
-              <th>Reason</th>
-              <th>When</th>
-            </tr>
-          </thead>
-          <tbody id="mod-table-body">
-            <tr><td colspan="5"><div class="skeleton skeleton-row"></div></td></tr>
-            <tr><td colspan="5"><div class="skeleton skeleton-row"></div></td></tr>
-            <tr><td colspan="5"><div class="skeleton skeleton-row"></div></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- ═══ FOOTER ═══════════════════════════════════════════════════════ -->
-    <footer style="text-align: center; padding: 20px 0; font-size: 0.8rem; color: var(--text-muted);">
-      Astra Dashboard v4.1.0 — Built by
-      <a href="https://github.com/watispro5212" style="color: var(--accent-primary); text-decoration: none;">watispro1</a>
-      &middot;
-      <a href="../index.html" style="color: var(--accent-secondary); text-decoration: none;">Back to Website</a>
-    </footer>
-
-  </div>
-
-  <script src="assets/js/dashboard.js"></script>
-</body>
+    <script src="assets/js/dashboard.js"></script>
+  </body>
 </html>
