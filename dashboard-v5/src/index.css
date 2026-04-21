@@ -1,0 +1,158 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   ASTRA DASHBOARD V5 — Premium Glassmorphism Design System
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* ── DESIGN TOKENS ─────────────────────────────────────────────────────── */
+:root {
+  --bg-base: #06080f;
+  --bg-surface: rgba(15, 20, 35, 0.65);
+  --bg-card: rgba(20, 28, 50, 0.55);
+  --bg-card-hover: rgba(25, 35, 65, 0.7);
+  --border-glass: rgba(59, 130, 246, 0.15);
+  --border-glass-hover: rgba(59, 130, 246, 0.35);
+  --accent-primary: #3b82f6;
+  --accent-secondary: #8b5cf6;
+  --accent-success: #10b981;
+  --accent-warning: #f59e0b;
+  --accent-danger: #ef4444;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --glow-primary: rgba(59, 130, 246, 0.25);
+  --glow-purple: rgba(139, 92, 246, 0.2);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── RESET & BASE ──────────────────────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  min-height: 100vh;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── ANIMATED BACKGROUND ───────────────────────────────────────────────── */
+.bg-grid {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.bg-glow {
+  position: fixed; z-index: 0; pointer-events: none;
+  width: 600px; height: 600px; border-radius: 50%;
+  background: radial-gradient(circle, var(--glow-primary) 0%, transparent 70%);
+  top: -200px; left: 50%; transform: translateX(-50%);
+  filter: blur(80px);
+  animation: pulseGlow 6s ease-in-out infinite alternate;
+}
+
+@keyframes pulseGlow {
+  0% { opacity: 0.3; transform: translateX(-50%) scale(1); }
+  100% { opacity: 0.6; transform: translateX(-50%) scale(1.15); }
+}
+
+/* ── LAYOUT ────────────────────────────────────────────────────────────── */
+.dashboard {
+  position: relative; z-index: 1;
+  max-width: 1280px; margin: 0 auto;
+  padding: 24px 28px 60px;
+}
+
+/* ── TOP BAR ───────────────────────────────────────────────────────────── */
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 24px; margin-bottom: 32px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+}
+
+.topbar__brand {
+  display: flex; align-items: center; gap: 12px;
+  text-decoration: none; color: var(--text-primary);
+}
+
+.topbar__logo {
+  width: 40px; height: 40px; border-radius: 12px;
+  box-shadow: 0 0 15px var(--glow-primary);
+}
+
+.topbar__title {
+  font-size: 1.35rem; font-weight: 700;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.topbar__version {
+  font-size: 0.7rem; font-weight: 600;
+  background: rgba(59, 130, 246, 0.15); color: var(--accent-primary);
+  padding: 3px 8px; border-radius: 6px;
+}
+
+.topbar__right { display: flex; align-items: center; gap: 16px; }
+
+/* ── LOGIN VIEW ─────────────────────────────────────────────────────────── */
+.login-wrap {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+}
+
+.login-card {
+  max-width: 420px; width: 100%;
+  text-align: center;
+  padding: 48px 40px;
+  display: flex; flex-direction: column; align-items: center; gap: 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(12px);
+}
+
+.login-logo {
+  width: 80px; height: 80px; border-radius: 20px;
+  box-shadow: 0 0 30px var(--glow-primary);
+  margin-bottom: 8px;
+}
+
+.login-title {
+  font-size: 1.8rem; font-weight: 800;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+.login-sub { font-size: 0.95rem; color: var(--text-secondary); }
+
+.btn-discord {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: #5865F2; color: #fff;
+  padding: 14px 28px; border-radius: var(--radius-md);
+  font-size: 1rem; font-weight: 600; text-decoration: none;
+  transition: all var(--transition-fast);
+  box-shadow: 0 4px 20px rgba(88, 101, 242, 0.4);
+  margin-top: 8px;
+  cursor: pointer;
+}
+
+.btn-discord:hover {
+  background: #4752c4;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 28px rgba(88, 101, 242, 0.55);
+}
+
+.login-note { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; }

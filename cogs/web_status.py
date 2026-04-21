@@ -19,7 +19,7 @@ DISCORD_CLIENT_ID     = os.getenv("DISCORD_CLIENT_ID", "")
 DISCORD_CLIENT_SECRET = os.getenv("DISCORD_CLIENT_SECRET", "")
 DASHBOARD_SECRET      = os.getenv("DASHBOARD_SECRET", "astra-dashboard-change-me")
 DASHBOARD_API_URL     = os.getenv("DASHBOARD_API_URL", "http://localhost:8080")
-DASHBOARD_FRONTEND_URL = os.getenv("DASHBOARD_FRONTEND_URL", "http://localhost:5500/dashboard")
+DASHBOARD_FRONTEND_URL = os.getenv("DASHBOARD_FRONTEND_URL", "http://localhost:5173/")
 
 MANAGE_GUILD_BIT = 0x20  # Discord permission flag
 
