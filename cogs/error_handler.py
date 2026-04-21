@@ -44,6 +44,22 @@ class ErrorHandler(commands.Cog):
         else:
             logger.error(f"Unexpected error in command '{interaction.command.name if interaction.command else 'Unknown'}': {error}")
             traceback.print_exception(type(error), error, error.__traceback__)
+            
+            # Formulate detailed text
+            error_details = "".join(traceback.format_exception(type(error), error, error.__traceback__))
+            
+            # Notify owner
+            try:
+                owner_id = self.bot.config.owner_id if hasattr(self.bot, 'config') else 1320058519642177668
+                from core.config import config
+                owner = self.bot.get_user(config.owner_id) or await self.bot.fetch_user(config.owner_id)
+                if owner:
+                    if len(error_details) > 1900:
+                        error_details = error_details[-1900:]
+                    await owner.send(f"⚠️ **Unexpected Error** in `/{interaction.command.name if interaction.command else 'Unknown'}`:\n```py\n{error_details}\n```")
+            except Exception as notify_error:
+                logger.error(f"Failed to notify owner: {notify_error}")
+
             embed = ErrorEmbed("An unexpected error occurred. The developers have been notified.")
             embed.set_footer(text="Error Code: INTERNAL_SERVER_ERROR")
 

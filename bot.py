@@ -51,8 +51,10 @@ class AstraBot(commands.Bot):
         if config.guild_id:
             guild = discord.Object(id=config.guild_id)
             self.tree.copy_global_to(guild=guild)
+            self.tree.clear_commands(guild=None)
+            await self.tree.sync()
             await self.tree.sync(guild=guild)
-            logger.info(f"Synced slash commands to guild {config.guild_id}")
+            logger.info(f"Synced slash commands to guild {config.guild_id} and cleared globals")
         else:
             await self.tree.sync()
             logger.info("Synced global slash commands")
