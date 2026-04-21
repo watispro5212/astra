@@ -1,25 +1,40 @@
 import { useState, useEffect } from 'react'
 import './index.css'
+import GuildPicker from './components/GuildPicker'
+import Dashboard from './components/Dashboard'
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [token, setToken] = useState(null);
+  const [selectedGuild, setSelectedGuild] = useState(null);
 
   useEffect(() => {
-    // Check for token in URL or local storage (simplified for now)
     const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
+    const tokenParam = urlParams.get('token');
     
-    if (token) {
-      localStorage.setItem('astra_token', token);
+    if (tokenParam) {
+      localStorage.setItem('astra_token', tokenParam);
+      setToken(tokenParam);
       setIsAuthenticated(true);
       window.history.replaceState({}, document.title, "/");
-    } else if (localStorage.getItem('astra_token')) {
-      setIsAuthenticated(true);
+    } else {
+      const storedToken = localStorage.getItem('astra_token');
+      if (storedToken) {
+        setToken(storedToken);
+        setIsAuthenticated(true);
+      }
     }
   }, []);
 
   const handleLogin = () => {
     window.location.href = 'http://localhost:8080/auth/login';
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('astra_token');
+    setToken(null);
+    setIsAuthenticated(false);
+    setSelectedGuild(null);
   };
 
   return (
@@ -28,7 +43,7 @@ function App() {
       <div className="bg-glow" aria-hidden="true"></div>
 
       {!isAuthenticated ? (
-        <div className="view login-wrap">
+        <div className="view login-wrap fade-in">
           <div className="login-card">
             <h1 className="login-title">Astra Dashboard v5</h1>
             <p className="login-sub">Sign in with Discord to manage your server settings.</p>
@@ -41,26 +56,18 @@ function App() {
             <p className="login-note">Only servers where you have <strong>Manage Server</strong> permission will appear.</p>
           </div>
         </div>
+      ) : !selectedGuild ? (
+        <GuildPicker 
+          token={token} 
+          onSelectGuild={setSelectedGuild} 
+          onLogout={handleLogout} 
+        />
       ) : (
-        <div className="dashboard">
-          <header className="topbar">
-            <div className="topbar__brand">
-              <span className="topbar__title">Astra Dashboard</span>
-              <span className="topbar__version">v5.0.0</span>
-            </div>
-            <div className="topbar__right">
-              <button onClick={() => {
-                localStorage.removeItem('astra_token');
-                setIsAuthenticated(false);
-              }} className="btn-discord" style={{padding: '8px 16px', fontSize: '0.9rem', marginTop: 0}}>Logout</button>
-            </div>
-          </header>
-          
-          <div style={{color: '#f1f5f9', textAlign: 'center', marginTop: '50px'}}>
-            <h2>Welcome to Astra v5!</h2>
-            <p style={{color: '#94a3b8', marginTop: '10px'}}>The interactive web dashboard is currently under construction.</p>
-          </div>
-        </div>
+        <Dashboard 
+          token={token} 
+          guild={selectedGuild} 
+          onBack={() => setSelectedGuild(null)} 
+        />
       )}
     </>
   )
