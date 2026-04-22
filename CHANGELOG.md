@@ -3,6 +3,18 @@
 All notable changes to Astra are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [6.3.1] — April 22, 2026
+
+### ☢️ Apex Reconstruction II
+The "Titan" experience has been refined for maximum server purity and high-fidelity aesthetics.
+
+#### 🏗️ Nuclear Protocol Expansion
+- **Hierarchy Purge**: The `/setup_server` command now purges all legacy roles alongside channels when the **Nuclear** option is enabled.
+- **Apex Branding**: Fully synchronized official **Astra Logo** and **Banner** across the bot and web portal.
+- **Restored UI**: Fixed a layout failure in the home page and hardened image asset loading.
+
+---
+
 ## [6.3.0] — April 22, 2026
 
 ### 🛰️ The Titan Update
