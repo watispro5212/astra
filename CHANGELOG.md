@@ -107,9 +107,8 @@ The biggest Astra release to date. Ten new bot modules, a fully redesigned websi
 ### Website
 
 - Fully redesigned site with glassmorphism design system and dark theme
-- **Status page** (`status.html`) — Per-service status indicators and 30-day uptime bar
 - **Command search** (`commands.html`) — Live filter across 50+ commands by name or description
-- **FAQ page** (`faq.html`) — 11 accordion items covering setup, economy, anti-raid, birthdays, backup, and self-hosting
+- **FAQ page** (`faq.html`) — 11 accordion items covering setup, moderation, tickets, and self-hosting
 - Social footer links
 - All inline styles replaced with semantic CSS classes (linter-clean)
 

@@ -4,26 +4,13 @@ from datetime import datetime
 from typing import Optional
 
 class AstraEmbed(discord.Embed):
-    """Base embed for Astra with consistent styling and Patron recognition."""
+    """Base tactical embed for Astra with consistent styling."""
     def __init__(self, **kwargs):
-        patron_data = kwargs.pop("patron", None)
-        
-        # Use custom premium color if available
-        if patron_data and patron_data.get("premium_color"):
-            try:
-                kwargs["color"] = int(patron_data["premium_color"].replace("#", ""), 16)
-            except:
-                kwargs["color"] = config.bot_theme_color
-        elif "color" not in kwargs:
+        if "color" not in kwargs:
             kwargs["color"] = config.bot_theme_color
             
         super().__init__(**kwargs)
-        
-        footer_text = f"{config.bot_name} Assistant"
-        if patron_data:
-            footer_text += " | Astra Supporter 💎"
-            
-        self.set_footer(text=footer_text)
+        self.set_footer(text=f"{config.bot_name} Tactical System • v6.0")
         self.timestamp = datetime.now()
 
 class ModerationEmbed(AstraEmbed):

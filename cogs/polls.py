@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 from typing import Optional
 
 class Polls(commands.Cog):
-    """Community engagement tools for polls."""
+    """Community consensus tools for operational feedback."""
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.check_polls.start()
@@ -19,12 +19,11 @@ class Polls(commands.Cog):
 
     @tasks.loop(seconds=60)
     async def check_polls(self):
-        """Background task to close expired polls."""
+        """Background monitoring to finalize expired polls."""
         expired = await PollService.get_active_polls()
         for p in expired:
             await PollService.close_poll(p['message_id'])
             
-            # Update embed
             guild = self.bot.get_guild(p['guild_id'])
             if not guild: continue
             channel = guild.get_channel(p['channel_id'])
@@ -34,16 +33,17 @@ class Polls(commands.Cog):
                 msg = await channel.fetch_message(p['message_id'])
                 embed = await PollService.build_poll_embed(p['message_id'], p['question'], config.bot_theme_color)
                 await msg.edit(embed=embed, view=None)
-            except:
+            except Exception:
                 pass
 
-    @app_commands.command(name="poll", description="Create an interactive poll.")
+    @app_commands.command(name="poll", description="📊 Deploy an interactive tactical poll.")
     @app_commands.describe(
-        question="The question to ask",
-        options="Comma-separated options (e.g. Yes, No, Maybe)",
-        duration="Optional duration (e.g. 1h, 30m) after which the poll closes.",
-        anonymous="If true, results are hidden until the poll closes."
+        question="The mission objective or question.",
+        options="Comma-separated tactical options (e.g. Alpha, Bravo, Charlie).",
+        duration="Deployment duration (e.g. 1h, 30m).",
+        anonymous="If enabled, results remain classified until closure."
     )
+    @app_commands.guild_only()
     async def create_poll(
         self, 
         interaction: discord.Interaction, 
@@ -56,9 +56,9 @@ class Polls(commands.Cog):
         option_list = [opt.strip() for opt in options.split(',') if opt.strip()]
         
         if len(option_list) < 2:
-            return await interaction.response.send_message("Please provide at least 2 options.", ephemeral=True)
+            return await interaction.response.send_message(embed=ErrorEmbed("Tactical protocols require at least 2 options."), ephemeral=True)
         if len(option_list) > 10:
-            return await interaction.response.send_message("Maximum 10 options allowed.", ephemeral=True)
+            return await interaction.response.send_message(embed=ErrorEmbed("Maximum tactical capacity is 10 options."), ephemeral=True)
 
         ends_at = None
         if duration:
@@ -69,13 +69,14 @@ class Polls(commands.Cog):
                 elif unit == 'm': ends_at = datetime.now() + timedelta(minutes=val)
                 elif unit == 'h': ends_at = datetime.now() + timedelta(hours=val)
                 elif unit == 'd': ends_at = datetime.now() + timedelta(days=val)
+                else: raise ValueError()
             except:
-                return await interaction.response.send_message("Invalid duration format! Use e.g. 1h, 30m.", ephemeral=True)
+                return await interaction.response.send_message(embed=ErrorEmbed("Invalid duration format! Use `1h`, `30m`, etc."), ephemeral=True)
 
         await interaction.response.defer(ephemeral=True)
 
-        # Create message first
-        embed = discord.Embed(title=f"📊 {question}", description="Setting up poll...", color=config.bot_theme_color)
+        # Initial placeholder
+        embed = AstraEmbed(title=f"📊 {question}", description="🛰️ Initializing tactical poll...")
         message = await interaction.channel.send(embed=embed)
 
         try:
@@ -94,39 +95,42 @@ class Polls(commands.Cog):
                 )
                 view.add_item(btn)
             
-            initial_embed = await PollService.build_poll_embed(message.id, question, config.bot_theme_color)
-            await message.edit(embed=initial_embed, view=view)
-            await interaction.followup.send("✅ Poll created successfully!")
+            final_embed = await PollService.build_poll_embed(message.id, question, config.bot_theme_color)
+            await message.edit(embed=final_embed, view=view)
+            await interaction.followup.send(embed=SuccessEmbed("Tactical poll deployed successfully."))
         except Exception as e:
-            await message.delete()
-            await interaction.followup.send(f"❌ Failed to create poll: {e}")
+            if message: await message.delete()
+            await interaction.followup.send(embed=ErrorEmbed(f"Deployment failed: {str(e)}"))
 
-    @app_commands.command(name="poll_close", description="Manually close a poll.")
-    @app_commands.describe(message_id="The ID of the poll message to close.")
+    @app_commands.command(name="poll_close", description="🛰️ Manually terminate a tactical poll.")
+    @app_commands.describe(message_id="The ID of the poll deployment.")
     @app_commands.checks.has_permissions(manage_messages=True)
+    @app_commands.guild_only()
     async def close_poll(self, interaction: discord.Interaction, message_id: str):
+        """Forces the closure of an active poll."""
         try:
             m_id = int(message_id)
         except:
-            return await interaction.response.send_message("Invalid message ID.", ephemeral=True)
+            return await interaction.response.send_message(embed=ErrorEmbed("Invalid deployment ID provided."), ephemeral=True)
             
+        await interaction.response.defer(ephemeral=True)
         poll = await PollService.get_poll(m_id)
         if not poll:
-            return await interaction.response.send_message("Poll not found.", ephemeral=True)
+            return await interaction.followup.send(embed=ErrorEmbed("No tactical record found for this ID."))
             
         await PollService.close_poll(m_id)
         
-        # Try to update the message
+        # Update the message
         channel = self.bot.get_channel(poll['channel_id'])
         if channel:
             try:
                 msg = await channel.fetch_message(m_id)
                 embed = await PollService.build_poll_embed(m_id, poll['question'], config.bot_theme_color)
                 await msg.edit(embed=embed, view=None)
-            except:
+            except Exception:
                 pass
                 
-        await interaction.response.send_message(embed=SuccessEmbed("Poll has been closed and results revealed."))
+        await interaction.followup.send(embed=SuccessEmbed("Tactical poll has been terminated and results finalized."))
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(Polls(bot))
