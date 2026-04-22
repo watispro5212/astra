@@ -1,250 +1,488 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" data-theme="dark">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Changelog — Astra</title>
-  <meta name="description" content="Full version history for Astra. See every feature added, improved, or fixed across all releases.">
-  <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
-  <link rel="stylesheet" href="assets/css/main.css">
-  <link rel="stylesheet" href="assets/css/components.css">
-</head>
-<body>
-  <div class="bg-grid" aria-hidden="true"></div>
-  <div class="bg-radial" aria-hidden="true"></div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Changelog — Astra</title>
+    <meta
+      name="description"
+      content="Full version history for Astra. See every feature added, improved, or fixed across all releases."
+    />
+    <link rel="icon" type="image/png" href="assets/images/astra-logo.png" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <link rel="stylesheet" href="assets/css/components.css" />
+  </head>
+  <body>
+    <div class="bg-grid" aria-hidden="true"></div>
+    <div class="bg-radial" aria-hidden="true"></div>
 
-  <nav class="navbar glass" role="navigation" aria-label="Main navigation">
-    <div class="container">
-      <a href="index.html" class="navbar__brand">
-        <img src="assets/images/astra-logo.png" alt="Astra logo" width="36" height="36">
-        Astra
-        <span class="navbar__version">v6.0.0</span>
-      </a>
-      <button type="button" class="navbar__toggle" aria-label="Toggle navigation menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-      <div class="navbar__links">
-        <a href="index.html" class="navbar__link">Home</a>
-        <a href="features.html" class="navbar__link">Features</a>
-        <a href="commands.html" class="navbar__link">Commands</a>
-        <a href="changelog.html" class="navbar__link active">Changelog</a>
-        <a href="support.html" class="navbar__link">Support</a>
-        <span class="navbar__cta">
-          <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=0&scope=bot+email+applications.commands+identify" class="btn btn--primary btn--small">Invite Astra</a>
-        </span>
+    <nav class="navbar glass" role="navigation" aria-label="Main navigation">
+      <div class="container">
+        <a href="index.html" class="navbar__brand">
+          <img
+            src="assets/images/astra-logo.png"
+            alt="Astra logo"
+            width="36"
+            height="36"
+          />
+          Astra
+          <span class="navbar__version">v6.1.0</span>
+        </a>
+        <button
+          type="button"
+          class="navbar__toggle"
+          aria-label="Toggle navigation menu"
+          aria-expanded="false"
+        >
+          <span></span><span></span><span></span>
+        </button>
+        <div class="navbar__links">
+          <a href="index.html" class="navbar__link">Home</a>
+          <a href="features.html" class="navbar__link">Features</a>
+          <a href="commands.html" class="navbar__link">Commands</a>
+          <a href="changelog.html" class="navbar__link active">Changelog</a>
+          <a href="support.html" class="navbar__link">Support</a>
+          <span class="navbar__cta">
+            <a
+              href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=0&scope=bot+email+applications.commands+identify"
+              class="btn btn--primary btn--small"
+              >Invite Astra</a
+            >
+          </span>
+        </div>
+      </div>
+    </nav>
+
+    <div class="page-header">
+      <div class="container">
+        <span class="section-header__badge">Version History</span>
+        <h1>What's <span class="text-gradient">new</span></h1>
+        <p>Every update, improvement, and fix — documented.</p>
       </div>
     </div>
-  </nav>
 
-  <div class="page-header">
-    <div class="container">
-      <span class="section-header__badge">Version History</span>
-      <h1>What's <span class="text-gradient">new</span></h1>
-      <p>Every update, improvement, and fix — documented.</p>
-    </div>
-  </div>
-
-  <section class="section changelog-section">
-    <div class="container container--changelog">
-
-      <!-- v6.0.0 -->
-      <div class="changelog-entry changelog-entry--latest animate-on-scroll is-visible">
-        <div class="changelog-entry__header">
-          <span class="changelog-entry__version">v6.0.0</span>
-          <span class="changelog-entry__date">April 21, 2026</span>
-          <span class="changelog-entry__tag changelog-entry__tag--latest">🚀 The Clean Up</span>
-        </div>
-        <p class="changelog-entry__summary">A massive philosophy shift towards simplicity, utility, and native Discord features. Bloat removed, essentials perfected.</p>
-
-        <h4 class="changelog-entry__sub-heading">🌟 Core Philosophy Shift</h4>
-        <ul>
-          <li><strong>Clean & Simple:</strong> Removed overly complex and bloated systems in favor of straight-forward, native discord experiences.</li>
-          <li><strong>Guided Onboarding:</strong> Implemented a flawless new member flow focusing on rules, verification, and role menus.</li>
-          <li><strong>Organized Setup:</strong> Simplified the server setup flow for administrators, utilizing sensible defaults and preview panes.</li>
-          <li><strong>Auto-Sharded:</strong> Upgraded the bot core to utilize native Auto-Sharding for infinite scalability across thousands of guilds.</li>
-          <li><strong>Web Sunset:</strong> Safely sunset the complex React web dashboard to focus exclusively on delivering the ultimate in-app Discord experience.</li>
-        </ul>
-      </div>
-
-      <!-- v4.1.0 -->
-      <div class="changelog-entry animate-on-scroll">
-        <div class="changelog-entry__header">
-          <span class="changelog-entry__version">v4.1.0</span>
-          <span class="changelog-entry__date">April 19, 2026</span>
-          <span class="changelog-entry__tag changelog-entry__tag--latest">🚀 Web Vanguard Update</span>
-        </div>
-        <p class="changelog-entry__summary">A dedicated frontend update focusing on interactive loading states, UX, and bringing the bot's live API telemetry to the homepage.</p>
-
-        <h4 class="changelog-entry__sub-heading">🌟 Website Updates</h4>
-        <ul>
-          <li><strong>Dynamic Telemetry Hook:</strong> The homepage Servers and Users statistics are no longer static dummy text; they now pull directly from the bot's live python memory via `fetch()`.</li>
-          <li><strong>Interactive Particle Engine:</strong> Injected `particles.js` into the Hero header layout, generating a cosmic constellation that tracks and bends to user mouse movements.</li>
-          <li><strong>Vanguard Welcome Modal:</strong> Added a sleek localized one-time welcome popup for new visitors bridging the V4.1 patch notes directly into their session.</li>
-        </ul>
-      </div>
-
-      <!-- v4.0.0 -->
-      <div class="changelog-entry animate-on-scroll">
-        <div class="changelog-entry__header">
-          <span class="changelog-entry__version">v4.0.0</span>
-          <span class="changelog-entry__date">April 18, 2026</span>
-          <span class="changelog-entry__tag">🚀 Major Release</span>
-        </div>
-        <p class="changelog-entry__summary">The biggest Astra update yet. 10 new modules, a completely redesigned website, and a massive expansion of existing features.</p>
-
-        <h4 class="changelog-entry__sub-heading">🆕 New Modules</h4>
-        <ul>
-          <li><strong>Economy System</strong> — Full coin economy with daily/work rewards, server shop (with role rewards), leaderboard, and member-to-member transfers</li>
-          <li><strong>Warning System</strong> — Formal warnings with <code>/warn</code>, <code>/warnings</code>, <code>/delwarn</code>, <code>/clearwarns</code>. DM sent on every warn</li>
-          <li><strong>AFK System</strong> — Set an AFK status with <code>/afk</code>. Auto-replies on mention, auto-removes on message send</li>
-          <li><strong>Birthday System</strong> — <code>/birthday set/check/upcoming/config</code>. Daily auto-announcements and optional birthday role assignment</li>
-          <li><strong>Suggestions</strong> — <code>/suggest</code> with reaction voting, staff approve/deny/implement workflow, DM notifications to authors</li>
-          <li><strong>Anti-Raid Protection</strong> — Real-time mass-join detection with automatic server lockdown. Configurable threshold, window, and action (kick/ban)</li>
-          <li><strong>Invite Tracker</strong> — Track who invited who, full invite leaderboard, fake/left invite detection with <code>/invites check/leaderboard/whoinvited</code></li>
-          <li><strong>Fun Commands</strong> — <code>/8ball</code>, <code>/coinflip</code>, <code>/roll</code>, <code>/roast</code>, <code>/trivia</code>, <code>/choose</code>, <code>/rps</code></li>
-          <li><strong>Server Backup</strong> — Export/import full server configuration as JSON with <code>/backup export/import/info</code></li>
-        </ul>
-
-        <h4 class="changelog-entry__sub-heading--spaced">🔧 Moderation Updates</h4>
-        <ul>
-          <li>Added <code>/lock</code> and <code>/unlock</code> — lock channels so members cannot send messages</li>
-          <li>Added <code>/nick</code> — change or reset a member's nickname</li>
-          <li>Improved role hierarchy checks on all moderation commands</li>
-        </ul>
-
-        <h4 class="changelog-entry__sub-heading--spaced">🌐 Website Overhaul</h4>
-        <ul>
-          <li>Full homepage redesign — animated hero, v3 badge, expanded feature showcase with 12 cards</li>
-          <li>New <strong>Commands page</strong> with live search/filter across all 50+ commands</li>
-          <li>All inline styles eliminated and moved to external CSS classes</li>
-          <li>Social links in footer, improved mobile layout, <code>type="button"</code> on all toggle buttons</li>
-          <li>Updated Terms of Service and Privacy Policy for v3</li>
-        </ul>
-
-        <h4 class="changelog-entry__sub-heading--spaced">🗄️ Database</h4>
-        <ul>
-          <li>Added 13 new tables for all v3 features (economy, warnings, AFK, birthdays, suggestions, invites, anti-raid)</li>
-          <li>Non-destructive v3 migrations — safe to run on existing v2 deployments</li>
-        </ul>
-      </div>
-
-      <!-- v2.1.0 -->
-      <div class="changelog-entry animate-on-scroll">
-        <div class="changelog-entry__header">
-          <span class="changelog-entry__version">v2.1.0</span>
-          <span class="changelog-entry__date">April 18, 2026</span>
-          <span class="changelog-entry__tag">✨ Branding Overhaul</span>
-        </div>
-        <ul>
-          <li>New "Premium Glass" design system with Outfit &amp; Inter typography</li>
-          <li>Enhanced glassmorphism effects with refined blur and color tokens</li>
-          <li>Added Changelog to the global navbar</li>
-          <li>Overhauled all 8 website pages for consistency</li>
-          <li>Optimized grid systems for mobile and tablet</li>
-          <li>Improved animation smoothness with cubic-bezier transitions</li>
-        </ul>
-      </div>
-
-      <!-- v2.0.0 -->
-      <div class="changelog-entry animate-on-scroll">
-        <div class="changelog-entry__header">
-          <span class="changelog-entry__version">v2.0.0</span>
-          <span class="changelog-entry__date">April 18, 2026</span>
-          <span class="changelog-entry__tag">🏗️ Major Expansion</span>
-        </div>
-        <p class="changelog-entry__summary--sm">Major feature expansion and core system refactor. Astra becomes a complete community management platform.</p>
-        <h4 class="changelog-entry__sub-heading">Added</h4>
-        <ul>
-          <li><strong>XP/Leveling System</strong> — Earn XP by chatting with configurable role rewards and level-up announcements</li>
-          <li><strong>Giveaways</strong> — Button-based persistent giveaways with automated winner selection</li>
-          <li><strong>Auto-Moderation</strong> — Spam, link, invite, caps, and bad-word filters</li>
-          <li><strong>Temporary Voice Channels</strong> — Join-to-Create hubs</li>
-          <li><strong>Welcome System</strong> — Automated join/leave messages and auto-role</li>
-          <li><strong>Ticket System v2</strong> — Categorized tickets with HTML transcripts</li>
-          <li><strong>Server Stats Dashboard</strong> — Real-time server and user statistics</li>
-        </ul>
-        <h4 class="changelog-entry__sub-heading--spaced-sm">Improved</h4>
-        <ul>
-          <li>Standardized error handling across all cogs</li>
-          <li>Non-destructive schema migrations for easier updates</li>
-          <li>All embeds updated to use AstraEmbed for brand consistency</li>
-        </ul>
-      </div>
-
-      <!-- v1.0.0 -->
-      <div class="changelog-entry animate-on-scroll">
-        <div class="changelog-entry__header">
-          <span class="changelog-entry__version">v1.0.0</span>
-          <span class="changelog-entry__date">April 18, 2026</span>
-          <span class="changelog-entry__tag">🎉 Initial Release</span>
-        </div>
-        <ul>
-          <li>Moderation: <code>/kick</code>, <code>/ban</code> with confirmation dialog, <code>/warn</code>, <code>/cases</code></li>
-          <li>Audit Logging: member joins/leaves, message edits/deletes, bans</li>
-          <li>Reaction Roles: persistent button-based menus with unique-role mode</li>
-          <li>Interactive Polls: up to 10 options, real-time progress bars, one-vote integrity</li>
-          <li>Reminders: flexible duration parsing with background scheduler</li>
-          <li>Starboard: configurable threshold, self-star filtering, media support</li>
-          <li>Ticket System: <code>/ticket_setup</code>, persistent "Open Ticket" button, private channels</li>
-          <li>General: <code>/ping</code>, <code>/about</code></li>
-          <li>Persistent SQLite database with migrations, global error handler, modular cog architecture</li>
-        </ul>
-      </div>
-
-    </div>
-  </section>
-
-  <footer class="footer glass" role="contentinfo">
-    <div class="container">
-      <div class="footer__grid">
-        <div>
-          <div class="footer__brand">
-            <img src="assets/images/astra-logo.png" alt="Astra" width="28" height="28">
-            Astra
+    <section class="section changelog-section">
+      <div class="container container--changelog">
+        <!-- v6.1.0 -->
+        <div
+          class="changelog-entry changelog-entry--latest animate-on-scroll is-visible"
+        >
+          <div class="changelog-entry__header">
+            <span class="changelog-entry__version">v6.1.0</span>
+            <span class="changelog-entry__date">April 22, 2026</span>
+            <span class="changelog-entry__tag changelog-entry__tag--latest"
+              >🛡️ The Big Bug Update</span
+            >
           </div>
-          <p class="footer__desc">The ultimate all-in-one Discord bot.</p>
+          <p class="changelog-entry__summary">
+            A massive stability and utility overhaul. Critical infrastructure
+            bugs neutralized, and the tactical command suite expanded for deeper
+            server control.
+          </p>
+
+          <h4 class="changelog-entry__sub-heading">🐛 Critical Fixes</h4>
+          <ul>
+            <li>
+              <strong>Infrastructure Logic:</strong> Fixed a fatal
+              <code>ValueError</code> in the <code>/setup_server</code> Orphan
+              Scan caused by the new multi-value channel blueprint format.
+            </li>
+            <li>
+              <strong>Hardened Formatting:</strong> Implemented a
+              safe-replacement loop in the Welcome System to prevent bot crashes
+              when malformed or invalid placeholders are used.
+            </li>
+            <li>
+              <strong>Command Duplication:</strong> Eliminated overlapping
+              diagnostic commands between the General and Diagnostics clusters.
+            </li>
+          </ul>
+
+          <h4 class="changelog-entry__sub-heading--spaced">
+            🛠️ New Tactical Operations
+          </h4>
+          <ul>
+            <li>
+              <strong>/mod softban:</strong> Instant message purge and ejection.
+            </li>
+            <li>
+              <strong>/mod rename:</strong> Rapid handle override for
+              professional standards.
+            </li>
+            <li>
+              <strong>/mod note:</strong> Tactical intelligence archival for
+              user records.
+            </li>
+            <li>
+              <strong>/system:</strong> Live host machine telemetry
+              (CPU/RAM/Uptime).
+            </li>
+            <li>
+              <strong>/welcome_test:</strong> Preview entry/exit transmissions
+              instantly.
+            </li>
+          </ul>
+
+          <h4 class="changelog-entry__sub-heading--spaced">
+            ✨ Command Overhauls
+          </h4>
+          <ul>
+            <li>
+              <strong>Intelligence Suite:</strong> Overhauled
+              <code>/userinfo</code> and <code>/serverinfo</code> with
+              high-fidelity operational data.
+            </li>
+            <li>
+              <strong>Asset Extraction:</strong> Upgraded
+              <code>/avatar</code> for maximum resolution retrieval.
+            </li>
+            <li>
+              <strong>Diagnostics:</strong> Enhanced <code>/ping</code> and
+              <code>/about</code> with precise shard and mission data.
+            </li>
+          </ul>
         </div>
-        <div>
-          <h4 class="footer__heading">Product</h4>
-          <a href="features.html" class="footer__link">Features</a>
-          <a href="commands.html" class="footer__link">Commands</a>
-          <a href="changelog.html" class="footer__link">Changelog</a>
+
+        <!-- v4.1.0 -->
+        <div class="changelog-entry animate-on-scroll">
+          <div class="changelog-entry__header">
+            <span class="changelog-entry__version">v4.1.0</span>
+            <span class="changelog-entry__date">April 19, 2026</span>
+            <span class="changelog-entry__tag changelog-entry__tag--latest"
+              >🚀 Web Vanguard Update</span
+            >
+          </div>
+          <p class="changelog-entry__summary">
+            A dedicated frontend update focusing on interactive loading states,
+            UX, and bringing the bot's live API telemetry to the homepage.
+          </p>
+
+          <h4 class="changelog-entry__sub-heading">🌟 Website Updates</h4>
+          <ul>
+            <li>
+              <strong>Dynamic Telemetry Hook:</strong> The homepage Servers and
+              Users statistics are no longer static dummy text; they now pull
+              directly from the bot's live python memory via `fetch()`.
+            </li>
+            <li>
+              <strong>Interactive Particle Engine:</strong> Injected
+              `particles.js` into the Hero header layout, generating a cosmic
+              constellation that tracks and bends to user mouse movements.
+            </li>
+            <li>
+              <strong>Vanguard Welcome Modal:</strong> Added a sleek localized
+              one-time welcome popup for new visitors bridging the V4.1 patch
+              notes directly into their session.
+            </li>
+          </ul>
         </div>
-        <div>
-          <h4 class="footer__heading">Community</h4>
-          <a href="https://discord.gg/NZ5Gr7eqE8" class="footer__link" target="_blank" rel="noopener">Support Server</a>
-          <a href="faq.html" class="footer__link">FAQ</a>
+
+        <!-- v4.0.0 -->
+        <div class="changelog-entry animate-on-scroll">
+          <div class="changelog-entry__header">
+            <span class="changelog-entry__version">v4.0.0</span>
+            <span class="changelog-entry__date">April 18, 2026</span>
+            <span class="changelog-entry__tag">🚀 Major Release</span>
+          </div>
+          <p class="changelog-entry__summary">
+            The biggest Astra update yet. 10 new modules, a completely
+            redesigned website, and a massive expansion of existing features.
+          </p>
+
+          <h4 class="changelog-entry__sub-heading">🆕 New Modules</h4>
+          <ul>
+            <li>
+              <strong>Economy System</strong> — Full coin economy with
+              daily/work rewards, server shop (with role rewards), leaderboard,
+              and member-to-member transfers
+            </li>
+            <li>
+              <strong>Warning System</strong> — Formal warnings with
+              <code>/warn</code>, <code>/warnings</code>, <code>/delwarn</code>,
+              <code>/clearwarns</code>. DM sent on every warn
+            </li>
+            <li>
+              <strong>AFK System</strong> — Set an AFK status with
+              <code>/afk</code>. Auto-replies on mention, auto-removes on
+              message send
+            </li>
+            <li>
+              <strong>Birthday System</strong> —
+              <code>/birthday set/check/upcoming/config</code>. Daily
+              auto-announcements and optional birthday role assignment
+            </li>
+            <li>
+              <strong>Suggestions</strong> — <code>/suggest</code> with reaction
+              voting, staff approve/deny/implement workflow, DM notifications to
+              authors
+            </li>
+            <li>
+              <strong>Anti-Raid Protection</strong> — Real-time mass-join
+              detection with automatic server lockdown. Configurable threshold,
+              window, and action (kick/ban)
+            </li>
+            <li>
+              <strong>Invite Tracker</strong> — Track who invited who, full
+              invite leaderboard, fake/left invite detection with
+              <code>/invites check/leaderboard/whoinvited</code>
+            </li>
+            <li>
+              <strong>Fun Commands</strong> — <code>/8ball</code>,
+              <code>/coinflip</code>, <code>/roll</code>, <code>/roast</code>,
+              <code>/trivia</code>, <code>/choose</code>, <code>/rps</code>
+            </li>
+            <li>
+              <strong>Server Backup</strong> — Export/import full server
+              configuration as JSON with <code>/backup export/import/info</code>
+            </li>
+          </ul>
+
+          <h4 class="changelog-entry__sub-heading--spaced">
+            🔧 Moderation Updates
+          </h4>
+          <ul>
+            <li>
+              Added <code>/lock</code> and <code>/unlock</code> — lock channels
+              so members cannot send messages
+            </li>
+            <li>
+              Added <code>/nick</code> — change or reset a member's nickname
+            </li>
+            <li>Improved role hierarchy checks on all moderation commands</li>
+          </ul>
+
+          <h4 class="changelog-entry__sub-heading--spaced">
+            🌐 Website Overhaul
+          </h4>
+          <ul>
+            <li>
+              Full homepage redesign — animated hero, v3 badge, expanded feature
+              showcase with 12 cards
+            </li>
+            <li>
+              New <strong>Commands page</strong> with live search/filter across
+              all 50+ commands
+            </li>
+            <li>
+              All inline styles eliminated and moved to external CSS classes
+            </li>
+            <li>
+              Social links in footer, improved mobile layout,
+              <code>type="button"</code> on all toggle buttons
+            </li>
+            <li>Updated Terms of Service and Privacy Policy for v3</li>
+          </ul>
+
+          <h4 class="changelog-entry__sub-heading--spaced">🗄️ Database</h4>
+          <ul>
+            <li>
+              Added 13 new tables for all v3 features (economy, warnings, AFK,
+              birthdays, suggestions, invites, anti-raid)
+            </li>
+            <li>
+              Non-destructive v3 migrations — safe to run on existing v2
+              deployments
+            </li>
+          </ul>
         </div>
-        <div>
-          <h4 class="footer__heading">Legal</h4>
-          <a href="privacy.html" class="footer__link">Privacy Policy</a>
-          <a href="terms.html" class="footer__link">Terms of Service</a>
+
+        <!-- v2.1.0 -->
+        <div class="changelog-entry animate-on-scroll">
+          <div class="changelog-entry__header">
+            <span class="changelog-entry__version">v2.1.0</span>
+            <span class="changelog-entry__date">April 18, 2026</span>
+            <span class="changelog-entry__tag">✨ Branding Overhaul</span>
+          </div>
+          <ul>
+            <li>
+              New "Premium Glass" design system with Outfit &amp; Inter
+              typography
+            </li>
+            <li>
+              Enhanced glassmorphism effects with refined blur and color tokens
+            </li>
+            <li>Added Changelog to the global navbar</li>
+            <li>Overhauled all 8 website pages for consistency</li>
+            <li>Optimized grid systems for mobile and tablet</li>
+            <li>Improved animation smoothness with cubic-bezier transitions</li>
+          </ul>
+        </div>
+
+        <!-- v2.0.0 -->
+        <div class="changelog-entry animate-on-scroll">
+          <div class="changelog-entry__header">
+            <span class="changelog-entry__version">v2.0.0</span>
+            <span class="changelog-entry__date">April 18, 2026</span>
+            <span class="changelog-entry__tag">🏗️ Major Expansion</span>
+          </div>
+          <p class="changelog-entry__summary--sm">
+            Major feature expansion and core system refactor. Astra becomes a
+            complete community management platform.
+          </p>
+          <h4 class="changelog-entry__sub-heading">Added</h4>
+          <ul>
+            <li>
+              <strong>XP/Leveling System</strong> — Earn XP by chatting with
+              configurable role rewards and level-up announcements
+            </li>
+            <li>
+              <strong>Giveaways</strong> — Button-based persistent giveaways
+              with automated winner selection
+            </li>
+            <li>
+              <strong>Auto-Moderation</strong> — Spam, link, invite, caps, and
+              bad-word filters
+            </li>
+            <li>
+              <strong>Temporary Voice Channels</strong> — Join-to-Create hubs
+            </li>
+            <li>
+              <strong>Welcome System</strong> — Automated join/leave messages
+              and auto-role
+            </li>
+            <li>
+              <strong>Ticket System v2</strong> — Categorized tickets with HTML
+              transcripts
+            </li>
+            <li>
+              <strong>Server Stats Dashboard</strong> — Real-time server and
+              user statistics
+            </li>
+          </ul>
+          <h4 class="changelog-entry__sub-heading--spaced-sm">Improved</h4>
+          <ul>
+            <li>Standardized error handling across all cogs</li>
+            <li>Non-destructive schema migrations for easier updates</li>
+            <li>All embeds updated to use AstraEmbed for brand consistency</li>
+          </ul>
+        </div>
+
+        <!-- v1.0.0 -->
+        <div class="changelog-entry animate-on-scroll">
+          <div class="changelog-entry__header">
+            <span class="changelog-entry__version">v1.0.0</span>
+            <span class="changelog-entry__date">April 18, 2026</span>
+            <span class="changelog-entry__tag">🎉 Initial Release</span>
+          </div>
+          <ul>
+            <li>
+              Moderation: <code>/kick</code>, <code>/ban</code> with
+              confirmation dialog, <code>/warn</code>, <code>/cases</code>
+            </li>
+            <li>
+              Audit Logging: member joins/leaves, message edits/deletes, bans
+            </li>
+            <li>
+              Reaction Roles: persistent button-based menus with unique-role
+              mode
+            </li>
+            <li>
+              Interactive Polls: up to 10 options, real-time progress bars,
+              one-vote integrity
+            </li>
+            <li>
+              Reminders: flexible duration parsing with background scheduler
+            </li>
+            <li>
+              Starboard: configurable threshold, self-star filtering, media
+              support
+            </li>
+            <li>
+              Ticket System: <code>/ticket_setup</code>, persistent "Open
+              Ticket" button, private channels
+            </li>
+            <li>General: <code>/ping</code>, <code>/about</code></li>
+            <li>
+              Persistent SQLite database with migrations, global error handler,
+              modular cog architecture
+            </li>
+          </ul>
         </div>
       </div>
-      <div class="footer__bottom">
-        <span>&copy; 2026 Astra. Made by <a href="https://github.com/watispro5212" class="footer__author-link">watispro1</a>.</span>
-        <span>Made with ✨ for the Discord community</span>
+    </section>
+
+    <footer class="footer glass" role="contentinfo">
+      <div class="container">
+        <div class="footer__grid">
+          <div>
+            <div class="footer__brand">
+              <img
+                src="assets/images/astra-logo.png"
+                alt="Astra"
+                width="28"
+                height="28"
+              />
+              Astra
+            </div>
+            <p class="footer__desc">The ultimate all-in-one Discord bot.</p>
+          </div>
+          <div>
+            <h4 class="footer__heading">Product</h4>
+            <a href="features.html" class="footer__link">Features</a>
+            <a href="commands.html" class="footer__link">Commands</a>
+            <a href="changelog.html" class="footer__link">Changelog</a>
+          </div>
+          <div>
+            <h4 class="footer__heading">Community</h4>
+            <a
+              href="https://discord.gg/NZ5Gr7eqE8"
+              class="footer__link"
+              target="_blank"
+              rel="noopener"
+              >Support Server</a
+            >
+            <a href="faq.html" class="footer__link">FAQ</a>
+          </div>
+          <div>
+            <h4 class="footer__heading">Legal</h4>
+            <a href="privacy.html" class="footer__link">Privacy Policy</a>
+            <a href="terms.html" class="footer__link">Terms of Service</a>
+          </div>
+        </div>
+        <div class="footer__bottom">
+          <span
+            >&copy; 2026 Astra. Made by
+            <a
+              href="https://github.com/watispro5212"
+              class="footer__author-link"
+              >watispro1</a
+            >.</span
+          >
+          <span>Made with ✨ for the Discord community</span>
+        </div>
       </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+
+    <div class="global-notification" id="global-notify">
+      <span class="global-notification__icon">✨</span>
+      <span class="global-notification__text"
+        >Astra v6.1.0 is officially live! Enjoy the refined experience.</span
+      >
+      <button
+        class="global-notification__close"
+        onclick="
+          document.getElementById('global-notify').style.display = 'none'
+        "
+      >
+        &times;
+      </button>
     </div>
-  </footer>
-
-  <script src="assets/js/main.js"></script>
-
-  <div class="global-notification" id="global-notify">
-    <span class="global-notification__icon">✨</span>
-    <span class="global-notification__text">Astra v6.0.0 is officially live! Enjoy the refined experience.</span>
-    <button class="global-notification__close" onclick="document.getElementById('global-notify').style.display='none'">&times;</button>
-  </div>
-  <button class="back-to-top" id="backToTop" aria-label="Back to top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-    &uarr;
-  </button>
-  <script>
-    window.addEventListener('scroll', () => {
-      const btn = document.getElementById('backToTop');
-      if (window.scrollY > 300) btn.classList.add('visible');
-      else btn.classList.remove('visible');
-    });
-  </script>
-</body>
-
+    <button
+      class="back-to-top"
+      id="backToTop"
+      aria-label="Back to top"
+      onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+    >
+      &uarr;
+    </button>
+    <script>
+      window.addEventListener("scroll", () => {
+        const btn = document.getElementById("backToTop");
+        if (window.scrollY > 300) btn.classList.add("visible");
+        else btn.classList.remove("visible");
+      });
+    </script>
+  </body>
 </html>

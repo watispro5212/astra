@@ -1,4 +1,4 @@
-# Astra v6.0.0 — Clean & Simple
+# Astra v6.1.0 — Clean & Simple
 
 Astra is a high-performance, minimalist Discord bot designed for professional community management, moderation, and support. Built for clarity and speed, Astra eliminates feature bloat to focus on the core essentials every growing server needs.
 

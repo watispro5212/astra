@@ -16,14 +16,14 @@ class ServerSetup(commands.Cog):
         # Remove non-alphanumeric characters and lowercase
         return "".join(c for c in text.lower() if c.isalnum())
 
-    @app_commands.command(name="setup_server", description="🛰️ DEEP CLEAN v2.16: Safe update + Auto-Delete Duplicates")
+    @app_commands.command(name="setup_server", description="🛰️ DEEP CLEAN v2.17: Safe update + Auto-Delete Duplicates")
     @app_commands.checks.has_permissions(administrator=True)
     async def setup_server(self, interaction: discord.Interaction):
         """Non-destructive server synchronization. Automatically deletes duplicate channels and roles."""
         await interaction.response.defer(ephemeral=True)
         
         status_embed = AstraEmbed(
-            title="🛰️ DEEP CLEAN INITIATED (v2.16.0)",
+            title="🛰️ DEEP CLEAN INITIATED (v2.17.0)",
             description="Starting deep-scan. Identifying and removing duplicate components..."
         )
         status_msg = await interaction.followup.send(embed=status_embed, ephemeral=True)
@@ -219,7 +219,7 @@ class ServerSetup(commands.Cog):
 
         # 4. FINAL SUCCESS
         final_embed = SuccessEmbed(
-            f"🛰️ Deep Clean v2.16.0 Complete!\n\n"
+            f"🛰️ Deep Clean v2.16.1 Complete!\n\n"
             f"🧹 Duplicates Purged: **{deleted_count}**\n"
             f"🏗️ Missing Items Created: **{created_count}**\n"
             f"👤 Roles Balanced: **{len(roles)}**\n\n"

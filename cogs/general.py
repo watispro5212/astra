@@ -86,7 +86,7 @@ class HelpSelect(discord.ui.Select):
         embed = AstraEmbed(title=f"{cat} Operations")
         desc_lines = [f"**{cmd}**\n└ {desc}" for cmd, desc in commands_in_cat]
         embed.description = "\n".join(desc_lines) or "*No operations registered in this sector.*"
-        embed.set_footer(text=f"Astra Tactical Guide • {len(commands_in_cat)} operations")
+        embed.set_footer(text="v6.1.0 Tactical Interface • Use dropdown to explore sectors")
         
         await interaction.response.edit_message(embed=embed, view=self.view)
 
@@ -134,7 +134,7 @@ class General(commands.Cog):
     @app_commands.command(name="about", description="🚀 Astra: Mission Architecture & Core Specifications.")
     async def about(self, interaction: discord.Interaction):
         embed = AstraEmbed(
-            title="🚀 Astra v6.0 \"Nebula\"",
+            title="🚀 Astra v6.1 \"Nebula\"",
             description=(
                 "Astra is a high-performance, mission-ready Discord management system built for high-scale communities.\n\n"
                 "**Core Specifications:**\n"

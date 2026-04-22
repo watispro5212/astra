@@ -8,13 +8,16 @@ class WelcomeService:
         return await db.fetch_one("SELECT * FROM welcome_configs WHERE guild_id = ?", guild_id)
 
     async def format_message(self, text: str, member: discord.Member) -> str:
-        """Formats placeholders like {user}, {server}, {member_count}."""
-        return text.format(
-            user=member.mention,
-            server=member.guild.name,
-            member_count=member.guild.member_count,
-            username=member.display_name
-        )
+        """Formats placeholders like {user}, {server}, {member_count} safely."""
+        replacements = {
+            "user": member.mention,
+            "server": member.guild.name,
+            "member_count": str(member.guild.member_count),
+            "username": member.display_name
+        }
+        for key, value in replacements.items():
+            text = text.replace(f"{{{key}}}", value)
+        return text
 
     async def send_welcome(self, member: discord.Member):
         config = await self.get_config(member.guild.id)

@@ -3,7 +3,7 @@
 All notable changes to Astra are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [6.0.0] — April 22, 2026
+## [6.1.0] — April 22, 2026
 
 ### 🚀 The Clean Up
 
