@@ -4,172 +4,142 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Privacy Policy — Astra</title>
-  <meta name="description" content="Astra Privacy Policy — what data we collect, how we use it, and your rights.">
+  <meta name="description" content="Privacy Policy for Astra v7.0.0 Enterprise Core.">
   <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    .legal-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      padding: 40px;
+      border-radius: 24px;
+      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px);
+      margin-bottom: 40px;
+    }
+    .legal-section {
+      margin-bottom: 35px;
+    }
+    .legal-title {
+      font-family: var(--font-tactical);
+      color: var(--primary-neon);
+      font-size: 1.25rem;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .legal-text {
+      color: #94a3b8;
+      line-height: 1.8;
+      font-size: 0.95rem;
+    }
+    .legal-text strong {
+      color: #fff;
+    }
+    .data-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin: 20px 0;
+    }
+    .data-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--glass-border);
+      padding: 20px;
+      border-radius: 12px;
+    }
+  </style>
 </head>
 <body>
-  <div class="bg-grid" aria-hidden="true"></div>
-  <div class="bg-radial" aria-hidden="true"></div>
-
-  <nav class="navbar glass" role="navigation" aria-label="Main navigation">
-    <div class="container">
-      <a href="index.html" class="navbar__brand">
-        <img src="assets/images/astra-logo.png" alt="Astra logo" width="36" height="36">
-        Astra
-        <span class="navbar__version">v6.3.0</span>
+  <div class="hero-titan__mesh"></div>
+  
+  <nav class="nav-titan" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <img src="assets/images/astra-logo.png" alt="Astra Logo" width="32" height="32">
+        ASTRA
       </a>
-      <button type="button" class="navbar__toggle" aria-label="Toggle navigation menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-      <div class="navbar__links">
-        <a href="index.html" class="navbar__link">Home</a>
-        <a href="features.html" class="navbar__link">Features</a>
-        <a href="commands.html" class="navbar__link">Commands</a>
-        <a href="support.html" class="navbar__link">Support</a>
-        <span class="navbar__cta">
-          <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=0&scope=bot+email+applications.commands+identify" class="btn btn--primary btn--small">Invite Astra</a>
-        </span>
+      <div class="nav-links">
+        <a href="features.html" class="nav-link">Sectors</a>
+        <a href="commands.html" class="nav-link">Protocols</a>
+        <a href="changelog.html" class="nav-link">Mission Logs</a>
+        <a href="support.html" class="nav-link">Support</a>
       </div>
     </div>
   </nav>
 
-  <div class="page-header">
-    <div class="container">
-      <h1>Privacy <span class="text-gradient">Policy</span></h1>
-      <p>Last updated: April 22, 2026 — Effective for Astra v6.3.0 and all subsequent versions.</p>
-    </div>
-  </div>
+  <header class="page-header">
+    <h1 class="page-header__title">PRIVACY POLICY</h1>
+    <p class="page-header__subtitle">archival protocols regarding the acquisition and persistence of operative data.</p>
+  </header>
 
-  <section class="section legal-section">
-    <div class="container container--narrow">
-      <div class="content">
-
-        <h2>1. Overview</h2>
-        <p>Astra ("the Bot") is committed to protecting your privacy. This policy explains what data the Bot collects, why it's collected, how it's stored, and your rights regarding that data. By using the Bot, you consent to the practices described here.</p>
-
-        <h2>2. Data We Collect</h2>
-        <p>Astra collects only what is strictly necessary for its features to function. This includes:</p>
-
-        <h3>Server Data</h3>
-        <ul>
-          <li><strong>Guild (Server) IDs</strong> — Used to store per-server configuration (logging channels, automod settings, ticket setup, etc.)</li>
-          <li><strong>Channel IDs &amp; Role IDs</strong> — Used for feature configuration (e.g., log channels, welcome channels, ticket categories)</li>
-        </ul>
-
-        <h3>User Data</h3>
-        <ul>
-          <li><strong>User IDs</strong> — Required to track reminders, moderation case history, and tactical progression</li>
-          <li><strong>Tactical Data</strong> — User XP, level, and fiscal credit balances are stored to enable the leveling and economy modules</li>
-          <li><strong>Usernames &amp; Avatars</strong> — Fetched from Discord's API in real-time for display purposes; not permanently stored</li>
-        </ul>
-
-        <h3>Activity Data</h3>
-        <ul>
-          <li><strong>Moderation cases</strong> — Action type, reason, moderator ID, target ID, and timestamp for audit trails</li>
-          <li><strong>Ticket Transcripts</strong> — Message history of ticket channels is stored only when a transcript is generated by a staff member</li>
-        </ul>
-
-        <h2>3. How We Use Your Data</h2>
-        <p>Data collected by Astra is used exclusively to provide and improve the Bot's features:</p>
-        <ul>
-          <li>Persisting server configuration across restarts</li>
-          <li>Delivering personal reminders</li>
-          <li>Generating moderation case logs and audit trails</li>
-          <li>Managing support tickets and onboarding flows</li>
-        </ul>
-        <p>We do not sell, share, rent, or otherwise transfer your data to third parties for marketing or commercial purposes.</p>
-
-        <h2>4. Data Storage &amp; Security</h2>
-        <p>All data is stored in a SQLite database on the server where Astra is hosted. If you are using the official hosted instance, data is stored on the Developer's private server. Access to the database is restricted to the Bot process and the Developer.</p>
-        <p>We use reasonable technical measures to protect stored data, but no system is 100% secure. Use of the Bot is at your own risk.</p>
-
-        <h2>5. Data Retention</h2>
-        <p>Data is retained for as long as it is needed for the feature it supports:</p>
-        <ul>
-          <li><strong>Server config</strong> — Retained until the Bot is removed from the server</li>
-          <li><strong>User data (Reminders, History)</strong> — Retained until a deletion request is submitted or the Bot is removed</li>
-          <li><strong>Moderation cases</strong> — Retained indefinitely for audit purposes</li>
-          <li><strong>Reminders</strong> — Deleted automatically once delivered</li>
-        </ul>
-
-        <h2>6. Third-Party Services</h2>
-        <p>Astra interacts with Discord's API to function. Discord's own <a href="https://discord.com/privacy" target="_blank" rel="noopener">Privacy Policy</a> governs how Discord handles your data. Astra does not use any other third-party data processors.</p>
-
-        <h2>7. Your Rights</h2>
-        <p>You have the right to:</p>
-        <ul>
-          <li><strong>Request data deletion</strong> — Contact us to have your personal data removed from the database</li>
-          <li><strong>Request a data export</strong> — Request a copy of data stored about you</li>
-          <li><strong>Opt out</strong> — Stop using the Bot at any time; your data will remain until you request deletion</li>
-        </ul>
-        <p>To exercise these rights, contact the Developer via the <a href="https://discord.gg/NZ5Gr7eqE8" target="_blank" rel="noopener">Support Server</a> or <a href="https://github.com/watispro5212" target="_blank" rel="noopener">GitHub</a>.</p>
-
-        <h2>8. Children's Privacy</h2>
-        <p>Astra is not directed at individuals under the age of 13 (or the minimum age required by your jurisdiction). If you believe a minor has provided personal data through the Bot, please contact us immediately.</p>
-
-        <h2>9. Changes to This Policy</h2>
-        <p>This policy may be updated from time to time. The "Last updated" date at the top reflects the most recent revision. Continued use of the Bot after changes constitutes acceptance of the updated policy.</p>
-
-        <h2>10. Contact</h2>
-        <p>For privacy-related inquiries, contact the Developer via the <a href="https://discord.gg/NZ5Gr7eqE8" target="_blank" rel="noopener">Astra Support Server</a> or <a href="https://github.com/watispro5212" target="_blank" rel="noopener">GitHub</a>.</p>
-
-      </div>
-    </div>
-  </section>
-
-  <footer class="footer glass" role="contentinfo">
-    <div class="container">
-      <div class="footer__grid">
-        <div>
-          <div class="footer__brand">
-            <img src="assets/images/astra-logo.png" alt="Astra" width="28" height="28">
-            Astra
+  <main class="container" style="max-width: 900px; margin: 0 auto; padding-bottom: 100px; padding-inline: 20px;">
+    
+    <div class="legal-card">
+      <div class="legal-section">
+        <div class="legal-title"><span>01</span> DATA ACQUISITION</div>
+        <p class="legal-text">
+          Astra collects only the minimal telemetry required to perform its autonomous routines. This data is acquired directly from the Discord API during interaction phases.
+        </p>
+        <div class="data-grid">
+          <div class="data-box">
+            <strong>Public Data</strong>
+            <p class="legal-text" style="font-size: 0.85rem; margin-top: 10px;">User IDs, Usernames, Guild IDs, and Role hierarchies.</p>
           </div>
-          <p class="footer__desc">The ultimate all-in-one Discord bot.</p>
-        </div>
-        <div>
-          <h4 class="footer__heading">Product</h4>
-          <a href="features.html" class="footer__link">Features</a>
-          <a href="commands.html" class="footer__link">Commands</a>
-          <a href="changelog.html" class="footer__link">Changelog</a>
-        </div>
-        <div>
-          <h4 class="footer__heading">Community</h4>
-          <a href="https://discord.gg/NZ5Gr7eqE8" class="footer__link" target="_blank" rel="noopener">Support Server</a>
-          <a href="faq.html" class="footer__link">FAQ</a>
-        </div>
-        <div>
-          <h4 class="footer__heading">Legal</h4>
-          <a href="privacy.html" class="footer__link">Privacy Policy</a>
-          <a href="terms.html" class="footer__link">Terms of Service</a>
+          <div class="data-box">
+            <strong>System Data</strong>
+            <p class="legal-text" style="font-size: 0.85rem; margin-top: 10px;">Message timestamps, Command execution logs, and XP levels.</p>
+          </div>
         </div>
       </div>
-      <div class="footer__bottom">
-        <span>&copy; 2026 Astra. Made by <a href="https://github.com/watispro5212" class="footer__author-link">watispro1</a>.</span>
-        <span>Made with ✨ for the Discord community</span>
+
+      <div class="legal-section">
+        <div class="legal-title"><span>02</span> DATA PERSISTENCE (POSTGRESQL)</div>
+        <p class="legal-text">
+          Operative data is persisted within an encrypted **PostgreSQL cluster**. This includes your leveling matrix, economy balance, and active support tickets. We do not store message content, images, or sensitive personal information outside of active moderation logs.
+        </p>
       </div>
+
+      <div class="legal-section">
+        <div class="legal-title"><span>03</span> VANGUARD ERROR REPORTING</div>
+        <p class="legal-text">
+          In the event of a system anomaly, a diagnostic packet is transmitted to the Astra Core Team. This packet contains the Error Stack Trace and the Context ID. No private user communication is ever included in these reports.
+        </p>
+      </div>
+
+      <div class="legal-section">
+        <div class="legal-title"><span>04</span> USER RIGHTS & ERASURE</div>
+        <p class="legal-text">
+          Citizens have the right to request a total wipe of their data from the Astra Intelligence Matrix. To initiate a **Right to Erasure**, join our Support Sector or use the `/utility request-wipe` protocol (where available).
+        </p>
+      </div>
+
+      <div class="legal-section">
+        <div class="legal-title"><span>05</span> THIRD-PARTY TRANSMISSION</div>
+        <p class="legal-text">
+          Astra never sells or distributes operative data to third-party entities. All data remains within the Astra Secure Network for the sole purpose of guild moderation and utility.
+        </p>
+      </div>
+
+      <p class="legal-text" style="font-size: 0.8rem; margin-top: 50px;">
+        Last Updated: April 22, 2026 • Astra Privacy Sector v7.0.0
+      </p>
     </div>
-  </footer>
 
-  <script src="assets/js/main.js"></script>
+  </main>
 
-  <div class="global-notification" id="global-notify">
-    <span class="global-notification__icon">✨</span>
-    <span class="global-notification__text">Astra v6.3.0 is officially live! Enjoy the Titan update.</span>
-    <button class="global-notification__close" onclick="document.getElementById('global-notify').style.display='none'">&times;</button>
-  </div>
-  <button class="back-to-top" id="backToTop" aria-label="Back to top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-    &uarr;
-  </button>
   <script>
     window.addEventListener('scroll', () => {
-      const btn = document.getElementById('backToTop');
-      if (window.scrollY > 300) btn.classList.add('visible');
-      else btn.classList.remove('visible');
+      const nav = document.getElementById('navbar');
+      if (window.scrollY > 50) {
+        nav.classList.add('nav-titan--scrolled');
+      } else {
+        nav.classList.remove('nav-titan--scrolled');
+      }
     });
   </script>
 </body>
-
 </html>

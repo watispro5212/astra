@@ -128,6 +128,17 @@ class DatabaseManager {
                 role_id ${INT},
                 price ${INT},
                 stock ${INT} DEFAULT -1
+            )`,
+            `CREATE TABLE IF NOT EXISTS leveling_configs (
+                guild_id ${INT} PRIMARY KEY,
+                announcement_channel_id ${INT}
+            )`,
+            `CREATE TABLE IF NOT EXISTS level_roles (
+                id ${PK},
+                guild_id ${INT},
+                level ${INT},
+                role_id ${INT},
+                UNIQUE(guild_id, level)
             )`
         ];
 
@@ -142,6 +153,8 @@ class DatabaseManager {
             `ALTER TABLE guilds ADD COLUMN automod_anti_invite ${BOOL} DEFAULT FALSE`,
             `ALTER TABLE guilds ADD COLUMN automod_anti_link ${BOOL} DEFAULT FALSE`,
             `ALTER TABLE guilds ADD COLUMN automod_spam_threshold ${INT} DEFAULT 5`,
+            `CREATE TABLE IF NOT EXISTS leveling_configs (guild_id ${INT} PRIMARY KEY, announcement_channel_id ${INT})`,
+            `CREATE TABLE IF NOT EXISTS level_roles (id ${PK}, guild_id ${INT}, level ${INT}, role_id ${INT}, UNIQUE(guild_id, level))`
         ];
         for (const migration of migrations) {
             try {

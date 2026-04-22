@@ -141,13 +141,36 @@ export class AstraClient extends Client {
                     const newLevel = (user.level || 0) + 1;
                     await db.execute('UPDATE users SET xp = ?, level = ? WHERE user_id = ?', 0, newLevel, message.author.id);
                     
+                    // Fetch Leveling Configs
+                    const cfg = await db.fetchOne('SELECT announcement_channel_id FROM leveling_configs WHERE guild_id = ?', message.guild.id);
+                    const milestoneRole = await db.fetchOne('SELECT role_id FROM level_roles WHERE guild_id = ? AND level = ?', message.guild.id, newLevel);
+
+                    if (milestoneRole) {
+                        const role = await message.guild.roles.fetch(milestoneRole.role_id).catch(() => null);
+                        if (role) await message.member?.roles.add(role).catch(() => {});
+                    }
+
                     const levelEmbed = new EmbedBuilder()
                         .setColor(0x9b59b6)
                         .setTitle('🎊 Level Elevated')
-                        .setDescription(`Congratulations **${message.author.username}**, you have reached **Level ${newLevel}**!`)
-                        .setFooter({ text: 'Astra Intelligence System' });
+                        .setDescription(`Congratulations **${message.author.username}**, you have reached **Level ${newLevel}**!${milestoneRole ? `\n\n**Reward Granted:** <@&${milestoneRole.role_id}>` : ''}`)
+                        .setFooter({ text: 'Astra Intelligence System v7.0.0' });
 
-                    message.channel.send({ content: `<@${message.author.id}>`, embeds: [levelEmbed] }).catch(() => {});
+                    let targetChannel: any = message.channel;
+                    if (cfg?.announcement_channel_id) {
+                        try {
+                            const announcementChan = await message.guild.channels.fetch(cfg.announcement_channel_id);
+                            if (announcementChan && announcementChan.isTextBased()) {
+                                targetChannel = announcementChan;
+                            }
+                        } catch (err) {
+                            logger.warn(`Failed to fetch announcement channel ${cfg.announcement_channel_id}: ${err}`);
+                        }
+                    }
+
+                    await targetChannel.send({ content: `<@${message.author.id}>`, embeds: [levelEmbed] }).catch((err: any) => {
+                        logger.error(`Failed to send level-up message: ${err}`);
+                    });
                 } else {
                     await db.execute('UPDATE users SET xp = ? WHERE user_id = ?', newXp, message.author.id);
                 }

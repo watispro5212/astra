@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, ChatInputCommandInteraction, PermissionFlagsBits, EmbedBuilder, ChannelType, PermissionsBitField, OverwriteResolvable } from 'discord.js';
+import { SlashCommandBuilder, ChatInputCommandInteraction, PermissionFlagsBits, EmbedBuilder, ChannelType, PermissionsBitField, OverwriteResolvable, TextChannel } from 'discord.js';
 import logger from '../core/logger';
 
 const TARGET_GUILD_ID = '1494909279159980192';
@@ -62,8 +62,9 @@ export default {
 
         // 1. APEX ROLE HIERARCHY
         const rolesToCreate = [
-            { name: "👑 OVERSEER", color: "#e74c3c", permissions: [PermissionFlagsBits.Administrator] },
+            { name: "🌟 SUPREME", color: "#f1c40f", permissions: [PermissionFlagsBits.Administrator] },
             { name: "🛡️ ADMINISTRATOR", color: "#c0392b", permissions: [PermissionFlagsBits.Administrator] },
+            { name: "💠 ELITE", color: "#3498db", permissions: [PermissionFlagsBits.ManageMessages, PermissionFlagsBits.MuteMembers, PermissionFlagsBits.DeafenMembers] },
             { name: "👮 MODERATOR", color: "#2980b9", permissions: [PermissionFlagsBits.ManageMessages, PermissionFlagsBits.KickMembers, PermissionFlagsBits.BanMembers, PermissionFlagsBits.ViewAuditLog, PermissionFlagsBits.ModerateMembers] },
             { name: "🔦 TRIAL MOD", color: "#3498db", permissions: [PermissionFlagsBits.ManageMessages, PermissionFlagsBits.ViewAuditLog] },
             { name: "🛡️ ENFORCER", color: "#e67e22", permissions: [PermissionFlagsBits.KickMembers, PermissionFlagsBits.BanMembers, PermissionFlagsBits.ManageMessages, PermissionFlagsBits.ModerateMembers] },
@@ -75,25 +76,28 @@ export default {
             { name: "✨ PIONEER", color: "#3498db", permissions: [PermissionFlagsBits.SendMessages] },
             { name: "🤖 OPERATIVE", color: "#1abc9c", permissions: [PermissionFlagsBits.ManageWebhooks] },
             { name: "👥 CITIZEN", color: "#95a5a6", permissions: [PermissionFlagsBits.SendMessages, PermissionFlagsBits.ReadMessageHistory, PermissionFlagsBits.AddReactions] },
+            // Leveling Milestone Roles
+            { name: "🏆 LVL 100", color: "#ffd700", permissions: [] },
+            { name: "🥇 LVL 50", color: "#c0c0c0", permissions: [] },
+            { name: "🥈 LVL 25", color: "#cd7f32", permissions: [] },
+            { name: "🥉 LVL 10", color: "#3498db", permissions: [] },
+            { name: "🎖️ LVL 5", color: "#1abc9c", permissions: [] },
         ];
 
+        const createdRoles = new Map<string, any>();
         for (const r of rolesToCreate) {
-            let role = guild.roles.cache.find(role => role.name === r.name);
-            if (!role) {
-                await guild.roles.create({
-                    name: r.name,
-                    color: r.color as any,
-                    permissions: r.permissions as any,
-                    reason: 'Astra Apex Reconstruction'
-                });
-            }
+            const role = await guild.roles.create({
+                name: r.name,
+                color: r.color as any,
+                permissions: r.permissions as any,
+                reason: 'Apex Reconstruction Hierarchy Deployment'
+            });
+            createdRoles.set(r.name, role);
         }
 
-        // Re-fetch roles for channel permissions
-        await guild.roles.fetch();
-        const enforcerRole = guild.roles.cache.find(r => r.name === "🛡️ ENFORCER");
-        const veteranRole = guild.roles.cache.find(r => r.name === "🎖️ VETERAN");
-        const boosterRole = guild.roles.cache.find(r => r.name === "💎 BOOSTER");
+        const enforcerRole = createdRoles.get("🛡️ ENFORCER");
+        const veteranRole = createdRoles.get("🎖️ VETERAN");
+        const boosterRole = createdRoles.get("💎 BOOSTER");
 
         // 2. APEX SECTOR BLUEPRINTS
         const blueprint = [
@@ -107,8 +111,20 @@ export default {
                     { name: "📜-rules", type: ChannelType.GuildText, topic: "Official guidelines and server regulations." },
                     { name: "📢-announcements", type: ChannelType.GuildText, topic: "Major updates and community news." },
                     { name: "👋-welcome", type: ChannelType.GuildText, topic: "New member arrival logs." },
+                    { name: "📜-role-information", type: ChannelType.GuildText, topic: "Detailed diagnostic of the server hierarchy." },
                     { name: "❓-faq", type: ChannelType.GuildText, topic: "Common questions and information." },
                     { name: "🤝-partners", type: ChannelType.GuildText, topic: "Affiliated servers and communities." }
+                ]
+            },
+            {
+                name: "🏆 INTELLIGENCE SECTOR",
+                permissions: [
+                    { id: guild.id, allow: [PermissionFlagsBits.ViewChannel], deny: [PermissionFlagsBits.SendMessages] }
+                ],
+                channels: [
+                    { name: "📈-rank-analysis", type: ChannelType.GuildText, topic: "Real-time level-up transmissions." },
+                    { name: "🏆-leaderboard", type: ChannelType.GuildText, topic: "Top-tier operative rankings." },
+                    { name: "🔮-milestones", type: ChannelType.GuildText, topic: "Sector-wide achievement logs." }
                 ]
             },
             {
@@ -239,9 +255,37 @@ export default {
             .setDescription(`The Astra Prime APEX architecture has been deployed. Infrastructure and Role Hierarchy have been synchronized.`)
             .setColor(0x2ecc71)
             .setThumbnail(interaction.client.user?.displayAvatarURL()!)
-            .setFooter({ text: 'Astra Architect v6.3.0 Apex' })
+            .setFooter({ text: 'Astra Architect v7.0.0 Apex' })
             .setTimestamp();
 
         await interaction.editReply({ embeds: [successEmbed] });
+
+        // 3. ROLE INFORMATION PAYLOAD
+        const infoChannel = guild.channels.cache.find(c => c.name === "📜-role-information" && c.type === ChannelType.GuildText) as TextChannel;
+        if (infoChannel) {
+            const roleEmbed = new EmbedBuilder()
+                .setTitle('📜 ASTRA HIERARCHY REGISTRY')
+                .setDescription('Below is a detailed diagnostic of the server roles and their respective clearance levels.')
+                .setColor(0x3498db)
+                .addFields(
+                    { name: '🌟 SUPREME', value: 'Highest administrative authority. Absolute sector control.' },
+                    { name: '🛡️ ADMINISTRATOR', value: 'Strategic management and infrastructure oversight.' },
+                    { name: '💠 ELITE', value: 'High-clearance moderation and community enforcement.' },
+                    { name: '👮 MODERATOR', value: 'Standard tactical security and conflict resolution.' },
+                    { name: '🛡️ ENFORCER', value: 'Entry-level security and message frequency maintenance.' },
+                    { name: '🧪 RESEARCHER', value: 'Technical contributors and development partners.' },
+                    { name: '🎖️ VETERAN', value: 'Long-term citizens with priority communication clearance.' },
+                    { name: '💎 BOOSTER', value: 'Citizens providing direct fiscal support to the sector.' },
+                    { name: '👥 CITIZEN', value: 'Standard operative with basic communication clearance.' }
+                )
+                .addFields({ 
+                    name: '🏆 LEVELING MILESTONES', 
+                    value: 'Roles earned through engagement: `LVL 5`, `LVL 10`, `LVL 25`, `LVL 50`, `LVL 100`.' 
+                })
+                .setFooter({ text: 'Astra Intelligence Registry v7.0.0' })
+                .setTimestamp();
+
+            await infoChannel.send({ embeds: [roleEmbed] });
+        }
     }
 };
