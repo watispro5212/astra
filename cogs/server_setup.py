@@ -143,7 +143,7 @@ class ServerSetup(commands.Cog):
         # Orphan Scan
         status_embed.description = "🔍 Performing Orphan Scan..."
         await status_msg.edit(embed=status_embed)
-        blueprint_names = {self._normalize(n) for _, _, channels in structure for n, _ in channels}
+        blueprint_names = {self._normalize(n) for _, _, channels in structure for _, n, _ in channels}
         for chan in guild.text_channels:
             if chan.category is None:
                 norm = self._normalize(chan.name)

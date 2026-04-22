@@ -246,7 +246,44 @@ class Moderation(commands.Cog):
         deleted = await interaction.channel.purge(limit=amount)
         await interaction.followup.send(embed=SuccessEmbed(f"Tactical Purge Complete: **{len(deleted)} messages** removed."))
 
-    @app_commands.command(name="slowmode", description="Regulate message traffic.")
+    @mod.command(name="softban", description="🔨 Purge messages and kick (Ban + Instant Unban).")
+    @app_commands.describe(member="The member to softban.", reason="Reason for the softban.", delete_days="Days of messages to purge.")
+    @app_commands.checks.has_permissions(ban_members=True)
+    async def softban(self, interaction: discord.Interaction, member: discord.Member, reason: str = "No reason provided", delete_days: int = 7):
+        if member.top_role >= interaction.user.top_role:
+             return await interaction.response.send_message(embed=ErrorEmbed("Insufficient Authority."), ephemeral=True)
+        
+        await interaction.response.defer(ephemeral=True)
+        try:
+            await member.ban(reason=f"[SOFTBAN] {reason}", delete_message_days=delete_days)
+            await interaction.guild.unban(member, reason="Softban cleanup.")
+            case_id = await ModerationService.create_case(interaction.guild_id, member.id, interaction.user.id, "softban", reason)
+            await interaction.followup.send(embed=SuccessEmbed(f"Softbanned **{member}** (Case #{case_id})"))
+        except Exception as e:
+            await interaction.followup.send(embed=ErrorEmbed(f"Softban Failed: {e}"))
+
+    @mod.command(name="rename", description="🏷️ Rapidly override a member's nickname.")
+    @app_commands.describe(member="The member to rename.", nickname="The new tactical handle.")
+    @app_commands.checks.has_permissions(manage_nicknames=True)
+    async def rename(self, interaction: discord.Interaction, member: discord.Member, nickname: Optional[str] = None):
+        if member.top_role >= interaction.user.top_role:
+             return await interaction.response.send_message(embed=ErrorEmbed("Insufficient Authority."), ephemeral=True)
+             
+        try:
+            old_name = member.display_name
+            await member.edit(nick=nickname)
+            await interaction.response.send_message(embed=SuccessEmbed(f"Handle Override: **{old_name}** ➔ **{nickname or member.name}**"))
+        except Exception as e:
+            await interaction.response.send_message(embed=ErrorEmbed(f"Override Failed: {e}"), ephemeral=True)
+
+    @mod.command(name="note", description="📝 Attach a private tactical note to a user record.")
+    @app_commands.describe(user="The subject of the note.", content="Tactical intelligence to record.")
+    @app_commands.checks.has_permissions(manage_messages=True)
+    async def note(self, interaction: discord.Interaction, user: discord.User, content: str):
+        case_id = await ModerationService.create_case(interaction.guild_id, user.id, interaction.user.id, "note", content)
+        await interaction.response.send_message(embed=SuccessEmbed(f"Node recorded for **{user}** (Case #{case_id})"), ephemeral=True)
+
+    @mod.command(name="slowmode", description="Regulate message traffic.")
     @app_commands.describe(seconds="Delay between messages (0 to disable).")
     @app_commands.checks.has_permissions(manage_channels=True)
     async def slowmode(self, interaction: discord.Interaction, seconds: int):

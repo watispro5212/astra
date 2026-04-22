@@ -111,54 +111,105 @@ class General(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @app_commands.command(name="help", description="Access the Astra Tactical Guide.")
-    @app_commands.describe(category="Jump directly to a specific tactical sector.")
-    async def help(self, interaction: discord.Interaction, category: Optional[str] = None):
-        categories = list(_HELP_CATEGORIES.keys())
-
-        if category:
-            match = next((c for c in categories if category.lower() in c.lower()), None)
-            if match:
-                cmds = _HELP_CATEGORIES[match]
-                embed = AstraEmbed(title=f"{match} Operations")
-                embed.description = "\n".join(f"**{cmd}**\n└ {desc}" for cmd, desc in cmds)
-                embed.set_footer(text=f"Astra Tactical Guide • {len(cmds)} operations")
-                return await interaction.response.send_message(embed=embed, ephemeral=True)
-
-        total = sum(len(v) for v in _HELP_CATEGORIES.values())
+    @app_commands.command(name="ping", description="📡 Audit signal strength and network latency.")
+    async def ping(self, interaction: discord.Interaction):
+        latency = round(self.bot.latency * 1000)
+        
         embed = AstraEmbed(
-            title="🛰️ Astra Tactical Command",
+            title="📡 Signal Strength Diagnostic",
             description=(
-                f"Astra is currently managing **{total} tactical operations** across **{len(categories)} sectors**.\n"
-                "Use the interface below to navigate our core systems.\n\n"
-                "**Tactical Uplinks:**\n"
-                "• [Operations Manual](https://watispro5212.github.io/astra/commands.html)\n"
-                "• [Command Center](https://discord.gg/NZ5Gr7eqE8)\n"
-                "• [Intelligence (FAQ)](https://watispro5212.github.io/astra/faq.html)"
-            ),
+                f"**Uplink Latency:** `{latency}ms`\n"
+                f"**Shard:** `#{interaction.guild.shard_id if interaction.guild else 0}`\n"
+                f"**API Status:** `OPERATIONAL`"
+            )
         )
         
-        # Add summary fields for first 6 categories
-        for cat, cmds in list(_HELP_CATEGORIES.items())[:6]:
-            embed.add_field(name=cat, value=f"`{len(cmds)} ops`", inline=True)
-            
-        embed.set_footer(text="v6.0.0 Tactical Interface • Use dropdown to explore sectors")
+        # Color coding based on latency
+        if latency < 100: embed.color = discord.Color.green()
+        elif latency < 250: embed.color = discord.Color.orange()
+        else: embed.color = discord.Color.red()
+        
+        await interaction.response.send_message(embed=embed, ephemeral=True)
 
-        view = HelpView(categories)
-        await interaction.response.send_message(embed=embed, view=view, ephemeral=True)
-        view.message = await interaction.original_response()
+    @app_commands.command(name="about", description="🚀 Astra: Mission Architecture & Core Specifications.")
+    async def about(self, interaction: discord.Interaction):
+        embed = AstraEmbed(
+            title="🚀 Astra v6.0 \"Nebula\"",
+            description=(
+                "Astra is a high-performance, mission-ready Discord management system built for high-scale communities.\n\n"
+                "**Core Specifications:**\n"
+                f"• **Command Nodes:** `{len(self.bot.tree.get_commands())}`\n"
+                f"• **Operational Sectors:** `{len(self.bot.guilds)}` servers\n"
+                f"• **Intelligence Matrix:** `Discord.py 2.3.2`\n"
+                "• **Architecture:** Event-driven, asynchronous core logic\n\n"
+                "**Mission Focus:**\n"
+                "Removing friction from community management through automation, diagnostics, and high-fidelity reporting."
+            )
+        )
+        embed.set_thumbnail(url=self.bot.user.display_avatar.url)
+        await interaction.response.send_message(embed=embed, ephemeral=True)
 
-    @help.autocomplete("category")
-    async def help_category_autocomplete(
-        self, interaction: discord.Interaction, current: str
-    ) -> list[app_commands.Choice[str]]:
-        categories = list(_HELP_CATEGORIES.keys())
-        return [
-            app_commands.Choice(name=cat, value=cat)
-            for cat in categories
-            if current.lower() in cat.lower()
-        ][:25]
+    @app_commands.command(name="userinfo", description="🔍 Deep-scan diagnostics for a specific member.")
+    @app_commands.describe(member="The subject to analyze.")
+    async def userinfo(self, interaction: discord.Interaction, member: Optional[discord.Member] = None):
+        target = member or interaction.user
+        
+        roles = [role.mention for role in reversed(target.roles) if role != interaction.guild.default_role]
+        role_str = " ".join(roles[:10]) + (f" ...and {len(roles)-10} more" if len(roles) > 10 else "")
+        if not roles: role_str = "None"
 
+        embed = AstraEmbed(title=f"🔍 Diagnostic: {target.display_name}")
+        embed.set_thumbnail(url=target.display_avatar.url)
+        
+        embed.add_field(name="🆔 Identification", value=f"**ID:** `{target.id}`\n**Handle:** `{target.name}`", inline=True)
+        embed.add_field(name="📅 Timestamps", value=(
+            f"**Created:** <t:{int(target.created_at.timestamp())}:R>\n"
+            f"**Joined:** <t:{int(target.joined_at.timestamp())}:R>"
+        ), inline=True)
+        
+        embed.add_field(name="🛡️ Military Record", value=f"**Top Role:** {target.top_role.mention}\n**Roles:** {role_str}", inline=False)
+        
+        if target.id == interaction.guild.owner_id:
+            embed.set_author(name="COMMANDER-IN-CHIEF / OWNER", icon_url="https://i.imgur.com/vHUP5F8.png")
+        
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+
+    @app_commands.command(name="serverinfo", description="📊 Retrieve detailed operational data for this guild.")
+    async def serverinfo(self, interaction: discord.Interaction):
+        guild = interaction.guild
+        
+        embed = AstraEmbed(title=f"📊 Sector Intelligence: {guild.name}")
+        if guild.icon: embed.set_thumbnail(url=guild.icon.url)
+        
+        embed.add_field(name="🏰 Infrastructure", value=(
+            f"**ID:** `{guild.id}`\n"
+            f"**Owner:** <@{guild.owner_id}>\n"
+            f"**Created:** <t:{int(guild.created_at.timestamp())}:F>"
+        ), inline=True)
+        
+        embed.add_field(name="👥 Population", value=(
+            f"**Total:** `{guild.member_count}` units\n"
+            f"**Level:** `Tier {guild.premium_tier}`\n"
+            f"**Boosts:** `{guild.premium_subscription_count}`"
+        ), inline=True)
+        
+        embed.add_field(name="📂 Breakdown", value=(
+            f"**Categories:** `{len(guild.categories)}` sectors\n"
+            f"**Text:** `{len(guild.text_channels)}` | **Voice:** `{len(guild.voice_channels)}` channels\n"
+            f"**Roles:** `{len(guild.roles)}` definitions"
+        ), inline=False)
+        
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+
+    @app_commands.command(name="avatar", description="🖼️ Extract high-resolution visual asset for a member.")
+    @app_commands.describe(member="The subject to scan.")
+    async def avatar(self, interaction: discord.Interaction, member: Optional[discord.Member] = None):
+        target = member or interaction.user
+        
+        embed = AstraEmbed(title=f"🖼️ Asset: {target.display_name}")
+        embed.set_image(url=target.display_avatar.with_size(1024).url)
+        
+        await interaction.response.send_message(embed=embed, ephemeral=True)
 
 
 async def setup(bot: commands.Bot):

@@ -91,5 +91,13 @@ class Welcome(commands.Cog):
         await db.execute(query, *params)
         await interaction.followup.send(embed=SuccessEmbed("Entry protocols have been recalibrated."))
 
+    @app_commands.command(name="welcome_test", description="🛰️ Test the current entry/exit transmission matrix.")
+    @app_commands.checks.has_permissions(manage_guild=True)
+    async def welcome_test(self, interaction: discord.Interaction):
+        """Simulates a member entry/exit to test transmissions."""
+        await interaction.response.send_message("🛰️ **Initiating transmission test...**", ephemeral=True)
+        await welcome_service.send_welcome(interaction.user)
+        await welcome_service.send_farewell(interaction.user)
+
 async def setup(bot: commands.Bot):
     await bot.add_cog(Welcome(bot))

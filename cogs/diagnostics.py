@@ -69,34 +69,21 @@ class Diagnostics(commands.Cog):
 
         await interaction.followup.send(embed=embed)
 
-    @app_commands.command(name="about", description="🛰️ Review Astra's tactical mission and origins.")
-    @app_commands.allowed_installs(guilds=True, users=True)
-    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    async def about(self, interaction: discord.Interaction):
-        """Displays bot overview and links."""
-        embed = AstraEmbed(
-            title="🛰️ Astra — Mission Overview",
-            description=(
-                "Astra is a high-performance, tactical Discord utility designed for secure support, "
-                "automated moderation, and efficient community management. Our core directive is "
-                "to provide a clean, modern interface that prioritizes speed and reliability."
-            )
-        )
-        embed.set_thumbnail(url=self.bot.user.display_avatar.url)
+    @app_commands.command(name="system", description="💻 Monitor host machine technical metrics.")
+    @app_commands.checks.has_permissions(administrator=True)
+    async def system_metrics(self, interaction: discord.Interaction):
+        """High-level host telemetry."""
+        cpu_usage = psutil.cpu_percent()
+        memory = psutil.virtual_memory()
+        uptime_seconds = int(time.time() - psutil.boot_time())
+        uptime = str(datetime.timedelta(seconds=uptime_seconds))
         
-        embed.add_field(name="🏛️ Command Center", value="[Join HQ](https://discord.gg/NZ5Gr7eqE8)", inline=True)
-        embed.add_field(name="🔗 Deploy Astra", value="[Authorization Portal](https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&response_type=code&scope=bot+applications.commands)", inline=True)
+        embed = AstraEmbed(title="💻 Host Machine Telemetry")
+        embed.add_field(name="🧠 CPU Load", value=f"`{cpu_usage}%`", inline=True)
+        embed.add_field(name="🧬 Memory Usage", value=f"`{memory.percent}%` ({round(memory.used/1024**3, 1)}GB / {round(memory.total/1024**3, 1)}GB)", inline=True)
+        embed.add_field(name="⏱️ Host Uptime", value=f"`{uptime}`", inline=False)
         
-        await interaction.response.send_message(embed=embed)
-
-    @app_commands.command(name="ping", description="📡 Signal strength test for response latency.")
-    @app_commands.allowed_installs(guilds=True, users=True)
-    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    async def ping(self, interaction: discord.Interaction):
-        """Standard latency test."""
-        latency = round(self.bot.latency * 1000)
-        embed = AstraEmbed(title="📡 Signal Strength", description=f"🛰️ Latency: **{latency}ms**")
-        await interaction.response.send_message(embed=embed)
+        await interaction.response.send_message(embed=embed, ephemeral=True)
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(Diagnostics(bot))
