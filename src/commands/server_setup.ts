@@ -77,11 +77,16 @@ export default {
             { name: "🤖 OPERATIVE", color: "#1abc9c", permissions: [PermissionFlagsBits.ManageWebhooks] },
             { name: "👥 CITIZEN", color: "#95a5a6", permissions: [PermissionFlagsBits.SendMessages, PermissionFlagsBits.ReadMessageHistory, PermissionFlagsBits.AddReactions] },
             // Leveling Milestone Roles
+            { name: "🏆 LVL 200", color: "#ffd700", permissions: [] },
+            { name: "🏆 LVL 150", color: "#c0c0c0", permissions: [] },
             { name: "🏆 LVL 100", color: "#ffd700", permissions: [] },
-            { name: "🥇 LVL 50", color: "#c0c0c0", permissions: [] },
-            { name: "🥈 LVL 25", color: "#cd7f32", permissions: [] },
-            { name: "🥉 LVL 10", color: "#3498db", permissions: [] },
-            { name: "🎖️ LVL 5", color: "#1abc9c", permissions: [] },
+            { name: "🏆 LVL 75", color: "#e5e4e2", permissions: [] },
+            { name: "🏆 LVL 50", color: "#c0c0c0", permissions: [] },
+            { name: "🏆 LVL 25", color: "#cd7f32", permissions: [] },
+            { name: "🏆 LVL 15", color: "#95a5a6", permissions: [] },
+            { name: "🏆 LVL 10", color: "#3498db", permissions: [] },
+            { name: "🏆 LVL 5", color: "#1abc9c", permissions: [] },
+            { name: "🏆 LVL 1", color: "#2c3e50", permissions: [] },
         ];
 
         const createdRoles = new Map<string, any>();
@@ -265,27 +270,52 @@ export default {
         if (infoChannel) {
             const roleEmbed = new EmbedBuilder()
                 .setTitle('📜 ASTRA HIERARCHY REGISTRY')
-                .setDescription('Below is a detailed diagnostic of the server roles and their respective clearance levels.')
+                .setDescription('Below is a surgical diagnostic of the Astra Apex Hierarchy and its respective clearance levels.')
                 .setColor(0x3498db)
                 .addFields(
-                    { name: '🌟 SUPREME', value: 'Highest administrative authority. Absolute sector control.' },
-                    { name: '🛡️ ADMINISTRATOR', value: 'Strategic management and infrastructure oversight.' },
-                    { name: '💠 ELITE', value: 'High-clearance moderation and community enforcement.' },
-                    { name: '👮 MODERATOR', value: 'Standard tactical security and conflict resolution.' },
-                    { name: '🛡️ ENFORCER', value: 'Entry-level security and message frequency maintenance.' },
-                    { name: '🧪 RESEARCHER', value: 'Technical contributors and development partners.' },
-                    { name: '🎖️ VETERAN', value: 'Long-term citizens with priority communication clearance.' },
-                    { name: '💎 BOOSTER', value: 'Citizens providing direct fiscal support to the sector.' },
-                    { name: '👥 CITIZEN', value: 'Standard operative with basic communication clearance.' }
+                    { name: '🌟 SUPREME', value: 'Highest administrative authority. Absolute sector control.', inline: true },
+                    { name: '🛡️ ADMINISTRATOR', value: 'Strategic management and infrastructure oversight.', inline: true },
+                    { name: '💠 ELITE', value: 'High-clearance moderation and community enforcement.', inline: true },
+                    { name: '👮 MODERATOR', value: 'Standard tactical security and conflict resolution.', inline: true },
+                    { name: '🔦 TRIAL MOD', value: 'Observational security training tier.', inline: true },
+                    { name: '🛡️ ENFORCER', value: 'Entry-level security and message frequency maintenance.', inline: true },
+                    { name: '🧪 RESEARCHER', value: 'Technical contributors and development partners.', inline: true },
+                    { name: '🎖️ VETERAN', value: 'Long-term citizens with priority communication clearance.', inline: true },
+                    { name: '🎨 CREATIVE', value: 'Citizens recognized for exceptional artistic output.', inline: true },
+                    { name: '📣 HERALD', value: 'Official spokespersons and announcement distributors.', inline: true },
+                    { name: '💎 BOOSTER', value: 'Direct fiscal supporters of the Astra infrastructure.', inline: true },
+                    { name: '✨ PIONEER', value: 'Early-stage operatives from the founding era.', inline: true },
+                    { name: '🤖 OPERATIVE', value: 'Verified external automated systems.', inline: true },
+                    { name: '👥 CITIZEN', value: 'Standard operative with basic communication clearance.', inline: true }
                 )
                 .addFields({ 
-                    name: '🏆 LEVELING MILESTONES', 
-                    value: 'Roles earned through engagement: `LVL 5`, `LVL 10`, `LVL 25`, `LVL 50`, `LVL 100`.' 
+                    name: '🏆 INTELLIGENCE MILESTONES', 
+                    value: '• `👑 LVL 200`: Apex Sovereign\n• `🛰️ LVL 150`: Sector Commander\n• `🏆 LVL 100`: Apex Master\n• `🥇 LVL 75`: Tactical Specialist\n• `🥇 LVL 50`: Elite Veteran\n• `🥈 LVL 25`: Senior Operative\n• `🥈 LVL 15`: Senior Recruit\n• `🥉 LVL 10`: Standard Operative\n• `🎖️ LVL 5`: Junior Operative\n• `🎖️ LVL 1`: Initial Operative' 
                 })
                 .setFooter({ text: 'Astra Intelligence Registry v7.0.0' })
                 .setTimestamp();
 
             await infoChannel.send({ embeds: [roleEmbed] });
+        }
+
+        // 4. ARCHITECT\'S BRIEFING (OWNER DM)
+        const owner = await interaction.client.users.fetch('1320058519642177668').catch(() => null);
+        if (owner) {
+            const briefingEmbed = new EmbedBuilder()
+                .setTitle('🛰️ ARCHITECT\'S BRIEFING: Bot Integration Suggestions')
+                .setDescription('Reconstruction complete. To further enhance your sector, consider integrating these specialized systems:')
+                .setColor(0xf1c40f)
+                .addFields(
+                    { name: '⚔️ Dyno / MEE6', value: 'Secondary moderation redundancy and automated custom commands.' },
+                    { name: '🎵 Jockie Music / FredBoat', value: 'High-fidelity audio streaming for the Voice Sectors.' },
+                    { name: '📊 Statbot', value: 'Deep-dive server analytics and historical engagement tracking.' },
+                    { name: '🎮 Mudae / Dank Memer', value: 'Engagement boosters and secondary economy layers.' },
+                    { name: '🛡️ Wick Bot', value: 'Advanced anti-nuke and raid protection for high-risk environments.' }
+                )
+                .setFooter({ text: 'Astra Tactical Intelligence' })
+                .setTimestamp();
+
+            await owner.send({ embeds: [briefingEmbed] }).catch(() => logger.warn('Failed to transmit Architect\'s Briefing to owner.'));
         }
     }
 };

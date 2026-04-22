@@ -13,6 +13,8 @@ import logger from './core/logger';
 import { db } from './core/database';
 import { Command } from './types';
 import { ErrorReporter } from './core/error_reporter';
+import { StatusService } from './services/statusService';
+import { PassiveIncomeService } from './services/passiveIncomeService';
 import * as path from 'path';
 import * as fs from 'fs';
 
@@ -112,6 +114,13 @@ export class AstraClient extends Client {
             GiveawayService.startChecker(this);
 
             this.user?.setActivity('Nova v7.0.0 | /system update', { type: ActivityType.Watching });
+
+            // Sentinel Status Pulse
+            await StatusService.sendSystemOnline(c);
+            StatusService.startHeartbeat(this);
+
+            // Industrial Yield Engine
+            PassiveIncomeService.startService();
         });
 
         // Tactical Intelligence (Leveling System)
@@ -246,6 +255,9 @@ export class AstraClient extends Client {
                         guild: interaction.guild,
                         user: interaction.user
                     });
+
+                    // Sentinel Anomaly Report
+                    await StatusService.sendError(error);
 
                     const errorEmbed = new EmbedBuilder()
                         .setColor(0xff0000)

@@ -125,9 +125,16 @@ class DatabaseManager {
                 guild_id ${INT},
                 name ${TEXT},
                 description ${TEXT},
-                role_id ${INT},
                 price ${INT},
-                stock ${INT} DEFAULT -1
+                stock ${INT} DEFAULT -1,
+                production_rate ${INT} DEFAULT 0
+            )`,
+            `CREATE TABLE IF NOT EXISTS user_inventory (
+                id ${PK},
+                user_id ${INT},
+                item_id ${INT},
+                quantity ${INT} DEFAULT 1,
+                last_harvest ${TEXT}
             )`,
             `CREATE TABLE IF NOT EXISTS leveling_configs (
                 guild_id ${INT} PRIMARY KEY,
@@ -139,6 +146,11 @@ class DatabaseManager {
                 level ${INT},
                 role_id ${INT},
                 UNIQUE(guild_id, level)
+            )`,
+            `CREATE TABLE IF NOT EXISTS user_stocks (
+                user_id ${INT} PRIMARY KEY,
+                shares ${INT} DEFAULT 0,
+                invested_amount ${INT} DEFAULT 0
             )`
         ];
 
