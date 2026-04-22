@@ -80,8 +80,14 @@ export class AstraClient extends Client {
         this.once(Events.ClientReady, async (c) => {
             logger.info(`Astra Online: Logged in as ${c.user.tag}`);
             
-            // Initial Sync
-            await this.syncCommands();
+            // Auto-Sync Logic
+            const isProduction = process.env.RAILWAY_ENVIRONMENT_ID || process.env.NODE_ENV === 'production';
+            if (isProduction) {
+                logger.info('Production environment detected. Synchronizing commands globally...');
+                await this.syncCommands('global');
+            } else {
+                await this.syncCommands('guild');
+            }
 
             // Start Background Services
             const { ReminderService } = require('./services/reminderService');
@@ -141,6 +147,11 @@ export class AstraClient extends Client {
             }
 
             if (scope === 'global') {
+                // Clear guild commands first to avoid duplication
+                if (config.guildId) {
+                    await rest.put(Routes.applicationGuildCommands(config.clientId, config.guildId), { body: [] });
+                    logger.info('Cleared guild commands before global sync.');
+                }
                 const data: any = await rest.put(
                     Routes.applicationCommands(config.clientId),
                     { body: commandData }
@@ -149,9 +160,12 @@ export class AstraClient extends Client {
                 return data.length;
             } else {
                 if (!config.guildId) {
-                    logger.warn('GUILD_ID not configured. Skipping guild sync.');
+                    logger.warn('GUILD_ID not configured. Defaulting to minimal sync.');
                     return 0;
                 }
+                // Clear global commands in development to avoid confusion
+                await rest.put(Routes.applicationCommands(config.clientId), { body: [] });
+                
                 const data: any = await rest.put(
                     Routes.applicationGuildCommands(config.clientId, config.guildId),
                     { body: commandData }

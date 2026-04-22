@@ -17,7 +17,6 @@
 <body>
   <div class="bg-grid" aria-hidden="true"></div>
   <div class="bg-radial" aria-hidden="true"></div>
-  <div class="bg-radial-2" aria-hidden="true"></div>
 
   <!-- NAVBAR -->
   <nav class="navbar glass" role="navigation" aria-label="Main navigation">
@@ -37,7 +36,7 @@
         <a href="changelog.html" class="navbar__link">Changelog</a>
         <a href="support.html" class="navbar__link">Support</a>
         <span class="navbar__cta">
-          <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=0&scope=bot+email+applications.commands+identify" class="btn btn--primary btn--small">Invite Astra</a>
+          <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands" class="btn btn--primary btn--small">Invite Astra</a>
         </span>
       </div>
     </div>
@@ -59,259 +58,67 @@
         Moderation, support tickets, guided onboarding, and powerful system utility.
       </p>
       <div class="hero__actions">
-        <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=0&scope=bot+email+applications.commands+identify" class="btn btn--primary btn--large">
+        <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands" class="btn btn--primary btn--large">
           ✨ Invite Astra — Free
         </a>
         <a href="features.html" class="btn btn--secondary btn--large">
           Explore Features
         </a>
-        <a href="https://discord.gg/NZ5Gr7eqE8" class="btn btn--ghost btn--large" target="_blank" rel="noopener">
-          Join Support Server
-        </a>
-      </div>
-      <div class="hero__stats animate-on-scroll">
-        <div class="hero__stat">
-          <div class="hero__stat-value counter" data-target="50">50+</div>
-          <div class="hero__stat-label">Slash Commands</div>
-        </div>
-        <div class="hero__stat">
-          <div class="hero__stat-value counter" data-target="20">20+</div>
-          <div class="hero__stat-label">Modules</div>
-        </div>
-        <div class="hero__stat">
-          <div class="hero__stat-value">99.9%</div>
-          <div class="hero__stat-label">Uptime</div>
-        </div>
-        <div class="hero__stat">
-          <div class="hero__stat-value">Free</div>
-          <div class="hero__stat-label">Forever</div>
-        </div>
       </div>
     </div>
     <div class="hero__scroll-hint" aria-hidden="true"></div>
   </section>
 
-  <!-- PREMIUM SHOWCASE 1 -->
-  <section class="section">
+  <!-- LIVE TERMINAL SECTION -->
+  <section class="section section--terminal" id="live-status">
     <div class="container">
-      <div class="feature-showcase animate-on-scroll">
-        <div class="feature-showcase__content">
-          <span class="tag tag--primary mb-md">Operational Excellence</span>
-          <h2 class="mb-lg">Professional <span class="text-gradient">Moderation</span></h2>
-          <p class="mb-xl">Every server deserves safety. Astra provides a mission-ready toolkit for staff teams, including numbered case tracking, automated logging, and native button-based confirmations for high-stakes actions.</p>
-          <ul class="mb-xl content">
-            <li><strong>Audit Trails:</strong> Every kick, ban, and mute is logged with a unique case ID.</li>
-            <li><strong>Appeal System:</strong> Integrated workflows for member appeals and case reviews.</li>
-            <li><strong>Data Sovereignty:</strong> Export your server's moderation history to CSV or JSON anytime.</li>
-          </ul>
-          <a href="features.html#moderation" class="btn btn--secondary">Explore Moderation Tools</a>
+      <div class="terminal-grid">
+        <div class="terminal-card animate-on-scroll">
+          <div class="terminal-header">
+            <div class="terminal-dots">
+              <span class="dot dot--red"></span>
+              <span class="dot dot--yellow"></span>
+              <span class="dot dot--green"></span>
+            </div>
+            <div class="terminal-title">ASTRA_TACTICAL_TERMINAL</div>
+          </div>
+          <div class="terminal-body">
+            <div class="discord-embed">
+              <div class="embed-border"></div>
+              <div class="embed-content">
+                <div class="embed-header">
+                  <span class="embed-icon">🛰️</span>
+                  <span class="embed-title">System Latency</span>
+                </div>
+                <div class="embed-fields">
+                  <div class="embed-field">
+                    <div class="field-name">API Latency</div>
+                    <div class="field-value">74ms</div>
+                  </div>
+                  <div class="embed-field">
+                    <div class="field-name">Uptime</div>
+                    <div class="field-value">13 minutes ago</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="terminal-input">
+              <span class="prompt">astra@system:~$</span>
+              <span class="cursor-type">/dev ping</span>
+            </div>
+          </div>
         </div>
-        <div class="feature-showcase__image">
-          <img src="astra_v6_discord_embeds_1776819526810.png" alt="Astra Moderation Interface Mockup">
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PREMIUM SHOWCASE 2 -->
-  <section class="section section--alt">
-    <div class="container">
-      <div class="feature-showcase feature-showcase--reverse animate-on-scroll">
-        <div class="feature-showcase__image">
-          <img src="astra_v6_dashboard_mockup_1776819511279.png" alt="Astra Dashboard Interface Mockup">
-        </div>
-        <div class="feature-showcase__content">
-          <span class="tag tag--primary mb-md">Seamless Management</span>
-          <h2 class="mb-lg">Sleek <span class="text-gradient">Configuration</span></h2>
-          <p class="mb-xl">Say goodbye to complex dashboards. Astra is designed for Discord-first interaction, but our underlying architecture ensures that every setting is easily accessible and highly performant.</p>
-          <ul class="mb-xl content">
-            <li><strong>Instant Sync:</strong> Changes to your config take effect across all shards immediately.</li>
-            <li><strong>Native UI:</strong> Use buttons, menus, and modals to configure Astra within Discord.</li>
-            <li><strong>Reliable:</strong> Built on a robust async architecture for 100% command reliability.</li>
-          </ul>
-          <a href="commands.html" class="btn btn--secondary">Browse All Commands</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FEATURE HIGHLIGHTS -->
-  <section class="section" id="features">
-    <div class="container">
-      <div class="section-header animate-on-scroll">
-        <span class="section-header__badge">Features</span>
-        <h2>Everything your server needs</h2>
-        <p>From professional moderation to support ticketing — Astra v6 handles the essentials with a clean, intuitive experience.</p>
-      </div>
-      <div class="grid grid--3 stagger">
-        <div class="card glass card--featured animate-on-scroll">
-          <div class="card__icon">🛡️</div>
-          <h3 class="card__title">Advanced Moderation</h3>
-          <p class="card__text">Kick, ban, warn, mute, lock channels, purge messages — full case tracking with appeals and CSV export.</p>
-          <span class="card__tag">Updated</span>
-        </div>
-        <div class="card glass card--featured animate-on-scroll">
-          <div class="card__icon">🛡️</div>
-          <h3 class="card__title">Professional Moderation</h3>
-          <p class="card__text">Every action (kick, ban, mute, warn) creates a numbered case. Full history lookup and CSV/JSON data exports.</p>
-          <span class="card__tag">Core</span>
-        </div>
-        <div class="card glass animate-on-scroll">
-          <div class="card__icon">🎫</div>
-          <h3 class="card__title">Support Tickets</h3>
-          <p class="card__text">Launch private support channels with one-click panels, claim systems, and automated HTML transcripts.</p>
-          <span class="card__tag">Premium</span>
-        </div>
-        <div class="card glass animate-on-scroll">
-          <div class="card__icon">👋</div>
-          <h3 class="card__title">Guided Onboarding</h3>
-          <p class="card__text">Automated welcome flows, rules verification, and professional button-based role menus for new members.</p>
-        </div>
-        <div class="card glass animate-on-scroll">
-          <div class="card__icon">📊</div>
-          <h3 class="card__title">Interactive Polls</h3>
-          <p class="card__text">Gauge community opinion with native poll interactions, live progress bars, and one-vote integrity.</p>
-        </div>
-        <div class="card glass animate-on-scroll">
-          <div class="card__icon">⏰</div>
-          <h3 class="card__title">Reminders</h3>
-          <p class="card__text">Never miss a deadline. Set personal reminders that deliver straight to your channel or DMs.</p>
-        </div>
-        <div class="card glass animate-on-scroll">
-          <div class="card__icon">📡</div>
-          <h3 class="card__title">System Diagnostics</h3>
-          <p class="card__text">View real-time bot performance, shard metrics, and server snapshots with enterprise diagnostics.</p>
-        </div>
-      </div>
-      <div class="section-cta animate-on-scroll">
-        <a href="features.html" class="btn btn--primary btn--large">View All Features →</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- PREMIUM SHOWCASE 3: ONBOARDING -->
-  <section class="section">
-    <div class="container">
-      <div class="feature-showcase animate-on-scroll">
-        <div class="feature-showcase__content">
-          <span class="tag tag--primary mb-md">Community Growth</span>
-          <h2 class="mb-lg">Intelligent <span class="text-gradient">Onboarding</span></h2>
-          <p class="mb-xl">First impressions are everything. Astra's onboarding engine handles the heavy lifting, guiding new members through rules, verification, and role selection with a sleek, interactive flow.</p>
-          <ul class="mb-xl content">
-            <li><strong>Automated Flows:</strong> Combine rules and roles into a single 'Start Here' experience.</li>
-            <li><strong>Verification:</strong> Ensure every member is vetted before they gain access.</li>
-            <li><strong>Role Menus:</strong> Beautiful button-based selection for interests and notifications.</li>
-          </ul>
-          <a href="features.html#onboarding" class="btn btn--secondary">See Onboarding Features</a>
-        </div>
-        <div class="feature-showcase__image">
-          <img src="astra_v6_onboarding_mockup_1776820085857.png" alt="Astra Onboarding Interface Mockup">
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PREMIUM SHOWCASE 4: STARBOARD -->
-  <section class="section section--alt">
-    <div class="container">
-      <div class="feature-showcase feature-showcase--reverse animate-on-scroll">
-        <div class="feature-showcase__image">
-          <img src="astra_v6_starboard_mockup_1776820070274.png" alt="Astra Starboard Interface Mockup">
-        </div>
-        <div class="feature-showcase__content">
-          <span class="tag tag--primary mb-md">Engagement Engine</span>
-          <h2 class="mb-lg">The <span class="text-gradient">Starboard</span></h2>
-          <p class="mb-xl">Highlight your community's best moments. Astra's Starboard automatically showcases highly-reacted posts in a dedicated channel, keeping your server's highlights front and center.</p>
-          <ul class="mb-xl content">
-            <li><strong>Native Reactions:</strong> Members vote using Discord's built-in star reaction.</li>
-            <li><strong>Dynamic Updates:</strong> Star counts update in real-time as the community votes.</li>
-            <li><strong>Media Support:</strong> Images, videos, and links are beautifully preserved in the showcase.</li>
-          </ul>
-          <a href="features.html#starboard" class="btn btn--secondary">Learn About Engagement</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- HOW IT WORKS -->
-  <section class="section section--alt" id="how-it-works">
-    <div class="container">
-      <div class="section-header animate-on-scroll">
-        <span class="section-header__badge">Getting Started</span>
-        <h2>Up and running in 3 steps</h2>
-        <p>No complex setup. Astra works out of the box.</p>
-      </div>
-      <div class="steps stagger">
-        <div class="step animate-on-scroll">
-          <div class="step__number">1</div>
-          <h3 class="step__title">Invite Astra</h3>
-          <p class="step__text">Click the invite button and authorize Astra with the recommended permissions. It takes 10 seconds.</p>
-        </div>
-        <div class="step animate-on-scroll">
-          <div class="step__number">2</div>
-          <h3 class="step__title">Configure</h3>
-          <p class="step__text">Use <code>/config</code> to set your channels and preferences. Every module has its own setup command.</p>
-        </div>
-        <div class="step animate-on-scroll">
-          <div class="step__number">3</div>
-          <h3 class="step__title">Enjoy</h3>
-          <p class="step__text">Start using slash commands. Astra handles moderation, economy, leveling, and more — automatically.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- WHY ASTRA -->
-  <section class="section section--alt" id="why-astra">
-    <div class="container">
-      <div class="section-header animate-on-scroll">
-        <span class="section-header__badge">Why Astra</span>
-        <h2>Built different</h2>
-        <p>Fast, clean, and built to last — no bloat, no confusion.</p>
-      </div>
-      <div class="grid grid--4 stagger">
-        <div class="card glass card--centered animate-on-scroll">
-          <div class="card__icon card__icon--centered">⚡</div>
-          <h3 class="card__title">Lightning Fast</h3>
-          <p class="card__text">Optimized async core ensures every command responds in under 50ms. No lag, just performance.</p>
-        </div>
-        <div class="card glass card--centered animate-on-scroll">
-          <div class="card__icon card__icon--centered">🧱</div>
-          <h3 class="card__title">Highly Modular</h3>
-          <p class="card__text">Toggle only the modules you need. Astra stays lightweight and focused on your server's unique needs.</p>
-        </div>
-        <div class="card glass card--centered animate-on-scroll">
-          <div class="card__icon card__icon--centered">🔒</div>
-          <h3 class="card__title">Security First</h3>
-          <p class="card__text">Comprehensive role-based permissions and detailed audit logging for total peace of mind.</p>
-        </div>
-        <div class="card glass card--centered animate-on-scroll">
-          <div class="card__icon card__icon--centered">✨</div>
-          <h3 class="card__title">Premium UI</h3>
-          <p class="card__text">Every embed and button is crafted for a high-fidelity experience that wows your community.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA BANNER -->
-  <section class="section" id="cta">
-    <div class="container">
-      <div class="cta-banner animate-on-scroll">
-        <div class="cta-banner__glow" aria-hidden="true"></div>
-        <h2>Ready to power up your server?</h2>
-        <p>Join thousands of servers already running Astra v6.</p>
-        <div class="hero__actions">
-          <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=0&scope=bot+email+applications.commands+identify" class="btn btn--primary btn--large">✨ Invite Astra — Free</a>
-          <a href="https://discord.gg/NZ5Gr7eqE8" class="btn btn--secondary btn--large" target="_blank" rel="noopener">Join Support Server</a>
+        <div class="terminal-info animate-on-scroll">
+          <span class="badge badge--new mb-md">Real-time Diagnostics</span>
+          <h2 class="mb-lg">High-Fidelity <span class="text-gradient">Visibility</span></h2>
+          <p class="mb-xl">Astra isn't a black box. Our diagnostics engine provides deep visibility into shard health, API latency, and sector performance with professional-grade tactical embeds.</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- FOOTER -->
-  <footer class="footer glass" role="contentinfo">
+  <footer class="footer glass">
     <div class="container">
       <div class="footer__grid">
         <div>
@@ -320,60 +127,29 @@
             Astra
           </div>
           <p class="footer__desc">The ultimate all-in-one Discord bot for moderation, community engagement, and server management.</p>
-          <div class="footer__social">
-            <a href="https://discord.gg/NZ5Gr7eqE8" class="footer__social-link" target="_blank" rel="noopener" aria-label="Discord">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736.1 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.176.1 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.176.1 0 0 .084.028 19.839 19.839 0 0 0 6.102-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
-            </a>
-            </a>
-          </div>
         </div>
         <div>
           <h4 class="footer__heading">Product</h4>
           <a href="features.html" class="footer__link">Features</a>
           <a href="commands.html" class="footer__link">Commands</a>
-          <a href="changelog.html" class="footer__link">Changelog</a>
-        </div>
-        <div>
-          <h4 class="footer__heading">Community</h4>
-          <a href="https://discord.gg/NZ5Gr7eqE8" class="footer__link" target="_blank" rel="noopener">Support Server</a>
-          <a href="faq.html" class="footer__link">FAQ</a>
-          <a href="support.html" class="footer__link">Contact</a>
-        </div>
-        <div>
-          <h4 class="footer__heading">Legal</h4>
-          <a href="privacy.html" class="footer__link">Privacy Policy</a>
-          <a href="terms.html" class="footer__link">Terms of Service</a>
-          <a href="LICENSE" class="footer__link">License</a>
         </div>
       </div>
       <div class="footer__bottom">
-        <span>&copy; 2026 Astra. Made by <a href="https://github.com/watispro5212" class="footer__author-link">watispro1</a>.</span>
-        <span>Made with ✨ for the Discord community</span>
+        <span>&copy; 2026 Astra. Made with ✨ for the Discord community</span>
       </div>
     </div>
   </footer>
 
   <script src="assets/js/main.js"></script>
-
-  <!-- Particles.js Library -->
   <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
   
-  <div class="global-notification" id="global-notify">
-    <span class="global-notification__icon">✨</span>
-    <span class="global-notification__text">Astra v6.2.0 is officially live! Enjoy the refined experience.</span>
-    <button class="global-notification__close" onclick="document.getElementById('global-notify').style.display='none'">&times;</button>
-  </div>
-  
-  <button class="back-to-top" id="backToTop" aria-label="Back to top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-    &uarr;
-  </button>
+  <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">&uarr;</button>
 
-  <!-- Vanguard Welcome Overlay (v4.1) -->
   <div id="vanguard-welcome" class="welcome-overlay">
     <div class="welcome-content">
-      <img src="assets/images/astra-logo.png" alt="Astra V4" width="80" height="80">
+      <img src="assets/images/astra-logo.png" alt="Astra" width="80" height="80">
       <h2>Welcome to Astra <span class="text-gradient">v6.2.0</span></h2>
-      <p>The Clean & Simple overhaul is complete. Featuring refined moderation, support tickets, and a high-performance Discord-native experience.</p>
+      <p>The Clean & Simple overhaul is complete. Featuring refined moderation, support tickets, and a high-performance experience.</p>
       <button class="btn btn--primary btn--large" id="btn-enter-site">Enter Site</button>
     </div>
   </div>
@@ -386,12 +162,11 @@
     });
 
     document.addEventListener("DOMContentLoaded", async () => {
-      // 1. Welcome Screen Logic (Only show once via localStorage)
       const welcomeOverlay = document.getElementById('vanguard-welcome');
       const enterBtn = document.getElementById('btn-enter-site');
-      if (!localStorage.getItem('astra_v41_welcome')) {
+      
+      if (!localStorage.getItem('astra_v6_welcome')) {
         welcomeOverlay.style.display = 'flex';
-        // Minor delay to let flex establish before animating opacity if we wanted
         setTimeout(() => welcomeOverlay.classList.add('show'), 50);
       } else {
         welcomeOverlay.style.display = 'none';
@@ -399,11 +174,10 @@
 
       enterBtn.addEventListener('click', () => {
         welcomeOverlay.classList.remove('show');
-        localStorage.setItem('astra_v41_welcome', 'true');
-        setTimeout(() => welcomeOverlay.style.display = 'none', 500); // Wait for transition
+        localStorage.setItem('astra_v6_welcome', 'true');
+        setTimeout(() => welcomeOverlay.style.display = 'none', 500);
       });
 
-      // 2. Load Particles inside Hero Header specifically
       particlesJS("particles", {
         "particles": {
           "number": {"value": 60, "density": {"enable": true, "value_area": 800}},
@@ -415,45 +189,14 @@
           "move": {"enable": true, "speed": 1.5, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false}
         },
         "interactivity": {
-          "detect_on": "canvas",
           "events": {
             "onhover": {"enable": true, "mode": "grab"},
             "onclick": {"enable": true, "mode": "push"},
             "resize": true
-          },
-          "modes": {
-            "grab": {"distance": 140, "line_linked": {"opacity": 0.8}},
-            "push": {"particles_nb": 3}
           }
         },
         "retina_detect": true
       });
-
-      // 3. Dynamic Homepage Stats Fetching (Placeholder for future API)
-      // const API_URL = 'https://your-bot-url.koyeb.app/api/status';
-      /*
-      try {
-        const res = await fetch(API_URL);
-        const data = await res.json();
-        
-        if (data.status === "online") {
-          // Find the counters
-          const statValues = document.querySelectorAll('.hero__stat-value');
-          if (statValues.length >= 2) {
-            statValues[0].setAttribute('data-target', data.guilds); // Guilds
-            statValues[0].innerHTML = data.guilds;
-            statValues[1].setAttribute('data-target', data.users); // Users
-            statValues[1].innerHTML = data.users.toLocaleString();
-            
-            // Adjust labels
-            const statLabels = document.querySelectorAll('.hero__stat-label');
-            statLabels[0].innerHTML = "Servers";
-            statLabels[1].innerHTML = "Global Users";
-          }
-        }
-      } catch (err) {
-        console.warn("Could not fetch Astra live stats for homepage.", err);
-      }
     });
   </script>
 </body>

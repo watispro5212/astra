@@ -55,13 +55,13 @@ const command: Command = {
         } else if (subcommand === 'ping') {
             const embed = new EmbedBuilder()
                 .setColor(0x3498db)
-                .setTitle('📡 System Latency')
+                .setTitle('🛰️ System Latency')
                 .addFields(
                     { name: 'API Latency', value: `\`${client.ws.ping}ms\``, inline: true },
-                    { name: 'Uptime', value: `<t:${Math.floor(Date.now() / 1000 - client.uptime! / 1000)}:R>`, inline: true }
+                    { name: 'Uptime', value: `<t:${Math.floor((Date.now() - client.uptime!) / 1000)}:R>`, inline: true }
                 );
             
-            await interaction.reply({ embeds: [embed], ephemeral: true });
+            await interaction.reply({ embeds: [embed] });
         }
     }
 };
