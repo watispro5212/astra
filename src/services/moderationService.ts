@@ -1,5 +1,4 @@
 import { db } from '../core/database';
-import { Guild } from 'discord.js';
 
 export class ModerationService {
     static async createCase(guildId: string, targetId: string, moderatorId: string, type: string, reason: string, duration?: string) {
@@ -17,6 +16,20 @@ export class ModerationService {
         );
         
         return nextCase;
+    }
+
+    static async getCase(guildId: string, caseNumber: number) {
+        return await db.fetchOne(
+            "SELECT * FROM moderation_cases WHERE guild_id = ? AND case_number = ?",
+            guildId, caseNumber
+        );
+    }
+
+    static async getUserHistory(guildId: string, userId: string) {
+        return await db.fetchAll(
+            "SELECT * FROM moderation_cases WHERE guild_id = ? AND target_id = ? ORDER BY case_number DESC",
+            guildId, userId
+        );
     }
 
     static async getGuildConfig(guildId: string) {

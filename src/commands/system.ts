@@ -6,6 +6,7 @@ import {
     TextChannel
 } from 'discord.js';
 import { Command } from '../types';
+import { config } from '../core/config';
 import { db } from '../core/database';
 import logger from '../core/logger';
 
@@ -29,23 +30,26 @@ const command: Command = {
         if (subcommand === 'update') {
             const embed = new EmbedBuilder()
                 .setColor(0x3498db)
-                .setTitle('🚀 Astra v6.3.0: Titan Update')
-                .setDescription('The Titan update introduces global community engagement systems, bridging the gap between utility and member retention.')
+                .setTitle('🚀 Astra v7.0.0: Nova Update')
+                .setDescription('Nova is the most comprehensive Astra release to date — introducing ticketing, giveaways, welcome systems, expanded moderation, and a full economy overhaul.')
                 .addFields(
-                    { name: '📊 Astra Intelligence', value: '• **Leveling**: Earn XP by chatting and track progression with `/rank`.\n• **Anti-Spam**: Built-in 60s cooldown to ensure authentic engagement.' },
-                    { name: '💰 Astra Fiscal', value: '• **Economy**: Global credit system with daily rewards (`/economy daily`).\n• **Transfers**: Peer-to-peer capital exchange with `/economy pay`.' },
-                    { name: '📡 Shard Telemetry', value: '• **Status Rotator**: Real-time presence updates showing shard health and server counts.' },
+                    { name: '🎫 Ticket System', value: '• `/ticket create` — Open a private support ticket with staff.\n• `/ticket close/add/remove` — Full ticket lifecycle management.' },
+                    { name: '🎉 Giveaway Engine', value: '• `/giveaway start` — Host timed giveaways with reaction entry.\n• `/giveaway end/reroll` — Draw or redraw winners at any time.' },
+                    { name: '👋 Welcome System', value: '• `/welcome set-channel/set-message/set-role` — Fully configurable welcome & auto-role.\n• `/welcome test` — Preview your configuration instantly.' },
+                    { name: '🛡️ Moderation+', value: '• `/mod warn/unban` — New warn and unban protocols.\n• `/mod case/history` — Full case management per operative.' },
+                    { name: '💰 Economy+', value: '• `/economy leaderboard` — Top 10 richest operatives.\n• `/economy work` — Hourly credit generation protocol.' },
+                    { name: '📊 Leveling+', value: '• `/leveling leaderboard` — Global intelligence ranking.\n• Visual progress bars in `/leveling rank`.' },
                     { name: '🌐 Web Terminal', value: '[Visit Dashboard](https://astrabot-1n54.onrender.com)' }
                 )
                 .setThumbnail(interaction.client.user?.displayAvatarURL()!)
-                .setFooter({ text: 'Astra Tactical Systems • Release 6.3.0' })
+                .setFooter({ text: 'Astra Tactical Systems • Nova Release 7.0.0' })
                 .setTimestamp();
 
             await interaction.reply({ embeds: [embed] });
 
         } else if (subcommand === 'alert') {
             // Owner Check
-            if (interaction.user.id !== '1320058519642177668') {
+            if (interaction.user.id !== config.ownerId) {
                 await interaction.reply({ content: '❌ Access Denied: Administrator clearance required.', ephemeral: true });
                 return;
             }

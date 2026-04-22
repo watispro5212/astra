@@ -2,7 +2,6 @@ import sqlite3 from 'sqlite3';
 import { Client } from 'pg';
 import { config } from './config';
 import logger from './logger';
-import { promisify } from 'util';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -47,7 +46,11 @@ class DatabaseManager {
                 guild_id ${INT} PRIMARY KEY,
                 log_channel_id ${INT},
                 staff_role_id ${INT},
-                mute_role_id ${INT}
+                mute_role_id ${INT},
+                automod_anti_spam ${BOOL} DEFAULT FALSE,
+                automod_anti_invite ${BOOL} DEFAULT FALSE,
+                automod_anti_link ${BOOL} DEFAULT FALSE,
+                automod_spam_threshold ${INT} DEFAULT 5
             )`,
             `CREATE TABLE IF NOT EXISTS moderation_cases (
                 id ${PK},
@@ -102,7 +105,29 @@ class DatabaseManager {
                 level ${INT} DEFAULT 0,
                 balance ${INT} DEFAULT 0,
                 last_daily ${TEXT},
+                last_work ${TEXT},
                 blacklisted ${BOOL} DEFAULT FALSE
+            )`,
+            `CREATE TABLE IF NOT EXISTS giveaways (
+                id ${PK},
+                guild_id ${INT},
+                channel_id ${INT},
+                message_id ${INT},
+                host_id ${INT},
+                prize ${TEXT},
+                winners ${INT} DEFAULT 1,
+                ends_at ${TEXT},
+                ended ${BOOL} DEFAULT FALSE,
+                winner_ids ${TEXT}
+            )`,
+            `CREATE TABLE IF NOT EXISTS shop_items (
+                id ${PK},
+                guild_id ${INT},
+                name ${TEXT},
+                description ${TEXT},
+                role_id ${INT},
+                price ${INT},
+                stock ${INT} DEFAULT -1
             )`
         ];
 
@@ -110,7 +135,23 @@ class DatabaseManager {
             await this.execute(query);
         }
 
-        logger.info("Database infrastructure initialized (v6.2.0 - TypeScript)");
+        // v7.0 migrations — safe to run on existing databases
+        const migrations = [
+            `ALTER TABLE users ADD COLUMN last_work ${TEXT}`,
+            `ALTER TABLE guilds ADD COLUMN automod_anti_spam ${BOOL} DEFAULT FALSE`,
+            `ALTER TABLE guilds ADD COLUMN automod_anti_invite ${BOOL} DEFAULT FALSE`,
+            `ALTER TABLE guilds ADD COLUMN automod_anti_link ${BOOL} DEFAULT FALSE`,
+            `ALTER TABLE guilds ADD COLUMN automod_spam_threshold ${INT} DEFAULT 5`,
+        ];
+        for (const migration of migrations) {
+            try {
+                await this.execute(migration);
+            } catch (_) {
+                // Column already exists on existing databases — expected
+            }
+        }
+
+        logger.info("Database infrastructure initialized (v7.0.0 - Nova)");
     }
 
     async execute(query: string, ...params: any[]): Promise<any> {

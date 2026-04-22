@@ -92,10 +92,10 @@ export class AstraClient extends Client {
 
             // Rotating Status Engine
             const statuses = [
-                () => ({ name: `v6.3.0 | /system update`, type: 0 }), // 0 = Playing
-                () => ({ name: `${c.guilds.cache.size} Sectors`, type: 3 }), // 3 = Watching
-                () => ({ name: `${c.users.cache.size} Members`, type: 2 }), // 2 = Listening
-                () => ({ name: `Tactical Excellence`, type: 1 }) // 1 = Streaming
+                () => ({ name: `Nova v7.0.0 | /system update`, type: 0 }),
+                () => ({ name: `${c.guilds.cache.size} Sectors`, type: 3 }),
+                () => ({ name: `${c.users.cache.size} Members`, type: 2 }),
+                () => ({ name: `Tactical Excellence`, type: 1 })
             ];
 
             let currentIndex = 0;
@@ -108,8 +108,10 @@ export class AstraClient extends Client {
             // Start Background Services
             const { ReminderService } = require('./services/reminderService');
             ReminderService.startChecker(this);
+            const { GiveawayService } = require('./services/giveawayService');
+            GiveawayService.startChecker(this);
 
-            this.user?.setActivity('Protecting the Sector | /about', { type: ActivityType.Watching });
+            this.user?.setActivity('Nova v7.0.0 | /system update', { type: ActivityType.Watching });
         });
 
         // Tactical Intelligence (Leveling System)
@@ -149,6 +151,54 @@ export class AstraClient extends Client {
                 } else {
                     await db.execute('UPDATE users SET xp = ? WHERE user_id = ?', newXp, message.author.id);
                 }
+            }
+        });
+
+        // Welcome & Farewell System
+        this.on(Events.GuildMemberAdd, async (member) => {
+            try {
+                const cfg = await db.fetchOne('SELECT * FROM welcome_configs WHERE guild_id = ?', member.guild.id);
+                if (!cfg) return;
+                if (cfg.channel_id) {
+                    const channel = await member.guild.channels.fetch(cfg.channel_id).catch(() => null);
+                    if (channel && channel.isTextBased()) {
+                        const msg = (cfg.message || 'Welcome {user} to **{server}**!').replace('{user}', `<@${member.id}>`).replace('{server}', member.guild.name);
+                        const welcomeEmbed = new EmbedBuilder()
+                            .setColor(0x2ecc71)
+                            .setTitle('👋 New Operative Arrived')
+                            .setDescription(msg)
+                            .setThumbnail(member.user.displayAvatarURL())
+                            .setFooter({ text: `Astra Welcome System • v7.0.0` })
+                            .setTimestamp();
+                        await (channel as any).send({ embeds: [welcomeEmbed] });
+                    }
+                }
+                if (cfg.auto_role_id) {
+                    const role = await member.guild.roles.fetch(cfg.auto_role_id).catch(() => null);
+                    if (role) await member.roles.add(role).catch(() => {});
+                }
+            } catch (err) {
+                logger.error(`Welcome system error: ${err}`);
+            }
+        });
+
+        this.on(Events.GuildMemberRemove, async (member) => {
+            try {
+                const cfg = await db.fetchOne('SELECT * FROM welcome_configs WHERE guild_id = ?', member.guild.id);
+                if (!cfg || !cfg.farewell_channel_id) return;
+                const channel = await member.guild.channels.fetch(cfg.farewell_channel_id).catch(() => null);
+                if (channel && channel.isTextBased()) {
+                    const msg = (cfg.farewell_message || '**{user}** has left the sector.').replace('{user}', member.user.username).replace('{server}', member.guild.name);
+                    const farewellEmbed = new EmbedBuilder()
+                        .setColor(0xe74c3c)
+                        .setTitle('👋 Operative Departed')
+                        .setDescription(msg)
+                        .setFooter({ text: 'Astra Welcome System • v7.0.0' })
+                        .setTimestamp();
+                    await (channel as any).send({ embeds: [farewellEmbed] });
+                }
+            } catch (err) {
+                logger.error(`Farewell system error: ${err}`);
             }
         });
 

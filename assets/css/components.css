@@ -1,5 +1,5 @@
-/* 
-  ASTRA TITAN COMPONENT SYSTEM v6.3.2
+/*
+  ASTRA NOVA COMPONENT SYSTEM v7.0.0
   Engineered for high-fidelity glassmorphism and tactical telemetry.
 */
 
@@ -106,12 +106,88 @@ body {
   box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
 }
 
+.btn-titan--primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 40px rgba(255, 255, 255, 0.2);
+}
+
 .btn-titan--secondary {
   background: var(--glass-bg);
   color: #fff;
   border: 1px solid var(--glass-border);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
+}
+
+.btn-titan--secondary:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-3px);
+}
+
+/* --- TITAN FOOTER --- */
+.site-footer {
+  border-top: 1px solid var(--glass-border);
+  padding: 60px 20px 40px;
+  text-align: center;
+  background: rgba(7, 10, 19, 0.6);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.site-footer__brand {
+  font-family: var(--font-tactical);
+  font-size: 1.1rem;
+  color: #fff;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.site-footer__tagline {
+  color: #64748b;
+  font-size: 0.85rem;
+  margin-bottom: 30px;
+}
+
+.site-footer__links {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.site-footer__link {
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: color 0.2s ease;
+}
+
+.site-footer__link:hover {
+  color: var(--primary-neon);
+}
+
+.site-footer__copy {
+  color: #475569;
+  font-size: 0.8rem;
+}
+
+/* --- BADGE --- */
+.badge {
+  display: inline-block;
+  padding: 5px 12px;
+  background: linear-gradient(90deg, var(--primary-neon), var(--secondary-neon));
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  box-shadow: 0 0 20px rgba(52, 152, 219, 0.4);
+  color: #fff;
 }
 
 /* --- TITAN CARDS --- */

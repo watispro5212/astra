@@ -60,7 +60,7 @@ const command: Command = {
                 .setTitle('📡 Astra System Diagnostics')
                 .setThumbnail(interaction.client.user?.displayAvatarURL()!)
                 .addFields(
-                    { name: '🤖 Client', value: `\`\`\`Tag: ${interaction.client.user?.tag}\nVersion: v6.3.0\nLibrary: discord.js v${djsVersion}\`\`\``, inline: false },
+                    { name: '🤖 Client', value: `\`\`\`Tag: ${interaction.client.user?.tag}\nVersion: v7.0.0 Nova\nLibrary: discord.js v${djsVersion}\`\`\``, inline: false },
                     { name: '💻 System Host', value: `\`\`\`OS: ${os.type()} ${os.arch()}\nCPU: ${os.cpus()[0].model}\nRAM: ${memUsage.toFixed(2)} MB / ${totalMem.toFixed(2)} GB\`\`\``, inline: false },
                     { name: '📊 Metrics', value: `\`\`\`Guilds: ${interaction.client.guilds.cache.size}\nLatency: ${interaction.client.ws.ping}ms\nUptime: ${days}d ${hours}h ${minutes}m\`\`\``, inline: false }
                 )
