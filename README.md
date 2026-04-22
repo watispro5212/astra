@@ -1,6 +1,6 @@
-# 🛰️ Astra Tactical Bot (TypeScript)
+# 🛰️ Astra Tactical Bot (v6.3.0 Titan)
 
-Astra is an enterprise-grade Discord moderation and utility bot, now rebuilt in high-performance TypeScript.
+Astra is an enterprise-grade Discord moderation, community engagement, and utility bot, rebuilt in high-performance TypeScript. The v6.3.0 **Titan Update** introduces global leveling and economy systems to drive member retention.
 
 ## 🚀 Quick Start (Local Development)
 
@@ -17,45 +17,32 @@ Astra is an enterprise-grade Discord moderation and utility bot, now rebuilt in 
 
 ---
 
-## ☁️ Deployment (Truly Free & No Credit Card)
+## 💎 v6.3.0 Titan Features
+- **📊 Global Leveling**: Track user engagement with message-based XP and tactical rank lookup (`/rank`).
+- **💰 Integrated Economy**: Claim daily rewards and transfer credits between operatives (`/economy`).
+- **🛡️ Hardened Moderation**: Professional-grade ejection and blacklist systems with hierarchy protection.
+- **📡 Shard Telemetry**: Real-time system diagnostics and rotating status engine.
 
-We recommend **Hugging Face Spaces** for hosting. It is completely free and does not require a credit card for signup.
+---
 
-### 1. Create your Space
-- Visit [Hugging Face](https://huggingface.co/) and create a free account.
-- Click **"New Space"**.
-- **Name**: `Astra-Bot` (or anything you like).
-- **SDK**: Select **Docker**.
-- **Template**: Choose **Blank**.
-- **Visibility**: Public or Private.
+## ☁️ Deployment (Railway & Render)
 
-### 2. Configure Secrets
-Your bot needs its credentials to run. **Do not upload your `.env` file to Hugging Face.**
-- In your Space, go to the **Settings** tab.
-- Find **"Variables and secrets"**.
-- Add the following **Secrets**:
-    - `DISCORD_TOKEN`: Your bot token.
-    - `DISCORD_CLIENT_ID`: Your bot's application ID.
-    - `GUILD_ID`: (Optional) Your development server ID for instant command updates.
-    - `DATABASE_URL`: Set to `sqlite:///./data/astra.db`.
+### 1. Bot Hosting (Railway)
+Astra is optimized for **Railway**. Simply link your repository and add your environment variables (`DISCORD_TOKEN`, `CLIENT_ID`, etc.). The bot will automatically handle global command synchronization on startup.
 
-### 3. Upload and Deploy
-- Upload the following files/folders to your Space (using the "Files" tab or via Git):
-    - `src/`
-    - `package.json`
-    - `tsconfig.json`
-    - `Dockerfile`
-- Hugging Face will automatically detect the `Dockerfile` and begin the build.
-- Once the status changes to **"Running"**, your bot is live!
-
-### 📡 Health Checks (Keep-Alive)
-This bot includes a built-in HTTP server on port `8080` to respond to Hugging Face health checks. This ensures the bot stays awake and 24/7 online.
+### 2. Website Hosting (Render)
+The Astra dashboard is designed for **Render Static Sites**. It includes full Safari compatibility and a live tactical terminal dashboard.
 
 ---
 
 ## 🛠️ Tech Stack
-- **Core**: TypeScript & Node.js
+- **Core**: TypeScript & Node.js 20
 - **Library**: [discord.js v14](https://discord.js.org/)
 - **Database**: SQLite (local) or PostgreSQL (production)
-- **Validation**: Zod
-- **Logging**: Winston
+- **Deployment**: Docker-ready (Railway/Render/HuggingFace)
+
+---
+
+## ⚖️ Legal & Security
+- **Privacy**: We store minimal user data (User ID, XP, Balance) strictly for feature functionality.
+- **Security**: Hardened against SQL injection and permission escalation.

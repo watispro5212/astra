@@ -95,6 +95,14 @@ class DatabaseManager {
                 user_id ${INT},
                 message ${TEXT},
                 remind_at ${TEXT}
+            )`,
+            `CREATE TABLE IF NOT EXISTS users (
+                user_id ${INT} PRIMARY KEY,
+                xp ${INT} DEFAULT 0,
+                level ${INT} DEFAULT 0,
+                balance ${INT} DEFAULT 0,
+                last_daily ${TEXT},
+                blacklisted ${BOOL} DEFAULT FALSE
             )`
         ];
 

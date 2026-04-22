@@ -18,7 +18,7 @@
       <a href="index.html" class="navbar__brand">
         <img src="assets/images/astra-logo.png" alt="Astra logo" width="36" height="36">
         Astra
-        <span class="navbar__version">v6.2.0</span>
+        <span class="navbar__version">v6.3.0</span>
       </a>
       <button type="button" class="navbar__toggle" aria-label="Toggle navigation menu" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -111,12 +111,24 @@
 
         <div class="accordion__item">
           <button type="button" class="accordion__header">
+            What is the tactical rank and economy system?
+            <span class="accordion__icon">▼</span>
+          </button>
+          <div class="accordion__body">
+            <div class="accordion__content">
+              Astra features an integrated engagement suite. Users earn <strong>XP</strong> and <strong>Level Up</strong> by chatting in your server. The <strong>Economy</strong> system allows users to claim daily credits and transfer them to others. These are purely virtual systems designed for community retention and have no real-world value.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion__item">
+          <button type="button" class="accordion__header">
             How do I self-host Astra?
             <span class="accordion__icon">▼</span>
           </button>
           <div class="accordion__body">
             <div class="accordion__content">
-              Clone the repository, install dependencies with <code>pip install -r requirements.txt</code>, create a <code>.env</code> file with your <code>DISCORD_TOKEN</code>, and run <code>python main.py</code>. Python 3.11+ required. Enable all three Privileged Gateway Intents (Members, Message Content, Presence) in the Discord Developer Portal. See the README for full setup instructions.
+              Clone the repository, install dependencies with <code>npm install</code>, create a <code>.env</code> file with your <code>DISCORD_TOKEN</code>, and run <code>npm run dev</code>. Node.js 20+ required. Enable all three Privileged Gateway Intents (Members, Message Content, Presence) in the Discord Developer Portal. See the README for full setup instructions.
             </div>
           </div>
         </div>
@@ -180,7 +192,7 @@
 
   <div class="global-notification" id="global-notify">
     <span class="global-notification__icon">✨</span>
-    <span class="global-notification__text">Astra v6.2.0 is officially live! Enjoy the refined experience.</span>
+    <span class="global-notification__text">Astra v6.3.0 is officially live! Enjoy the Titan update.</span>
     <button class="global-notification__close" onclick="document.getElementById('global-notify').style.display='none'">&times;</button>
   </div>
   <button class="back-to-top" id="backToTop" aria-label="Back to top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">

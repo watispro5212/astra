@@ -29,15 +29,16 @@ const command: Command = {
         if (subcommand === 'update') {
             const embed = new EmbedBuilder()
                 .setColor(0x3498db)
-                .setTitle('🚀 Astra v6.2.0: TypeScript Overhaul')
-                .setDescription('The system has been completely rewritten in TypeScript for peak performance and stability.')
+                .setTitle('🚀 Astra v6.3.0: Titan Update')
+                .setDescription('The Titan update introduces global community engagement systems, bridging the gap between utility and member retention.')
                 .addFields(
-                    { name: '✨ What\'s New', value: '• **New Engine**: Robust TypeScript core using Discord.js v14.\n• **Moderation**: Enhanced Ban, Timeout, and Purge systems.\n• **Diagnostics**: Detailed system monitoring and latency tracking.\n• **Temporal System**: Improved background reminders.' },
-                    { name: '📥 Installation', value: '[Invite Astra](https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands)' },
-                    { name: '🌐 Web Terminal', value: '[Visit Website](https://astra-web.render.com)' }
+                    { name: '📊 Astra Intelligence', value: '• **Leveling**: Earn XP by chatting and track progression with `/rank`.\n• **Anti-Spam**: Built-in 60s cooldown to ensure authentic engagement.' },
+                    { name: '💰 Astra Fiscal', value: '• **Economy**: Global credit system with daily rewards (`/economy daily`).\n• **Transfers**: Peer-to-peer capital exchange with `/economy pay`.' },
+                    { name: '📡 Shard Telemetry', value: '• **Status Rotator**: Real-time presence updates showing shard health and server counts.' },
+                    { name: '🌐 Web Terminal', value: '[Visit Dashboard](https://astrabot-1n54.onrender.com)' }
                 )
                 .setThumbnail(interaction.client.user?.displayAvatarURL()!)
-                .setFooter({ text: 'Astra Tactical Systems • Release 6.2.0' })
+                .setFooter({ text: 'Astra Tactical Systems • Release 6.3.0' })
                 .setTimestamp();
 
             await interaction.reply({ embeds: [embed] });

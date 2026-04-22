@@ -89,11 +89,66 @@ export class AstraClient extends Client {
                 await this.syncCommands('guild');
             }
 
+            // Rotating Status Engine
+            const statuses = [
+                () => ({ name: `v6.3.0 | /system update`, type: 0 }), // 0 = Playing
+                () => ({ name: `${c.guilds.cache.size} Sectors`, type: 3 }), // 3 = Watching
+                () => ({ name: `${c.users.cache.size} Members`, type: 2 }), // 2 = Listening
+                () => ({ name: `Tactical Excellence`, type: 1 }) // 1 = Streaming
+            ];
+
+            let currentIndex = 0;
+            setInterval(() => {
+                const status = statuses[currentIndex]();
+                c.user.setActivity(status.name, { type: status.type as any });
+                currentIndex = (currentIndex + 1) % statuses.length;
+            }, 60000);
+
             // Start Background Services
             const { ReminderService } = require('./services/reminderService');
             ReminderService.startChecker(this);
 
             this.user?.setActivity('Protecting the Sector | /about', { type: ActivityType.Watching });
+        });
+
+        // Tactical Intelligence (Leveling System)
+        const xpCooldowns = new Map<string, number>();
+
+        this.on(Events.MessageCreate, async (message) => {
+            if (message.author.bot || !message.guild) return;
+
+            const now = Date.now();
+            const cooldown = xpCooldowns.get(message.author.id);
+
+            if (cooldown && now - cooldown < 60000) return;
+            xpCooldowns.set(message.author.id, now);
+
+            const xpAdd = Math.floor(Math.random() * 11) + 15; // 15-25 XP
+            
+            let user = await db.fetchOne('SELECT xp, level FROM users WHERE user_id = ?', message.author.id);
+            
+            if (!user) {
+                await db.execute('INSERT INTO users (user_id, xp, level) VALUES (?, ?, ?)', message.author.id, xpAdd, 0);
+                user = { xp: xpAdd, level: 0 };
+            } else {
+                const newXp = (user.xp || 0) + xpAdd;
+                const nextLevelXp = ((user.level || 0) + 1) * 500;
+
+                if (newXp >= nextLevelXp) {
+                    const newLevel = (user.level || 0) + 1;
+                    await db.execute('UPDATE users SET xp = ?, level = ? WHERE user_id = ?', 0, newLevel, message.author.id);
+                    
+                    const levelEmbed = new EmbedBuilder()
+                        .setColor(0x9b59b6)
+                        .setTitle('🎊 Level Elevated')
+                        .setDescription(`Congratulations **${message.author.username}**, you have reached **Level ${newLevel}**!`)
+                        .setFooter({ text: 'Astra Intelligence System' });
+
+                    message.channel.send({ content: `<@${message.author.id}>`, embeds: [levelEmbed] }).catch(() => {});
+                } else {
+                    await db.execute('UPDATE users SET xp = ? WHERE user_id = ?', newXp, message.author.id);
+                }
+            }
         });
 
         this.on(Events.InteractionCreate, async (interaction) => {

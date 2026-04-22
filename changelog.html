@@ -26,7 +26,7 @@
             height="36"
           />
           Astra
-          <span class="navbar__version">v6.2.0</span>
+          <span class="navbar__version">v6.3.0</span>
         </a>
         <button
           type="button"
@@ -63,9 +63,45 @@
 
     <section class="section changelog-section">
       <div class="container container--changelog">
+        <!-- v6.3.0 -->
+        <div class="changelog-entry changelog-entry--latest animate-on-scroll is-visible">
+          <div class="changelog-entry__header">
+            <span class="changelog-entry__version">v6.3.0 — Titan Update</span>
+            <span class="badge badge--new">Latest</span>
+            <span class="changelog-entry__date">April 22, 2026</span>
+            <span class="changelog-entry__tag changelog-entry__tag--latest">🛰️ Tactical Expansion</span>
+          </div>
+          <p class="changelog-entry__summary">
+            The Titan Update introduces global user engagement systems. From fiscal credit management to tactical rank progression, Astra v6.3.0 bridges the gap between utility and community.
+          </p>
+
+          <h4 class="changelog-entry__sub-heading">📊 Astra Intelligence (Leveling)</h4>
+          <ul>
+            <li><strong>Message-Based XP:</strong> Users now earn between 15-25 XP for every message sent in your server.</li>
+            <li><strong>Anti-Spam Filter:</strong> Integrated a 60-second cooldown per user to ensure authentic engagement.</li>
+            <li><strong>Level-Up Transmissions:</strong> Automated, high-fidelity notifications celebrate user rank advancements.</li>
+            <li><strong>/rank:</strong> Real-time tactical status lookup for any member in the sector.</li>
+          </ul>
+
+          <h4 class="changelog-entry__sub-heading--spaced">💰 Astra Fiscal (Economy)</h4>
+          <ul>
+            <li><strong>Global Credit Ledger:</strong> Unified balance tracking across the Astra network.</li>
+            <li><strong>Daily Allocations:</strong> Claim 500 credits every 24 hours with <code>/economy daily</code>.</li>
+            <li><strong>Capital Transfers:</strong> Peer-to-peer credit transactions using <code>/economy pay</code>.</li>
+            <li><strong>Balance Audits:</strong> Instant fiscal status reports with <code>/economy balance</code>.</li>
+          </ul>
+
+          <h4 class="changelog-entry__sub-heading--spaced">📡 System Refinements</h4>
+          <ul>
+            <li><strong>Rotating Status Engine:</strong> The bot now cycles its presence to show shard health, member counts, and active sectors.</li>
+            <li><strong>Safari Vendor Audit:</strong> Added <code>-webkit-</code> prefixes to all glassmorphism components for perfect iOS rendering.</li>
+            <li><strong>TypeScript Stabilization:</strong> Optimized core event handlers and expanded database schema for high-volume data.</li>
+          </ul>
+        </div>
+
         <!-- v6.2.0 -->
         <div
-          class="changelog-entry changelog-entry--latest animate-on-scroll is-visible"
+          class="changelog-entry animate-on-scroll is-visible"
         >
           <div class="changelog-entry__header">
             <span class="changelog-entry__version">v6.2.0</span>
@@ -500,7 +536,7 @@
     <div class="global-notification" id="global-notify">
       <span class="global-notification__icon">✨</span>
       <span class="global-notification__text"
-        >Astra v6.2.0 is officially live! Enjoy the refined experience.</span
+        >Astra v6.3.0 is officially live! Enjoy the Titan update.</span
       >
       <button
         class="global-notification__close"

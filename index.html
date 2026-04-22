@@ -3,16 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Astra — The Ultimate Discord Bot</title>
-  <meta name="description" content="Astra v6 — The clean, minimalist Discord bot for professional community management. Moderation, support tickets, onboarding, and more. Free and always online.">
-  <meta property="og:title" content="Astra — The Ultimate Discord Bot">
-  <meta property="og:description" content="All-in-one Discord community bot. Moderation, economy, leveling, anti-raid & more.">
+  <title>Astra — The Ultimate Discord Engine</title>
+  <meta name="description" content="Astra v6.3.0 Titan — The most powerful, high-fidelity Discord engine for professional communities. Moderation, economy, leveling, and tactical utility.">
+  <meta property="og:title" content="Astra — The Ultimate Discord Engine">
+  <meta property="og:description" content="All-in-one Discord community engine. Moderation, economy, leveling, anti-raid & more.">
   <meta property="og:image" content="assets/images/astra-banner.png">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@500;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="bg-grid" aria-hidden="true"></div>
@@ -24,7 +25,7 @@
       <a href="index.html" class="navbar__brand" aria-label="Astra home">
         <img src="assets/images/astra-logo.png" alt="Astra logo" width="36" height="36">
         Astra
-        <span class="navbar__version">v6.2.0</span>
+        <span class="navbar__version">v6.3.0</span>
       </a>
       <button type="button" class="navbar__toggle" aria-label="Toggle navigation menu" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -47,34 +48,66 @@
     <div class="hero__particles" aria-hidden="true" id="particles"></div>
     <div class="container hero">
       <div class="hero__badge animate-on-scroll">
-        <span class="badge badge--new">🚀 v6.2.0 Released</span>
+        <span class="badge badge--new">🚀 v6.3.0 TITAN UPDATE LIVE</span>
       </div>
-      <img src="assets/images/astra-logo.png" alt="Astra logo" class="hero__logo" width="120" height="120">
       <h1 class="hero__title">
-        The Ultimate<br><span class="text-gradient">Discord Bot</span>
+        The Future of<br><span class="text-gradient">Discord Excellence</span>
       </h1>
       <p class="hero__subtitle">
-        Astra brings professional community management into one elegant package.<br>
-        Moderation, support tickets, guided onboarding, and powerful system utility.
+        Astra v6.3.0 bridges the gap between utility and engagement. <br>
+        A professional community engine powered by TypeScript and high-fidelity tactical intelligence.
       </p>
       <div class="hero__actions">
         <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands" class="btn btn--primary btn--large">
           ✨ Invite Astra — Free
         </a>
-        <a href="features.html" class="btn btn--secondary btn--large">
-          Explore Features
+        <a href="#modules" class="btn btn--secondary btn--large">
+          Explore Matrix
         </a>
       </div>
     </div>
-    <div class="hero__scroll-hint" aria-hidden="true"></div>
   </section>
 
-  <!-- LIVE TERMINAL SECTION -->
+  <!-- MODULE MATRIX -->
+  <section class="section section--modules" id="modules">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-header__badge">Core Systems</span>
+        <h2 class="section-header__title">The <span class="text-gradient">Titan Matrix</span></h2>
+        <p class="section-header__desc">Four pillars of tactical excellence, unified in one elegant engine.</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card glass animate-on-scroll">
+          <div class="feature-card__icon">🛡️</div>
+          <h3 class="feature-card__title">Vanguard Security</h3>
+          <p class="feature-card__desc">Professional-grade moderation with hierarchy protection, temporal suspensions, and case archival.</p>
+        </div>
+        <div class="feature-card glass animate-on-scroll">
+          <div class="feature-card__icon">📊</div>
+          <h3 class="feature-card__title">Astra Intelligence</h3>
+          <p class="feature-card__desc">Dynamic leveling systems with message-based XP, rank analysis, and automated progression transmissions.</p>
+        </div>
+        <div class="feature-card glass animate-on-scroll">
+          <div class="feature-card__icon">💰</div>
+          <h3 class="feature-card__title">Astra Fiscal</h3>
+          <p class="feature-card__desc">Global economy engine with daily allocations, capital transfers, and unified balance ledgers.</p>
+        </div>
+        <div class="feature-card glass animate-on-scroll">
+          <div class="feature-card__icon">📡</div>
+          <h3 class="feature-card__title">Diagnostics Suite</h3>
+          <p class="feature-card__desc">Real-time system telemetry, shard health monitoring, and rotating presence status.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIVE TERMINAL -->
   <section class="section section--terminal" id="live-status">
     <div class="container">
       <div class="terminal-grid">
         <div class="terminal-card animate-on-scroll">
-          <div class="terminal-header">
+          <div class="terminal-header glass">
             <div class="terminal-dots">
               <span class="dot dot--red"></span>
               <span class="dot dot--yellow"></span>
@@ -83,35 +116,38 @@
             <div class="terminal-title">ASTRA_TACTICAL_TERMINAL</div>
           </div>
           <div class="terminal-body">
-            <div class="discord-embed">
-              <div class="embed-border"></div>
-              <div class="embed-content">
-                <div class="embed-header">
-                  <span class="embed-icon">🛰️</span>
-                  <span class="embed-title">System Latency</span>
-                </div>
-                <div class="embed-fields">
-                  <div class="embed-field">
-                    <div class="field-name">API Latency</div>
-                    <div class="field-value">74ms</div>
+            <div id="terminal-content">
+              <div class="discord-embed">
+                <div class="embed-border" style="background: #9b59b6;"></div>
+                <div class="embed-content">
+                  <div class="embed-header">
+                    <span class="embed-icon">📈</span>
+                    <span class="embed-title">Tactical Rank</span>
                   </div>
-                  <div class="embed-field">
-                    <div class="field-name">Uptime</div>
-                    <div class="field-value">13 minutes ago</div>
+                  <div class="embed-fields">
+                    <div class="embed-field">
+                      <div class="field-name">Current Level</div>
+                      <div class="field-value">Level 24</div>
+                    </div>
+                    <div class="embed-field">
+                      <div class="field-name">Experience</div>
+                      <div class="field-value">1,240 / 2,500 XP</div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
             <div class="terminal-input">
               <span class="prompt">astra@system:~$</span>
-              <span class="cursor-type">/dev ping</span>
+              <span class="cursor-type" id="terminal-cursor">/rank</span>
             </div>
           </div>
         </div>
         <div class="terminal-info animate-on-scroll">
-          <span class="badge badge--new mb-md">Real-time Diagnostics</span>
+          <span class="badge badge--new mb-md">Titan Telemetry</span>
           <h2 class="mb-lg">High-Fidelity <span class="text-gradient">Visibility</span></h2>
-          <p class="mb-xl">Astra isn't a black box. Our diagnostics engine provides deep visibility into shard health, API latency, and sector performance with professional-grade tactical embeds.</p>
+          <p class="mb-xl">Astra v6.3.0 provides unparalleled insight into your community's growth. Monitor fiscal health and tactical progression with professional-grade diagnostics.</p>
+          <a href="commands.html" class="btn btn--primary">View All Commands</a>
         </div>
       </div>
     </div>
@@ -126,16 +162,22 @@
             <img src="assets/images/astra-logo.png" alt="Astra" width="28" height="28">
             Astra
           </div>
-          <p class="footer__desc">The ultimate all-in-one Discord bot for moderation, community engagement, and server management.</p>
+          <p class="footer__desc">The ultimate all-in-one Discord engine for elite community management.</p>
         </div>
         <div>
           <h4 class="footer__heading">Product</h4>
           <a href="features.html" class="footer__link">Features</a>
           <a href="commands.html" class="footer__link">Commands</a>
+          <a href="changelog.html" class="footer__link">Changelog</a>
+        </div>
+        <div>
+          <h4 class="footer__heading">Community</h4>
+          <a href="https://discord.gg/NZ5Gr7eqE8" class="footer__link" target="_blank" rel="noopener">Support</a>
+          <a href="faq.html" class="footer__link">FAQ</a>
         </div>
       </div>
       <div class="footer__bottom">
-        <span>&copy; 2026 Astra. Made with ✨ for the Discord community</span>
+        <span>&copy; 2026 Astra. Hosted on Railway & Render.</span>
       </div>
     </div>
   </footer>
@@ -145,22 +187,16 @@
   
   <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">&uarr;</button>
 
-  <div id="vanguard-welcome" class="welcome-overlay">
-    <div class="welcome-content">
+  <div id="vanguard-welcome" class="welcome-overlay glass">
+    <div class="welcome-content glass">
       <img src="assets/images/astra-logo.png" alt="Astra" width="80" height="80">
-      <h2>Welcome to Astra <span class="text-gradient">v6.2.0</span></h2>
-      <p>The Clean & Simple overhaul is complete. Featuring refined moderation, support tickets, and a high-performance experience.</p>
-      <button class="btn btn--primary btn--large" id="btn-enter-site">Enter Site</button>
+      <h2>Titan <span class="text-gradient">v6.3.0</span></h2>
+      <p>The Future of Discord Excellence is here. Enter the Tactical Command Center.</p>
+      <button class="btn btn--primary btn--large" id="btn-enter-site">Establish Link</button>
     </div>
   </div>
 
   <script>
-    window.addEventListener('scroll', () => {
-      const btn = document.getElementById('backToTop');
-      if (window.scrollY > 300) btn.classList.add('visible');
-      else btn.classList.remove('visible');
-    });
-
     document.addEventListener("DOMContentLoaded", async () => {
       const welcomeOverlay = document.getElementById('vanguard-welcome');
       const enterBtn = document.getElementById('btn-enter-site');
@@ -180,23 +216,33 @@
 
       particlesJS("particles", {
         "particles": {
-          "number": {"value": 60, "density": {"enable": true, "value_area": 800}},
+          "number": {"value": 80, "density": {"enable": true, "value_area": 800}},
           "color": {"value": "#3b82f6"},
           "shape": {"type": "circle"},
-          "opacity": {"value": 0.5, "random": false, "anim": {"enable": true, "speed": 1, "opacity_min": 0.1, "sync": false}},
-          "size": {"value": 3, "random": true, "anim": {"enable": false}},
-          "line_linked": {"enable": true, "distance": 150, "color": "#8b5cf6", "opacity": 0.3, "width": 1},
-          "move": {"enable": true, "speed": 1.5, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false}
+          "opacity": {"value": 0.5},
+          "size": {"value": 2},
+          "line_linked": {"enable": true, "distance": 150, "color": "#8b5cf6", "opacity": 0.2, "width": 1},
+          "move": {"enable": true, "speed": 1}
         },
         "interactivity": {
-          "events": {
-            "onhover": {"enable": true, "mode": "grab"},
-            "onclick": {"enable": true, "mode": "push"},
-            "resize": true
-          }
+          "events": {"onhover": {"enable": true, "mode": "grab"}}
         },
         "retina_detect": true
       });
+
+      // Terminal Cycler
+      const cursor = document.getElementById('terminal-cursor');
+      const content = document.getElementById('terminal-content');
+      const sequences = [
+        { text: '/rank', html: `<div class="discord-embed"><div class="embed-border" style="background: #9b59b6;"></div><div class="embed-content"><div class="embed-header"><span class="embed-icon">📈</span><span class="embed-title">Tactical Rank</span></div><div class="embed-fields"><div class="embed-field"><div class="field-name">Current Level</div><div class="field-value">Level 24</div></div><div class="embed-field"><div class="field-name">Experience</div><div class="field-value">1,240 / 2,500 XP</div></div></div></div></div>` },
+        { text: '/economy balance', html: `<div class="discord-embed"><div class="embed-border" style="background: #3498db;"></div><div class="embed-content"><div class="embed-header"><span class="embed-icon">💳</span><span class="embed-title">Fiscal Status</span></div><div class="embed-description">Current Balance: **4,500** credits</div></div></div>` }
+      ];
+      let i = 0;
+      setInterval(() => {
+        i = (i + 1) % sequences.length;
+        cursor.textContent = sequences[i].text;
+        content.innerHTML = sequences[i].html;
+      }, 4000);
     });
   </script>
 </body>
