@@ -4,25 +4,24 @@ import GuildPicker from './components/GuildPicker'
 import Dashboard from './components/Dashboard'
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [token, setToken] = useState(null);
+  const [token, setToken] = useState(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tokenParam = urlParams.get('token');
+    if (tokenParam) {
+      localStorage.setItem('astra_token', tokenParam);
+      return tokenParam;
+    }
+    return localStorage.getItem('astra_token');
+  });
+
+  const [isAuthenticated, setIsAuthenticated] = useState(!!token);
   const [selectedGuild, setSelectedGuild] = useState(null);
 
   useEffect(() => {
+    // Clean up URL if token was present
     const urlParams = new URLSearchParams(window.location.search);
-    const tokenParam = urlParams.get('token');
-    
-    if (tokenParam) {
-      localStorage.setItem('astra_token', tokenParam);
-      setToken(tokenParam);
-      setIsAuthenticated(true);
+    if (urlParams.get('token')) {
       window.history.replaceState({}, document.title, "/");
-    } else {
-      const storedToken = localStorage.getItem('astra_token');
-      if (storedToken) {
-        setToken(storedToken);
-        setIsAuthenticated(true);
-      }
     }
   }, []);
 
