@@ -19,6 +19,7 @@
   --color-primary-dark: #2563eb;
   --color-accent:      #8b5cf6;
   --color-accent-rgb:  139, 92, 246;
+  --color-accent-light: #a78bfa;
   --color-glow:        rgba(59, 130, 246, 0.25);
   --color-glow-strong: rgba(59, 130, 246, 0.4);
   --color-text:        #f8fafc;
@@ -31,6 +32,11 @@
   --color-border-hover: rgba(59, 130, 246, 0.3);
   --glass-bg:          rgba(15, 23, 42, 0.65);
   --glass-border:      rgba(255, 255, 255, 0.12);
+  --glass-highlight:   rgba(255, 255, 255, 0.05);
+
+  /* Gradients */
+  --grad-primary: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  --grad-surface: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
 
   /* Typography */
   --font-heading: 'Outfit', sans-serif;
@@ -254,15 +260,42 @@ p {
 .stagger > .animate-on-scroll:nth-child(6) { transition-delay: 500ms; }
 
 /* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-  }
   .animate-on-scroll {
     opacity: 1;
     transform: none;
   }
+}
+
+/* ---- Utilities ---- */
+.mb-xs { margin-bottom: var(--space-xs); }
+.mb-sm { margin-bottom: var(--space-sm); }
+.mb-md { margin-bottom: var(--space-md); }
+.mb-lg { margin-bottom: var(--space-lg); }
+.mb-xl { margin-bottom: var(--space-xl); }
+.mb-2xl { margin-bottom: var(--space-2xl); }
+
+.flex { display: flex; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.gap-md { gap: var(--space-md); }
+
+.w-full { width: 100%; }
+.relative { position: relative; }
+
+.glow-text {
+  text-shadow: 0 0 20px rgba(var(--color-primary-rgb), 0.3);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
 /* ---- Background Effects ---- */

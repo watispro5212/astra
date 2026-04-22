@@ -104,12 +104,48 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ── Smooth scroll for anchor links ── */
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', (e) => {
-      const target = document.querySelector(anchor.getAttribute('href'));
+      const href = anchor.getAttribute('href');
+      if (href === '#') return;
+      const target = document.querySelector(href);
       if (target) {
         e.preventDefault();
         target.scrollIntoView({ behavior: 'smooth' });
       }
     });
   });
+
+  /* ── Stats Counter Animation ── */
+  const counters = document.querySelectorAll('.counter');
+  if (counters.length > 0 && 'IntersectionObserver' in window) {
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const counter = entry.target;
+          const target = parseInt(counter.getAttribute('data-target'));
+          const duration = 2000; // 2 seconds
+          const startTime = performance.now();
+          
+          const updateCounter = (currentTime) => {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const currentCount = Math.floor(progress * target);
+            
+            counter.innerText = currentCount + (counter.innerText.includes('+') ? '+' : '');
+            
+            if (progress < 1) {
+              requestAnimationFrame(updateCounter);
+            } else {
+              counter.innerText = target + (counter.innerText.includes('+') ? '+' : '');
+            }
+          };
+          
+          requestAnimationFrame(updateCounter);
+          counterObserver.unobserve(counter);
+        }
+      });
+    }, { threshold: 1.0 });
+
+    counters.forEach(c => counterObserver.observe(c));
+  }
 
 });
