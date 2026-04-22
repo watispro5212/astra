@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FAQ — Astra</title>
-  <meta name="description" content="Frequently asked questions about Astra — setup, features, permissions, and more.">
+  <title>Intel — Astra FAQ</title>
+  <meta name="description" content="Official Astra v6.3.0 'Titan' intelligence briefings and frequently asked questions.">
   <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
@@ -13,198 +13,85 @@
   <div class="bg-grid" aria-hidden="true"></div>
   <div class="bg-radial" aria-hidden="true"></div>
 
-  <nav class="navbar glass" role="navigation" aria-label="Main navigation">
+  <nav class="navbar glass">
     <div class="container">
       <a href="index.html" class="navbar__brand">
         <img src="assets/images/astra-logo.png" alt="Astra logo" width="36" height="36">
-        Astra
-        <span class="navbar__version">v6.3.0</span>
+        Astra <span class="navbar__version">v6.3.0</span>
       </a>
-      <button type="button" class="navbar__toggle" aria-label="Toggle navigation menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
       <div class="navbar__links">
         <a href="index.html" class="navbar__link">Home</a>
-        <a href="features.html" class="navbar__link">Features</a>
-        <a href="commands.html" class="navbar__link">Commands</a>
-        <a href="changelog.html" class="navbar__link">Changelog</a>
+        <a href="features.html" class="navbar__link">Modules</a>
+        <a href="commands.html" class="navbar__link">Registry</a>
         <a href="support.html" class="navbar__link">Support</a>
-        <span class="navbar__cta">
-          <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=0&scope=bot+email+applications.commands+identify" class="btn btn--primary btn--small">Invite Astra</a>
-        </span>
       </div>
     </div>
   </nav>
 
   <div class="page-header">
     <div class="container">
-      <span class="section-header__badge">FAQ</span>
+      <span class="section-header__badge">Astra Intelligence Briefing</span>
       <h1>Frequently Asked <span class="text-gradient">Questions</span></h1>
-      <p>Can't find your answer? Join the <a href="https://discord.gg/NZ5Gr7eqE8" target="_blank" rel="noopener" class="status-contact-link">support server</a>.</p>
+      <p>Mission-critical guidance for establishing your server infrastructure.</p>
     </div>
   </div>
 
-  <section class="section faq-section">
-    <div class="container container--narrow">
-      <div class="accordion">
-
-        <div class="accordion__item">
-          <button type="button" class="accordion__header">
-            How do I invite Astra to my server?
-            <span class="accordion__icon">▼</span>
-          </button>
-          <div class="accordion__body">
-            <div class="accordion__content">
-              Click any "Invite Astra" button on this site, or use the direct invite link. You'll need the <strong>Manage Server</strong> permission on the target server. Astra requests Administrator by default for full functionality — you can downscope this but some features may not work.
-            </div>
+  <section class="section">
+    <div class="container">
+      
+      <div class="feature-category animate-on-scroll">
+        <h2 class="feature-category__title">📊 Astra Intelligence (Leveling)</h2>
+        <div class="grid grid--1">
+          <div class="card glass">
+            <h3 class="card__title">How does XP progression work?</h3>
+            <p class="card__text">Citizens earn 15-25 XP per transmission. To maintain data integrity, a 60-second activity cooldown is enforced between XP-earning interactions.</p>
+          </div>
+          <div class="card glass">
+            <h3 class="card__title">Are ranks global or server-specific?</h3>
+            <p class="card__text">XP and Levels are currently server-specific to ensure local community integrity, but global rank cross-referencing is planned for v6.4.0.</p>
           </div>
         </div>
-
-        <div class="accordion__item">
-          <button type="button" class="accordion__header">
-            What permissions does Astra need?
-            <span class="accordion__icon">▼</span>
-          </button>
-          <div class="accordion__body">
-            <div class="accordion__content">
-              Astra requests Administrator for the simplest setup. If you prefer minimal permissions, the core requirements are: <em>Manage Messages, Manage Channels, Manage Roles, Kick/Ban Members, Moderate Members, Send Messages, Embed Links, Read Message History, View Channels, and Add Reactions</em>. Some modules (like anti-raid lockdown) require Administrator to modify channel permissions at scale.
-            </div>
-          </div>
-        </div>
-
-        <div class="accordion__item">
-          <button type="button" class="accordion__header">
-            Why aren't slash commands showing up?
-            <span class="accordion__icon">▼</span>
-          </button>
-          <div class="accordion__body">
-            <div class="accordion__content">
-              Slash commands can take up to 1 hour to propagate globally after a new deployment. If you're self-hosting, make sure to run <code>/dev sync</code> (owner-only) or set a <code>GUILD_ID</code> in your <code>.env</code> to sync instantly to a specific server. Make sure Astra has the <strong>applications.commands</strong> scope in its invite link.
-            </div>
-          </div>
-        </div>
-
-        <div class="accordion__item">
-          <button type="button" class="accordion__header">
-            Is Astra free to use?
-            <span class="accordion__icon">▼</span>
-          </button>
-          <div class="accordion__body">
-            <div class="accordion__content">
-              Yes — Astra is 100% free. We believe in providing powerful, professional tools for community management without any paywalls or cosmetic gatekeeping.
-            </div>
-          </div>
-        </div>
-
-
-        <div class="accordion__item">
-          <button type="button" class="accordion__header">
-            What data does Astra store?
-            <span class="accordion__icon">▼</span>
-          </button>
-          <div class="accordion__body">
-            <div class="accordion__content">
-              Astra stores only what's necessary to function: server configuration, moderation cases, and similar feature data. No message content is permanently stored — our systems process data in real-time and discard it immediately after use. See the <a href="privacy.html" class="status-contact-link">Privacy Policy</a> for full details.
-            </div>
-          </div>
-        </div>
-
-        <div class="accordion__item">
-          <button type="button" class="accordion__header">
-            What is the tactical rank and economy system?
-            <span class="accordion__icon">▼</span>
-          </button>
-          <div class="accordion__body">
-            <div class="accordion__content">
-              Astra features an integrated engagement suite. Users earn <strong>XP</strong> and <strong>Level Up</strong> by chatting in your server. The <strong>Economy</strong> system allows users to claim daily credits and transfer them to others. These are purely virtual systems designed for community retention and have no real-world value.
-            </div>
-          </div>
-        </div>
-
-        <div class="accordion__item">
-          <button type="button" class="accordion__header">
-            How do I self-host Astra?
-            <span class="accordion__icon">▼</span>
-          </button>
-          <div class="accordion__body">
-            <div class="accordion__content">
-              Clone the repository, install dependencies with <code>npm install</code>, create a <code>.env</code> file with your <code>DISCORD_TOKEN</code>, and run <code>npm run dev</code>. Node.js 20+ required. Enable all three Privileged Gateway Intents (Members, Message Content, Presence) in the Discord Developer Portal. See the README for full setup instructions.
-            </div>
-          </div>
-        </div>
-
       </div>
+
+      <div class="feature-category animate-on-scroll">
+        <h2 class="feature-category__title">💰 Astra Fiscal (Economy)</h2>
+        <div class="grid grid--1">
+          <div class="card glass">
+            <h3 class="card__title">How do I claim my daily credits?</h3>
+            <p class="card__text">Use the <code>/economy daily</code> command every 24 hours to receive your 500 credit allocation.</p>
+          </div>
+          <div class="card glass">
+            <h3 class="card__title">Can I transfer credits between users?</h3>
+            <p class="card__text">Yes, the <code>/economy pay</code> protocol allows for secure capital transfers between server operatives.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-category animate-on-scroll">
+        <h2 class="feature-category__title">🏗️ Architect (Setup)</h2>
+        <div class="grid grid--1">
+          <div class="card glass">
+            <h3 class="card__title">What is the "Nuclear Protocol"?</h3>
+            <p class="card__text">The Nuclear Protocol in <code>/setup_server</code> performs a total infrastructure purge before rebuilding your server according to Astra Prime blueprints. Use with caution.</p>
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
 
-  <footer class="footer glass" role="contentinfo">
+  <footer class="footer glass">
     <div class="container">
-      <div class="footer__grid">
-        <div>
-          <div class="footer__brand">
-            <img src="assets/images/astra-logo.png" alt="Astra" width="28" height="28">
-            Astra
-          </div>
-          <p class="footer__desc">The ultimate all-in-one Discord bot.</p>
+      <div class="footer__bottom text-center">
+        <div class="footer__brand justify-center">
+          <img src="assets/images/astra-logo.png" alt="Astra" width="28" height="28">
+          Astra Prime
         </div>
-        <div>
-          <h4 class="footer__heading">Product</h4>
-          <a href="features.html" class="footer__link">Features</a>
-          <a href="commands.html" class="footer__link">Commands</a>
-          <a href="changelog.html" class="footer__link">Changelog</a>
-        </div>
-        <div>
-          <h4 class="footer__heading">Community</h4>
-          <a href="https://discord.gg/NZ5Gr7eqE8" class="footer__link" target="_blank" rel="noopener">Support Server</a>
-          <a href="faq.html" class="footer__link">FAQ</a>
-        </div>
-        <div>
-          <h4 class="footer__heading">Legal</h4>
-          <a href="privacy.html" class="footer__link">Privacy Policy</a>
-          <a href="terms.html" class="footer__link">Terms of Service</a>
-        </div>
-      </div>
-      <div class="footer__bottom">
-        <span>&copy; 2026 Astra. Made by <a href="https://github.com/watispro5212" class="footer__author-link">watispro1</a>.</span>
-        <span>Made with ✨ for the Discord community</span>
+        <span>&copy; 2026 Astra Global Network.</span>
       </div>
     </div>
   </footer>
 
   <script src="assets/js/main.js"></script>
-  <script>
-    document.querySelectorAll('.accordion__header').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const item = btn.closest('.accordion__item');
-        const body = item.querySelector('.accordion__body');
-        const isOpen = item.classList.contains('open');
-        document.querySelectorAll('.accordion__item.open').forEach(i => {
-          i.classList.remove('open');
-          i.querySelector('.accordion__body').style.maxHeight = null;
-        });
-        if (!isOpen) {
-          item.classList.add('open');
-          body.style.maxHeight = body.scrollHeight + 'px';
-        }
-      });
-    });
-  </script>
-
-  <div class="global-notification" id="global-notify">
-    <span class="global-notification__icon">✨</span>
-    <span class="global-notification__text">Astra v6.3.0 is officially live! Enjoy the Titan update.</span>
-    <button class="global-notification__close" onclick="document.getElementById('global-notify').style.display='none'">&times;</button>
-  </div>
-  <button class="back-to-top" id="backToTop" aria-label="Back to top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-    &uarr;
-  </button>
-  <script>
-    window.addEventListener('scroll', () => {
-      const btn = document.getElementById('backToTop');
-      if (window.scrollY > 300) btn.classList.add('visible');
-      else btn.classList.remove('visible');
-    });
-  </script>
 </body>
-
 </html>

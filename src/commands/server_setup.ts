@@ -9,7 +9,7 @@ export default {
         .setDescription('🏗️ APEX RECONSTRUCTION: Massive infrastructure deployment with metadata.')
         .addBooleanOption(opt => 
             opt.setName('nuclear')
-               .setDescription('⚠️ DANGER: Delete ALL existing channels before rebuilding?')
+               .setDescription('⚠️ DANGER: Delete ALL channels AND roles before rebuilding?')
                .setRequired(true))
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 
@@ -30,7 +30,7 @@ export default {
         const startEmbed = new EmbedBuilder()
             .setTitle('🏗️ Apex Reconstruction Initiated')
             .setDescription(isNuclear 
-                ? '⚠️ **NUCLEAR PROTOCOL ACTIVE**: Purging Astra Prime Sector for Apex deployment...' 
+                ? '⚠️ **NUCLEAR PROTOCOL ACTIVE**: Purging all channels and roles for Apex deployment...' 
                 : '🔄 **SYNC PROTOCOL ACTIVE**: Expanding sector architecture to Apex standards...')
             .setColor(isNuclear ? 0xe74c3c : 0x3498db)
             .setFooter({ text: 'Astra Architect v6.3.0 Apex' })
@@ -40,9 +40,18 @@ export default {
 
         if (isNuclear) {
             try {
+                // 1. Purge Channels
                 const channels = await guild.channels.fetch();
                 for (const channel of channels.values()) {
                     if (channel) await channel.delete('Apex Reconstruction').catch(() => null);
+                }
+
+                // 2. Purge Roles (Excluding @everyone and integration roles)
+                const roles = await guild.roles.fetch();
+                for (const role of roles.values()) {
+                    if (role.name !== "@everyone" && role.managed === false && role.editable) {
+                        await role.delete('Apex Reconstruction').catch(() => null);
+                    }
                 }
             } catch (err) {
                 logger.error(`Nuclear purge failed: ${err}`);
@@ -75,11 +84,13 @@ export default {
             }
         }
 
+        // Re-fetch roles for channel permissions
+        await guild.roles.fetch();
         const enforcerRole = guild.roles.cache.find(r => r.name === "🛡️ ENFORCER");
         const veteranRole = guild.roles.cache.find(r => r.name === "🎖️ VETERAN");
         const boosterRole = guild.roles.cache.find(r => r.name === "💎 BOOSTER");
 
-        // 2. APEX SECTOR BLUEPRINTS (With Channel Topics)
+        // 2. APEX SECTOR BLUEPRINTS
         const blueprint = [
             {
                 name: "📡 INFORMATION SECTOR",
@@ -88,7 +99,7 @@ export default {
                     { id: enforcerRole?.id, allow: [PermissionFlagsBits.SendMessages] }
                 ],
                 channels: [
-                    { name: "📜-rules", type: ChannelType.GuildText, topic: "Official server regulations and community standards. Zero-tolerance for breach of protocol." },
+                    { name: "📜-rules", type: ChannelType.GuildText, topic: "Official server regulations and community standards." },
                     { name: "📢-announcements", type: ChannelType.GuildText, topic: "Global transmissions and critical updates from Astra Core." },
                     { name: "👋-welcome", type: ChannelType.GuildText, topic: "Arrival protocol for new server operatives." },
                     { name: "❓-faq", type: ChannelType.GuildText, topic: "Frequently asked questions and tactical guidance." },
@@ -144,7 +155,7 @@ export default {
                 channels: [
                     { name: "🎫-ticket-hub", type: ChannelType.GuildText, topic: "Interaction point for opening support and inquiry tickets." },
                     { name: "🛰️-system-status", type: ChannelType.GuildText, topic: "Real-time shard health and deployment telemetry." },
-                    { name: "💡-suggestions", type: ChannelType.GuildText, allowCitizen: true, topic: "Community feedback and system enhancement proposals." },
+                    { name: "💡-suggestions", type: ChannelType.GuildText, allowCitizen: true, topic: "Community feedback and enhancement proposals." },
                     { name: "🐛-bug-reports", type: ChannelType.GuildText, allowCitizen: true, topic: "Reporting tactical anomalies and system errors." }
                 ]
             },
@@ -198,7 +209,7 @@ export default {
 
         const successEmbed = new EmbedBuilder()
             .setTitle('✅ Apex Reconstruction Complete')
-            .setDescription(`The Astra Prime APEX architecture has been deployed. All channels now feature tactical metadata.`)
+            .setDescription(`The Astra Prime APEX architecture has been deployed. Infrastructure and Role Hierarchy have been synchronized.`)
             .setColor(0x2ecc71)
             .setThumbnail(interaction.client.user?.displayAvatarURL()!)
             .setFooter({ text: 'Astra Architect v6.3.0 Apex' })
