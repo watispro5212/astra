@@ -25,7 +25,7 @@
       <a href="index.html" class="navbar__brand" aria-label="Astra home">
         <img src="assets/images/astra-logo.png" alt="Astra logo" width="36" height="36">
         Astra
-        <span class="navbar__version">v6.1.0</span>
+        <span class="navbar__version">v6.2.0</span>
       </a>
       <button type="button" class="navbar__toggle" aria-label="Toggle navigation menu" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -48,7 +48,7 @@
     <div class="hero__particles" aria-hidden="true" id="particles"></div>
     <div class="container hero">
       <div class="hero__badge animate-on-scroll">
-        <span class="badge badge--new">🚀 v6.1.0 Released</span>
+        <span class="badge badge--new">🚀 v6.2.0 Released</span>
       </div>
       <img src="assets/images/astra-logo.png" alt="Astra logo" class="hero__logo" width="120" height="120">
       <h1 class="hero__title">
@@ -360,7 +360,7 @@
   
   <div class="global-notification" id="global-notify">
     <span class="global-notification__icon">✨</span>
-    <span class="global-notification__text">Astra v6.1.0 is officially live! Enjoy the refined experience.</span>
+    <span class="global-notification__text">Astra v6.2.0 is officially live! Enjoy the refined experience.</span>
     <button class="global-notification__close" onclick="document.getElementById('global-notify').style.display='none'">&times;</button>
   </div>
   
@@ -372,7 +372,7 @@
   <div id="vanguard-welcome" class="welcome-overlay">
     <div class="welcome-content">
       <img src="assets/images/astra-logo.png" alt="Astra V4" width="80" height="80">
-      <h2>Welcome to Astra <span class="text-gradient">v6.1.0</span></h2>
+      <h2>Welcome to Astra <span class="text-gradient">v6.2.0</span></h2>
       <p>The Clean & Simple overhaul is complete. Featuring refined moderation, support tickets, and a high-performance Discord-native experience.</p>
       <button class="btn btn--primary btn--large" id="btn-enter-site">Enter Site</button>
     </div>
@@ -429,8 +429,9 @@
         "retina_detect": true
       });
 
-      // 3. Dynamic Homepage Stats Fetching
-      const API_URL = 'http://localhost:8080/api/status';
+      // 3. Dynamic Homepage Stats Fetching (Placeholder for future API)
+      // const API_URL = 'https://your-bot-url.koyeb.app/api/status';
+      /*
       try {
         const res = await fetch(API_URL);
         const data = await res.json();

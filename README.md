@@ -1,52 +1,61 @@
-# Astra v6.1.0 — Clean & Simple
+# 🛰️ Astra Tactical Bot (TypeScript)
 
-Astra is a high-performance, minimalist Discord bot designed for professional community management, moderation, and support. Built for clarity and speed, Astra eliminates feature bloat to focus on the core essentials every growing server needs.
+Astra is an enterprise-grade Discord moderation and utility bot, now rebuilt in high-performance TypeScript.
 
-## 🚀 Core Philosophy
-Astra v6 ("The Clean Up") represents a major architectural shift. We've removed complex, underused systems (Economy, Leveling, Fun) to deliver a zero-friction experience.
-- **Discord-Native**: Deep integration with slash commands, buttons, modals, and native timeouts.
-- **No Bloat**: Every feature has a clear purpose. No unnecessary DMs or complex setup flows.
-- **Enterprise Grade**: Auto-sharded architecture with a persistent SQLite core.
+## 🚀 Quick Start (Local Development)
 
-## ✨ Key Features
-- **Professional Moderation**: Numbered case tracking, native timeouts, conduct history, and CSV/JSON data exports.
-- **Guided Onboarding**: Automated server blueprints, welcome flows, and button-based role menus.
-- **Support Tickets**: Secure, private support channels with HTML transcripts and staff performance metrics.
-- **Server Utility**: Interactive polls, personal reminders, and comprehensive audit logging.
-
-## 🛠️ Getting Started
-### Prerequisites
-- Python 3.10+
-- A Discord Bot Token (via [Discord Developer Portal](https://discord.com/developers/applications))
-
-### Installation
-1. Clone the repository:
+1. **Install Dependencies**:
    ```bash
-   git clone https://github.com/watispro5212/astra.git
-   cd astra
+   npm install
    ```
-2. Install dependencies:
+2. **Setup Environment**:
+   Create a `.env` file based on `.env.example` and fill in your Discord credentials.
+3. **Run in Development**:
    ```bash
-   pip install -r requirements.txt
+   npm run dev
    ```
-3. Configure environment variables:
-   Copy `.env.example` to `.env` and fill in your bot token.
-   ```bash
-   cp .env.example .env
-   ```
-4. Run the bot:
-   ```bash
-   python main.py
-   ```
-
-## 📜 Documentation
-- **Commands**: View the full command reference at [commands.html](commands.html).
-- **Features**: Explore detailed module breakdowns at [features.html](features.html).
-- **Changelog**: See the full version history at [CHANGELOG.md](CHANGELOG.md).
-- **Security**: Review our security philosophy in [SECURITY.md](SECURITY.md).
-
-## ⚖️ License
-Astra is licensed under the MIT License. See [LICENSE](LICENSE) for details.
 
 ---
-*Developed with ✨ for the Discord community by [watispro1](https://github.com/watispro5212).*
+
+## ☁️ Deployment (Truly Free & No Credit Card)
+
+We recommend **Hugging Face Spaces** for hosting. It is completely free and does not require a credit card for signup.
+
+### 1. Create your Space
+- Visit [Hugging Face](https://huggingface.co/) and create a free account.
+- Click **"New Space"**.
+- **Name**: `Astra-Bot` (or anything you like).
+- **SDK**: Select **Docker**.
+- **Template**: Choose **Blank**.
+- **Visibility**: Public or Private.
+
+### 2. Configure Secrets
+Your bot needs its credentials to run. **Do not upload your `.env` file to Hugging Face.**
+- In your Space, go to the **Settings** tab.
+- Find **"Variables and secrets"**.
+- Add the following **Secrets**:
+    - `DISCORD_TOKEN`: Your bot token.
+    - `DISCORD_CLIENT_ID`: Your bot's application ID.
+    - `GUILD_ID`: (Optional) Your development server ID for instant command updates.
+    - `DATABASE_URL`: Set to `sqlite:///./data/astra.db`.
+
+### 3. Upload and Deploy
+- Upload the following files/folders to your Space (using the "Files" tab or via Git):
+    - `src/`
+    - `package.json`
+    - `tsconfig.json`
+    - `Dockerfile`
+- Hugging Face will automatically detect the `Dockerfile` and begin the build.
+- Once the status changes to **"Running"**, your bot is live!
+
+### 📡 Health Checks (Keep-Alive)
+This bot includes a built-in HTTP server on port `8080` to respond to Hugging Face health checks. This ensures the bot stays awake and 24/7 online.
+
+---
+
+## 🛠️ Tech Stack
+- **Core**: TypeScript & Node.js
+- **Library**: [discord.js v14](https://discord.js.org/)
+- **Database**: SQLite (local) or PostgreSQL (production)
+- **Validation**: Zod
+- **Logging**: Winston
