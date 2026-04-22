@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Commands — Astra</title>
-  <meta name="description" content="Complete command reference for Astra v3. Search and filter all 50+ slash commands.">
+  <meta name="description" content="Complete command reference for Astra v6.0.0. Professional management and community tools.">
   <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
@@ -18,7 +18,7 @@
       <a href="index.html" class="navbar__brand">
         <img src="assets/images/astra-logo.png" alt="Astra logo" width="36" height="36">
         Astra
-        <span class="navbar__version">v4.0.0</span>
+        <span class="navbar__version">v6.0.0</span>
       </a>
       <button type="button" class="navbar__toggle" aria-label="Toggle navigation menu" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -30,7 +30,6 @@
         <a href="changelog.html" class="navbar__link">Changelog</a>
         <a href="status.html" class="navbar__link">Status</a>
         <a href="support.html" class="navbar__link">Support</a>
-        <a href="https://patreon.com/watispro1" class="navbar__link" target="_blank" rel="noopener">Patreon</a>
         <span class="navbar__cta">
           <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=0&scope=bot+email+applications.commands+identify" class="btn btn--primary btn--small">Invite Astra</a>
         </span>
@@ -40,125 +39,67 @@
 
   <div class="page-header">
     <div class="container">
-      <span class="section-header__badge">v4.0.0 Command Reference</span>
-      <h1>All <span class="text-gradient">50+</span> commands</h1>
-      <p>Every slash command, described and categorized. Use the search to find what you need.</p>
+      <span class="section-header__badge">v6.0.0 Command Reference</span>
+      <h1>Master your <span class="text-gradient">server</span></h1>
+      <p>Clean, efficient, and professional. Every command designed for high-performance management.</p>
     </div>
   </div>
 
   <section class="section" id="commands">
     <div class="container">
-      <input type="search" class="command-search" id="cmd-search" placeholder="🔍  Search commands... (e.g. ban, economy, birthday)" aria-label="Search commands">
+      <input type="search" class="command-search" id="cmd-search" placeholder="🔍  Search commands... (e.g. ban, ticket, config)" aria-label="Search commands">
 
       <div id="cmd-list">
 
         <div class="feature-category" data-category="moderation">
           <h2 class="feature-category__title">🛡️ Moderation</h2>
           <div class="grid grid--2">
-            <div class="command-card" data-cmd="/mod kick"><div><div class="command-card__name">/mod kick</div><div class="command-card__desc">Kick a member from the server with an optional reason.</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span></div></div>
-            <div class="command-card" data-cmd="/mod ban"><div><div class="command-card__name">/mod ban</div><div class="command-card__desc">Ban a member with confirmation dialog. Optionally delete messages.</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span></div></div>
-            <div class="command-card" data-cmd="/mod mute"><div><div class="command-card__name">/mod mute</div><div class="command-card__desc">Timeout a member for a duration (e.g. 10m, 1h, 2d).</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span></div></div>
+            <div class="command-card" data-cmd="/mod kick"><div><div class="command-card__name">/mod kick</div><div class="command-card__desc">Kick a member from the server with a recorded reason.</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span></div></div>
+            <div class="command-card" data-cmd="/mod ban"><div><div class="command-card__name">/mod ban</div><div class="command-card__desc">Ban a member with confirmation dialog. Supports message deletion.</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span></div></div>
+            <div class="command-card" data-cmd="/mod mute"><div><div class="command-card__name">/mod mute</div><div class="command-card__desc">Timeout a member for a set duration (e.g. 10m, 1h, 2d).</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span></div></div>
             <div class="command-card" data-cmd="/mod unmute"><div><div class="command-card__name">/mod unmute</div><div class="command-card__desc">Remove a member's timeout early.</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span></div></div>
-            <div class="command-card" data-cmd="/mod unban"><div><div class="command-card__name">/mod unban</div><div class="command-card__desc">Unban a user by their ID.</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span></div></div>
-            <div class="command-card" data-cmd="/mod history"><div><div class="command-card__name">/mod history</div><div class="command-card__desc">View moderation history for a user or a specific case.</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span></div></div>
-            <div class="command-card" data-cmd="/mod appeal"><div><div class="command-card__name">/mod appeal</div><div class="command-card__desc">Mark a case as appealed with a reason.</div></div><div class="command-card__meta"><span class="badge badge--admin">Admin</span></div></div>
-            <div class="command-card" data-cmd="/mod export"><div><div class="command-card__name">/mod export</div><div class="command-card__desc">Export all moderation cases as JSON or CSV.</div></div><div class="command-card__meta"><span class="badge badge--admin">Admin</span></div></div>
-            <div class="command-card" data-cmd="/warn"><div><div class="command-card__name">/warn</div><div class="command-card__desc">Issue a formal warning to a member. Sends DM to the warned user.</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/warnings"><div><div class="command-card__name">/warnings</div><div class="command-card__desc">View all active warnings for a member.</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/delwarn"><div><div class="command-card__name">/delwarn</div><div class="command-card__desc">Remove a specific warning by its ID.</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/clearwarns"><div><div class="command-card__name">/clearwarns</div><div class="command-card__desc">Clear all warnings for a member.</div></div><div class="command-card__meta"><span class="badge badge--admin">Admin</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/purge"><div><div class="command-card__name">/purge</div><div class="command-card__desc">Delete 1–100 messages from the current channel.</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span></div></div>
-            <div class="command-card" data-cmd="/slowmode"><div><div class="command-card__name">/slowmode</div><div class="command-card__desc">Set a slowmode delay in seconds. 0 to disable.</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span></div></div>
-            <div class="command-card" data-cmd="/lock"><div><div class="command-card__name">/lock</div><div class="command-card__desc">Lock a channel so members cannot send messages.</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/unlock"><div><div class="command-card__name">/unlock</div><div class="command-card__desc">Unlock a previously locked channel.</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/nick"><div><div class="command-card__name">/nick</div><div class="command-card__desc">Change or reset a member's nickname.</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span></div></div>
+            <div class="command-card" data-cmd="/mod history"><div><div class="command-card__name">/mod history</div><div class="command-card__desc">View detailed conduct history for a user or case.</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span></div></div>
+            <div class="command-card" data-cmd="/mod appeal"><div><div class="command-card__name">/mod appeal</div><div class="command-card__desc">Mark a moderation case as appealed or resolved.</div></div><div class="command-card__meta"><span class="badge badge--admin">Admin</span></div></div>
+            <div class="command-card" data-cmd="/mod export"><div><div class="command-card__name">/mod export</div><div class="command-card__desc">Export server moderation logs to JSON or CSV format.</div></div><div class="command-card__meta"><span class="badge badge--admin">Admin</span></div></div>
+            <div class="command-card" data-cmd="/purge"><div><div class="command-card__name">/purge</div><div class="command-card__desc">Bulk-delete up to 100 messages from the channel.</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span></div></div>
+            <div class="command-card" data-cmd="/slowmode"><div><div class="command-card__name">/slowmode</div><div class="command-card__desc">Set a message delay timer for the current channel.</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span></div></div>
+            <div class="command-card" data-cmd="/lock"><div><div class="command-card__name">/lock</div><div class="command-card__desc">Lock a channel to prevent member messages.</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span></div></div>
+            <div class="command-card" data-cmd="/unlock"><div><div class="command-card__name">/unlock</div><div class="command-card__desc">Unlock a previously locked channel.</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span></div></div>
           </div>
         </div>
 
-        <div class="feature-category" data-category="antiraid">
-          <h2 class="feature-category__title">🚨 Anti-Raid</h2>
+        <div class="feature-category" data-category="tickets support">
+          <h2 class="feature-category__title">🎫 Support System</h2>
           <div class="grid grid--2">
-            <div class="command-card" data-cmd="/antiraid config"><div><div class="command-card__name">/antiraid config</div><div class="command-card__desc">Configure detection threshold, time window, action (kick/ban), and alert channel.</div></div><div class="command-card__meta"><span class="badge badge--admin">Admin</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/antiraid unlock"><div><div class="command-card__name">/antiraid unlock</div><div class="command-card__desc">Lift an active lockdown and resume normal server operation.</div></div><div class="command-card__meta"><span class="badge badge--admin">Admin</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/antiraid status"><div><div class="command-card__name">/antiraid status</div><div class="command-card__desc">View current anti-raid protection status and settings.</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span><span class="badge badge--new-cmd">v3</span></div></div>
+            <div class="command-card" data-cmd="/ticket_setup"><div><div class="command-card__name">/ticket_setup</div><div class="command-card__desc">Configure ticket category, staff roles, and logging.</div></div><div class="command-card__meta"><span class="badge badge--admin">Admin</span></div></div>
+            <div class="command-card" data-cmd="/ticket_panel"><div><div class="command-card__name">/ticket_panel</div><div class="command-card__desc">Send the persistent ticket launcher panel to a channel.</div></div><div class="command-card__meta"><span class="badge badge--admin">Admin</span></div></div>
+            <div class="command-card" data-cmd="/ticket stats"><div><div class="command-card__name">/ticket stats</div><div class="command-card__desc">View support performance metrics and staff ranking.</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span></div></div>
+            <div class="command-card" data-cmd="/ticket transcript"><div><div class="command-card__name">/ticket transcript</div><div class="command-card__desc">Generate a permanent archive of the current ticket.</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span></div></div>
+            <div class="command-card" data-cmd="/ticket add"><div><div class="command-card__name">/ticket add</div><div class="command-card__desc">Add a member to an existing ticket channel.</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span></div></div>
+            <div class="command-card" data-cmd="/ticket remove"><div><div class="command-card__name">/ticket remove</div><div class="command-card__desc">Remove a member from an existing ticket channel.</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span></div></div>
           </div>
         </div>
 
-        <div class="feature-category" data-category="economy">
-          <h2 class="feature-category__title">💰 Economy</h2>
+        <div class="feature-category" data-category="utility general info">
+          <h2 class="feature-category__title">🚀 Utility &amp; Tools</h2>
           <div class="grid grid--2">
-            <div class="command-card" data-cmd="/economy balance"><div><div class="command-card__name">/economy balance</div><div class="command-card__desc">View your wallet and bank balance.</div></div><div class="command-card__meta"><span class="badge badge--everyone">Everyone</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/economy daily"><div><div class="command-card__name">/economy daily</div><div class="command-card__desc">Claim 200 coins every 24 hours.</div></div><div class="command-card__meta"><span class="badge badge--everyone">Everyone</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/economy work"><div><div class="command-card__name">/economy work</div><div class="command-card__desc">Work to earn 50–150 coins (1-hour cooldown).</div></div><div class="command-card__meta"><span class="badge badge--everyone">Everyone</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/economy pay"><div><div class="command-card__name">/economy pay</div><div class="command-card__desc">Transfer coins to another member.</div></div><div class="command-card__meta"><span class="badge badge--everyone">Everyone</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/economy leaderboard"><div><div class="command-card__name">/economy leaderboard</div><div class="command-card__desc">View the top 10 richest members.</div></div><div class="command-card__meta"><span class="badge badge--everyone">Everyone</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/economy shop"><div><div class="command-card__name">/economy shop</div><div class="command-card__desc">Browse available items in the server shop.</div></div><div class="command-card__meta"><span class="badge badge--everyone">Everyone</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/economy buy"><div><div class="command-card__name">/economy buy</div><div class="command-card__desc">Purchase an item from the shop by its ID.</div></div><div class="command-card__meta"><span class="badge badge--everyone">Everyone</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/economy additem"><div><div class="command-card__name">/economy additem</div><div class="command-card__desc">Add an item to the shop with a price and optional role reward.</div></div><div class="command-card__meta"><span class="badge badge--admin">Admin</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/economy removeitem"><div><div class="command-card__name">/economy removeitem</div><div class="command-card__desc">Remove an item from the shop.</div></div><div class="command-card__meta"><span class="badge badge--admin">Admin</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/economy give"><div><div class="command-card__name">/economy give</div><div class="command-card__desc">Give coins to a member (admin only).</div></div><div class="command-card__meta"><span class="badge badge--admin">Admin</span><span class="badge badge--new-cmd">v3</span></div></div>
+            <div class="command-card" data-cmd="/ping"><div><div class="command-card__name">/ping</div><div class="command-card__desc">Check bot latency and shard status.</div></div><div class="command-card__meta"><span class="badge badge--everyone">Everyone</span></div></div>
+            <div class="command-card" data-cmd="/about"><div><div class="command-card__name">/about</div><div class="command-card__desc">Information about Astra v6, mission, and credits.</div></div><div class="command-card__meta"><span class="badge badge--everyone">Everyone</span></div></div>
+            <div class="command-card" data-cmd="/userinfo"><div><div class="command-card__name">/userinfo</div><div class="command-card__desc">Detailed profile information for a member.</div></div><div class="command-card__meta"><span class="badge badge--everyone">Everyone</span></div></div>
+            <div class="command-card" data-cmd="/serverinfo"><div><div class="command-card__name">/serverinfo</div><div class="command-card__desc">Statistics and details about the current guild.</div></div><div class="command-card__meta"><span class="badge badge--everyone">Everyone</span></div></div>
+            <div class="command-card" data-cmd="/poll"><div><div class="command-card__name">/poll</div><div class="command-card__desc">Create a community poll with native Discord buttons.</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span></div></div>
+            <div class="command-card" data-cmd="/remind"><div><div class="command-card__name">/remind</div><div class="command-card__desc">Set personal reminders for future events.</div></div><div class="command-card__meta"><span class="badge badge--everyone">Everyone</span></div></div>
+            <div class="command-card" data-cmd="/avatar"><div><div class="command-card__name">/avatar</div><div class="command-card__desc">View the full-size profile picture of a member.</div></div><div class="command-card__meta"><span class="badge badge--everyone">Everyone</span></div></div>
           </div>
         </div>
 
-        <div class="feature-category" data-category="community afk birthday suggest">
-          <h2 class="feature-category__title">🌟 Community</h2>
+        <div class="feature-category" data-category="admin setup config">
+          <h2 class="feature-category__title">⚙️ Administration</h2>
           <div class="grid grid--2">
-            <div class="command-card" data-cmd="/afk"><div><div class="command-card__name">/afk</div><div class="command-card__desc">Set your AFK status with an optional reason. Auto-removed on activity.</div></div><div class="command-card__meta"><span class="badge badge--everyone">Everyone</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/birthday set"><div><div class="command-card__name">/birthday set</div><div class="command-card__desc">Set your birthday for automatic announcements.</div></div><div class="command-card__meta"><span class="badge badge--everyone">Everyone</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/birthday check"><div><div class="command-card__name">/birthday check</div><div class="command-card__desc">Check a member's saved birthday.</div></div><div class="command-card__meta"><span class="badge badge--everyone">Everyone</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/birthday upcoming"><div><div class="command-card__name">/birthday upcoming</div><div class="command-card__desc">View the next 10 upcoming birthdays in this server.</div></div><div class="command-card__meta"><span class="badge badge--everyone">Everyone</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/birthday config"><div><div class="command-card__name">/birthday config</div><div class="command-card__desc">Set the announcement channel and birthday role.</div></div><div class="command-card__meta"><span class="badge badge--admin">Admin</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/suggest"><div><div class="command-card__name">/suggest</div><div class="command-card__desc">Submit a suggestion to the server's suggestion channel.</div></div><div class="command-card__meta"><span class="badge badge--everyone">Everyone</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/suggestion approve"><div><div class="command-card__name">/suggestion approve</div><div class="command-card__desc">Approve a suggestion by ID with an optional note.</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/suggestion deny"><div><div class="command-card__name">/suggestion deny</div><div class="command-card__desc">Deny a suggestion by ID with an optional reason.</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/suggestion config"><div><div class="command-card__name">/suggestion config</div><div class="command-card__desc">Configure the suggestion channel and staff role.</div></div><div class="command-card__meta"><span class="badge badge--admin">Admin</span><span class="badge badge--new-cmd">v3</span></div></div>
-          </div>
-        </div>
-
-        <div class="feature-category" data-category="invites">
-          <h2 class="feature-category__title">📨 Invite Tracker</h2>
-          <div class="grid grid--2">
-            <div class="command-card" data-cmd="/invites check"><div><div class="command-card__name">/invites check</div><div class="command-card__desc">Check a member's invite statistics (total, real, fake, left).</div></div><div class="command-card__meta"><span class="badge badge--everyone">Everyone</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/invites leaderboard"><div><div class="command-card__name">/invites leaderboard</div><div class="command-card__desc">View the top inviters in this server.</div></div><div class="command-card__meta"><span class="badge badge--everyone">Everyone</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/invites whoinvited"><div><div class="command-card__name">/invites whoinvited</div><div class="command-card__desc">Look up who invited a specific member.</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span><span class="badge badge--new-cmd">v3</span></div></div>
-          </div>
-        </div>
-
-        <div class="feature-category" data-category="fun games">
-          <h2 class="feature-category__title">🎮 Fun</h2>
-          <div class="grid grid--2">
-            <div class="command-card" data-cmd="/8ball"><div><div class="command-card__name">/8ball</div><div class="command-card__desc">Ask the magic 8-ball a question.</div></div><div class="command-card__meta"><span class="badge badge--everyone">Everyone</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/coinflip"><div><div class="command-card__name">/coinflip</div><div class="command-card__desc">Flip a coin — heads or tails.</div></div><div class="command-card__meta"><span class="badge badge--everyone">Everyone</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/roll"><div><div class="command-card__name">/roll</div><div class="command-card__desc">Roll a dice with a configurable number of sides.</div></div><div class="command-card__meta"><span class="badge badge--everyone">Everyone</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/roast"><div><div class="command-card__name">/roast</div><div class="command-card__desc">Roast a member with a random line (all in good fun).</div></div><div class="command-card__meta"><span class="badge badge--everyone">Everyone</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/trivia"><div><div class="command-card__name">/trivia</div><div class="command-card__desc">Start a live trivia round in the current channel.</div></div><div class="command-card__meta"><span class="badge badge--everyone">Everyone</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/choose"><div><div class="command-card__name">/choose</div><div class="command-card__desc">Have Astra choose from a comma-separated list of options.</div></div><div class="command-card__meta"><span class="badge badge--everyone">Everyone</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/rps"><div><div class="command-card__name">/rps</div><div class="command-card__desc">Play Rock, Paper, Scissors against Astra.</div></div><div class="command-card__meta"><span class="badge badge--everyone">Everyone</span><span class="badge badge--new-cmd">v3</span></div></div>
-          </div>
-        </div>
-
-        <div class="feature-category" data-category="leveling xp">
-          <h2 class="feature-category__title">🏆 Leveling &amp; Engagement</h2>
-          <div class="grid grid--2">
-            <div class="command-card" data-cmd="/rank"><div><div class="command-card__name">/rank</div><div class="command-card__desc">View your XP and level progress in this server.</div></div><div class="command-card__meta"><span class="badge badge--everyone">Everyone</span></div></div>
-            <div class="command-card" data-cmd="/leaderboard"><div><div class="command-card__name">/leaderboard</div><div class="command-card__desc">Top 10 most active members by XP.</div></div><div class="command-card__meta"><span class="badge badge--everyone">Everyone</span></div></div>
-            <div class="command-card" data-cmd="/giveaway"><div><div class="command-card__name">/giveaway</div><div class="command-card__desc">Start a persistent button-based giveaway.</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span></div></div>
-            <div class="command-card" data-cmd="/poll"><div><div class="command-card__name">/poll</div><div class="command-card__desc">Create an interactive poll with up to 10 options and a timer.</div></div><div class="command-card__meta"><span class="badge badge--mod">Mod</span></div></div>
-          </div>
-        </div>
-
-        <div class="feature-category" data-category="tickets backup config">
-          <h2 class="feature-category__title">⚙️ Config &amp; Utilities</h2>
-          <div class="grid grid--2">
-            <div class="command-card" data-cmd="/config logging"><div><div class="command-card__name">/config logging</div><div class="command-card__desc">Set the audit log channel.</div></div><div class="command-card__meta"><span class="badge badge--admin">Admin</span></div></div>
-            <div class="command-card" data-cmd="/config starboard"><div><div class="command-card__name">/config starboard</div><div class="command-card__desc">Set the starboard channel and star threshold.</div></div><div class="command-card__meta"><span class="badge badge--admin">Admin</span></div></div>
-            <div class="command-card" data-cmd="/config view"><div><div class="command-card__name">/config view</div><div class="command-card__desc">View a summary of all current server settings.</div></div><div class="command-card__meta"><span class="badge badge--admin">Admin</span></div></div>
-            <div class="command-card" data-cmd="/ticket_setup"><div><div class="command-card__name">/ticket_setup</div><div class="command-card__desc">Configure ticket categories, staff roles, and log channels.</div></div><div class="command-card__meta"><span class="badge badge--admin">Admin</span></div></div>
-            <div class="command-card" data-cmd="/backup export"><div><div class="command-card__name">/backup export</div><div class="command-card__desc">Export server configuration to a JSON file.</div></div><div class="command-card__meta"><span class="badge badge--admin">Admin</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/backup import"><div><div class="command-card__name">/backup import</div><div class="command-card__desc">Restore server configuration from a backup JSON file.</div></div><div class="command-card__meta"><span class="badge badge--admin">Admin</span><span class="badge badge--new-cmd">v3</span></div></div>
-            <div class="command-card" data-cmd="/remind"><div><div class="command-card__name">/remind</div><div class="command-card__desc">Set a personal reminder (e.g. 10m, 1h 30m, 2d).</div></div><div class="command-card__meta"><span class="badge badge--everyone">Everyone</span></div></div>
-            <div class="command-card" data-cmd="/ping"><div><div class="command-card__name">/ping</div><div class="command-card__desc">Check Astra's gateway and REST latency.</div></div><div class="command-card__meta"><span class="badge badge--everyone">Everyone</span></div></div>
-            <div class="command-card" data-cmd="/about"><div><div class="command-card__name">/about</div><div class="command-card__desc">View Astra's version, uptime, and credits.</div></div><div class="command-card__meta"><span class="badge badge--everyone">Everyone</span></div></div>
+            <div class="command-card" data-cmd="/setup_server"><div><div class="command-card__name">/setup_server</div><div class="command-card__desc">Automated server builder for a professional layout.</div></div><div class="command-card__meta"><span class="badge badge--admin">Admin</span></div></div>
+            <div class="command-card" data-cmd="/config view"><div><div class="command-card__name">/config view</div><div class="command-card__desc">View current server-specific Astra configurations.</div></div><div class="command-card__meta"><span class="badge badge--admin">Admin</span></div></div>
+            <div class="command-card" data-cmd="/config logs"><div><div class="command-card__name">/config logs</div><div class="command-card__desc">Set the destination for server activity logs.</div></div><div class="command-card__meta"><span class="badge badge--admin">Admin</span></div></div>
+            <div class="command-card" data-cmd="/config welcome"><div><div class="command-card__name">/config welcome</div><div class="command-card__desc">Manage join messages and auto-role assignment.</div></div><div class="command-card__meta"><span class="badge badge--admin">Admin</span></div></div>
           </div>
         </div>
 
@@ -180,7 +121,7 @@
             <img src="assets/images/astra-logo.png" alt="Astra" width="28" height="28">
             Astra
           </div>
-          <p class="footer__desc">The ultimate all-in-one Discord bot.</p>
+          <p class="footer__desc">The ultimate all-in-one Discord bot for professional server management.</p>
         </div>
         <div>
           <h4 class="footer__heading">Product</h4>
@@ -235,7 +176,7 @@
 
   <div class="global-notification" id="global-notify">
     <span class="global-notification__icon">✨</span>
-    <span class="global-notification__text">Astra v4.0.0 is officially live! Enjoy the new features.</span>
+    <span class="global-notification__text">Astra v6.0.0 is officially live! Enjoy the refined experience.</span>
     <button class="global-notification__close" onclick="document.getElementById('global-notify').style.display='none'">&times;</button>
   </div>
   <button class="back-to-top" id="backToTop" aria-label="Back to top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
@@ -249,5 +190,4 @@
     });
   </script>
 </body>
-
 </html>

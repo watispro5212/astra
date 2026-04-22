@@ -26,7 +26,7 @@
             height="36"
           />
           Astra
-          <span class="navbar__version">v4.1.0</span>
+          <span class="navbar__version">v6.0.0</span>
         </a>
         <button
           type="button"
@@ -43,13 +43,6 @@
           <a href="changelog.html" class="navbar__link">Changelog</a>
           <a href="status.html" class="navbar__link active">Status</a>
           <a href="support.html" class="navbar__link">Support</a>
-          <a
-            href="https://patreon.com/watispro1"
-            class="navbar__link"
-            target="_blank"
-            rel="noopener"
-            >Patreon</a
-          >
           <span class="navbar__cta">
             <a
               href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=0&scope=bot+email+applications.commands+identify"
@@ -278,7 +271,7 @@
 
           const container = document.getElementById('dynamic-services-container');
           if (container) {
-            const fallbackServices = ['Gateway API','Database','Economy','Moderation','Leveling/XP','Reputation','Ticket System','Anti-Raid'];
+            const fallbackServices = ['Gateway API','Database','Moderation','Ticket System','Utility Engine','Onboarding Flows'];
             container.innerHTML = fallbackServices.map(name =>
               `<div class="status-row">
                 <div><div class="status-row__name">⚠️ ${name}</div></div>
@@ -320,7 +313,7 @@
     <div class="global-notification" id="global-notify">
       <span class="global-notification__icon">✨</span>
       <span class="global-notification__text"
-        >Astra v4.1.0 is officially live! Enjoy the new features.</span
+        >Astra v6.0.0 is officially live! Enjoy the refined experience.</span
       >
       <button
         class="global-notification__close"

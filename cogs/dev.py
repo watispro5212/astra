@@ -30,7 +30,7 @@ class Developer(commands.Cog):
             await interaction.response.send_message(f"❌ Failed to reload `{extension}`: {e}", ephemeral=True)
 
     @dev.command(name="sync", description="📑 Sync slash commands to local or global guild.")
-    @app_commands.describe(scope="Whether to sync to 'global' or 'guild'.")
+    @app_commands.describe(scope="Whether to sync to 'global', 'guild', or 'clear'.")
     async def sync_group(self, interaction: discord.Interaction, scope: str = "guild"):
         """Developer group sync command."""
         await self._perform_sync(interaction, scope)
@@ -48,11 +48,15 @@ class Developer(commands.Cog):
                 self.bot.tree.copy_global_to(guild=guild)
                 synced = await self.bot.tree.sync(guild=guild)
                 await interaction.followup.send(f"✅ Synced **{len(synced)}** commands to this guild context.")
+            elif scope == "clear":
+                self.bot.tree.clear_commands(guild=interaction.guild)
+                await self.bot.tree.sync(guild=interaction.guild)
+                await interaction.followup.send("✅ Cleared all local guild commands to remove duplicates! Now run `/dev sync scope:global`.")
             else:
                 synced = await self.bot.tree.sync()
-                await interaction.followup.send(f"✅ Successfully synchronized **{len(synced)}** commands across all global contexts (Guilds & User-Apps).")
+                await interaction.followup.send(f"✅ Successfully synchronized **{len(synced)}** commands across all global contexts.")
             
-            logger.info(f"Dev: Synchronized {len(synced)} commands (Scope: {scope})")
+            logger.info(f"Dev: Synchronized {len(synced) if scope != 'clear' else 0} commands (Scope: {scope})")
         except Exception as e:
             await interaction.followup.send(f"❌ Synchronization failed: {e}")
             logger.error(f"Sync Error: {e}")
@@ -65,11 +69,17 @@ class Developer(commands.Cog):
         from ui.embeds import AstraEmbed
         embed = AstraEmbed(title="📡 Shard Health Monitor")
         
-        # In a real environment with many shards, we'd loop through them
-        # For Astra, we'll show the current shard stats
-        embed.add_field(name="Total Shards", value="`1`", inline=True)
-        embed.add_field(name="Current Shard ID", value=f"`{interaction.guild.shard_id or 0}`", inline=True)
-        embed.add_field(name="Latency", value=f"`{round(self.bot.latency * 1000)}ms`", inline=True)
+        total_shards = self.bot.shard_count or 1
+        current_shard = interaction.guild.shard_id if interaction.guild else 0
+        
+        embed.add_field(name="Total Shards", value=f"`{total_shards}`", inline=True)
+        embed.add_field(name="Current Shard ID", value=f"`{current_shard}`", inline=True)
+        
+        latencies = "\n".join([f"Shard {shard_id}: {round(latency * 1000)}ms" for shard_id, latency in self.bot.latencies])
+        if latencies:
+            embed.add_field(name="All Latencies", value=f"```\n{latencies}\n```", inline=False)
+        else:
+            embed.add_field(name="Latency", value=f"`{round(self.bot.latency * 1000)}ms`", inline=True)
         
         await interaction.response.send_message(embed=embed, ephemeral=True)
 

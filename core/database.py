@@ -42,17 +42,10 @@ class DatabaseManager:
             CREATE TABLE IF NOT EXISTS guilds (
                 guild_id INTEGER PRIMARY KEY,
                 log_channel_id INTEGER,
-                welcome_channel_id INTEGER,
-                starboard_channel_id INTEGER,
-                starboard_threshold INTEGER DEFAULT 3,
+                staff_role_id INTEGER,
                 mute_role_id INTEGER
             )
         """)
-        # v2 guild migrations
-        await self._safe_add_column("guilds", "xp_enabled", "BOOLEAN DEFAULT 1")
-        await self._safe_add_column("guilds", "xp_rate", "INTEGER DEFAULT 15")
-        await self._safe_add_column("guilds", "xp_cooldown", "INTEGER DEFAULT 60")
-        await self._safe_add_column("guilds", "xp_announce_channel_id", "INTEGER")
 
         # ── MODERATION CASES ──────────────────────────────────────────────────
         await self.connection.execute("""
@@ -75,30 +68,16 @@ class DatabaseManager:
         await self._safe_add_column("moderation_cases", "appeal_reason", "TEXT")
         await self._safe_add_column("moderation_cases", "case_status", "TEXT DEFAULT 'active'")
 
-        # ── AUTOMOD RULES ─────────────────────────────────────────────────────
+        # ── WARNINGS (V6 MODERATION) ──────────────────────────────────────────
         await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS automod_rules (
+            CREATE TABLE IF NOT EXISTS warnings (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                guild_id INTEGER NOT NULL,
-                name TEXT NOT NULL,
-                trigger_type TEXT NOT NULL,
-                trigger_data TEXT,
-                action TEXT DEFAULT 'delete',
-                exempt_roles TEXT,
-                exempt_channels TEXT,
-                is_enabled BOOLEAN DEFAULT 1
-            )
-        """)
-
-        # ── AUTOMOD LOGS ──────────────────────────────────────────────────────
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS automod_logs (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                guild_id INTEGER NOT NULL,
-                user_id INTEGER NOT NULL,
-                rule_name TEXT NOT NULL,
-                content TEXT,
-                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+                guild_id INTEGER,
+                user_id INTEGER,
+                moderator_id INTEGER,
+                reason TEXT,
+                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+                is_active BOOLEAN DEFAULT 1
             )
         """)
 
@@ -113,6 +92,27 @@ class DatabaseManager:
                 timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         """)
+
+        # ── TICKETS ───────────────────────────────────────────────────────────
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS ticket_configs (
+                guild_id INTEGER PRIMARY KEY,
+                category_id INTEGER,
+                staff_role_id INTEGER,
+                log_channel_id INTEGER
+            )
+        """)
+        await self.connection.execute("""
+            CREATE TABLE IF NOT EXISTS tickets (
+                channel_id INTEGER PRIMARY KEY,
+                guild_id INTEGER,
+                user_id INTEGER,
+                status TEXT DEFAULT 'open',
+                reason TEXT,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        await self._safe_add_column("tickets", "reason", "TEXT")
 
         # ── ROLE MENUS ────────────────────────────────────────────────────────
         await self.connection.execute("""
@@ -186,58 +186,7 @@ class DatabaseManager:
         """)
         await self._safe_add_column("reminders", "role_id", "INTEGER")
 
-        # ── STARBOARD ─────────────────────────────────────────────────────────
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS starboard_messages (
-                original_id INTEGER PRIMARY KEY,
-                starboard_id INTEGER,
-                guild_id INTEGER,
-                star_count INTEGER DEFAULT 0
-            )
-        """)
-
-        # ── TICKETS ───────────────────────────────────────────────────────────
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS ticket_configs (
-                guild_id INTEGER PRIMARY KEY,
-                category_id INTEGER,
-                staff_role_id INTEGER,
-                log_channel_id INTEGER
-            )
-        """)
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS tickets (
-                channel_id INTEGER PRIMARY KEY,
-                guild_id INTEGER,
-                user_id INTEGER,
-                status TEXT DEFAULT 'open',
-                reason TEXT,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            )
-        """)
-        await self._safe_add_column("tickets", "reason", "TEXT")
-
-        # ── XP / LEVELING (v2) ────────────────────────────────────────────────
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS user_xp (
-                user_id INTEGER,
-                guild_id INTEGER,
-                xp INTEGER DEFAULT 0,
-                level INTEGER DEFAULT 0,
-                last_message_at DATETIME,
-                PRIMARY KEY (user_id, guild_id)
-            )
-        """)
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS level_roles (
-                guild_id INTEGER,
-                level INTEGER,
-                role_id INTEGER,
-                PRIMARY KEY (guild_id, level)
-            )
-        """)
-
-        # ── WELCOME / FAREWELL (v2) ───────────────────────────────────────────
+        # ── WELCOME / ONBOARDING ──────────────────────────────────────────────
         await self.connection.execute("""
             CREATE TABLE IF NOT EXISTS welcome_configs (
                 guild_id INTEGER PRIMARY KEY,
@@ -251,250 +200,8 @@ class DatabaseManager:
         """)
         await self._safe_add_column("welcome_configs", "auto_bot_role_id", "INTEGER")
 
-        # ── AUTO-MODERATION (v2) ──────────────────────────────────────────────
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS automod_configs (
-                guild_id INTEGER PRIMARY KEY,
-                spam_enabled BOOLEAN DEFAULT 0,
-                spam_threshold INTEGER DEFAULT 5,
-                spam_window INTEGER DEFAULT 5,
-                link_filter BOOLEAN DEFAULT 0,
-                invite_filter BOOLEAN DEFAULT 0,
-                caps_filter BOOLEAN DEFAULT 0,
-                caps_percent INTEGER DEFAULT 70,
-                bad_words TEXT DEFAULT ''
-            )
-        """)
-
-        # ── GIVEAWAYS (v2) ────────────────────────────────────────────────────
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS giveaways (
-                message_id INTEGER PRIMARY KEY,
-                guild_id INTEGER,
-                channel_id INTEGER,
-                host_id INTEGER,
-                prize TEXT,
-                winner_count INTEGER DEFAULT 1,
-                ends_at DATETIME,
-                is_ended BOOLEAN DEFAULT 0
-            )
-        """)
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS giveaway_entries (
-                message_id INTEGER,
-                user_id INTEGER,
-                PRIMARY KEY (message_id, user_id)
-            )
-        """)
-
-        # ── TEMP VOICE CHANNELS (v2) ──────────────────────────────────────────
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS temp_voice_configs (
-                guild_id INTEGER PRIMARY KEY,
-                hub_channel_id INTEGER
-            )
-        """)
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS temp_voice_channels (
-                channel_id INTEGER PRIMARY KEY,
-                guild_id INTEGER,
-                owner_id INTEGER
-            )
-        """)
-
-        # ── PATRONS (v3) ──────────────────────────────────────────────────────
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS patrons (
-                user_id INTEGER PRIMARY KEY,
-                tier INTEGER DEFAULT 0,
-                expires_at DATETIME,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                premium_color TEXT,
-                custom_badge TEXT
-            )
-        """)
-        await self._safe_add_column("patrons", "premium_color", "TEXT")
-        await self._safe_add_column("patrons", "custom_badge", "TEXT")
-
-        # ── ELITE GALLERY (v4) ────────────────────────────────────────────────
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS elite_images (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id INTEGER,
-                image_url TEXT,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            )
-        """)
-
-        # ── ECONOMY (v3) ─────────────────────────────────────────────────────────
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS economy (
-                user_id INTEGER,
-                guild_id INTEGER,
-                balance INTEGER DEFAULT 0,
-                bank INTEGER DEFAULT 0,
-                last_daily DATETIME,
-                last_work DATETIME,
-                total_earned INTEGER DEFAULT 0,
-                PRIMARY KEY (user_id, guild_id)
-            )
-        """)
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS shop_items (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                guild_id INTEGER,
-                name TEXT,
-                description TEXT,
-                price INTEGER,
-                role_id INTEGER,
-                stock INTEGER DEFAULT -1,
-                is_active BOOLEAN DEFAULT 1
-            )
-        """)
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS economy_transactions (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                guild_id INTEGER,
-                user_id INTEGER,
-                amount INTEGER,
-                type TEXT,
-                description TEXT,
-                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-            )
-        """)
-
-        # ── WARNINGS (v3) ─────────────────────────────────────────────────────
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS warnings (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                guild_id INTEGER,
-                user_id INTEGER,
-                moderator_id INTEGER,
-                reason TEXT,
-                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-                is_active BOOLEAN DEFAULT 1
-            )
-        """)
-
-        # ── AFK (v3) ──────────────────────────────────────────────────────────
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS afk (
-                user_id INTEGER,
-                guild_id INTEGER,
-                reason TEXT DEFAULT 'AFK',
-                set_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                PRIMARY KEY (user_id, guild_id)
-            )
-        """)
-
-        # ── BIRTHDAYS (v3) ────────────────────────────────────────────────────
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS birthdays (
-                user_id INTEGER,
-                guild_id INTEGER,
-                birth_month INTEGER,
-                birth_day INTEGER,
-                timezone TEXT DEFAULT 'UTC',
-                PRIMARY KEY (user_id, guild_id)
-            )
-        """)
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS birthday_configs (
-                guild_id INTEGER PRIMARY KEY,
-                channel_id INTEGER,
-                role_id INTEGER,
-                message TEXT DEFAULT 'Happy Birthday {user}! 🎂'
-            )
-        """)
-
-        # ── SUGGESTIONS (v3) ──────────────────────────────────────────────────
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS suggestions (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                guild_id INTEGER,
-                channel_id INTEGER,
-                message_id INTEGER,
-                author_id INTEGER,
-                content TEXT,
-                status TEXT DEFAULT 'pending',
-                staff_note TEXT,
-                upvotes INTEGER DEFAULT 0,
-                downvotes INTEGER DEFAULT 0,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            )
-        """)
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS suggestion_configs (
-                guild_id INTEGER PRIMARY KEY,
-                channel_id INTEGER,
-                staff_role_id INTEGER,
-                dm_on_update BOOLEAN DEFAULT 1
-            )
-        """)
-
-        # ── INVITE TRACKER (v3) ───────────────────────────────────────────────
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS invite_tracking (
-                guild_id INTEGER,
-                inviter_id INTEGER,
-                invitee_id INTEGER,
-                invite_code TEXT,
-                joined_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                is_fake BOOLEAN DEFAULT 0,
-                PRIMARY KEY (guild_id, invitee_id)
-            )
-        """)
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS invite_counts (
-                guild_id INTEGER,
-                user_id INTEGER,
-                total INTEGER DEFAULT 0,
-                fake INTEGER DEFAULT 0,
-                left INTEGER DEFAULT 0,
-                PRIMARY KEY (guild_id, user_id)
-            )
-        """)
-
-        # ── ANTI-RAID (v3) ────────────────────────────────────────────────────
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS antiraid_configs (
-                guild_id INTEGER PRIMARY KEY,
-                enabled BOOLEAN DEFAULT 0,
-                join_threshold INTEGER DEFAULT 10,
-                join_window INTEGER DEFAULT 10,
-                lockdown_active BOOLEAN DEFAULT 0,
-                alert_channel_id INTEGER,
-                action TEXT DEFAULT 'kick'
-            )
-        """)
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS antiraid_logs (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                guild_id INTEGER,
-                event_type TEXT,
-                description TEXT,
-                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-            )
-        """)
-
-        # ── v3 GUILD MIGRATIONS ───────────────────────────────────────────────
-        await self._safe_add_column("guilds", "suggestion_channel_id", "INTEGER")
-        await self._safe_add_column("guilds", "birthday_channel_id", "INTEGER")
-        await self._safe_add_column("guilds", "economy_enabled", "BOOLEAN DEFAULT 1")
-
-        # ── REPUTATION (v4) ───────────────────────────────────────────────────
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS reputation (
-                user_id INTEGER,
-                guild_id INTEGER,
-                rep_score INTEGER DEFAULT 0,
-                last_rep_given DATETIME,
-                PRIMARY KEY (user_id, guild_id)
-            )
-        """)
-
         await self.connection.commit()
-        logger.info("Database tables initialized (v4)")
+        logger.info("Database tables initialized (v6 - Cleaned Up)")
 
     async def execute(self, query: str, *args):
         """Executes a non-returning query."""

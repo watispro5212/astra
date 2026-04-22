@@ -143,17 +143,6 @@
   border-radius: var(--radius-md);
 }
 
-.btn--patreon {
-  background: var(--color-patreon);
-  color: #fff !important;
-  box-shadow: 0 4px 15px rgba(255, 66, 77, 0.3);
-}
-
-.btn--patreon:hover {
-  background: #e03b44;
-  transform: translateY(-3px);
-  box-shadow: 0 12px 25px rgba(255, 66, 77, 0.45);
-}
 
 /* ═══════════════════════════════════════════
    UTILITIES

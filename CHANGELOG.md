@@ -3,6 +3,20 @@
 All notable changes to Astra are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [6.0.0] — April 22, 2026
+
+### 🚀 The Clean Up
+
+A massive philosophy shift towards simplicity, utility, and native Discord features. Bloat removed, essentials perfected.
+
+#### 🌟 Core Philosophy Shift
+- **Clean & Simple**: Removed overly complex and bloated systems (Economy, Starboard, Automod, Levels, Birthdays, Suggestions, Starboard, Backup, etc.) in favor of straight-forward, native discord experiences.
+- **Patreon Removal**: Fully eradicated all Patreon integrations, links, and gated features. Astra is now 100% free with zero paywalls.
+- **Guided Onboarding**: Implemented a flawless new member flow focusing on rules, verification, and role menus.
+- **Organized Setup**: Simplified the server setup flow for administrators, utilizing sensible defaults and preview panes.
+- **Auto-Sharded**: Upgraded the bot core to utilize native Auto-Sharding for infinite scalability across thousands of guilds.
+- **Web Sunset**: Safely sunset the complex React web dashboard to focus exclusively on delivering the ultimate in-app Discord experience.
+
 ---
 
 ## [3.0.0] — April 18, 2026
@@ -96,7 +110,6 @@ The biggest Astra release to date. Ten new bot modules, a fully redesigned websi
 - **Status page** (`status.html`) — Per-service status indicators and 30-day uptime bar
 - **Command search** (`commands.html`) — Live filter across 50+ commands by name or description
 - **FAQ page** (`faq.html`) — 11 accordion items covering setup, economy, anti-raid, birthdays, backup, and self-hosting
-- Patreon tier cards on landing page
 - Social footer links
 - All inline styles replaced with semantic CSS classes (linter-clean)
 
@@ -104,7 +117,7 @@ The biggest Astra release to date. Ten new bot modules, a fully redesigned websi
 
 - **LICENSE** updated to ACL v2.0 — added Section 6 (Data & Privacy), updated contact URLs
 - **Privacy Policy** updated for v3 data types (economy, warnings, AFK, birthdays, invites, anti-raid logs)
-- **Terms of Service** updated with economy disclaimer, anti-raid liability clause, Patreon section
+- **Terms of Service** updated with economy disclaimer and anti-raid liability clause
 - **README** rewritten for v3 with full feature table, env vars, required intents, and commands table
 
 ### Database

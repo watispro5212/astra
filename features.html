@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Features — Astra</title>
-  <meta name="description" content="Explore every feature Astra has to offer — moderation, economy, leveling, anti-raid, fun commands, and much more.">
+  <meta name="description" content="Explore Astra's core feature set — professional moderation, support tickets, onboarding, and community utility.">
   <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
@@ -18,7 +18,7 @@
       <a href="index.html" class="navbar__brand">
         <img src="assets/images/astra-logo.png" alt="Astra logo" width="36" height="36">
         Astra
-        <span class="navbar__version">v4.0.0</span>
+        <span class="navbar__version">v6.0.0</span>
       </a>
       <button type="button" class="navbar__toggle" aria-label="Toggle navigation menu" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -30,7 +30,6 @@
         <a href="changelog.html" class="navbar__link">Changelog</a>
         <a href="status.html" class="navbar__link">Status</a>
         <a href="support.html" class="navbar__link">Support</a>
-        <a href="https://patreon.com/watispro1" class="navbar__link" target="_blank" rel="noopener">Patreon</a>
         <span class="navbar__cta">
           <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=0&scope=bot+email+applications.commands+identify" class="btn btn--primary btn--small">Invite Astra</a>
         </span>
@@ -40,9 +39,9 @@
 
   <div class="page-header">
     <div class="container">
-      <span class="section-header__badge">v4.0.0 Feature Set</span>
-      <h1>Every feature, <span class="text-gradient">documented</span></h1>
-      <p>Astra v3 ships with 20+ modules covering everything your server needs.</p>
+      <span class="section-header__badge">v6.0.0 Core Features</span>
+      <h1>Clean, Modern, <span class="text-gradient">Powerful</span></h1>
+      <p>Astra v6 focuses on the essentials: professional management without the bloat.</p>
     </div>
   </div>
 
@@ -50,244 +49,104 @@
     <div class="container">
 
       <div class="feature-category animate-on-scroll">
-        <h2 class="feature-category__title">🛡️ Moderation Suite</h2>
+        <h2 class="feature-category__title">🛡️ Professional Moderation</h2>
         <div class="grid grid--3">
           <div class="card glass">
             <div class="card__icon">⚖️</div>
             <h3 class="card__title">Case Tracking</h3>
-            <p class="card__text">Every action (kick, ban, mute, warn) creates a numbered case. Full history, appeals, and CSV/JSON export.</p>
+            <p class="card__text">Every action (kick, ban, mute, warn) creates a numbered case. Full history lookup and easy appeals management.</p>
           </div>
           <div class="card glass">
             <div class="card__icon">🔇</div>
-            <h3 class="card__title">Timeout / Mute</h3>
-            <p class="card__text">Native Discord timeouts with flexible duration parsing (10m, 1h, 2d). Fully reversible with <code>/mod unmute</code>.</p>
+            <h3 class="card__title">Native Timeouts</h3>
+            <p class="card__text">Utilize Discord's native timeout system with flexible duration parsing (10m, 1h, 2d). Clean, reliable, and effective.</p>
           </div>
           <div class="card glass">
             <div class="card__icon">⚠️</div>
             <h3 class="card__title">Warning System</h3>
-            <p class="card__text">Issue formal warnings, view warning history, remove individual warnings, or clear all at once. DM notification on warn.</p>
-            <span class="card__tag card__tag--new">New in v3</span>
+            <p class="card__text">Issue formal warnings with automated DM notifications. Track member conduct with ease and precision.</p>
           </div>
           <div class="card glass">
             <div class="card__icon">🔒</div>
-            <h3 class="card__title">Channel Lock / Unlock</h3>
-            <p class="card__text">Lock any channel instantly to prevent member messages. Staff see a reason; lock persists until manually lifted.</p>
-            <span class="card__tag card__tag--new">New in v3</span>
-          </div>
-          <div class="card glass">
-            <div class="card__icon">🧹</div>
-            <h3 class="card__title">Purge &amp; Slowmode</h3>
-            <p class="card__text">Bulk-delete up to 100 messages instantly. Set slowmode delays from 1 second to 6 hours per channel.</p>
-          </div>
-          <div class="card glass">
-            <div class="card__icon">🤖</div>
-            <h3 class="card__title">Auto-Moderation</h3>
-            <p class="card__text">Automatic spam, link, invite, caps, and bad-word filtering with dynamic custom rules per server.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="feature-category animate-on-scroll">
-        <h2 class="feature-category__title">🚨 Security &amp; Anti-Raid</h2>
-        <div class="grid grid--3">
-          <div class="card glass">
-            <div class="card__icon">🛡️</div>
-            <h3 class="card__title">Mass-Join Detection</h3>
-            <p class="card__text">Monitors join rate in real-time. Triggers automatic lockdown when join burst exceeds a configurable threshold.</p>
-            <span class="card__tag card__tag--new">New in v3</span>
-          </div>
-          <div class="card glass">
-            <div class="card__icon">🔐</div>
-            <h3 class="card__title">Automatic Lockdown</h3>
-            <p class="card__text">On raid detection, new members are auto-kicked until staff lifts the lockdown with <code>/antiraid unlock</code>.</p>
-            <span class="card__tag card__tag--new">New in v3</span>
-          </div>
-          <div class="card glass">
-            <div class="card__icon">🔍</div>
-            <h3 class="card__title">Permission Auditing</h3>
-            <p class="card__text">Compare two roles side-by-side or run a full guild permission audit to surface dangerous over-permissions.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="feature-category animate-on-scroll">
-        <h2 class="feature-category__title">💰 Economy System</h2>
-        <div class="grid grid--3">
-          <div class="card glass">
-            <div class="card__icon">🪙</div>
-            <h3 class="card__title">Coins &amp; Balance</h3>
-            <p class="card__text">Wallet + bank system. Earn coins through daily rewards, working, or admin grants. Transfer coins between members.</p>
-            <span class="card__tag card__tag--new">New in v3</span>
-          </div>
-          <div class="card glass">
-            <div class="card__icon">🛒</div>
-            <h3 class="card__title">Server Shop</h3>
-            <p class="card__text">Admins create shop items with prices and optional role rewards. Members spend coins to purchase items instantly.</p>
-            <span class="card__tag card__tag--new">New in v3</span>
-          </div>
-          <div class="card glass">
-            <div class="card__icon">📈</div>
-            <h3 class="card__title">Economy Leaderboard</h3>
-            <p class="card__text">Top 10 wealthiest members ranked by combined wallet + bank. Medal icons for the top 3 richest.</p>
-            <span class="card__tag card__tag--new">New in v3</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="feature-category animate-on-scroll">
-        <h2 class="feature-category__title">🏆 Engagement &amp; Leveling</h2>
-        <div class="grid grid--3">
-          <div class="card glass">
-            <div class="card__icon">✨</div>
-            <h3 class="card__title">XP &amp; Levels</h3>
-            <p class="card__text">Earn XP by chatting. Configurable rate and cooldown. Level-up announcements in a dedicated channel.</p>
-          </div>
-          <div class="card glass">
-            <div class="card__icon">🎁</div>
-            <h3 class="card__title">Giveaways</h3>
-            <p class="card__text">Button-based persistent giveaways with configurable duration, winner count, and automated winner announcements.</p>
-          </div>
-          <div class="card glass">
-            <div class="card__icon">📊</div>
-            <h3 class="card__title">Interactive Polls</h3>
-            <p class="card__text">Create timed and anonymous polls with up to 10 options. Live progress bars update as votes come in.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="feature-category animate-on-scroll">
-        <h2 class="feature-category__title">🌟 Community Features</h2>
-        <div class="grid grid--3">
-          <div class="card glass">
-            <div class="card__icon">💡</div>
-            <h3 class="card__title">Suggestions</h3>
-            <p class="card__text">Members submit ideas with reaction voting. Staff approve, deny, or implement. Authors get DM status updates.</p>
-            <span class="card__tag card__tag--new">New in v3</span>
-          </div>
-          <div class="card glass">
-            <div class="card__icon">🎂</div>
-            <h3 class="card__title">Birthday System</h3>
-            <p class="card__text">Set your birthday, view upcoming birthdays, get auto-announced on your day, and receive an optional birthday role.</p>
-            <span class="card__tag card__tag--new">New in v3</span>
-          </div>
-          <div class="card glass">
-            <div class="card__icon">💤</div>
-            <h3 class="card__title">AFK System</h3>
-            <p class="card__text">Go AFK with a custom reason. Astra auto-replies when you're mentioned and removes AFK when you send a message.</p>
-            <span class="card__tag card__tag--new">New in v3</span>
-          </div>
-          <div class="card glass">
-            <div class="card__icon">⭐</div>
-            <h3 class="card__title">Starboard</h3>
-            <p class="card__text">Community highlights with configurable star threshold, self-star filtering, and media/image support.</p>
-          </div>
-          <div class="card glass">
-            <div class="card__icon">🎭</div>
-            <h3 class="card__title">Reaction Roles</h3>
-            <p class="card__text">Persistent button and dropdown role menus. Unique-role mode enforces mutual exclusivity within a menu.</p>
-          </div>
-          <div class="card glass">
-            <div class="card__icon">📨</div>
-            <h3 class="card__title">Invite Tracker</h3>
-            <p class="card__text">Track every invite: who invited who, total count, fake and leave tracking. Full invite leaderboard.</p>
-            <span class="card__tag card__tag--new">New in v3</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="feature-category animate-on-scroll">
-        <h2 class="feature-category__title">🎮 Fun Commands</h2>
-        <div class="grid grid--3">
-          <div class="card glass">
-            <div class="card__icon">🎱</div>
-            <h3 class="card__title">Magic 8-Ball</h3>
-            <p class="card__text">Ask any question and receive one of 20 possible answers.</p>
-            <span class="card__tag card__tag--new">New in v3</span>
-          </div>
-          <div class="card glass">
-            <div class="card__icon">🧠</div>
-            <h3 class="card__title">Live Trivia</h3>
-            <p class="card__text">In-channel trivia with a 20-second timer. First correct answer in chat wins!</p>
-            <span class="card__tag card__tag--new">New in v3</span>
-          </div>
-          <div class="card glass">
-            <div class="card__icon">✊</div>
-            <h3 class="card__title">Rock Paper Scissors</h3>
-            <p class="card__text">Challenge Astra to a game. Three choices, instant result.</p>
-            <span class="card__tag card__tag--new">New in v3</span>
-          </div>
-          <div class="card glass">
-            <div class="card__icon">🔥</div>
-            <h3 class="card__title">Roast Generator</h3>
-            <p class="card__text">Roast any member (all in good fun!) with a random line from Astra's roast library.</p>
-            <span class="card__tag card__tag--new">New in v3</span>
-          </div>
-          <div class="card glass">
-            <div class="card__icon">🎲</div>
-            <h3 class="card__title">Dice &amp; Coin Flip</h3>
-            <p class="card__text">Roll any-sided dice or flip a coin. Perfect for tabletop gaming or settling debates.</p>
-            <span class="card__tag card__tag--new">New in v3</span>
-          </div>
-          <div class="card glass">
-            <div class="card__icon">🤔</div>
-            <h3 class="card__title">Chooser</h3>
-            <p class="card__text">Give Astra a list of options, it picks one randomly. Great for indecisive moments.</p>
-            <span class="card__tag card__tag--new">New in v3</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="feature-category animate-on-scroll">
-        <h2 class="feature-category__title">⚙️ Utilities &amp; Infrastructure</h2>
-        <div class="grid grid--3">
-          <div class="card glass">
-            <div class="card__icon">🎫</div>
-            <h3 class="card__title">Ticket System</h3>
-            <p class="card__text">Private support channels with one-click setup. Staff controls, member management, and HTML transcript generation.</p>
-          </div>
-          <div class="card glass">
-            <div class="card__icon">📦</div>
-            <h3 class="card__title">Server Backup</h3>
-            <p class="card__text">Export your entire server config to JSON and restore it with a single command.</p>
-            <span class="card__tag card__tag--new">New in v3</span>
-          </div>
-          <div class="card glass">
-            <div class="card__icon">⏰</div>
-            <h3 class="card__title">Reminders</h3>
-            <p class="card__text">Personal reminders with flexible formats. Delivered to channel or DM if the channel is unavailable.</p>
-          </div>
-          <div class="card glass">
-            <div class="card__icon">👋</div>
-            <h3 class="card__title">Welcome System</h3>
-            <p class="card__text">Custom join/farewell messages with template variables and auto-role assignment for new members.</p>
-          </div>
-          <div class="card glass">
-            <div class="card__icon">🎙️</div>
-            <h3 class="card__title">Temp Voice Channels</h3>
-            <p class="card__text">Join-to-Create hubs that spawn private voice channels on join and delete them when empty.</p>
+            <h3 class="card__title">Channel Controls</h3>
+            <p class="card__text">Lockdown channels instantly with <code>/lock</code>. Manage chat flow with <code>/purge</code> and <code>/slowmode</code> commands.</p>
           </div>
           <div class="card glass">
             <div class="card__icon">📋</div>
             <h3 class="card__title">Audit Logging</h3>
-            <p class="card__text">Detailed event tracking for member joins, leaves, message edits/deletes, bans, and more.</p>
+            <p class="card__text">A comprehensive log of all server activity, from moderation actions to channel updates and member transitions.</p>
+          </div>
+          <div class="card glass">
+            <div class="card__icon">🛡️</div>
+            <h3 class="card__title">Permission Audit</h3>
+            <p class="card__text">Scan your server for dangerous permission configurations and compare roles side-by-side for perfect security.</p>
           </div>
         </div>
       </div>
 
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container">
-      <div class="cta-banner animate-on-scroll">
-        <div class="cta-banner__glow" aria-hidden="true"></div>
-        <h2>Ready to power up your server?</h2>
-        <p>Invite Astra in seconds — everything is free, no sign-up required.</p>
-        <div class="hero__actions">
-          <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=0&scope=bot+email+applications.commands+identify" class="btn btn--primary btn--large">✨ Invite Astra — Free</a>
-          <a href="commands.html" class="btn btn--secondary btn--large">View Commands →</a>
+      <div class="feature-category animate-on-scroll">
+        <h2 class="feature-category__title">🎫 Support &amp; Tickets</h2>
+        <div class="grid grid--3">
+          <div class="card glass">
+            <div class="card__icon">🎫</div>
+            <h3 class="card__title">Private Support</h3>
+            <p class="card__text">Launch dedicated support channels with one-click panels. Private, secure, and fully manageable by your staff.</p>
+          </div>
+          <div class="card glass">
+            <div class="card__icon">👋</div>
+            <h3 class="card__title">Staff Controls</h3>
+            <p class="card__text">Claim tickets, add/remove members, and close sessions with intuitive button-based interactions.</p>
+          </div>
+          <div class="card glass">
+            <div class="card__icon">📄</div>
+            <h3 class="card__title">HTML Transcripts</h3>
+            <p class="card__text">Generate beautiful, permanent archives of ticket conversations for record-keeping and accountability.</p>
+          </div>
         </div>
       </div>
+
+      <div class="feature-category animate-on-scroll">
+        <h2 class="feature-category__title">👋 Onboarding &amp; Roles</h2>
+        <div class="grid grid--3">
+          <div class="card glass">
+            <div class="card__icon">✨</div>
+            <h3 class="card__title">Guided Welcome</h3>
+            <p class="card__text">Create a perfect first impression with automated join messages and auto-role assignment for new members.</p>
+          </div>
+          <div class="card glass">
+            <div class="card__icon">🎭</div>
+            <h3 class="card__title">Role Menus</h3>
+            <p class="card__text">Professional button-based menus for self-assignable roles. Keep your server organized and interactive.</p>
+          </div>
+          <div class="card glass">
+            <div class="card__icon">📜</div>
+            <h3 class="card__title">Blueprint Setup</h3>
+            <p class="card__text">Build a complete, professional server structure in seconds with Astra's automated infrastructure builder.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-category animate-on-scroll">
+        <h2 class="feature-category__title">🚀 Utility &amp; Community</h2>
+        <div class="grid grid--3">
+          <div class="card glass">
+            <div class="card__icon">📊</div>
+            <h3 class="card__title">Interactive Polls</h3>
+            <p class="card__text">Gauge community opinion with native poll interactions, live progress bars, and one-vote integrity.</p>
+          </div>
+          <div class="card glass">
+            <div class="card__icon">⏰</div>
+            <h3 class="card__title">Reminders</h3>
+            <p class="card__text">Never miss a deadline. Set personal reminders that deliver straight to your channel or direct messages.</p>
+          </div>
+          <div class="card glass">
+            <div class="card__icon">📡</div>
+            <h3 class="card__title">System Diagnostics</h3>
+            <p class="card__text">View real-time bot performance, shard metrics, and server snapshots with enterprise-grade diagnostics.</p>
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -299,20 +158,18 @@
             <img src="assets/images/astra-logo.png" alt="Astra" width="28" height="28">
             Astra
           </div>
-          <p class="footer__desc">The ultimate all-in-one Discord bot for moderation, community engagement, and server management.</p>
+          <p class="footer__desc">The ultimate all-in-one Discord bot for professional server management.</p>
         </div>
         <div>
           <h4 class="footer__heading">Product</h4>
           <a href="features.html" class="footer__link">Features</a>
           <a href="commands.html" class="footer__link">Commands</a>
           <a href="changelog.html" class="footer__link">Changelog</a>
-          <a href="status.html" class="footer__link">Status</a>
         </div>
         <div>
           <h4 class="footer__heading">Community</h4>
           <a href="https://discord.gg/NZ5Gr7eqE8" class="footer__link" target="_blank" rel="noopener">Support Server</a>
           <a href="faq.html" class="footer__link">FAQ</a>
-          <a href="https://patreon.com/watispro1" class="footer__link" target="_blank" rel="noopener">Patreon</a>
         </div>
         <div>
           <h4 class="footer__heading">Legal</h4>
@@ -331,7 +188,7 @@
 
   <div class="global-notification" id="global-notify">
     <span class="global-notification__icon">✨</span>
-    <span class="global-notification__text">Astra v4.0.0 is officially live! Enjoy the new features.</span>
+    <span class="global-notification__text">Astra v6.0.0 is officially live! Enjoy the refined experience.</span>
     <button class="global-notification__close" onclick="document.getElementById('global-notify').style.display='none'">&times;</button>
   </div>
   <button class="back-to-top" id="backToTop" aria-label="Back to top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
@@ -345,5 +202,4 @@
     });
   </script>
 </body>
-
 </html>

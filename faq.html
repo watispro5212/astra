@@ -18,7 +18,7 @@
       <a href="index.html" class="navbar__brand">
         <img src="assets/images/astra-logo.png" alt="Astra logo" width="36" height="36">
         Astra
-        <span class="navbar__version">v4.0.0</span>
+        <span class="navbar__version">v6.0.0</span>
       </a>
       <button type="button" class="navbar__toggle" aria-label="Toggle navigation menu" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -30,7 +30,6 @@
         <a href="changelog.html" class="navbar__link">Changelog</a>
         <a href="status.html" class="navbar__link">Status</a>
         <a href="support.html" class="navbar__link">Support</a>
-        <a href="https://patreon.com/watispro1" class="navbar__link" target="_blank" rel="noopener">Patreon</a>
         <span class="navbar__cta">
           <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=0&scope=bot+email+applications.commands+identify" class="btn btn--primary btn--small">Invite Astra</a>
         </span>
@@ -93,70 +92,11 @@
           </button>
           <div class="accordion__body">
             <div class="accordion__content">
-              Yes — all core features are completely free. Patreon supporters unlock cosmetic perks like custom embed colors, higher XP multipliers, and reduced cooldowns, but no essential functionality is paywalled.
+              Yes — Astra is 100% free. We believe in providing powerful, professional tools for community management without any paywalls or cosmetic gatekeeping.
             </div>
           </div>
         </div>
 
-        <div class="accordion__item">
-          <button type="button" class="accordion__header">
-            How do I set up the economy system?
-            <span class="accordion__icon">▼</span>
-          </button>
-          <div class="accordion__body">
-            <div class="accordion__content">
-              The economy is enabled by default. Members can immediately use <code>/economy daily</code> and <code>/economy work</code> to earn coins. To create shop items, use <code>/economy additem</code> (requires Manage Server). To view the shop, use <code>/economy shop</code>.
-            </div>
-          </div>
-        </div>
-
-        <div class="accordion__item">
-          <button type="button" class="accordion__header">
-            How do I enable anti-raid protection?
-            <span class="accordion__icon">▼</span>
-          </button>
-          <div class="accordion__body">
-            <div class="accordion__content">
-              Run <code>/antiraid config enabled:True</code> to activate it. You can set the join threshold (default 10 joins), time window (default 10 seconds), alert channel, and the action taken on raiders (kick or ban). Use <code>/antiraid unlock</code> to lift a lockdown after a raid is resolved.
-            </div>
-          </div>
-        </div>
-
-        <div class="accordion__item">
-          <button type="button" class="accordion__header">
-            How do suggestions work?
-            <span class="accordion__icon">▼</span>
-          </button>
-          <div class="accordion__body">
-            <div class="accordion__content">
-              First, run <code>/suggestion config channel:#your-channel</code> to set up the suggestion channel. Members then use <code>/suggest</code> to submit ideas — Astra posts an embed with 👍/👎 reactions. Staff can use <code>/suggestion approve</code>, <code>/suggestion deny</code>, or <code>/suggestion implement</code> to update the status. The suggestion author gets a DM whenever their suggestion is reviewed.
-            </div>
-          </div>
-        </div>
-
-        <div class="accordion__item">
-          <button type="button" class="accordion__header">
-            How do I set up birthday announcements?
-            <span class="accordion__icon">▼</span>
-          </button>
-          <div class="accordion__body">
-            <div class="accordion__content">
-              Use <code>/birthday config channel:#announcements</code> to set where birthdays are announced. Optionally add a <code>role:</code> that gets assigned on someone's birthday. Members set their own birthday with <code>/birthday set</code>. Astra checks at 9 AM UTC daily and announces any birthdays for that day.
-            </div>
-          </div>
-        </div>
-
-        <div class="accordion__item">
-          <button type="button" class="accordion__header">
-            Can I back up my server configuration?
-            <span class="accordion__icon">▼</span>
-          </button>
-          <div class="accordion__body">
-            <div class="accordion__content">
-              Yes! Use <code>/backup export</code> to download a JSON file containing all your server's Astra configuration (channels, roles, automod settings, ticket config, economy settings, etc.). Use <code>/backup import</code> to restore from that file on the same server or a different one.
-            </div>
-          </div>
-        </div>
 
         <div class="accordion__item">
           <button type="button" class="accordion__header">
@@ -165,7 +105,7 @@
           </button>
           <div class="accordion__body">
             <div class="accordion__content">
-              Astra stores only what's necessary to function: server configuration, moderation cases, XP data, economy balances, reminders, and similar feature data. No message content is permanently stored — automod checks messages in real-time and discards them. See the <a href="privacy.html" class="status-contact-link">Privacy Policy</a> for full details.
+              Astra stores only what's necessary to function: server configuration, moderation cases, and similar feature data. No message content is permanently stored — our systems process data in real-time and discard it immediately after use. See the <a href="privacy.html" class="status-contact-link">Privacy Policy</a> for full details.
             </div>
           </div>
         </div>
@@ -241,7 +181,7 @@
 
   <div class="global-notification" id="global-notify">
     <span class="global-notification__icon">✨</span>
-    <span class="global-notification__text">Astra v4.0.0 is officially live! Enjoy the new features.</span>
+    <span class="global-notification__text">Astra v6.0.0 is officially live! Enjoy the refined experience.</span>
     <button class="global-notification__close" onclick="document.getElementById('global-notify').style.display='none'">&times;</button>
   </div>
   <button class="back-to-top" id="backToTop" aria-label="Back to top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">

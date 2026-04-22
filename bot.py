@@ -8,10 +8,9 @@ from core.database import db
 from ui.views.role_view import PersistentRoleView
 from ui.views.poll_view import PersistentPollView
 from ui.views.ticket_view import TicketLauncherView, TicketControlView
-from ui.views.giveaway_view import GiveawayView
 from services.reminder_service import ReminderService
 
-class AstraBot(commands.Bot):
+class AstraBot(commands.AutoShardedBot):
     def __init__(self):
         intents = discord.Intents.default()
         intents.guilds = True
@@ -38,11 +37,9 @@ class AstraBot(commands.Bot):
         self.add_view(PersistentPollView())
         self.add_view(TicketLauncherView())
         self.add_view(TicketControlView())
-        self.add_view(GiveawayView())
         
         # Start background tasks
         self.check_reminders.start()
-        self.cleanup_automod_cache.start()
         
         # Load extensions
         await self.load_extensions()
@@ -116,9 +113,3 @@ class AstraBot(commands.Bot):
     @check_reminders.before_loop
     async def before_check_reminders(self):
         await self.wait_until_ready()
-
-    @tasks.loop(minutes=30.0)
-    async def cleanup_automod_cache(self):
-        """Background task to clear stale anti-spam data."""
-        from services.automod_service import automod_service
-        await automod_service.cleanup_cache()

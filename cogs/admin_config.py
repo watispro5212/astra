@@ -16,26 +16,20 @@ class AdminConfig(commands.GroupCog, name="config"):
         await interaction.response.defer(ephemeral=True)
         await ModerationService.update_guild_config(interaction.guild_id, log_channel_id=channel.id)
         
-        embed = SuccessEmbed(f"Logging channel has been set to {channel.mention}")
+        embed = SuccessEmbed(f"✅ Logging channel has been set to {channel.mention}")
         await interaction.followup.send(embed=embed)
 
-    @app_commands.command(name="starboard", description="Set the channel for the Starboard.")
-    @app_commands.checks.has_permissions(administrator=True)
-    async def set_starboard(self, interaction: discord.Interaction, channel: discord.TextChannel):
-        """Configures the starboard channel."""
-        await interaction.response.defer(ephemeral=True)
-        await ModerationService.update_guild_config(interaction.guild_id, starboard_channel_id=channel.id)
-        await interaction.followup.send(embed=SuccessEmbed(f"Starboard channel set to {channel.mention}"))
 
-    @app_commands.command(name="threshold", description="Set the number of stars required for the Starboard.")
+
+    @app_commands.command(name="staff", description="Set the staff role for Astra permissions.")
     @app_commands.checks.has_permissions(administrator=True)
-    async def set_threshold(self, interaction: discord.Interaction, threshold: int):
-        """Configures the star threshold."""
+    async def set_staff(self, interaction: discord.Interaction, role: discord.Role):
+        """Configures the staff role."""
         await interaction.response.defer(ephemeral=True)
-        if threshold < 1:
-            return await interaction.followup.send("Threshold must be at least 1.", ephemeral=True)
-        await ModerationService.update_guild_config(interaction.guild_id, starboard_threshold=threshold)
-        await interaction.followup.send(embed=SuccessEmbed(f"Starboard threshold set to **{threshold}** stars"))
+        await ModerationService.update_guild_config(interaction.guild_id, staff_role_id=role.id)
+        
+        embed = SuccessEmbed(f"✅ Staff role has been set to **{role.name}**")
+        await interaction.followup.send(embed=embed)
 
     @app_commands.command(name="view", description="View current server configuration.")
     @app_commands.checks.has_permissions(manage_guild=True)
@@ -44,18 +38,23 @@ class AdminConfig(commands.GroupCog, name="config"):
         await interaction.response.defer(ephemeral=True)
         config = await ModerationService.get_guild_config(interaction.guild_id)
         
-        if not config:
+        # Get Welcome Config too
+        from services.welcome_service import welcome_service
+        w_config = await welcome_service.get_config(interaction.guild_id)
+        
+        if not config and not w_config:
             await interaction.followup.send("No configuration found for this server. Use `/config logging` to get started.", ephemeral=True)
             return
 
-        embed = AstraEmbed(title=f"Configuration for {interaction.guild.name}")
+        embed = AstraEmbed(title=f"⚙️ Configuration: {interaction.guild.name}")
         
-        log_channel = interaction.guild.get_channel(config['log_channel_id']) if config['log_channel_id'] else None
-        embed.add_field(name="Logging Channel", value=log_channel.mention if log_channel else "Not set", inline=True)
+        log_channel = interaction.guild.get_channel(config['log_channel_id']) if config and config.get('log_channel_id') else None
+        staff_role = interaction.guild.get_role(config['staff_role_id']) if config and config.get('staff_role_id') else None
+        welcome_channel = interaction.guild.get_channel(w_config['channel_id']) if w_config and w_config.get('channel_id') else None
         
-        starboard_channel = interaction.guild.get_channel(config['starboard_channel_id']) if config['starboard_channel_id'] else None
-        embed.add_field(name="Starboard Channel", value=starboard_channel.mention if starboard_channel else "Not set", inline=True)
-        embed.add_field(name="Star Threshold", value=f"⭐ {config['starboard_threshold']}", inline=True)
+        embed.add_field(name="📜 Logging Channel", value=log_channel.mention if log_channel else "Not set", inline=True)
+        embed.add_field(name="👋 Welcome Channel", value=welcome_channel.mention if welcome_channel else "Not set", inline=True)
+        embed.add_field(name="🛡️ Staff Role", value=staff_role.mention if staff_role else "Not set", inline=True)
         
         await interaction.followup.send(embed=embed)
 

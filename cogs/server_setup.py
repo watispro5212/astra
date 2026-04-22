@@ -3,6 +3,8 @@ import asyncio
 from discord import app_commands
 from discord.ext import commands
 from ui.embeds import SuccessEmbed, ErrorEmbed, AstraEmbed
+from core.database import db
+from services.moderation_service import ModerationService
 
 class ServerSetup(commands.Cog):
     """Automated server builder and reset tools."""
@@ -78,61 +80,21 @@ class ServerSetup(commands.Cog):
                 if role.name != name: await role.edit(name=name)
             roles[name] = role
 
-        # 2. INFRASTRUCTURE SYNC
+        # 2. INFRASTRUCTURE SYNC (V6 Core)
         structure = [
             ("─── WELCOME ZONE ───", "public_read", [
                 ("👋 welcome", "Official greetings for new Astra members."),
                 ("📜 rules", "The law of the land. Read carefully."),
-                ("✅ verify", "Verify your account to access the community."),
-                ("📢 server-guide", "Everything you need to know about navigating this server.")
+                ("📢 announcements", "Major news and broadcasts.")
             ]),
-            ("─── SUPPORT DESK 🆘 ───", "support", [
-                ("❓ support-faq", "Common fixes and answers to frequent questions."),
-                ("🎫 open-a-ticket", "Need private help? Open a ticket here."),
-                ("🆘 community-help", "Ask the community for tips and tricks."),
-                ("🐞 bug-reports", "Found a glitch? Let us know!"),
-                ("💡 feature-requests", "Help us shape the future of Astra.")
+            ("─── SUPPORT 🆘 ───", "support", [
+                ("🎫 open-a-ticket", "Need help? Open a ticket here."),
+                ("📋 staff-logs", "Internal audit logs and incident tracking.")
             ]),
-            ("─── UPDATES CENTER 🚀 ───", "public_read", [
-                ("📢 announcements", "Major news and broadcasts."),
-                ("🚀 updates", "New feature releases and bot updates."),
-                ("📝 changelog", "Detailed patch notes from the dev team."),
-                ("📌 useful-links", "Invite links, documentation, and more.")
-            ]),
-            ("─── THE LOUNGE ───", "free_chat", [
-                ("💬 public-lounge", "The open lobby for everyone. No verification required!"),
-                ("🎭 guest-chat", "A place for visitors to ask quick questions.")
-            ]),
-            ("─── COMMUNITY HUB 💬 ───", "public_chat", [
-                ("💬 general", "The main lobby for Astra community chat."),
-                ("🤖 bot-commands", "The place to interact with Astra and other bots."),
-                ("🎉 introductions", "Say hello and introduce yourself!"),
-                ("📷 server-showcase", "Show off your server setups and bot configs."),
-                ("🗣️ off-topic", "For everything that doesn't fit elsewhere.")
-            ]),
-            ("─── THE LABORATORY 🧪 ───", "restricted", [
-                ("🧪 bot-testing", "Experimental features. High danger of bugs!"),
-                ("🔍 feature-preview", "Sneak peeks at upcoming Astra versions.")
-            ]),
-            ("─── STAFF OFFICE 🏢 ───", "staff", [
-                ("🛡️ mod-chat", "Private coordination for the moderation team."),
-                ("📋 mod-logs", "Internal audit logs and incident tracking."),
-                ("🗂️ support-tickets", "Archive of resolved support queries.")
-            ]),
-            ("─── SOCIAL MEDIA ───", "public_read", [
-                ("🎨 astra-gallery", "Fan art and bot setup screenshots."),
-                ("🐦 twitter-feed", "Automated updates from the Astra Twitter."),
-                ("🎥 video-highlights", "YouTube and TikTok community features."),
-                ("🌐 official-socials", "Links to all official Astra platforms.")
-            ]),
-            ("─── PARTNERS & GROWTH ───", "public_read", [
-                ("🤝 partner-info", "Partnership requirements and benefits."),
-                ("⭐ affiliate-showcase", "Featured partner servers."),
-                ("📈 server-growth", "Helpful tips for growing your server with Astra.")
-            ]),
-            ("─── MISCELLANEOUS ───", "public_read", [
-                ("🗳️ community-polls", "Cast your vote on server decisions."),
-                ("⭐ hall-of-fame", "The best of the best Astra moments.")
+            ("─── COMMUNITY 💬 ───", "public_chat", [
+                ("💬 general", "The main lobby for community chat."),
+                ("🤖 bot-commands", "The place to interact with Astra."),
+                ("🎭 role-menu", "Pick your roles here!")
             ])
         ]
 
@@ -148,7 +110,7 @@ class ServerSetup(commands.Cog):
                 except: pass
             else: cat_map[norm] = cat
 
-        # Orphan Scan: remove uncategorized channels that duplicate blueprint names
+        # Orphan Scan
         status_embed.description = "🔍 Performing Orphan Scan..."
         await status_msg.edit(embed=status_embed)
         blueprint_names = {self._normalize(n) for _, _, channels in structure for n, _ in channels}
@@ -171,11 +133,6 @@ class ServerSetup(commands.Cog):
                 overwrites = { guild.default_role: discord.PermissionOverwrite(view_channel=True, send_messages=False) }
                 if p_type == 'public_chat':
                     overwrites[roles["👋 Verified"]] = discord.PermissionOverwrite(view_channel=True, send_messages=True)
-                elif p_type == 'free_chat':
-                    overwrites[guild.default_role] = discord.PermissionOverwrite(view_channel=True, send_messages=True)
-                elif p_type == 'restricted':
-                    overwrites[guild.default_role] = discord.PermissionOverwrite(view_channel=False)
-                    overwrites[roles["🧪 Bot Tester"]] = discord.PermissionOverwrite(view_channel=True, send_messages=True)
                 elif p_type == 'staff':
                     overwrites[guild.default_role] = discord.PermissionOverwrite(view_channel=False)
                     overwrites[roles["🛡️ Moderator"]] = discord.PermissionOverwrite(view_channel=True, send_messages=True)
@@ -184,7 +141,7 @@ class ServerSetup(commands.Cog):
             else:
                 if category.name != cat_name: await category.edit(name=cat_name)
 
-            # Cleanup Duplicate Channels in this category
+            # Cleanup Duplicate Channels
             chan_map = {}
             for chan in category.text_channels:
                 norm = self._normalize(chan.name)
@@ -196,16 +153,20 @@ class ServerSetup(commands.Cog):
             for name, topic in channels:
                 channel = discord.utils.find(lambda c: self._normalize(c.name) == self._normalize(name), category.text_channels)
                 if not channel:
-                    await guild.create_text_channel(name=name, category=category, topic=topic)
+                    new_chan = await guild.create_text_channel(name=name, category=category, topic=topic)
                     created_count += 1
+                    # Save core channels to DB
+                    if "welcome" in name:
+                        await db.execute("INSERT INTO welcome_configs (guild_id, channel_id) VALUES (?, ?) ON CONFLICT(guild_id) DO UPDATE SET channel_id = excluded.channel_id", guild.id, new_chan.id)
+                    elif "staff-logs" in name:
+                        await ModerationService.update_guild_config(guild.id, log_channel_id=new_chan.id)
                 else:
                     if channel.name != name or channel.topic != topic:
                         await channel.edit(name=name, topic=topic)
                 await asyncio.sleep(0.1)
 
-        # 3. AUTOMOD SYNC
-        from core.database import db
-        await db.execute("INSERT INTO automod_configs (guild_id, spam_enabled, link_filter, invite_filter, spam_threshold, spam_window) VALUES (?, 1, 1, 1, 5, 5) ON CONFLICT(guild_id) DO NOTHING", guild.id)
+        # 3. SAVE CORE ROLES
+        await ModerationService.update_guild_config(guild.id, staff_role_id=roles["🛡️ Moderator"].id)
 
         # 4. FINAL SUCCESS
         final_embed = SuccessEmbed(

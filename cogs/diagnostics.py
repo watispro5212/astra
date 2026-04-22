@@ -74,16 +74,15 @@ class Diagnostics(commands.Cog):
         embed = AstraEmbed(
             title="🛰️ Astra — Mission Overview",
             description=(
-                "Astra is a high-performance Discord assistant designed for elite server management, "
-                "security, and community engagement. Built with speed and precision, Astra provides "
-                "everything from enterprise-grade Bio-Mod security to professional support ticket systems."
+                "Astra is a clean, modern Discord bot made for support, moderation, onboarding, and community management. "
+                "The goal is to keep the bot simple to use, easy to configure, and useful in real servers. "
+                "Every feature has a clear purpose and every command is easy to remember."
             )
         )
         embed.set_thumbnail(url=self.bot.user.display_avatar.url)
         
         embed.add_field(name="🏛️ Support Community", value="[Join Server](https://discord.gg/NZ5Gr7eqE8)", inline=True)
         embed.add_field(name="🔗 Discord Portal", value="[Invite Astra](https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=0&scope=bot+email+applications.commands+identify)", inline=True)
-        embed.add_field(name="❤ Patreon", value="[Support Astra](https://patreon.com/watispro1)", inline=True)
         
         await interaction.response.send_message(embed=embed)
 
