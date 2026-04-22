@@ -128,7 +128,8 @@ const command: Command = {
                 return;
             }
             const user = interaction.options.getUser('user')!;
-            await interaction.channel?.permissionOverwrites.create(user.id, {
+            const channel = interaction.channel as TextChannel;
+            await channel.permissionOverwrites.create(user.id, {
                 ViewChannel: true, SendMessages: true, ReadMessageHistory: true
             });
             await interaction.reply({ embeds: [new EmbedBuilder()
@@ -149,7 +150,8 @@ const command: Command = {
                 await interaction.reply({ content: '❌ Cannot remove the ticket creator.', ephemeral: true });
                 return;
             }
-            await interaction.channel?.permissionOverwrites.delete(user.id);
+            const channel = interaction.channel as TextChannel;
+            await channel.permissionOverwrites.delete(user.id);
             await interaction.reply({ embeds: [new EmbedBuilder()
                 .setColor(0xe74c3c)
                 .setDescription(`✅ Removed <@${user.id}> from this ticket.`)] });
