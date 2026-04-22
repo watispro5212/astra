@@ -3,6 +3,8 @@ import { Client } from 'pg';
 import { config } from './config';
 import logger from './logger';
 import { promisify } from 'util';
+import * as fs from 'fs';
+import * as path from 'path';
 
 class DatabaseManager {
     private db: any;
@@ -18,9 +20,16 @@ class DatabaseManager {
             await this.db.connect();
             logger.info('Connected to PostgreSQL database');
         } else {
-            const path = config.databaseUrl.replace('sqlite:///', '');
-            this.db = new sqlite3.Database(path);
-            logger.info(`Connected to SQLite database: ${path}`);
+            const pathStr = config.databaseUrl.replace('sqlite:///', '');
+            const dir = path.dirname(path.join(process.cwd(), pathStr));
+            
+            if (!fs.existsSync(dir)) {
+                fs.mkdirSync(dir, { recursive: true });
+                logger.info(`Created database directory: ${dir}`);
+            }
+
+            this.db = new sqlite3.Database(pathStr);
+            logger.info(`Connected to SQLite database: ${pathStr}`);
         }
     }
 
