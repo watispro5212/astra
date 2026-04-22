@@ -10,7 +10,7 @@ class AstraEmbed(discord.Embed):
             kwargs["color"] = config.bot_theme_color
             
         super().__init__(**kwargs)
-        self.set_footer(text=f"{config.bot_name} Tactical System • v6.1")
+        self.set_footer(text=f"{config.bot_name} Tactical System • v6.2.0")
         self.timestamp = datetime.now()
 
 class ModerationEmbed(AstraEmbed):

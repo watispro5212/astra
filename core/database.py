@@ -1,223 +1,141 @@
-import aiosqlite
 import os
+from databases import Database
 from core.logger import logger
 from core.config import config
-from typing import Optional, List, Dict, Any
+from typing import Optional, List, Dict, Any, Union
+import sqlalchemy
 
 class DatabaseManager:
     def __init__(self):
-        # Strip sqlite:/// prefix if present
-        self.db_path = config.database_url.replace("sqlite:///", "")
-        self.connection: Optional[aiosqlite.Connection] = None
+        self.url = config.database_url
+        self.database: Optional[Database] = None
+        self.is_postgresql = self.url.startswith("postgresql")
 
     async def connect(self):
-        """Establishes connection to the SQLite database."""
-        if not self.connection:
-            self.connection = await aiosqlite.connect(self.db_path)
-            self.connection.row_factory = aiosqlite.Row
-            logger.info(f"Connected to database at {self.db_path}")
+        """Establishes a connection pool to the database."""
+        if not self.database:
+            self.database = Database(self.url)
+            await self.database.connect()
+            logger.info(f"Connected to database pool: {self.url.split('@')[-1] if '@' in self.url else self.url}")
 
     async def disconnect(self):
-        """Closes the database connection."""
-        if self.connection:
-            await self.connection.close()
-            self.connection = None
-            logger.info("Disconnected from database")
+        """Closes the database connection pool."""
+        if self.database:
+            await self.database.disconnect()
+            self.database = None
+            logger.info("Disconnected from database pool")
 
-    async def _safe_add_column(self, table: str, column: str, definition: str):
-        """Adds a column to an existing table if it doesn't already exist."""
-        try:
-            await self.connection.execute(f"ALTER TABLE {table} ADD COLUMN {column} {definition}")
-            await self.connection.commit()
-            logger.info(f"Migration: added column '{column}' to '{table}'")
-        except Exception:
-            pass  # Column already exists
+    def _convert_query(self, query: str) -> str:
+        """Converts SQLite '?' syntax to PostgreSQL ':p1, :p2' syntax if needed."""
+        if not self.is_postgresql:
+            return query
+            
+        parts = query.split('?')
+        new_query = ""
+        for i, part in enumerate(parts[:-1]):
+            new_query += f"{part}:p{i+1}"
+        new_query += parts[-1]
+        return new_query
+
+    def _get_params(self, args: tuple) -> dict:
+        """Converts positional args to a dictionary for named parameters."""
+        return {f"p{i+1}": arg for i, arg in enumerate(args)}
 
     async def initialize_tables(self):
-        """Creates all tables if they don't exist, and runs non-destructive migrations."""
+        """Creates all tables if they don't exist. Optimized for both SQLite and PostgreSQL."""
         await self.connect()
 
+        # Type mapping
+        PK = "SERIAL PRIMARY KEY" if self.is_postgresql else "INTEGER PRIMARY KEY AUTOINCREMENT"
+        TS = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP" if self.is_postgresql else "DATETIME DEFAULT CURRENT_TIMESTAMP"
+        TEXT = "TEXT"
+        INT = "BIGINT" if self.is_postgresql else "INTEGER"
+        BOOL = "BOOLEAN"
+
         # ── GUILD CONFIG ──────────────────────────────────────────────────────
-        await self.connection.execute("""
+        await self.database.execute(f"""
             CREATE TABLE IF NOT EXISTS guilds (
-                guild_id INTEGER PRIMARY KEY,
-                log_channel_id INTEGER,
-                staff_role_id INTEGER,
-                mute_role_id INTEGER
+                guild_id {INT} PRIMARY KEY,
+                log_channel_id {INT},
+                staff_role_id {INT},
+                mute_role_id {INT}
             )
         """)
 
-        # ── MODERATION CASES ──────────────────────────────────────────────────
-        await self.connection.execute("""
+        # ── MODERATION ────────────────────────────────────────────────────────
+        await self.database.execute(f"""
             CREATE TABLE IF NOT EXISTS moderation_cases (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                guild_id INTEGER,
-                case_number INTEGER,
-                target_id INTEGER,
-                moderator_id INTEGER,
-                type TEXT,
-                reason TEXT,
-                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-                duration TEXT,
-                note TEXT,
+                id {PK},
+                guild_id {INT},
+                case_number {INT},
+                target_id {INT},
+                moderator_id {INT},
+                type {TEXT},
+                reason {TEXT},
+                timestamp {TS},
+                duration {TEXT},
+                note {TEXT},
+                is_appealed {BOOL} DEFAULT FALSE,
+                appeal_reason {TEXT},
+                case_status {TEXT} DEFAULT 'active',
                 UNIQUE(guild_id, case_number)
-            )
-        """)
-        await self._safe_add_column("moderation_cases", "note", "TEXT")
-        await self._safe_add_column("moderation_cases", "is_appealed", "BOOLEAN DEFAULT 0")
-        await self._safe_add_column("moderation_cases", "appeal_reason", "TEXT")
-        await self._safe_add_column("moderation_cases", "case_status", "TEXT DEFAULT 'active'")
-
-        # ── WARNINGS (V6 MODERATION) ──────────────────────────────────────────
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS warnings (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                guild_id INTEGER,
-                user_id INTEGER,
-                moderator_id INTEGER,
-                reason TEXT,
-                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-                is_active BOOLEAN DEFAULT 1
-            )
-        """)
-
-        # ── TICKET EVENTS ─────────────────────────────────────────────────────
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS ticket_events (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                channel_id INTEGER NOT NULL,
-                guild_id INTEGER NOT NULL,
-                staff_id INTEGER,
-                event_type TEXT NOT NULL,
-                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         """)
 
         # ── TICKETS ───────────────────────────────────────────────────────────
-        await self.connection.execute("""
+        await self.database.execute(f"""
             CREATE TABLE IF NOT EXISTS ticket_configs (
-                guild_id INTEGER PRIMARY KEY,
-                category_id INTEGER,
-                staff_role_id INTEGER,
-                log_channel_id INTEGER
+                guild_id {INT} PRIMARY KEY,
+                category_id {INT},
+                staff_role_id {INT},
+                log_channel_id {INT}
             )
         """)
-        await self.connection.execute("""
+        await self.database.execute(f"""
             CREATE TABLE IF NOT EXISTS tickets (
-                channel_id INTEGER PRIMARY KEY,
-                guild_id INTEGER,
-                user_id INTEGER,
-                status TEXT DEFAULT 'open',
-                reason TEXT,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            )
-        """)
-        await self._safe_add_column("tickets", "reason", "TEXT")
-
-        # ── ROLE MENUS ────────────────────────────────────────────────────────
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS role_menus (
-                message_id INTEGER PRIMARY KEY,
-                guild_id INTEGER,
-                channel_id INTEGER,
-                title TEXT,
-                type TEXT,
-                unique_roles BOOLEAN DEFAULT 0
-            )
-        """)
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS role_options (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                message_id INTEGER,
-                role_id INTEGER,
-                label TEXT,
-                emoji TEXT,
-                FOREIGN KEY (message_id) REFERENCES role_menus (message_id) ON DELETE CASCADE
+                channel_id {INT} PRIMARY KEY,
+                guild_id {INT},
+                user_id {INT},
+                status {TEXT} DEFAULT 'open',
+                reason {TEXT},
+                created_at {TS}
             )
         """)
 
-        # ── POLLS ─────────────────────────────────────────────────────────────
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS polls (
-                message_id INTEGER PRIMARY KEY,
-                guild_id INTEGER,
-                channel_id INTEGER,
-                question TEXT,
-                is_closed BOOLEAN DEFAULT 0,
-                is_anonymous BOOLEAN DEFAULT 0,
-                ends_at DATETIME
-            )
-        """)
-        await self._safe_add_column("polls", "is_anonymous", "BOOLEAN DEFAULT 0")
-
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS poll_options (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                message_id INTEGER,
-                label TEXT,
-                vote_count INTEGER DEFAULT 0,
-                FOREIGN KEY (message_id) REFERENCES polls (message_id) ON DELETE CASCADE
-            )
-        """)
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS poll_votes (
-                message_id INTEGER,
-                user_id INTEGER,
-                option_id INTEGER,
-                PRIMARY KEY (message_id, user_id),
-                FOREIGN KEY (message_id) REFERENCES polls (message_id) ON DELETE CASCADE,
-                FOREIGN KEY (option_id) REFERENCES poll_options (id) ON DELETE CASCADE
-            )
-        """)
-
-        # ── REMINDERS ─────────────────────────────────────────────────────────
-        await self.connection.execute("""
-            CREATE TABLE IF NOT EXISTS reminders (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                guild_id INTEGER,
-                channel_id INTEGER,
-                user_id INTEGER,
-                message TEXT,
-                remind_at DATETIME,
-                is_recurring BOOLEAN DEFAULT 0,
-                interval_seconds INTEGER,
-                role_id INTEGER
-            )
-        """)
-        await self._safe_add_column("reminders", "role_id", "INTEGER")
-
-        # ── WELCOME / ONBOARDING ──────────────────────────────────────────────
-        await self.connection.execute("""
+        # ── WELCOME ───────────────────────────────────────────────────────────
+        await self.database.execute(f"""
             CREATE TABLE IF NOT EXISTS welcome_configs (
-                guild_id INTEGER PRIMARY KEY,
-                channel_id INTEGER,
-                message TEXT,
-                auto_role_id INTEGER,
-                auto_bot_role_id INTEGER,
-                farewell_channel_id INTEGER,
-                farewell_message TEXT
+                guild_id {INT} PRIMARY KEY,
+                channel_id {INT},
+                message {TEXT},
+                auto_role_id {INT},
+                auto_bot_role_id {INT},
+                farewell_channel_id {INT},
+                farewell_message {TEXT}
             )
         """)
-        await self._safe_add_column("welcome_configs", "auto_bot_role_id", "INTEGER")
 
-        await self.connection.commit()
-        logger.info("Database tables initialized (v6 - Cleaned Up)")
+        logger.info("Database infrastructure initialized (v6.2.0 - Scalable)")
 
     async def execute(self, query: str, *args):
-        """Executes a non-returning query."""
-        async with self.connection.execute(query, args) as cursor:
-            await self.connection.commit()
-            return cursor.lastrowid
+        """Executes a non-returning query with automatic parameter binding conversion."""
+        q = self._convert_query(query)
+        params = self._get_params(args)
+        return await self.database.execute(query=q, values=params)
 
-    async def fetch_one(self, query: str, *args) -> Optional[aiosqlite.Row]:
-        """Fetches a single row."""
-        async with self.connection.execute(query, args) as cursor:
-            return await cursor.fetchone()
+    async def fetch_one(self, query: str, *args) -> Optional[dict]:
+        """Fetches a single row and returns it as a dictionary."""
+        q = self._convert_query(query)
+        params = self._get_params(args)
+        row = await self.database.fetch_one(query=q, values=params)
+        return dict(row) if row else None
 
-    async def fetch_all(self, query: str, *args) -> List[aiosqlite.Row]:
-        """Fetches all rows matching the query."""
-        async with self.connection.execute(query, args) as cursor:
-            return await cursor.fetchall()
+    async def fetch_all(self, query: str, *args) -> List[dict]:
+        """Fetches all rows and returns them as a list of dictionaries."""
+        q = self._convert_query(query)
+        params = self._get_params(args)
+        rows = await self.database.fetch_all(query=q, values=params)
+        return [dict(row) for row in rows]
 
 # Global database instance
 db = DatabaseManager()

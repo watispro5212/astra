@@ -63,10 +63,52 @@
 
     <section class="section changelog-section">
       <div class="container container--changelog">
-        <!-- v6.1.0 -->
+        <!-- v6.2.0 -->
         <div
           class="changelog-entry changelog-entry--latest animate-on-scroll is-visible"
         >
+          <div class="changelog-entry__header">
+            <span class="changelog-entry__version">v6.2.0</span>
+            <span class="changelog-entry__date">April 22, 2026</span>
+            <span class="changelog-entry__tag changelog-entry__tag--latest"
+              >🚀 Scale & Horizon</span
+            >
+          </div>
+          <p class="changelog-entry__summary">
+            Foundation for the future. Transitioning Astra's core identity from
+            a single-instance bot to an enterprise-grade distributed network
+            capable of serving millions.
+          </p>
+
+          <h4 class="changelog-entry__sub-heading">
+            📡 High-Performance Infrastructure
+          </h4>
+          <ul>
+            <li>
+              <strong>PostgreSQL Integration:</strong> Migrated the core
+              database engine to PostgreSQL support for high-concurrency
+              operations.
+            </li>
+            <li>
+              <strong>Async Connection Pooling:</strong> Integrated the
+              <code>databases</code> library with <code>asyncpg</code> for
+              near-zero latency multi-shard database access.
+            </li>
+            <li>
+              <strong>Syntax Bridge:</strong> Built a custom query translator to
+              maintain backward compatibility with SQLite while leveraging
+              PostgreSQL speed.
+            </li>
+            <li>
+              <strong>Enterprise Schema:</strong> Overhauled table definitions
+              with <code>BIGINT</code> and <code>SERIAL</code> types to support
+              astronomical data growth.
+            </li>
+          </ul>
+        </div>
+
+        <!-- v6.1.0 -->
+        <div class="changelog-entry animate-on-scroll is-visible">
           <div class="changelog-entry__header">
             <span class="changelog-entry__version">v6.1.0</span>
             <span class="changelog-entry__date">April 22, 2026</span>
