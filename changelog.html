@@ -3,91 +3,144 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Logs — Astra Changelog</title>
-  <meta name="description" content="Official mission logs and deployment history for Astra v6.3.1 'Titan'.">
+  <title>Mission Logs — Astra</title>
+  <meta name="description" content="Astra v6.3.2 deployment history and mission logs.">
   <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    .log-entry {
+      border-left: 2px solid var(--primary-neon);
+      margin-left: 20px;
+      padding-left: 30px;
+      padding-bottom: 50px;
+      position: relative;
+    }
+    .log-entry::before {
+      content: '';
+      position: absolute;
+      left: -9px;
+      top: 0;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--titan-bg);
+      border: 2px solid var(--primary-neon);
+      box-shadow: 0 0 10px var(--primary-neon);
+    }
+    .log-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      padding: 30px;
+      border-radius: 16px;
+      -webkit-backdrop-filter: blur(15px);
+      backdrop-filter: blur(15px);
+    }
+    .log-version {
+      font-family: var(--font-tactical);
+      font-size: 1.5rem;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .log-date {
+      color: #64748b;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+    }
+    .log-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .log-item {
+      color: #94a3b8;
+      margin-bottom: 10px;
+      display: flex;
+      gap: 12px;
+      font-size: 0.95rem;
+    }
+    .log-item::before {
+      content: '•';
+      color: var(--primary-neon);
+      font-weight: 800;
+    }
+  </style>
 </head>
 <body>
-  <div class="bg-grid" aria-hidden="true"></div>
-  <div class="bg-radial" aria-hidden="true"></div>
-
-  <nav class="navbar glass">
-    <div class="container">
-      <a href="index.html" class="navbar__brand">
-        <img src="assets/images/astra-logo.png" alt="Astra logo" width="36" height="36">
-        Astra <span class="navbar__version">v6.3.1</span>
+  <div class="hero-titan__mesh"></div>
+  
+  <nav class="nav-titan" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <img src="assets/images/astra-logo.png" alt="Astra Logo" width="32" height="32">
+        ASTRA
       </a>
-      <div class="navbar__links">
-        <a href="index.html" class="navbar__link">Home</a>
-        <a href="features.html" class="navbar__link">Modules</a>
-        <a href="commands.html" class="navbar__link">Registry</a>
-        <a href="changelog.html" class="navbar__link active">Logs</a>
+      <div class="nav-links">
+        <a href="features.html" class="nav-link">Sectors</a>
+        <a href="commands.html" class="nav-link">Protocols</a>
+        <a href="changelog.html" class="nav-link" style="color: #fff;">Mission Logs</a>
+        <a href="support.html" class="nav-link">Support</a>
       </div>
     </div>
   </nav>
 
-  <div class="page-header">
-    <div class="container">
-      <span class="section-header__badge">Astra Mission Logs</span>
-      <h1>Deployment <span class="text-gradient">History</span></h1>
-      <p>Tracking the evolution of the Astra Global Network.</p>
-    </div>
-  </div>
+  <header class="page-header">
+    <h1 class="page-header__title">MISSION LOGS</h1>
+    <p class="page-header__subtitle">The archival history of the Astra Titan deployment, documenting every infrastructure upgrade and tactical advancement.</p>
+  </header>
 
-  <section class="section">
-    <div class="container container--narrow">
-      
-      <div class="changelog-entry animate-on-scroll">
-        <div class="changelog-entry__header">
-          <span class="changelog-entry__version">v6.3.1</span>
-          <span class="changelog-entry__date">April 22, 2026</span>
-          <span class="badge badge--everyone">Titan Restoration</span>
-        </div>
-        <div class="changelog-entry__content content">
-          <h3>☢️ Apex Reconstruction II</h3>
-          <p>This tactical patch restores branding integrity and expands the Nuclear Protocol.</p>
-          <ul>
-            <li><strong>Nuclear Role Purge</strong>: <code>/setup_server</code> now wipes all roles alongside channels for a true fresh start.</li>
-            <li><strong>Official Branding</strong>: Corrected paths and styles for the Astra Logo and Banner.</li>
-            <li><strong>UI Restoration</strong>: Fixed home page layout failures and optimized glassmorphism.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="changelog-entry animate-on-scroll">
-        <div class="changelog-entry__header">
-          <span class="changelog-entry__version">v6.3.0</span>
-          <span class="changelog-entry__date">April 22, 2026</span>
-          <span class="badge badge--everyone">Major Release</span>
-        </div>
-        <div class="changelog-entry__content content">
-          <h3>🛰️ The Titan Update</h3>
-          <p>A massive expansion bringing intelligence and fiscal modules back to the core engine.</p>
-          <ul>
-            <li><strong>Intelligence Module</strong>: Leveling, XP, and rank cards.</li>
-            <li><strong>Fiscal Module</strong>: Global economy, daily credits, and transfers.</li>
-            <li><strong>Apex Reconstruction</strong>: Total server setup engine for 1494909279159980192.</li>
-          </ul>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <footer class="footer glass">
-    <div class="container text-center">
-      <div class="footer__brand justify-center">
-        <img src="assets/images/astra-logo.png" alt="Astra" width="32" height="32">
-        Astra Prime
-      </div>
-      <div class="footer__bottom">
-        <span>&copy; 2026 Astra Engine.</span>
+  <main class="container" style="max-width: 800px; margin: 0 auto; padding-bottom: 100px; padding-inline: 20px;">
+    
+    <div class="log-entry">
+      <div class="log-card">
+        <div class="log-version">v6.3.2 "Titan Expansion"</div>
+        <div class="log-date">APRIL 22, 2026</div>
+        <ul class="log-list">
+          <li class="log-item">Deployed Elite Tier moderation hierarchy (Admin, Mod, Trial Mod).</li>
+          <li class="log-item">Integrated Marketplace and Archive sectors into Apex Infrastructure.</li>
+          <li class="log-item">Implemented Portal-Wide "Titan Dashboard" UI Overhaul.</li>
+          <li class="log-item">Hardened Cross-Browser compatibility for glassmorphism effects.</li>
+        </ul>
       </div>
     </div>
-  </footer>
 
-  <script src="assets/js/main.js"></script>
+    <div class="log-entry">
+      <div class="log-card">
+        <div class="log-version">v6.3.1 "Titan Restoration"</div>
+        <div class="log-date">APRIL 22, 2026</div>
+        <ul class="log-list">
+          <li class="log-item">Restored official high-fidelity branding across all sectors.</li>
+          <li class="log-item">Deployed Nuclear Protocol for absolute server reconstruction.</li>
+          <li class="log-item">Synchronized Vanguard Error Reporter for real-time developer telemetry.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="log-entry">
+      <div class="log-card">
+        <div class="log-version">v6.3.0 "Titan Alpha"</div>
+        <div class="log-date">APRIL 21, 2026</div>
+        <ul class="log-list">
+          <li class="log-item">Initial deployment of the Titan Intelligence Suite.</li>
+          <li class="log-item">Launched Global XP Synchronization engine.</li>
+        </ul>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('navbar');
+      if (window.scrollY > 50) {
+        nav.classList.add('nav-titan--scrolled');
+      } else {
+        nav.classList.remove('nav-titan--scrolled');
+      }
+    });
+  </script>
 </body>
 </html>

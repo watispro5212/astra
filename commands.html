@@ -1,234 +1,146 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" data-theme="dark">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Registry — Astra</title>
-    <meta
-      name="description"
-      content="Complete command reference for Astra v6.3.0 Titan. Tactical community engagement and management tools."
-    />
-    <link rel="icon" type="image/png" href="assets/images/astra-logo.png" />
-    <link rel="stylesheet" href="assets/css/main.css" />
-    <link rel="stylesheet" href="assets/css/components.css" />
-    <style>
-      .category-filters {
-        display: flex;
-        gap: 0.75rem;
-        flex-wrap: wrap;
-        margin-bottom: 2rem;
-        justify-content: center;
-      }
-      .filter-btn {
-        padding: 0.5rem 1.25rem;
-        border-radius: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        background: rgba(255, 255, 255, 0.05);
-        color: var(--text-muted);
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-size: 0.9rem;
-      }
-      .filter-btn:hover, .filter-btn.active {
-        background: var(--primary-color);
-        color: white;
-        border-color: var(--primary-color);
-        box-shadow: 0 0 15px rgba(52, 152, 219, 0.3);
-      }
-    </style>
-  </head>
-  <body>
-    <div class="bg-grid" aria-hidden="true"></div>
-    <div class="bg-radial" aria-hidden="true"></div>
-
-    <nav class="navbar glass">
-      <div class="container">
-        <a href="index.html" class="navbar__brand">
-          <img
-            src="assets/images/astra-logo.png"
-            alt="Astra logo"
-            width="36"
-            height="36"
-          />
-          Astra <span class="navbar__version">v6.3.1</span>
-        </a>
-        <div class="navbar__links">
-          <a href="index.html" class="navbar__link">Home</a>
-          <a href="features.html" class="navbar__link">Modules</a>
-          <a href="commands.html" class="navbar__link active">Registry</a>
-          <a href="changelog.html" class="navbar__link">Mission Logs</a>
-          <a href="support.html" class="navbar__link">Support</a>
-        </div>
-      </div>
-    </nav>
-
-    <div class="page-header">
-      <div class="container">
-        <span class="section-header__badge">Astra Command Registry</span>
-        <h1>Tactical <span class="text-gradient">Control</span></h1>
-        <p>
-          Master every sector of your server with our high-performance command suite.
-        </p>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Protocols — Astra</title>
+  <meta name="description" content="Astra v6.3.2 command registry and tactical protocols.">
+  <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    .command-row {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s ease;
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+    }
+    .command-row:hover {
+      border-color: var(--primary-neon);
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .command-name {
+      font-family: var(--font-tactical);
+      color: var(--primary-neon);
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+    .command-desc {
+      color: #94a3b8;
+      font-size: 0.95rem;
+    }
+    .command-badge {
+      font-size: 0.7rem;
+      padding: 4px 8px;
+      border-radius: 4px;
+      background: rgba(52, 152, 219, 0.1);
+      border: 1px solid var(--primary-neon);
+      color: var(--primary-neon);
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+  </style>
+</head>
+<body>
+  <div class="hero-titan__mesh"></div>
+  
+  <nav class="nav-titan" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <img src="assets/images/astra-logo.png" alt="Astra Logo" width="32" height="32">
+        ASTRA
+      </a>
+      <div class="nav-links">
+        <a href="features.html" class="nav-link">Sectors</a>
+        <a href="commands.html" class="nav-link" style="color: #fff;">Protocols</a>
+        <a href="changelog.html" class="nav-link">Mission Logs</a>
+        <a href="support.html" class="nav-link">Support</a>
       </div>
     </div>
+  </nav>
 
-    <section class="section" id="commands">
-      <div class="container">
-        <input
-          type="search"
-          class="command-search"
-          id="cmd-search"
-          placeholder="🔍  Search the registry... (e.g. economy, rank, setup)"
-          aria-label="Search registry"
-        />
+  <header class="page-header">
+    <h1 class="page-header__title">TACTICAL PROTOCOLS</h1>
+    <p class="page-header__subtitle">Explore the high-clearance commands and autonomous routines programmed into the Astra Titan engine.</p>
+  </header>
 
-        <div class="category-filters">
-          <button class="filter-btn active" data-filter="all">All Modules</button>
-          <button class="filter-btn" data-filter="security">Security</button>
-          <button class="filter-btn" data-filter="fiscal">Fiscal</button>
-          <button class="filter-btn" data-filter="intelligence">Intelligence</button>
-          <button class="filter-btn" data-filter="architect">Architect</button>
-          <button class="filter-btn" data-filter="logistics">Logistics</button>
-        </div>
-
-        <div id="cmd-list">
-          <div class="feature-category" data-category="fiscal economy">
-            <h2 class="feature-category__title">💰 Astra Fiscal</h2>
-            <div class="grid grid--2">
-              <div class="command-card" data-cmd="/economy daily">
-                <div>
-                  <div class="command-card__name">/economy daily</div>
-                  <div class="command-card__desc">Claim 500 virtual credits every 24 hours.</div>
-                </div>
-                <div class="command-card__meta"><span class="badge badge--everyone">Everyone</span></div>
-              </div>
-              <div class="command-card" data-cmd="/economy balance">
-                <div>
-                  <div class="command-card__name">/economy balance</div>
-                  <div class="command-card__desc">View your credit ledger and global standing.</div>
-                </div>
-                <div class="command-card__meta"><span class="badge badge--everyone">Everyone</span></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="feature-category" data-category="intelligence levels xp">
-            <h2 class="feature-category__title">📊 Astra Intelligence</h2>
-            <div class="grid grid--2">
-              <div class="command-card" data-cmd="/rank">
-                <div>
-                  <div class="command-card__name">/rank</div>
-                  <div class="command-card__desc">Analyze your tactical rank and XP progression.</div>
-                </div>
-                <div class="command-card__meta"><span class="badge badge--everyone">Everyone</span></div>
-              </div>
-              <div class="command-card" data-cmd="/leaderboard">
-                <div>
-                  <div class="command-card__name">/leaderboard</div>
-                  <div class="command-card__desc">View the top operatives in the global network.</div>
-                </div>
-                <div class="command-card__meta"><span class="badge badge--everyone">Everyone</span></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="feature-category" data-category="security moderation">
-            <h2 class="feature-category__title">🛡️ Vanguard Security</h2>
-            <div class="grid grid--2">
-              <div class="command-card" data-cmd="/mod kick">
-                <div>
-                  <div class="command-card__name">/mod kick</div>
-                  <div class="command-card__desc">Expel a citizen from the sector.</div>
-                </div>
-                <div class="command-card__meta"><span class="badge badge--mod">Mod</span></div>
-              </div>
-              <div class="command-card" data-cmd="/mod ban">
-                <div>
-                  <div class="command-card__name">/mod ban</div>
-                  <div class="command-card__desc">Permanently blacklist a citizen.</div>
-                </div>
-                <div class="command-card__meta"><span class="badge badge--mod">Mod</span></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="feature-category" data-category="architect setup">
-            <h2 class="feature-category__title">🏗️ Astra Architect</h2>
-            <div class="grid grid--2">
-              <div class="command-card" data-cmd="/setup_server">
-                <div>
-                  <div class="command-card__name">/setup_server</div>
-                  <div class="command-card__desc">Nuclear Reconstruction Protocol.</div>
-                </div>
-                <div class="command-card__meta"><span class="badge badge--admin">Admin</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div id="cmd-empty" class="cmd-empty-state">
-          <h3>No records found</h3>
-          <p>Try a different transmission frequency.</p>
-        </div>
+  <main class="container" style="max-width: 900px; margin: 0 auto; padding-bottom: 100px; padding-inline: 20px;">
+    
+    <div class="command-row">
+      <div>
+        <div class="command-name">/setup_server</div>
+        <div class="command-desc">Initiate a total hierarchy purge and APEX reconstruction.</div>
       </div>
-    </section>
+      <span class="command-badge">Admin</span>
+    </div>
 
-    <footer class="footer glass">
-      <div class="container text-center">
-        <div class="footer__brand justify-center">
-          <img src="assets/images/astra-logo.png" alt="Astra" width="32" height="32">
-          Astra Prime
-        </div>
-        <p class="footer__desc">The ultimate all-in-one Discord engine.</p>
-        <div class="footer__bottom">
-          <span>&copy; 2026 Astra. Made with ✨</span>
-        </div>
+    <div class="command-row">
+      <div>
+        <div class="command-name">/utility userinfo</div>
+        <div class="command-desc">Generate a diagnostic report on a specific operative.</div>
       </div>
-    </footer>
+      <span class="command-badge">Public</span>
+    </div>
 
-    <script src="assets/js/main.js"></script>
-    <script>
-      const search = document.getElementById("cmd-search");
-      const empty = document.getElementById("cmd-empty");
-      const cards = document.querySelectorAll(".command-card");
-      const categories = document.querySelectorAll("[data-category]");
-      const filters = document.querySelectorAll(".filter-btn");
+    <div class="command-row">
+      <div>
+        <div class="command-name">/utility serverinfo</div>
+        <div class="command-desc">Analyze sector telemetry and security status.</div>
+      </div>
+      <span class="command-badge">Public</span>
+    </div>
 
-      function updateRegistry() {
-        const q = search.value.toLowerCase().trim();
-        const activeFilter = document.querySelector(".filter-btn.active").dataset.filter;
-        let visible = 0;
+    <div class="command-row">
+      <div>
+        <div class="command-name">/leveling status</div>
+        <div class="command-desc">Analyze your current XP matrix and rank trajectory.</div>
+      </div>
+      <span class="command-badge">Public</span>
+    </div>
 
-        cards.forEach((card) => {
-          const category = card.closest("[data-category]").dataset.category;
-          const text = (card.dataset.cmd || "") + " " + card.textContent;
-          
-          const matchQuery = !q || text.toLowerCase().includes(q);
-          const matchFilter = activeFilter === "all" || category.includes(activeFilter);
-          
-          const isVisible = matchQuery && matchFilter;
-          card.classList.toggle("hidden", !isVisible);
-          if (isVisible) visible++;
-        });
+    <div class="command-row">
+      <div>
+        <div class="command-name">/economy claim</div>
+        <div class="command-desc">Execute daily fiscal allowance protocol.</div>
+      </div>
+      <span class="command-badge">Public</span>
+    </div>
 
-        categories.forEach((cat) => {
-          const hasVisible = [...cat.querySelectorAll(".command-card")].some(
-            (c) => !c.classList.contains("hidden"),
-          );
-          cat.classList.toggle("hidden", !hasVisible);
-        });
+    <div class="command-row">
+      <div>
+        <div class="command-name">/moderation clear</div>
+        <div class="command-desc">Perform a localized frequency wipe (Clear messages).</div>
+      </div>
+      <span class="command-badge">Staff</span>
+    </div>
 
-        empty.style.display = visible === 0 ? "block" : "none";
+    <div class="command-row">
+      <div>
+        <div class="command-name">/system status</div>
+        <div class="command-desc">Check real-time shard health and API latency.</div>
+      </div>
+      <span class="command-badge">Public</span>
+    </div>
+
+  </main>
+
+  <script>
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('navbar');
+      if (window.scrollY > 50) {
+        nav.classList.add('nav-titan--scrolled');
+      } else {
+        nav.classList.remove('nav-titan--scrolled');
       }
-
-      search.addEventListener("input", updateRegistry);
-      filters.forEach(btn => {
-        btn.addEventListener("click", () => {
-          filters.forEach(f => f.classList.remove("active"));
-          btn.classList.add("active");
-          updateRegistry();
-        });
-      });
-    </script>
-  </body>
+    });
+  </script>
+</body>
 </html>

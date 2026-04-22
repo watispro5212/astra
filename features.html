@@ -3,193 +3,89 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Modules — Astra</title>
-  <meta name="description" content="Explore Astra's core tactical modules v6.3.1 — Vanguard Security, Astra Intelligence, and Astra Fiscal.">
+  <title>Sectors — Astra</title>
+  <meta name="description" content="Explore the tactical sectors of Astra v6.3.2 Titan.">
   <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
-  <style>
-    .module-matrix {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 3rem;
-      background: rgba(255, 255, 255, 0.02);
-      border-radius: 16px;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    
-    .module-matrix th, .module-matrix td {
-      padding: 1.5rem;
-      text-align: left;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    }
-    
-    .module-matrix th {
-      background: rgba(255, 255, 255, 0.05);
-      color: var(--primary-color);
-      text-transform: uppercase;
-      font-size: 0.8rem;
-      letter-spacing: 1px;
-    }
-    
-    .check-mark { color: #2ecc71; font-weight: bold; }
-    .cross-mark { color: #e74c3c; font-weight: bold; }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="bg-grid" aria-hidden="true"></div>
-  <div class="bg-radial" aria-hidden="true"></div>
-
-  <nav class="navbar glass">
-    <div class="container">
-      <a href="index.html" class="navbar__brand">
-        <img src="assets/images/astra-logo.png" alt="Astra logo" width="36" height="36">
-        Astra <span class="navbar__version">v6.3.1</span>
+  <div class="hero-titan__mesh"></div>
+  
+  <nav class="nav-titan" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <img src="assets/images/astra-logo.png" alt="Astra Logo" width="32" height="32">
+        ASTRA
       </a>
-      <div class="navbar__links">
-        <a href="index.html" class="navbar__link">Home</a>
-        <a href="features.html" class="navbar__link active">Modules</a>
-        <a href="commands.html" class="navbar__link">Registry</a>
-        <a href="changelog.html" class="navbar__link">Mission Logs</a>
-        <a href="support.html" class="navbar__link">Support</a>
+      <div class="nav-links">
+        <a href="features.html" class="nav-link" style="color: #fff;">Sectors</a>
+        <a href="commands.html" class="nav-link">Protocols</a>
+        <a href="changelog.html" class="nav-link">Mission Logs</a>
+        <a href="support.html" class="nav-link">Support</a>
       </div>
     </div>
   </nav>
 
-  <div class="page-header">
-    <div class="container">
-      <span class="section-header__badge">Tactical Module Registry</span>
-      <h1>System <span class="text-gradient">Capabilities</span></h1>
-      <p>Explore the high-fidelity modules that power the Astra Global Network.</p>
+  <header class="page-header">
+    <h1 class="page-header__title">TACTICAL SECTORS</h1>
+    <p class="page-header__subtitle">
+      Astra is divided into specialized intelligence sectors, each engineered to provide autonomous solutions for elite communities.
+    </p>
+  </header>
+
+  <main class="container" style="max-width: 1200px; margin: 0 auto; padding-bottom: 100px;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; padding: 0 20px;">
+      
+      <div class="telemetry-card">
+        <span style="font-size: 2.5rem; margin-bottom: 20px; display: block;">🛡️</span>
+        <h3 class="telemetry-card__title">MODERATION SECTOR</h3>
+        <p style="color: #94a3b8; line-height: 1.6;">Advanced multi-tier security featuring Nuclear Purge, automatic anti-spam, and tactical role reconstruction.</p>
+      </div>
+
+      <div class="telemetry-card">
+        <span style="font-size: 2.5rem; margin-bottom: 20px; display: block;">📈</span>
+        <h3 class="telemetry-card__title">INTELLIGENCE SECTOR</h3>
+        <p style="color: #94a3b8; line-height: 1.6;">Global XP synchronization across all Astra-linked guilds. Real-time rank analysis and engagement telemetry.</p>
+      </div>
+
+      <div class="telemetry-card">
+        <span style="font-size: 2.5rem; margin-bottom: 20px; display: block;">🏦</span>
+        <h3 class="telemetry-card__title">ECONOMY SECTOR</h3>
+        <p style="color: #94a3b8; line-height: 1.6;">A robust fiscal environment with daily claims, role marketplaces, and simulated stock trading protocols.</p>
+      </div>
+
+      <div class="telemetry-card">
+        <span style="font-size: 2.5rem; margin-bottom: 20px; display: block;">📡</span>
+        <h3 class="telemetry-card__title">LOGISTICS SECTOR</h3>
+        <p style="color: #94a3b8; line-height: 1.6;">High-clearance support ticketing, community suggestions, and real-time shard status reporting.</p>
+      </div>
+
+      <div class="telemetry-card">
+        <span style="font-size: 2.5rem; margin-bottom: 20px; display: block;">🎮</span>
+        <h3 class="telemetry-card__title">ENTERTAINMENT SECTOR</h3>
+        <p style="color: #94a3b8; line-height: 1.6;">Interactive tactical games, music studio integrations, and community engagement protocols.</p>
+      </div>
+
+      <div class="telemetry-card">
+        <span style="font-size: 2.5rem; margin-bottom: 20px; display: block;">⚙️</span>
+        <h3 class="telemetry-card__title">UTILITY SECTOR</h3>
+        <p style="color: #94a3b8; line-height: 1.6;">Temporal reminders, community polls, and deep-tissue user/server diagnostic reports.</p>
+      </div>
+
     </div>
-  </div>
+  </main>
 
-  <section class="section">
-    <div class="container">
-      <div class="feature-category animate-on-scroll">
-        <h2 class="feature-category__title">🛡️ Vanguard Security</h2>
-        <div class="grid grid--3">
-          <div class="card glass">
-            <div class="card__icon">⚖️</div>
-            <h3 class="card__title">Case Tracking</h3>
-            <p class="card__text">Every action (kick, ban, mute, warn) creates a numbered case. Full history lookup and easy appeals management.</p>
-          </div>
-          <div class="card glass">
-            <div class="card__icon">🔇</div>
-            <h3 class="card__title">Native Timeouts</h3>
-            <p class="card__text">Utilize Discord's native timeout system with flexible duration parsing (10m, 1h, 2d). Clean and effective.</p>
-          </div>
-          <div class="card glass">
-            <div class="card__icon">🔒</div>
-            <h3 class="card__title">Zero-G Lockdown</h3>
-            <p class="card__text">Instantly secure a sector to prevent unauthorized transmissions during tactical anomalies.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="feature-category animate-on-scroll">
-        <h2 class="feature-category__title">📊 Astra Intelligence</h2>
-        <div class="grid grid--3">
-          <div class="card glass">
-            <div class="card__icon">🆙</div>
-            <h3 class="card__title">Global Leveling</h3>
-            <p class="card__text">Reward active members with XP and rank roles. Includes high-fidelity rank analysis.</p>
-          </div>
-          <div class="card glass">
-            <div class="card__icon">⏳</div>
-            <h3 class="card__title">Activity Verification</h3>
-            <p class="card__text">60-second cooldowns ensure that growth is earned through authentic community interaction.</p>
-          </div>
-          <div class="card glass">
-            <div class="card__icon">📡</div>
-            <h3 class="card__title">Live Telemetry</h3>
-            <p class="card__text">Automated, non-intrusive level-up transmissions delivered to engagement sectors.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="feature-category animate-on-scroll">
-        <h2 class="feature-category__title">💰 Astra Fiscal</h2>
-        <div class="grid grid--3">
-          <div class="card glass">
-            <div class="card__icon">💳</div>
-            <h3 class="card__title">Unified Ledger</h3>
-            <p class="card__text">Global credit tracking across all Astra-enabled servers. Persistent fiscal data.</p>
-          </div>
-          <div class="card glass">
-            <div class="card__icon">🎁</div>
-            <h3 class="card__title">Daily Allocations</h3>
-            <p class="card__text">Members can claim 500 virtual credits every 24 hours to fuel their fiscal growth.</p>
-          </div>
-          <div class="card glass">
-            <div class="card__icon">💸</div>
-            <h3 class="card__title">Capital Transfers</h3>
-            <p class="card__text">Secure peer-to-peer credit transfers allowing users to reward others.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="animate-on-scroll">
-        <h2 class="feature-category__title">⚙️ Capability Matrix</h2>
-        <table class="module-matrix">
-          <thead>
-            <tr>
-              <th>Feature</th>
-              <th>Astra Prime</th>
-              <th>Legacy Bots</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Global Intelligence (Leveling)</td>
-              <td><span class="check-mark">✓</span> High Fidelity</td>
-              <td><span class="cross-mark">✗</span> Local Only</td>
-            </tr>
-            <tr>
-              <td>Fiscal Ledger (Economy)</td>
-              <td><span class="check-mark">✓</span> Unified</td>
-              <td><span class="cross-mark">✗</span> Fragmented</td>
-            </tr>
-            <tr>
-              <td>Zero-G Reconstruction</td>
-              <td><span class="check-mark">✓</span> Nuclear Capable</td>
-              <td><span class="cross-mark">✗</span> Manual Only</td>
-            </tr>
-            <tr>
-              <td>Native Discord Timeouts</td>
-              <td><span class="check-mark">✓</span> Supported</td>
-              <td><span class="check-mark">✓</span> Partial</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </section>
-
-  <footer class="footer glass">
-    <div class="container">
-      <div class="footer__grid">
-        <div>
-          <div class="footer__brand">
-            <img src="assets/images/astra-logo.png" alt="Astra" width="32" height="32">
-            Astra Prime
-          </div>
-          <p class="footer__desc">The ultimate all-in-one Discord engine for professional server management.</p>
-        </div>
-        <div>
-          <h4 class="footer__heading">Product</h4>
-          <a href="features.html" class="footer__link">Modules</a>
-          <a href="commands.html" class="footer__link">Registry</a>
-          <a href="changelog.html" class="footer__link">Mission Logs</a>
-        </div>
-      </div>
-      <div class="footer__bottom">
-        <span>&copy; 2026 Astra. Made with ✨ for the Discord community</span>
-      </div>
-    </div>
-  </footer>
-
-  <script src="assets/js/main.js"></script>
+  <script>
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('navbar');
+      if (window.scrollY > 50) {
+        nav.classList.add('nav-titan--scrolled');
+      } else {
+        nav.classList.remove('nav-titan--scrolled');
+      }
+    });
+  </script>
 </body>
 </html>

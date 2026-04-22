@@ -3,95 +3,107 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Intel — Astra FAQ</title>
-  <meta name="description" content="Official Astra v6.3.0 'Titan' intelligence briefings and frequently asked questions.">
+  <title>FAQ — Astra</title>
+  <meta name="description" content="Frequently asked questions about Astra v6.3.2 Titan.">
   <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    .faq-item {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      margin-bottom: 20px;
+      padding: 30px;
+      -webkit-backdrop-filter: blur(15px);
+      backdrop-filter: blur(15px);
+      transition: all 0.3s ease;
+    }
+    .faq-item:hover {
+      border-color: var(--primary-neon);
+    }
+    .faq-question {
+      font-family: var(--font-tactical);
+      font-size: 1.1rem;
+      color: #fff;
+      margin-bottom: 12px;
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+    .faq-answer {
+      color: #94a3b8;
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+    .faq-icon {
+      color: var(--primary-neon);
+      font-weight: 800;
+    }
+  </style>
 </head>
 <body>
-  <div class="bg-grid" aria-hidden="true"></div>
-  <div class="bg-radial" aria-hidden="true"></div>
-
-  <nav class="navbar glass">
-    <div class="container">
-      <a href="index.html" class="navbar__brand">
-        <img src="assets/images/astra-logo.png" alt="Astra logo" width="36" height="36">
-        Astra <span class="navbar__version">v6.3.1</span>
+  <div class="hero-titan__mesh"></div>
+  
+  <nav class="nav-titan" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <img src="assets/images/astra-logo.png" alt="Astra Logo" width="32" height="32">
+        ASTRA
       </a>
-      <div class="navbar__links">
-        <a href="index.html" class="navbar__link">Home</a>
-        <a href="features.html" class="navbar__link">Modules</a>
-        <a href="commands.html" class="navbar__link">Registry</a>
-        <a href="support.html" class="navbar__link">Support</a>
+      <div class="nav-links">
+        <a href="features.html" class="nav-link">Sectors</a>
+        <a href="commands.html" class="nav-link">Protocols</a>
+        <a href="changelog.html" class="nav-link">Mission Logs</a>
+        <a href="support.html" class="nav-link">Support</a>
       </div>
     </div>
   </nav>
 
-  <div class="page-header">
-    <div class="container">
-      <span class="section-header__badge">Astra Intelligence Briefing</span>
-      <h1>Frequently Asked <span class="text-gradient">Questions</span></h1>
-      <p>Mission-critical guidance for establishing your server infrastructure.</p>
+  <header class="page-header">
+    <h1 class="page-header__title">ARCHIVAL FAQ</h1>
+    <p class="page-header__subtitle">Instant tactical intelligence and system clarifications for the Astra Titan engine.</p>
+  </header>
+
+  <main class="container" style="max-width: 800px; margin: 0 auto; padding-bottom: 100px; padding-inline: 20px;">
+    
+    <div class="faq-item">
+      <div class="faq-question"><span class="faq-icon">Q:</span> How do I establish the Apex Hierarchy?</div>
+      <div class="faq-answer">Use the <code>/setup_server</code> protocol with the <code>nuclear: true</code> option. This will purge legacy sectors and deploy the Titan v6.3.2 infrastructure.</div>
     </div>
-  </div>
 
-  <section class="section">
-    <div class="container">
-      
-      <div class="feature-category animate-on-scroll">
-        <h2 class="feature-category__title">📊 Astra Intelligence (Leveling)</h2>
-        <div class="grid grid--1">
-          <div class="card glass">
-            <h3 class="card__title">How does XP progression work?</h3>
-            <p class="card__text">Citizens earn 15-25 XP per transmission. To maintain data integrity, a 60-second activity cooldown is enforced between XP-earning interactions.</p>
-          </div>
-          <div class="card glass">
-            <h3 class="card__title">Are ranks global or server-specific?</h3>
-            <p class="card__text">XP and Levels are currently server-specific to ensure local community integrity, but global rank cross-referencing is planned for v6.4.0.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="feature-category animate-on-scroll">
-        <h2 class="feature-category__title">💰 Astra Fiscal (Economy)</h2>
-        <div class="grid grid--1">
-          <div class="card glass">
-            <h3 class="card__title">How do I claim my daily credits?</h3>
-            <p class="card__text">Use the <code>/economy daily</code> command every 24 hours to receive your 500 credit allocation.</p>
-          </div>
-          <div class="card glass">
-            <h3 class="card__title">Can I transfer credits between users?</h3>
-            <p class="card__text">Yes, the <code>/economy pay</code> protocol allows for secure capital transfers between server operatives.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="feature-category animate-on-scroll">
-        <h2 class="feature-category__title">🏗️ Architect (Setup)</h2>
-        <div class="grid grid--1">
-          <div class="card glass">
-            <h3 class="card__title">What is the "Nuclear Protocol"?</h3>
-            <p class="card__text">The Nuclear Protocol in <code>/setup_server</code> performs a total infrastructure purge before rebuilding your server according to Astra Prime blueprints. Use with caution.</p>
-          </div>
-        </div>
-      </div>
-
+    <div class="faq-item">
+      <div class="faq-question"><span class="faq-icon">Q:</span> Is the leveling system global?</div>
+      <div class="faq-answer">Yes. Astra utilizes a global Intelligence Matrix. Your XP and Level are synchronized across all Astra-linked sectors, allowing you to maintain your rank in any community.</div>
     </div>
-  </section>
 
-  <footer class="footer glass">
-    <div class="container">
-      <div class="footer__bottom text-center">
-        <div class="footer__brand justify-center">
-          <img src="assets/images/astra-logo.png" alt="Astra" width="28" height="28">
-          Astra Prime
-        </div>
-        <span>&copy; 2026 Astra Global Network.</span>
-      </div>
+    <div class="faq-item">
+      <div class="faq-question"><span class="faq-icon">Q:</span> How does the Vanguard Error Reporter work?</div>
+      <div class="faq-answer">Whenever a system anomaly is detected, Astra generates a diagnostic packet and transmits it directly to the Core Developers. This ensures near-instant resolution of tactical failures.</div>
     </div>
-  </footer>
 
-  <script src="assets/js/main.js"></script>
+    <div class="faq-item">
+      <div class="faq-question"><span class="faq-icon">Q:</span> Can I trade roles in the Marketplace?</div>
+      <div class="faq-answer">Absolutely. The Economy Sector allows citizens to claim daily credits and exchange them in the <code>#🛒-marketplace</code> for exclusive tactical roles and perks.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question"><span class="faq-icon">Q:</span> Is Astra optimized for mobile?</div>
+      <div class="faq-answer">Yes. The Titan UI engine is engineered for full cross-browser compatibility, including specialized patches for Safari and iOS glassmorphism.</div>
+    </div>
+
+  </main>
+
+  <script>
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('navbar');
+      if (window.scrollY > 50) {
+        nav.classList.add('nav-titan--scrolled');
+      } else {
+        nav.classList.remove('nav-titan--scrolled');
+      }
+    });
+  </script>
 </body>
 </html>
