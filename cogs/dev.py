@@ -43,18 +43,21 @@ class Developer(commands.Cog):
         await interaction.response.defer(ephemeral=True)
         
         try:
+            synced_count = 0
             if scope == "guild":
                 guild = discord.Object(id=interaction.guild_id)
                 self.bot.tree.copy_global_to(guild=guild)
                 synced = await self.bot.tree.sync(guild=guild)
-                await interaction.followup.send(f"✅ Synced **{len(synced)}** commands to this guild context.")
+                synced_count = len(synced)
+                await interaction.followup.send(f"✅ Synced **{synced_count}** commands to this guild context.")
             elif scope == "clear":
                 self.bot.tree.clear_commands(guild=interaction.guild)
                 await self.bot.tree.sync(guild=interaction.guild)
                 await interaction.followup.send("✅ Cleared all local guild commands.")
             elif scope == "global":
                 synced = await self.bot.tree.sync()
-                await interaction.followup.send(f"✅ Successfully synchronized **{len(synced)}** commands globally.")
+                synced_count = len(synced)
+                await interaction.followup.send(f"✅ Successfully synchronized **{synced_count}** commands globally.")
             elif scope == "clear_global":
                 self.bot.tree.clear_commands(guild=None)
                 await self.bot.tree.sync()
@@ -63,9 +66,13 @@ class Developer(commands.Cog):
                 await interaction.followup.send("❌ Invalid scope. Use `guild`, `global`, `clear`, or `clear_global`.")
                 return
             
-            logger.info(f"Dev: Synchronized {len(synced) if scope != 'clear' else 0} commands (Scope: {scope})")
+            logger.info(f"Dev: Synchronized {synced_count} commands (Scope: {scope})")
         except Exception as e:
-            await interaction.followup.send(f"❌ Synchronization failed: {e}")
+            # Check if we already responded/deferred to avoid double-response errors
+            try:
+                await interaction.followup.send(f"❌ Synchronization failed: {e}")
+            except Exception:
+                pass
             logger.error(f"Sync Error: {e}")
 
     @dev.command(name="shards", description="📡 View detailed shard health and latency.")

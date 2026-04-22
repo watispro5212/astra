@@ -2,7 +2,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 from services.reminder_service import ReminderService
-from ui.embeds import SuccessEmbed, ErrorEmbed, AstraEmbed
+from ui.embeds import SuccessEmbed, ErrorEmbed, AstraEmbed, InfoEmbed
 import datetime
 from typing import Optional
 

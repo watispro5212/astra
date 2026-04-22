@@ -115,6 +115,18 @@ class DatabaseManager:
             )
         """)
 
+        # ── REMINDERS ─────────────────────────────────────────────────────────
+        await self.database.execute(f"""
+            CREATE TABLE IF NOT EXISTS reminders (
+                id {PK},
+                guild_id {INT},
+                channel_id {INT},
+                user_id {INT},
+                message {TEXT},
+                remind_at {TEXT}
+            )
+        """)
+
         logger.info("Database infrastructure initialized (v6.2.0 - Scalable)")
 
     async def execute(self, query: str, *args):

@@ -142,9 +142,9 @@ class Moderation(commands.Cog):
     @mod.command(name="unban", description="Restore sector access for a user.")
     @app_commands.describe(user_id="The ID of the user to unban.", reason="Reason for restoring access.")
     @app_commands.checks.has_permissions(ban_members=True)
-    async def unban(self, interaction: discord.Interaction, user_id: str, reason: str = "No reason provided"):
+    async def unban(self, interaction: discord.Interaction, user_id: int, reason: str = "No reason provided"):
         try:
-            user = await self.bot.fetch_user(int(user_id))
+            user = await self.bot.fetch_user(user_id)
             await interaction.guild.unban(user, reason=reason)
             case_id = await ModerationService.create_case(interaction.guild_id, user.id, interaction.user.id, "unban", reason)
             await interaction.response.send_message(embed=SuccessEmbed(f"Restored access for **{user.name}** (Case #{case_id})"))
