@@ -341,3 +341,5 @@ export class AstraClient extends Client {
         }
     }
 }
+
+new AstraClient().init();

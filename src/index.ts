@@ -1,32 +1,19 @@
-import { AstraClient } from './bot';
+import { ShardingManager } from 'discord.js';
+import { config } from './core/config';
 import logger from './core/logger';
-import http from 'http';
+import * as path from 'path';
 
-const client = new AstraClient();
-
-// --- KOYEB/RENDER KEEP-ALIVE SYSTEM ---
-// This listens for health checks to keep the bot alive on free hosting tiers.
-const PORT = parseInt(process.env.PORT || '8080');
-http.createServer((req, res) => {
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end('Astra Tactical System: ONLINE');
-}).listen(PORT, '0.0.0.0', () => {
-    logger.info(`Health check server listening on port ${PORT}`);
-});
-// --------------------------------------
-
-client.init().catch(err => {
-    logger.error(`Critical Failure during startup: ${err}`);
-    process.exit(1);
+const manager = new ShardingManager(path.join(__dirname, 'bot.ts'), {
+    token: config.token,
+    totalShards: 'auto', // Or specify 1 if you want to force one shard as requested
+    respawn: true,
+    execArgv: ['-r', 'ts-node/register']
 });
 
-// Handle graceful shutdown
-process.on('SIGINT', () => {
-    logger.info('Shutting down Astra...');
-    client.destroy();
-    process.exit(0);
+manager.on('shardCreate', shard => {
+    logger.info(`🛰️ SHARD [${shard.id}] INITIALIZED: Deploying tactical assets...`);
 });
 
-process.on('unhandledRejection', (reason, promise) => {
-    logger.error(`Unhandled Rejection at: ${promise}, reason: ${reason}`);
+manager.spawn().catch(err => {
+    logger.error(`🚨 SHARDING MANAGER FAILURE: ${err}`);
 });

@@ -106,6 +106,7 @@ class DatabaseManager {
                 balance ${INT} DEFAULT 0,
                 last_daily ${TEXT},
                 last_work ${TEXT},
+                last_mine ${TEXT},
                 blacklisted ${BOOL} DEFAULT FALSE
             )`,
             `CREATE TABLE IF NOT EXISTS giveaways (

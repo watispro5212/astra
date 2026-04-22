@@ -28,7 +28,6 @@ const command: Command = {
                        .setDescription('Add a new item to the marketplace.')
                        .addStringOption(opt => opt.setName('name').setDescription('Item name.').setRequired(true))
                        .addIntegerOption(opt => opt.setName('price').setDescription('Credit cost.').setRequired(true))
-                       .addRoleOption(opt => opt.setName('role').setDescription('Role to grant (optional).').setRequired(false))
                        .addIntegerOption(opt => opt.setName('production-rate').setDescription('Passive income per hour.').setRequired(false))
                        .addStringOption(opt => opt.setName('description').setDescription('Item description.').setRequired(false))
                  )
@@ -53,13 +52,12 @@ const command: Command = {
             if (subcommand === 'add') {
                 const name = interaction.options.getString('name')!;
                 const price = interaction.options.getInteger('price')!;
-                const role = interaction.options.getRole('role');
                 const productionRate = interaction.options.getInteger('production-rate') || 0;
                 const description = interaction.options.getString('description') || 'No description provided.';
 
                 await db.execute(
-                    'INSERT INTO shop_items (guild_id, name, description, role_id, price, production_rate) VALUES (?, ?, ?, ?, ?, ?)',
-                    guildId, name, description, role?.id || null, price, productionRate
+                    'INSERT INTO shop_items (guild_id, name, description, price, production_rate) VALUES (?, ?, ?, ?, ?)',
+                    guildId, name, description, price, productionRate
                 );
 
                 await interaction.reply({ content: `✅ **INVENTORY LOGGED**: **${name}** has been added to the warehouse for \`${price}\` credits. (Yield: \`${productionRate}/hr\`)`, ephemeral: true });
@@ -113,10 +111,6 @@ const command: Command = {
             // Execute Transaction
             await db.execute('UPDATE users SET balance = balance - ? WHERE user_id = ?', item.price, interaction.user.id);
             
-            if (role) {
-                await (interaction.member as any).roles.add(role).catch(() => {});
-            }
-
             if (item.production_rate > 0) {
                 await db.execute(
                     'INSERT INTO user_inventory (user_id, item_id, quantity, last_harvest) VALUES (?, ?, 1, ?)',
@@ -124,7 +118,7 @@ const command: Command = {
                 );
             }
 
-            await interaction.reply({ content: `✅ **ACQUISITION SUCCESS**: You have purchased **${item.name}** for \`${item.price}\` credits.${role ? ' The role has been granted.' : ''}${item.production_rate > 0 ? ' The asset is now producing passive income.' : ''}` });
+            await interaction.reply({ content: `✅ **ACQUISITION SUCCESS**: You have purchased **${item.name}** for \`${item.price}\` credits.${item.production_rate > 0 ? ' The asset is now producing passive income.' : ''}` });
         }
     }
 };
