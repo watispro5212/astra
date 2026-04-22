@@ -51,10 +51,17 @@ class Developer(commands.Cog):
             elif scope == "clear":
                 self.bot.tree.clear_commands(guild=interaction.guild)
                 await self.bot.tree.sync(guild=interaction.guild)
-                await interaction.followup.send("✅ Cleared all local guild commands to remove duplicates! Now run `/dev sync scope:global`.")
-            else:
+                await interaction.followup.send("✅ Cleared all local guild commands.")
+            elif scope == "global":
                 synced = await self.bot.tree.sync()
-                await interaction.followup.send(f"✅ Successfully synchronized **{len(synced)}** commands across all global contexts.")
+                await interaction.followup.send(f"✅ Successfully synchronized **{len(synced)}** commands globally.")
+            elif scope == "clear_global":
+                self.bot.tree.clear_commands(guild=None)
+                await self.bot.tree.sync()
+                await interaction.followup.send("✅ Cleared all global commands. Restart the bot to re-register them from code.")
+            else:
+                await interaction.followup.send("❌ Invalid scope. Use `guild`, `global`, `clear`, or `clear_global`.")
+                return
             
             logger.info(f"Dev: Synchronized {len(synced) if scope != 'clear' else 0} commands (Scope: {scope})")
         except Exception as e:

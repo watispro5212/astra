@@ -26,8 +26,8 @@ class DatabaseManager:
             logger.info("Disconnected from database pool")
 
     def _convert_query(self, query: str) -> str:
-        """Converts SQLite '?' syntax to PostgreSQL ':p1, :p2' syntax if needed."""
-        if not self.is_postgresql:
+        """Converts SQLite '?' syntax to named ':p1, :p2' syntax for consistent parameter binding."""
+        if '?' not in query:
             return query
             
         parts = query.split('?')
