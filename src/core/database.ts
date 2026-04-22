@@ -67,9 +67,9 @@ class DatabaseManager {
             )`,
             `CREATE TABLE IF NOT EXISTS ticket_configs (
                 guild_id ${INT} PRIMARY KEY,
-                category_id {INT},
-                staff_role_id {INT},
-                log_channel_id {INT}
+                category_id ${INT},
+                staff_role_id ${INT},
+                log_channel_id ${INT}
             )`,
             `CREATE TABLE IF NOT EXISTS tickets (
                 channel_id ${INT} PRIMARY KEY,
