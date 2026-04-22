@@ -12,6 +12,7 @@ import { config } from './core/config';
 import logger from './core/logger';
 import { db } from './core/database';
 import { Command } from './types';
+import { ErrorReporter } from './core/error_reporter';
 import * as path from 'path';
 import * as fs from 'fs';
 
@@ -165,10 +166,18 @@ export class AstraClient extends Client {
                     await command.execute(interaction);
                 } catch (error) {
                     logger.error(`Execution Error [/${interaction.commandName}]: ${error}`);
+                    
+                    // Transmit Diagnostic Packet to Developer
+                    await ErrorReporter.report(this, error, {
+                        commandName: interaction.commandName,
+                        guild: interaction.guild,
+                        user: interaction.user
+                    });
+
                     const errorEmbed = new EmbedBuilder()
                         .setColor(0xff0000)
                         .setTitle('⚠️ Tactical Error')
-                        .setDescription(`An unexpected error occurred during command execution.\n\`\`\`${error}\`\`\``);
+                        .setDescription(`An unexpected error occurred during command execution. The system developer has been notified.\n\`\`\`${error}\`\`\``);
 
                     if (interaction.replied || interaction.deferred) {
                         await interaction.followUp({ embeds: [errorEmbed], ephemeral: true });
@@ -185,12 +194,25 @@ export class AstraClient extends Client {
         });
     }
 
-    public async syncCommands(scope: 'global' | 'guild' | 'clear' = 'guild') {
+    public async syncCommands(scope: 'global' | 'guild' | 'clear' | 'full_purge' = 'guild') {
         const rest = new REST({ version: '10' }).setToken(config.token);
         const commandData = Array.from(this.commands.values()).map(c => c.data.toJSON());
 
         try {
-            logger.info(`Synchronizing Commands (Scope: ${scope})...`);
+            logger.info(`[SYNC] Initiating Command Synchronization (Scope: ${scope})...`);
+
+            if (scope === 'full_purge') {
+                logger.info('[SYNC] NUCLEAR PURGE: Eradicating all legacy command records from Discord servers...');
+                if (config.guildId) {
+                    await rest.put(Routes.applicationGuildCommands(config.clientId, config.guildId), { body: [] });
+                }
+                await rest.put(Routes.applicationCommands(config.clientId), { body: [] });
+                logger.info('[SYNC] All sectors cleared of command echoes. Re-deploying Titan suite...');
+                
+                // Re-deploy immediately after purge
+                await rest.put(Routes.applicationCommands(config.clientId), { body: commandData });
+                return commandData.length;
+            }
 
             if (scope === 'clear') {
                 if (config.guildId) {

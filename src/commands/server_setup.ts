@@ -99,11 +99,11 @@ export default {
                     { id: enforcerRole?.id, allow: [PermissionFlagsBits.SendMessages] }
                 ],
                 channels: [
-                    { name: "📜-rules", type: ChannelType.GuildText, topic: "Official server regulations and community standards." },
-                    { name: "📢-announcements", type: ChannelType.GuildText, topic: "Global transmissions and critical updates from Astra Core." },
-                    { name: "👋-welcome", type: ChannelType.GuildText, topic: "Arrival protocol for new server operatives." },
-                    { name: "❓-faq", type: ChannelType.GuildText, topic: "Frequently asked questions and tactical guidance." },
-                    { name: "🤝-partners", type: ChannelType.GuildText, topic: "Collaborative sectors and allied communities." }
+                    { name: "📜-rules", type: ChannelType.GuildText, topic: "Official guidelines and server regulations." },
+                    { name: "📢-announcements", type: ChannelType.GuildText, topic: "Major updates and community news." },
+                    { name: "👋-welcome", type: ChannelType.GuildText, topic: "New member arrival logs." },
+                    { name: "❓-faq", type: ChannelType.GuildText, topic: "Common questions and information." },
+                    { name: "🤝-partners", type: ChannelType.GuildText, topic: "Affiliated servers and communities." }
                 ]
             },
             {
@@ -112,13 +112,13 @@ export default {
                     { id: guild.id, allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages], deny: [] }
                 ],
                 channels: [
-                    { name: "💬-general", type: ChannelType.GuildText, topic: "Primary communication frequency for all citizens." },
-                    { name: "🤖-commands", type: ChannelType.GuildText, topic: "Dedicated sector for bot interactions and system queries." },
-                    { name: "📸-media", type: ChannelType.GuildText, topic: "Visual transmissions and asset sharing." },
-                    { name: "🎮-gaming", type: ChannelType.GuildText, topic: "Coordination for gaming operations and combat sessions." },
-                    { name: "💻-tech", type: ChannelType.GuildText, topic: "Discussions regarding development, hardware, and tactical tech." },
-                    { name: "🎨-art-showcase", type: ChannelType.GuildText, topic: "Display sector for creative assets and artistic works." },
-                    { name: "🎶-music-chat", type: ChannelType.GuildText, topic: "Audio-related discussions and track sharing." }
+                    { name: "💬-general", type: ChannelType.GuildText, topic: "Main communication channel for members." },
+                    { name: "🤖-commands", type: ChannelType.GuildText, topic: "Channel for bot commands and interactions." },
+                    { name: "📸-media", type: ChannelType.GuildText, topic: "Sharing images and videos." },
+                    { name: "🎮-gaming", type: ChannelType.GuildText, topic: "Gaming discussion and coordination." },
+                    { name: "💻-tech", type: ChannelType.GuildText, topic: "Technology and development talk." },
+                    { name: "🎨-art-showcase", type: ChannelType.GuildText, topic: "Showcase your creative work." },
+                    { name: "🎶-music-chat", type: ChannelType.GuildText, topic: "Music sharing and discussion." }
                 ]
             },
             {
@@ -129,8 +129,8 @@ export default {
                     { id: boosterRole?.id, allow: [PermissionFlagsBits.ViewChannel] }
                 ],
                 channels: [
-                    { name: "💎-elite-lounge", type: ChannelType.GuildText, topic: "Exclusive lounge for Boosters and Veterans." },
-                    { name: "🔊 Elite Frequency", type: ChannelType.GuildVoice, topic: "High-fidelity audio frequency for elite members." }
+                    { name: "💎-elite-lounge", type: ChannelType.GuildText, topic: "Exclusive chat for Veterans and Boosters." },
+                    { name: "🔊 Elite Frequency", type: ChannelType.GuildVoice }
                 ]
             },
             {
@@ -140,11 +140,11 @@ export default {
                     { id: enforcerRole?.id, allow: [PermissionFlagsBits.ViewChannel] }
                 ],
                 channels: [
-                    { name: "🛠️-staff-hub", type: ChannelType.GuildText, topic: "Central coordination for server enforcers and administrators." },
-                    { name: "🚨-admin-lounge", type: ChannelType.GuildText, topic: "High-clearance sector for Overseer-level discussions." },
-                    { name: "⚖️-evidence", type: ChannelType.GuildText, topic: "Case archival and moderation evidence logs." },
-                    { name: "📡-bot-logs", type: ChannelType.GuildText, topic: "Real-time telemetry from system integrations." },
-                    { name: "🕵️-audit-trails", type: ChannelType.GuildText, topic: "Permanent record of administrative actions." }
+                    { name: "🛠️-staff-hub", type: ChannelType.GuildText, topic: "Staff coordination and internal chat." },
+                    { name: "🚨-admin-lounge", type: ChannelType.GuildText, topic: "Private area for administrators." },
+                    { name: "⚖️-evidence", type: ChannelType.GuildText, topic: "Moderation logs and evidence storage." },
+                    { name: "📡-bot-logs", type: ChannelType.GuildText, topic: "Bot logs and system activity." },
+                    { name: "🕵️-audit-trails", type: ChannelType.GuildText, topic: "Administrative record keeping." }
                 ]
             },
             {
@@ -153,10 +153,10 @@ export default {
                     { id: guild.id, allow: [PermissionFlagsBits.ViewChannel], deny: [PermissionFlagsBits.SendMessages] }
                 ],
                 channels: [
-                    { name: "🎫-ticket-hub", type: ChannelType.GuildText, topic: "Interaction point for opening support and inquiry tickets." },
-                    { name: "🛰️-system-status", type: ChannelType.GuildText, topic: "Real-time shard health and deployment telemetry." },
-                    { name: "💡-suggestions", type: ChannelType.GuildText, allowCitizen: true, topic: "Community feedback and enhancement proposals." },
-                    { name: "🐛-bug-reports", type: ChannelType.GuildText, allowCitizen: true, topic: "Reporting tactical anomalies and system errors." }
+                    { name: "🎫-ticket-hub", type: ChannelType.GuildText, topic: "Open a support ticket here." },
+                    { name: "🛰️-system-status", type: ChannelType.GuildText, topic: "Astra system health and status." },
+                    { name: "💡-suggestions", type: ChannelType.GuildText, allowCitizen: true, topic: "Submit server suggestions." },
+                    { name: "🐛-bug-reports", type: ChannelType.GuildText, allowCitizen: true, topic: "Report bugs and system issues." }
                 ]
             },
             {

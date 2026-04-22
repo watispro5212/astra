@@ -17,6 +17,15 @@ const command: Command = {
                 .setDescription('Initiate a tactical community poll.')
                 .addStringOption(opt => opt.setName('question').setDescription('The inquiry to present.').setRequired(true))
                 .addStringOption(opt => opt.setName('options').setDescription('Inquiry options (separated by commas).').setRequired(true))
+        )
+        .addSubcommand(sub =>
+            sub.setName('userinfo')
+                .setDescription('Diagnostic report on an operative.')
+                .addUserOption(opt => opt.setName('target').setDescription('The operative to analyze.').setRequired(false))
+        )
+        .addSubcommand(sub =>
+            sub.setName('serverinfo')
+                .setDescription('Telemetry analysis of the current sector.')
         ),
 
     async execute(interaction: ChatInputCommandInteraction) {
@@ -79,6 +88,43 @@ const command: Command = {
             for (let i = 0; i < options.length; i++) {
                 await message.react(emojis[i]);
             }
+        } else if (subcommand === 'userinfo') {
+            const user = interaction.options.getUser('target') || interaction.user;
+            const member = await interaction.guild?.members.fetch(user.id);
+
+            const embed = new EmbedBuilder()
+                .setColor(0x3498db)
+                .setTitle(`👤 Operative Profile: ${user.username}`)
+                .setThumbnail(user.displayAvatarURL({ size: 256 }))
+                .addFields(
+                    { name: '🆔 Identification', value: `\`${user.id}\``, inline: true },
+                    { name: '🎖️ Rank', value: member?.roles.highest.name || 'Citizen', inline: true },
+                    { name: '📅 Arrival Protocol', value: `<t:${Math.floor(user.createdTimestamp / 1000)}:R>`, inline: true },
+                    { name: '🛰️ Sector Entry', value: member?.joinedTimestamp ? `<t:${Math.floor(member.joinedTimestamp / 1000)}:R>` : 'Unknown', inline: true }
+                )
+                .setTimestamp();
+
+            await interaction.reply({ embeds: [embed] });
+
+        } else if (subcommand === 'serverinfo') {
+            const guild = interaction.guild;
+            if (!guild) return;
+
+            const embed = new EmbedBuilder()
+                .setColor(0x3498db)
+                .setTitle(`🛰️ Sector Analysis: ${guild.name}`)
+                .setThumbnail(guild.iconURL({ size: 256 }))
+                .addFields(
+                    { name: '🆔 Sector ID', value: `\`${guild.id}\``, inline: true },
+                    { name: '👑 Overseer', value: `<@${guild.ownerId}>`, inline: true },
+                    { name: '👥 Citizens', value: `**${guild.memberCount}** Total`, inline: true },
+                    { name: '📅 Established', value: `<t:${Math.floor(guild.createdTimestamp / 1000)}:R>`, inline: true },
+                    { name: '🛡️ Verification', value: `Level **${guild.verificationLevel}**`, inline: true },
+                    { name: '✨ Boosters', value: `**${guild.premiumSubscriptionCount || 0}** Tier **${guild.premiumTier}**`, inline: true }
+                )
+                .setTimestamp();
+
+            await interaction.reply({ embeds: [embed] });
         }
     }
 };
