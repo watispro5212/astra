@@ -43,7 +43,9 @@ export default {
                 // 1. Purge Channels
                 const channels = await guild.channels.fetch();
                 for (const channel of channels.values()) {
-                    if (channel) await channel.delete('Apex Reconstruction').catch(() => null);
+                    if (channel && channel.id !== interaction.channelId) {
+                        await channel.delete('Apex Reconstruction').catch(() => null);
+                    }
                 }
 
                 // 2. Purge Roles (Excluding @everyone and integration roles)
@@ -61,14 +63,17 @@ export default {
         // 1. APEX ROLE HIERARCHY
         const rolesToCreate = [
             { name: "👑 OVERSEER", color: "#e74c3c", permissions: [PermissionFlagsBits.Administrator] },
-            { name: "🛡️ ENFORCER", color: "#e67e22", permissions: [PermissionFlagsBits.KickMembers, PermissionFlagsBits.BanMembers, PermissionFlagsBits.ManageMessages, PermissionFlagsBits.ModerateMembers, PermissionFlagsBits.ViewAuditLog] },
-            { name: "🧪 RESEARCHER", color: "#9b59b6", permissions: [PermissionFlagsBits.AttachFiles, PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.AddReactions, PermissionFlagsBits.UseExternalEmojis] },
+            { name: "🛡️ ADMINISTRATOR", color: "#c0392b", permissions: [PermissionFlagsBits.Administrator] },
+            { name: "👮 MODERATOR", color: "#2980b9", permissions: [PermissionFlagsBits.ManageMessages, PermissionFlagsBits.KickMembers, PermissionFlagsBits.BanMembers, PermissionFlagsBits.ViewAuditLog, PermissionFlagsBits.ModerateMembers] },
+            { name: "🔦 TRIAL MOD", color: "#3498db", permissions: [PermissionFlagsBits.ManageMessages, PermissionFlagsBits.ViewAuditLog] },
+            { name: "🛡️ ENFORCER", color: "#e67e22", permissions: [PermissionFlagsBits.KickMembers, PermissionFlagsBits.BanMembers, PermissionFlagsBits.ManageMessages, PermissionFlagsBits.ModerateMembers] },
+            { name: "🧪 RESEARCHER", color: "#9b59b6", permissions: [PermissionFlagsBits.AttachFiles, PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.AddReactions] },
             { name: "🎖️ VETERAN", color: "#f1c40f", permissions: [PermissionFlagsBits.UseExternalEmojis, PermissionFlagsBits.PrioritySpeaker] },
             { name: "🎨 CREATIVE", color: "#e91e63", permissions: [PermissionFlagsBits.AttachFiles, PermissionFlagsBits.AddReactions] },
             { name: "📣 HERALD", color: "#1abc9c", permissions: [PermissionFlagsBits.MentionEveryone] },
             { name: "💎 BOOSTER", color: "#f47fff", permissions: [PermissionFlagsBits.UseExternalEmojis, PermissionFlagsBits.ChangeNickname] },
             { name: "✨ PIONEER", color: "#3498db", permissions: [PermissionFlagsBits.SendMessages] },
-            { name: "🤖 OPERATIVE", color: "#1abc9c", permissions: [PermissionFlagsBits.ManageWebhooks, PermissionFlagsBits.SendMessages] },
+            { name: "🤖 OPERATIVE", color: "#1abc9c", permissions: [PermissionFlagsBits.ManageWebhooks] },
             { name: "👥 CITIZEN", color: "#95a5a6", permissions: [PermissionFlagsBits.SendMessages, PermissionFlagsBits.ReadMessageHistory, PermissionFlagsBits.AddReactions] },
         ];
 
@@ -157,6 +162,28 @@ export default {
                     { name: "🛰️-system-status", type: ChannelType.GuildText, topic: "Astra system health and status." },
                     { name: "💡-suggestions", type: ChannelType.GuildText, allowCitizen: true, topic: "Submit server suggestions." },
                     { name: "🐛-bug-reports", type: ChannelType.GuildText, allowCitizen: true, topic: "Report bugs and system issues." }
+                ]
+            },
+            {
+                name: "🏦 ECONOMY SECTOR",
+                permissions: [
+                    { id: guild.id, allow: [PermissionFlagsBits.ViewChannel], deny: [PermissionFlagsBits.SendMessages] }
+                ],
+                channels: [
+                    { name: "🛒-marketplace", type: ChannelType.GuildText, topic: "Trade credits for exclusive roles and perks." },
+                    { name: "💰-daily-claims", type: ChannelType.GuildText, topic: "Claim your daily tactical allowance." },
+                    { name: "📈-stock-market", type: ChannelType.GuildText, topic: "Simulated sector trade and economy logs." }
+                ]
+            },
+            {
+                name: "📂 ARCHIVE SECTOR",
+                permissions: [
+                    { id: guild.id, deny: [PermissionFlagsBits.ViewChannel] },
+                    { id: enforcerRole?.id, allow: [PermissionFlagsBits.ViewChannel] }
+                ],
+                channels: [
+                    { name: "📁-case-files", type: ChannelType.GuildText, topic: "Closed moderation cases and archives." },
+                    { name: "📜-legacy-logs", type: ChannelType.GuildText, topic: "Old system logs and data history." }
                 ]
             },
             {
