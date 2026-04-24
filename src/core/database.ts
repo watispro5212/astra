@@ -162,12 +162,15 @@ class DatabaseManager {
         // v7.0 migrations — safe to run on existing databases
         const migrations = [
             `ALTER TABLE users ADD COLUMN last_work ${TEXT}`,
+            `ALTER TABLE users ADD COLUMN last_mine ${TEXT}`,
             `ALTER TABLE guilds ADD COLUMN automod_anti_spam ${BOOL} DEFAULT FALSE`,
             `ALTER TABLE guilds ADD COLUMN automod_anti_invite ${BOOL} DEFAULT FALSE`,
             `ALTER TABLE guilds ADD COLUMN automod_anti_link ${BOOL} DEFAULT FALSE`,
             `ALTER TABLE guilds ADD COLUMN automod_spam_threshold ${INT} DEFAULT 5`,
             `CREATE TABLE IF NOT EXISTS leveling_configs (guild_id ${INT} PRIMARY KEY, announcement_channel_id ${INT})`,
-            `CREATE TABLE IF NOT EXISTS level_roles (id ${PK}, guild_id ${INT}, level ${INT}, role_id ${INT}, UNIQUE(guild_id, level))`
+            `CREATE TABLE IF NOT EXISTS level_roles (id ${PK}, guild_id ${INT}, level ${INT}, role_id ${INT}, UNIQUE(guild_id, level))`,
+            `CREATE TABLE IF NOT EXISTS user_inventory (id ${PK}, user_id ${INT}, item_id ${INT}, quantity ${INT} DEFAULT 1, last_harvest ${TEXT})`,
+            `CREATE TABLE IF NOT EXISTS user_stocks (user_id ${INT} PRIMARY KEY, shares ${INT} DEFAULT 0, invested_amount ${INT} DEFAULT 0)`
         ];
         for (const migration of migrations) {
             try {

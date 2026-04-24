@@ -4,15 +4,53 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sectors — Astra</title>
-  <meta name="description" content="Explore the tactical sectors of Astra v7.0.0 Titan.">
+  <meta name="description" content="Explore the 9 tactical sectors of Astra v7.0.0 Nova — moderation, leveling, economy, tickets, giveaways, welcome, and more.">
   <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    .sector-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 28px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px 100px;
+    }
+    .sector-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 36px 30px;
+      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px);
+      transition: border-color 0.3s ease, transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .sector-card:hover { border-color: var(--primary-neon); transform: translateY(-4px); }
+    .sector-card--new { border-color: rgba(52,152,219,0.3); }
+    .sector-card__icon { font-size: 2.5rem; margin-bottom: 16px; display: block; }
+    .sector-card__header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .sector-card__title { font-family: var(--font-tactical); font-size: 1rem; color: #fff; }
+    .sector-card__new-badge {
+      font-size: 0.6rem; padding: 2px 7px; border-radius: 4px;
+      background: rgba(52,152,219,0.2); border: 1px solid rgba(52,152,219,0.5);
+      color: #3498db; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .sector-card__desc { color: #94a3b8; font-size: 0.9rem; line-height: 1.65; flex: 1; }
+    .sector-card__features {
+      margin-top: 20px; list-style: none; padding: 0;
+      border-top: 1px solid var(--glass-border); padding-top: 16px;
+    }
+    .sector-card__feature { color: #64748b; font-size: 0.8rem; padding: 4px 0; display: flex; gap: 8px; }
+    .sector-card__feature::before { content: '›'; color: var(--primary-neon); font-weight: 700; }
+  </style>
 </head>
 <body>
   <div class="hero-titan__mesh"></div>
-  
+
   <nav class="nav-titan" id="navbar">
     <div class="nav-container">
       <a href="index.html" class="nav-logo">
@@ -20,7 +58,7 @@
         ASTRA
       </a>
       <div class="nav-links">
-        <a href="features.html" class="nav-link" style="color: #fff;">Sectors</a>
+        <a href="features.html" class="nav-link" style="color:#fff;">Sectors</a>
         <a href="commands.html" class="nav-link">Protocols</a>
         <a href="changelog.html" class="nav-link">Mission Logs</a>
         <a href="support.html" class="nav-link">Support</a>
@@ -30,61 +68,170 @@
 
   <header class="page-header">
     <h1 class="page-header__title">TACTICAL SECTORS</h1>
-    <p class="page-header__subtitle">
-      Astra is divided into specialized intelligence sectors, each engineered to provide autonomous solutions for elite communities.
-    </p>
+    <p class="page-header__subtitle">Astra v7.0.0 Nova ships 9 fully autonomous intelligence sectors — each engineered to be the best-in-class solution for elite communities.</p>
   </header>
 
-  <main class="container" style="max-width: 1200px; margin: 0 auto; padding-bottom: 100px;">
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; padding: 0 20px;">
-      
-      <div class="telemetry-card">
-        <span style="font-size: 2.5rem; margin-bottom: 20px; display: block;">🛡️</span>
-        <h3 class="telemetry-card__title">MODERATION SECTOR</h3>
-        <p style="color: #94a3b8; line-height: 1.6;">Advanced multi-tier security featuring Nuclear Purge, automatic anti-spam, and tactical role reconstruction.</p>
-      </div>
+  <div class="sector-grid">
 
-      <div class="telemetry-card">
-        <span style="font-size: 2.5rem; margin-bottom: 20px; display: block;">📈</span>
-        <h3 class="telemetry-card__title">INTELLIGENCE SECTOR</h3>
-        <p style="color: #94a3b8; line-height: 1.6;">Global XP synchronization across all Astra-linked guilds. Real-time rank analysis and engagement telemetry.</p>
+    <div class="sector-card">
+      <span class="sector-card__icon">🛡️</span>
+      <div class="sector-card__header">
+        <h3 class="sector-card__title">MODERATION SECTOR</h3>
       </div>
-
-      <div class="telemetry-card">
-        <span style="font-size: 2.5rem; margin-bottom: 20px; display: block;">🏦</span>
-        <h3 class="telemetry-card__title">ECONOMY SECTOR</h3>
-        <p style="color: #94a3b8; line-height: 1.6;">A robust fiscal environment with daily claims, role marketplaces, and simulated stock trading protocols.</p>
-      </div>
-
-      <div class="telemetry-card">
-        <span style="font-size: 2.5rem; margin-bottom: 20px; display: block;">📡</span>
-        <h3 class="telemetry-card__title">LOGISTICS SECTOR</h3>
-        <p style="color: #94a3b8; line-height: 1.6;">High-clearance support ticketing, community suggestions, and real-time shard status reporting.</p>
-      </div>
-
-      <div class="telemetry-card">
-        <span style="font-size: 2.5rem; margin-bottom: 20px; display: block;">🎮</span>
-        <h3 class="telemetry-card__title">ENTERTAINMENT SECTOR</h3>
-        <p style="color: #94a3b8; line-height: 1.6;">Interactive tactical games, music studio integrations, and community engagement protocols.</p>
-      </div>
-
-      <div class="telemetry-card">
-        <span style="font-size: 2.5rem; margin-bottom: 20px; display: block;">⚙️</span>
-        <h3 class="telemetry-card__title">UTILITY SECTOR</h3>
-        <p style="color: #94a3b8; line-height: 1.6;">Temporal reminders, community polls, and deep-tissue user/server diagnostic reports.</p>
-      </div>
-
+      <p class="sector-card__desc">A multi-tier enforcement system with automatic case logging, hierarchy protection, and full operative history tracking.</p>
+      <ul class="sector-card__features">
+        <li class="sector-card__feature">Kick, ban, unban, timeout, warn — all with case IDs</li>
+        <li class="sector-card__feature">DM-based warnings with automatic fallback</li>
+        <li class="sector-card__feature">Per-server case lookup and full history view</li>
+        <li class="sector-card__feature">Bulk message purge (1–100, skips 14-day-old messages)</li>
+        <li class="sector-card__feature">Role hierarchy protection prevents abuse</li>
+      </ul>
     </div>
-  </main>
+
+    <div class="sector-card">
+      <span class="sector-card__icon">📈</span>
+      <div class="sector-card__header">
+        <h3 class="sector-card__title">INTELLIGENCE SECTOR</h3>
+      </div>
+      <p class="sector-card__desc">Global XP tracking that rewards authentic engagement. Operatives carry their rank across every Astra-linked community.</p>
+      <ul class="sector-card__features">
+        <li class="sector-card__feature">15–25 XP per message with 60-second anti-spam cooldown</li>
+        <li class="sector-card__feature">Visual ASCII progress bar toward next level</li>
+        <li class="sector-card__feature">Automatic level-up announcements in channel</li>
+        <li class="sector-card__feature">Global top-10 leaderboard with live username resolution</li>
+        <li class="sector-card__feature">Lookup any operative's rank and XP</li>
+      </ul>
+    </div>
+
+    <div class="sector-card">
+      <span class="sector-card__icon">💰</span>
+      <div class="sector-card__header">
+        <h3 class="sector-card__title">FISCAL SECTOR</h3>
+      </div>
+      <p class="sector-card__desc">A complete community economy with multiple income streams, peer-to-peer transfers, and a global wealth leaderboard.</p>
+      <ul class="sector-card__features">
+        <li class="sector-card__feature">Daily allocation: 2,500 credits every 24 hours</li>
+        <li class="sector-card__feature">Work missions: 250–750 cr, 1-hour cooldown</li>
+        <li class="sector-card__feature">High-risk mining: 500–2,500 cr or loss, 30-min cooldown</li>
+        <li class="sector-card__feature">Peer-to-peer credit transfers between operatives</li>
+        <li class="sector-card__feature">Global top-10 wealth leaderboard</li>
+      </ul>
+    </div>
+
+    <div class="sector-card sector-card--new">
+      <span class="sector-card__icon">🎫</span>
+      <div class="sector-card__header">
+        <h3 class="sector-card__title">LOGISTICS SECTOR</h3>
+        <span class="sector-card__new-badge">New in v7</span>
+      </div>
+      <p class="sector-card__desc">A full private-channel ticket system. Members open tickets, staff are automatically granted access, and the lifecycle is managed entirely in Discord.</p>
+      <ul class="sector-card__features">
+        <li class="sector-card__feature">Private channel per ticket — hidden from everyone else</li>
+        <li class="sector-card__feature">Automatic staff role permission grants via config</li>
+        <li class="sector-card__feature">One active ticket per user prevents spam</li>
+        <li class="sector-card__feature">Add/remove users mid-ticket</li>
+        <li class="sector-card__feature">5-second grace period on close before deletion</li>
+      </ul>
+    </div>
+
+    <div class="sector-card sector-card--new">
+      <span class="sector-card__icon">🎉</span>
+      <div class="sector-card__header">
+        <h3 class="sector-card__title">ENTERTAINMENT SECTOR</h3>
+        <span class="sector-card__new-badge">New in v7</span>
+      </div>
+      <p class="sector-card__desc">Host fully automated giveaways with reaction-based entry, configurable winner counts, and a background auto-end service.</p>
+      <ul class="sector-card__features">
+        <li class="sector-card__feature">Timed giveaways (1 minute – 7 days)</li>
+        <li class="sector-card__feature">Up to 10 simultaneous winners per draw</li>
+        <li class="sector-card__feature">Background checker auto-ends expired giveaways</li>
+        <li class="sector-card__feature">Manual end and one-command reroll</li>
+        <li class="sector-card__feature">Bot entries automatically filtered out</li>
+      </ul>
+    </div>
+
+    <div class="sector-card sector-card--new">
+      <span class="sector-card__icon">👋</span>
+      <div class="sector-card__header">
+        <h3 class="sector-card__title">WELCOME SECTOR</h3>
+        <span class="sector-card__new-badge">New in v7</span>
+      </div>
+      <p class="sector-card__desc">Fully configurable onboarding — custom welcome messages, auto-role assignment, farewell messages, and live preview testing.</p>
+      <ul class="sector-card__features">
+        <li class="sector-card__feature">Custom message with {user} / {server} placeholders</li>
+        <li class="sector-card__feature">Auto-role assignment on member join</li>
+        <li class="sector-card__feature">Separate farewell channel and message</li>
+        <li class="sector-card__feature">Live test command to preview instantly</li>
+        <li class="sector-card__feature">Full config view in one command</li>
+      </ul>
+    </div>
+
+    <div class="sector-card">
+      <span class="sector-card__icon">🚀</span>
+      <div class="sector-card__header">
+        <h3 class="sector-card__title">UTILITY SECTOR</h3>
+      </div>
+      <p class="sector-card__desc">Essential productivity tools for members and staff — reminders, community polls, and deep-tissue diagnostic reports.</p>
+      <ul class="sector-card__features">
+        <li class="sector-card__feature">Personal timed reminders delivered in-channel</li>
+        <li class="sector-card__feature">Reaction-based polls with up to 10 options</li>
+        <li class="sector-card__feature">Operative profile with join date and role info</li>
+        <li class="sector-card__feature">Server telemetry — members, channels, boost tier</li>
+      </ul>
+    </div>
+
+    <div class="sector-card">
+      <span class="sector-card__icon">📊</span>
+      <div class="sector-card__header">
+        <h3 class="sector-card__title">INFO SECTOR</h3>
+      </div>
+      <p class="sector-card__desc">System-level diagnostics and user intelligence — from full-res avatars to live latency readings and memory metrics.</p>
+      <ul class="sector-card__features">
+        <li class="sector-card__feature">1024px avatar display for any operative</li>
+        <li class="sector-card__feature">Live stats: uptime, RAM, latency, guild count</li>
+        <li class="sector-card__feature">Detailed user intelligence reports</li>
+        <li class="sector-card__feature">Server snapshot with full configuration data</li>
+      </ul>
+    </div>
+
+    <div class="sector-card">
+      <span class="sector-card__icon">⚙️</span>
+      <div class="sector-card__header">
+        <h3 class="sector-card__title">SYSTEM SECTOR</h3>
+      </div>
+      <p class="sector-card__desc">Core operations for administrators — system-wide alerts, command synchronisation, and the Nuclear Protocol server reconstruction.</p>
+      <ul class="sector-card__features">
+        <li class="sector-card__feature">Broadcast alerts to all linked sectors simultaneously</li>
+        <li class="sector-card__feature">Guild / global / clear command sync scopes</li>
+        <li class="sector-card__feature">Apex reconstruction: full channel + role rebuild</li>
+        <li class="sector-card__feature">Vanguard Error Reporter notifies developers in real-time</li>
+        <li class="sector-card__feature">Nova v7.0.0 release summary on demand</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <footer class="site-footer">
+    <div class="site-footer__brand">
+      <img src="assets/images/astra-logo.png" alt="Astra" width="24" height="24">
+      ASTRA
+    </div>
+    <p class="site-footer__tagline">Nova v7.0.0 · Tactical Discord Intelligence</p>
+    <div class="site-footer__links">
+      <a href="features.html" class="site-footer__link">Sectors</a>
+      <a href="commands.html" class="site-footer__link">Protocols</a>
+      <a href="changelog.html" class="site-footer__link">Mission Logs</a>
+      <a href="faq.html" class="site-footer__link">FAQ</a>
+      <a href="support.html" class="site-footer__link">Support</a>
+      <a href="privacy.html" class="site-footer__link">Privacy</a>
+      <a href="terms.html" class="site-footer__link">Terms</a>
+    </div>
+    <p class="site-footer__copy">&copy; 2026 Astra. All rights reserved. Built under the Astra Community License v2.1.</p>
+  </footer>
 
   <script>
     window.addEventListener('scroll', () => {
-      const nav = document.getElementById('navbar');
-      if (window.scrollY > 50) {
-        nav.classList.add('nav-titan--scrolled');
-      } else {
-        nav.classList.remove('nav-titan--scrolled');
-      }
+      document.getElementById('navbar').classList.toggle('nav-titan--scrolled', window.scrollY > 50);
     });
   </script>
 </body>

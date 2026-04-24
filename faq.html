@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FAQ — Astra</title>
-  <meta name="description" content="Frequently asked questions about Astra v7.0.0 Titan.">
+  <meta name="description" content="Frequently asked questions about Astra v7.0.0 Nova.">
   <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
@@ -13,39 +13,75 @@
     .faq-item {
       background: var(--glass-bg);
       border: 1px solid var(--glass-border);
-      border-radius: 12px;
-      margin-bottom: 20px;
-      padding: 30px;
+      border-radius: 14px;
+      margin-bottom: 16px;
       -webkit-backdrop-filter: blur(15px);
       backdrop-filter: blur(15px);
-      transition: all 0.3s ease;
+      transition: border-color 0.3s ease;
+      overflow: hidden;
     }
-    .faq-item:hover {
-      border-color: var(--primary-neon);
-    }
+    .faq-item:hover { border-color: var(--primary-neon); }
     .faq-question {
+      padding: 24px 28px;
       font-family: var(--font-tactical);
-      font-size: 1.1rem;
-      color: #fff;
-      margin-bottom: 12px;
-      display: flex;
-      gap: 15px;
-      align-items: center;
-    }
-    .faq-answer {
-      color: #94a3b8;
-      line-height: 1.6;
       font-size: 0.95rem;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      gap: 16px;
+      -webkit-user-select: none;
+      user-select: none;
     }
-    .faq-icon {
+    .faq-question__text { display: flex; gap: 14px; align-items: center; }
+    .faq-icon { color: var(--primary-neon); font-weight: 800; flex-shrink: 0; }
+    .faq-arrow {
+      color: #64748b;
+      font-size: 1rem;
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+    }
+    .faq-item.open .faq-arrow { transform: rotate(180deg); }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s ease;
+      color: #94a3b8;
+      line-height: 1.7;
+      font-size: 0.93rem;
+      padding: 0 28px;
+    }
+    .faq-item.open .faq-answer {
+      max-height: 400px;
+      padding: 0 28px 24px;
+    }
+    .faq-answer code {
+      background: rgba(52,152,219,0.12);
+      border: 1px solid rgba(52,152,219,0.3);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85em;
+      color: #60a5fa;
+    }
+    .faq-section-label {
+      font-family: var(--font-tactical);
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
       color: var(--primary-neon);
-      font-weight: 800;
+      margin: 40px 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
+    .faq-section-label::after { content: ''; flex: 1; height: 1px; background: var(--glass-border); }
   </style>
 </head>
 <body>
   <div class="hero-titan__mesh"></div>
-  
+
   <nav class="nav-titan" id="navbar">
     <div class="nav-container">
       <a href="index.html" class="nav-logo">
@@ -63,46 +99,155 @@
 
   <header class="page-header">
     <h1 class="page-header__title">ARCHIVAL FAQ</h1>
-    <p class="page-header__subtitle">Instant tactical intelligence and system clarifications for the Astra Titan engine.</p>
+    <p class="page-header__subtitle">Instant intelligence for common questions about the Astra Nova v7.0.0 engine.</p>
   </header>
 
   <main class="container" style="max-width: 800px; margin: 0 auto; padding-bottom: 100px; padding-inline: 20px;">
-    
+
+    <!-- GENERAL -->
+    <div class="faq-section-label">General</div>
+
     <div class="faq-item">
-      <div class="faq-question"><span class="faq-icon">Q:</span> How do I establish the Apex Hierarchy?</div>
-      <div class="faq-answer">Use the <code>/setup_server</code> protocol with the <code>nuclear: true</code> option. This will purge legacy sectors and deploy the Titan v6.3.2 infrastructure.</div>
+      <div class="faq-question">
+        <span class="faq-question__text"><span class="faq-icon">Q</span> What is Astra Nova v7.0.0?</span>
+        <span class="faq-arrow">▼</span>
+      </div>
+      <div class="faq-answer">Astra is a free, enterprise-grade Discord bot with 9 tactical sectors covering moderation, leveling, economy, support tickets, giveaways, welcome systems, utilities, info, and core system operations. v7.0.0 "Nova" is the largest release in Astra's history, adding 3 entirely new sectors and dozens of new commands.</div>
     </div>
 
     <div class="faq-item">
-      <div class="faq-question"><span class="faq-icon">Q:</span> Is the leveling system global?</div>
-      <div class="faq-answer">Yes. Astra utilizes a global Intelligence Matrix. Your XP and Level are synchronized across all Astra-linked sectors, allowing you to maintain your rank in any community.</div>
+      <div class="faq-question">
+        <span class="faq-question__text"><span class="faq-icon">Q</span> Is Astra free to use?</span>
+        <span class="faq-arrow">▼</span>
+      </div>
+      <div class="faq-answer">Yes — 100%. All Patreon paywalls were removed in v6.1.0 and every feature in Nova v7.0.0 is available to every server at no cost. You can self-host under the Astra Community License v2.1 as well.</div>
     </div>
 
     <div class="faq-item">
-      <div class="faq-question"><span class="faq-icon">Q:</span> How does the Vanguard Error Reporter work?</div>
-      <div class="faq-answer">Whenever a system anomaly is detected, Astra generates a diagnostic packet and transmits it directly to the Core Developers. This ensures near-instant resolution of tactical failures.</div>
+      <div class="faq-question">
+        <span class="faq-question__text"><span class="faq-icon">Q</span> How do I add Astra to my server?</span>
+        <span class="faq-arrow">▼</span>
+      </div>
+      <div class="faq-answer">Click the "Establish Link" button on the homepage. Astra requests Administrator permissions to ensure it can manage channels, roles, and messages across all sectors. Once added, slash commands are available immediately — no manual setup required.</div>
+    </div>
+
+    <!-- MODERATION -->
+    <div class="faq-section-label">Moderation</div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        <span class="faq-question__text"><span class="faq-icon">Q</span> How does the warning system work in v7.0?</span>
+        <span class="faq-arrow">▼</span>
+      </div>
+      <div class="faq-answer">Use <code>/mod warn @user reason</code>. The warning is logged as a moderation case in the database and an embed is DM'd to the target operative. If their DMs are closed, the warning is still recorded and staff are notified. You can view all warnings with <code>/mod history @user</code>.</div>
     </div>
 
     <div class="faq-item">
-      <div class="faq-question"><span class="faq-icon">Q:</span> Can I trade roles in the Marketplace?</div>
-      <div class="faq-answer">Absolutely. The Economy Sector allows citizens to claim daily credits and exchange them in the <code>#🛒-marketplace</code> for exclusive tactical roles and perks.</div>
+      <div class="faq-question">
+        <span class="faq-question__text"><span class="faq-icon">Q</span> Can I view a specific moderation case?</span>
+        <span class="faq-arrow">▼</span>
+      </div>
+      <div class="faq-answer">Yes. Use <code>/mod case [number]</code> to retrieve full details on any case: type, reason, moderator, duration, timestamp, and status. Use <code>/mod history @user</code> to pull up to 15 most recent cases for a specific operative.</div>
+    </div>
+
+    <!-- ECONOMY & LEVELING -->
+    <div class="faq-section-label">Economy &amp; Leveling</div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        <span class="faq-question__text"><span class="faq-icon">Q</span> Is the leveling system global or per-server?</span>
+        <span class="faq-arrow">▼</span>
+      </div>
+      <div class="faq-answer">Global. Astra uses a single XP database across all linked communities. Your level and XP carry over between servers, so your rank is preserved no matter which Astra-linked community you're in.</div>
     </div>
 
     <div class="faq-item">
-      <div class="faq-question"><span class="faq-icon">Q:</span> Is Astra optimized for mobile?</div>
-      <div class="faq-answer">Yes. The Titan UI engine is engineered for full cross-browser compatibility, including specialized patches for Safari and iOS glassmorphism.</div>
+      <div class="faq-question">
+        <span class="faq-question__text"><span class="faq-icon">Q</span> What are the economy income sources in v7?</span>
+        <span class="faq-arrow">▼</span>
+      </div>
+      <div class="faq-answer">There are three income streams: <code>/economy daily</code> (2,500 credits, 24h cooldown), <code>/economy work</code> (250–750 credits, 1-hour cooldown), and <code>/economy mine</code> (high-risk: 70% chance of 500–2,500 credits, 30% chance of losing up to 1,000 credits, 30-min cooldown).</div>
+    </div>
+
+    <!-- TICKETS & GIVEAWAYS -->
+    <div class="faq-section-label">Tickets &amp; Giveaways</div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        <span class="faq-question__text"><span class="faq-icon">Q</span> How do I set up the ticket system?</span>
+        <span class="faq-arrow">▼</span>
+      </div>
+      <div class="faq-answer">The ticket system works out-of-the-box with no setup. Members run <code>/ticket create</code> and a private channel is created. For advanced configuration (category placement, automatic staff role access), an admin can configure the ticket settings in the database using the <code>ticket_configs</code> table — or wait for the upcoming <code>/ticketconfig</code> command in a future update.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        <span class="faq-question__text"><span class="faq-icon">Q</span> What happens when a giveaway timer expires?</span>
+        <span class="faq-arrow">▼</span>
+      </div>
+      <div class="faq-answer">The Giveaway Service background checker runs every 60 seconds. When a giveaway's <code>ends_at</code> timestamp passes, it automatically fetches 🎉 reactions, filters out bots, picks random winners, announces them in the channel, and marks the giveaway as ended. No manual intervention needed.</div>
+    </div>
+
+    <!-- WELCOME & SETUP -->
+    <div class="faq-section-label">Welcome &amp; Setup</div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        <span class="faq-question__text"><span class="faq-icon">Q</span> How do I configure the welcome message?</span>
+        <span class="faq-arrow">▼</span>
+      </div>
+      <div class="faq-answer">Use <code>/welcome set-channel #channel</code> to set where messages appear, <code>/welcome set-message your text</code> to write the message (use <code>{user}</code> and <code>{server}</code> as placeholders), and <code>/welcome set-role @role</code> to auto-assign a role on join. Run <code>/welcome test</code> to preview it instantly. Use <code>/welcome view</code> to see the full current config.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        <span class="faq-question__text"><span class="faq-icon">Q</span> How does the Vanguard Error Reporter work?</span>
+        <span class="faq-arrow">▼</span>
+      </div>
+      <div class="faq-answer">Whenever a command throws an unhandled exception, Astra generates a diagnostic packet (command name, guild, user, error message) and DMs it to the configured owner ID. This allows near-instant identification and resolution of production failures without users needing to report them manually.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        <span class="faq-question__text"><span class="faq-icon">Q</span> What does the Apex Nuclear Protocol do?</span>
+        <span class="faq-arrow">▼</span>
+      </div>
+      <div class="faq-answer">Running <code>/setup_server</code> with nuclear mode enabled completely purges all channels and roles in the server, then rebuilds the full Apex hierarchy from scratch — including 13 custom roles and 7 categorised sectors (Information, Citizen, Elite, Security, Logistics, Economy, Archive, and Voice). This is irreversible and intended for initial server configuration only.</div>
     </div>
 
   </main>
 
+  <footer class="site-footer">
+    <div class="site-footer__brand">
+      <img src="assets/images/astra-logo.png" alt="Astra" width="24" height="24">
+      ASTRA
+    </div>
+    <p class="site-footer__tagline">Nova v7.0.0 · Tactical Discord Intelligence</p>
+    <div class="site-footer__links">
+      <a href="features.html" class="site-footer__link">Sectors</a>
+      <a href="commands.html" class="site-footer__link">Protocols</a>
+      <a href="changelog.html" class="site-footer__link">Mission Logs</a>
+      <a href="faq.html" class="site-footer__link">FAQ</a>
+      <a href="support.html" class="site-footer__link">Support</a>
+      <a href="privacy.html" class="site-footer__link">Privacy</a>
+      <a href="terms.html" class="site-footer__link">Terms</a>
+    </div>
+    <p class="site-footer__copy">&copy; 2026 Astra. All rights reserved. Built under the Astra Community License v2.1.</p>
+  </footer>
+
   <script>
     window.addEventListener('scroll', () => {
-      const nav = document.getElementById('navbar');
-      if (window.scrollY > 50) {
-        nav.classList.add('nav-titan--scrolled');
-      } else {
-        nav.classList.remove('nav-titan--scrolled');
-      }
+      document.getElementById('navbar').classList.toggle('nav-titan--scrolled', window.scrollY > 50);
+    });
+
+    // Accordion
+    document.querySelectorAll('.faq-question').forEach(q => {
+      q.addEventListener('click', () => {
+        const item = q.closest('.faq-item');
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        if (!isOpen) item.classList.add('open');
+      });
     });
   </script>
 </body>

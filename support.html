@@ -4,15 +4,144 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Support — Astra</title>
-  <meta name="description" content="Astra v7.0.0 Titan support and community resources.">
+  <meta name="description" content="Astra v7.0.0 Nova support resources — join the official sector, browse the FAQ, or submit a bug report.">
   <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    .support-main {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding-bottom: 100px;
+      padding-inline: 20px;
+    }
+
+    .support-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+      margin-bottom: 60px;
+    }
+
+    .support-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 40px 30px;
+      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px);
+      text-align: center;
+      transition: border-color 0.3s ease, transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .support-card:hover {
+      border-color: var(--primary-neon);
+      transform: translateY(-4px);
+    }
+
+    .support-card__icon { font-size: 3rem; margin-bottom: 20px; }
+
+    .support-card__title {
+      font-family: var(--font-tactical);
+      font-size: 1rem;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    .support-card__desc {
+      color: #94a3b8;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-bottom: 28px;
+      flex: 1;
+    }
+
+    .btn-titan--full {
+      justify-content: center;
+      width: 100%;
+    }
+
+    .info-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 32px;
+      -webkit-backdrop-filter: blur(15px);
+      backdrop-filter: blur(15px);
+      margin-bottom: 20px;
+    }
+
+    .info-card__title {
+      font-family: var(--font-tactical);
+      font-size: 0.9rem;
+      color: #fff;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .info-card__body {
+      color: #94a3b8;
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    .info-card__body code {
+      background: rgba(52, 152, 219, 0.12);
+      border: 1px solid rgba(52, 152, 219, 0.3);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85em;
+      color: #60a5fa;
+    }
+
+    .info-card__intro { max-width: 100%; margin-bottom: 12px; }
+    .info-card__note  { max-width: 100%; margin-top: 12px; }
+
+    .report-list {
+      padding-left: 0;
+      list-style: none;
+    }
+
+    .report-list__item {
+      padding: 5px 0;
+      color: #94a3b8;
+    }
+
+    .status-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .status-row:last-child { border-bottom: none; }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #2ecc71;
+      box-shadow: 0 0 8px rgba(46, 204, 113, 0.6);
+      flex-shrink: 0;
+    }
+
+    .status-label { color: #94a3b8; font-size: 0.875rem; flex: 1; }
+    .status-value { color: #2ecc71; font-size: 0.8rem; font-weight: 600; }
+
+    .nav-link--active { color: #fff; }
+  </style>
 </head>
 <body>
   <div class="hero-titan__mesh"></div>
-  
+
   <nav class="nav-titan" id="navbar">
     <div class="nav-container">
       <a href="index.html" class="nav-logo">
@@ -23,53 +152,117 @@
         <a href="features.html" class="nav-link">Sectors</a>
         <a href="commands.html" class="nav-link">Protocols</a>
         <a href="changelog.html" class="nav-link">Mission Logs</a>
-        <a href="support.html" class="nav-link" style="color: #fff;">Support</a>
+        <a href="support.html" class="nav-link nav-link--active">Support</a>
       </div>
     </div>
   </nav>
 
   <header class="page-header">
     <h1 class="page-header__title">SUPPORT SECTOR</h1>
-    <p class="page-header__subtitle">Establish a direct communication link with the Astra Core development team or browse our archival FAQ for instant tactical guidance.</p>
+    <p class="page-header__subtitle">Need assistance with Astra Nova v7.0.0? Choose a channel below — our Vanguard team responds fastest in the official Discord sector.</p>
   </header>
 
-  <main class="container" style="max-width: 1000px; margin: 0 auto; padding-bottom: 100px; padding-inline: 20px;">
-    
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-bottom: 60px;">
-      
-      <div class="telemetry-card" style="text-align: center;">
-        <span style="font-size: 3rem; margin-bottom: 20px; display: block;">🏢</span>
-        <h3 class="telemetry-card__title">OFFICIAL SECTOR</h3>
-        <p style="color: #94a3b8; margin-bottom: 25px; min-height: 50px;">Join the Astra HQ to receive direct support from the Vanguard team.</p>
-        <a href="https://discord.gg/astra" class="btn-titan btn-titan--primary" style="justify-content: center;">Enter Sector</a>
+  <main class="support-main">
+
+    <!-- Support channels -->
+    <div class="support-grid">
+      <div class="support-card">
+        <span class="support-card__icon">🏢</span>
+        <h3 class="support-card__title">OFFICIAL SECTOR</h3>
+        <p class="support-card__desc">Join the Astra HQ Discord server to get direct support from the Vanguard development team, report bugs, and follow release announcements.</p>
+        <a href="https://discord.gg/astra" class="btn-titan btn-titan--primary btn-titan--full">Enter Sector</a>
       </div>
 
-      <div class="telemetry-card" style="text-align: center;">
-        <span style="font-size: 3rem; margin-bottom: 20px; display: block;">📜</span>
-        <h3 class="telemetry-card__title">KNOWLEDGE BASE</h3>
-        <p style="color: #94a3b8; margin-bottom: 25px; min-height: 50px;">Browse our frequently asked questions for immediate system intelligence.</p>
-        <a href="faq.html" class="btn-titan btn-titan--secondary" style="justify-content: center;">Browse FAQ</a>
+      <div class="support-card">
+        <span class="support-card__icon">📜</span>
+        <h3 class="support-card__title">KNOWLEDGE BASE</h3>
+        <p class="support-card__desc">Browse the archival FAQ for instant answers to the most common questions about setup, features, commands, and v7.0 changes.</p>
+        <a href="faq.html" class="btn-titan btn-titan--secondary btn-titan--full">Browse FAQ</a>
       </div>
 
+      <div class="support-card">
+        <span class="support-card__icon">📋</span>
+        <h3 class="support-card__title">COMMAND REGISTRY</h3>
+        <p class="support-card__desc">Not sure which command to use? The full v7.0.0 protocol registry lists every command with its permission tier and description.</p>
+        <a href="commands.html" class="btn-titan btn-titan--secondary btn-titan--full">View Commands</a>
+      </div>
     </div>
 
-    <div class="telemetry-card">
-      <h3 class="telemetry-card__title" style="margin-bottom: 20px;">DIAGNOSTIC TRANSMISSION</h3>
-      <p style="color: #94a3b8; line-height: 1.6; margin-bottom: 0;">
-        If you have encountered a tactical anomaly or system error, please use the <code>/utility report</code> protocol or join the support sector directly. Our **Vanguard Error Reporter** is active and may have already alerted our developers to the anomaly.
-      </p>
+    <!-- System status -->
+    <div class="info-card">
+      <div class="info-card__title">⚡ System Status — Nova v7.0.0</div>
+      <div class="status-row">
+        <span class="status-dot"></span>
+        <span class="status-label">Bot Gateway</span>
+        <span class="status-value">Operational</span>
+      </div>
+      <div class="status-row">
+        <span class="status-dot"></span>
+        <span class="status-label">Database</span>
+        <span class="status-value">Operational</span>
+      </div>
+      <div class="status-row">
+        <span class="status-dot"></span>
+        <span class="status-label">Reminder Service</span>
+        <span class="status-value">Operational</span>
+      </div>
+      <div class="status-row">
+        <span class="status-dot"></span>
+        <span class="status-label">Giveaway Service</span>
+        <span class="status-value">Operational</span>
+      </div>
+      <div class="status-row">
+        <span class="status-dot"></span>
+        <span class="status-label">Vanguard Error Reporter</span>
+        <span class="status-value">Operational</span>
+      </div>
+    </div>
+
+    <!-- How to report -->
+    <div class="info-card">
+      <div class="info-card__title">🐛 Reporting a Bug or Anomaly</div>
+      <div class="info-card__body">
+        <p class="info-card__intro">If you encounter unexpected behavior, the fastest resolution path is the official Discord sector. When reporting, include:</p>
+        <ul class="report-list">
+          <li class="report-list__item">› The exact command you ran (e.g. <code>/mod warn</code>)</li>
+          <li class="report-list__item">› The error message or unexpected output you received</li>
+          <li class="report-list__item">› Your server ID and approximate time of the incident</li>
+        </ul>
+        <p class="info-card__note">The <strong>Vanguard Error Reporter</strong> is active in Nova v7.0.0 — critical failures are automatically DM'd to the development team, so many issues are resolved before users even report them.</p>
+      </div>
+    </div>
+
+    <!-- Self-hosting -->
+    <div class="info-card">
+      <div class="info-card__title">🔧 Self-Hosting Astra</div>
+      <div class="info-card__body">
+        Astra is open for self-hosting under the <strong>Astra Community License v2.1</strong>. Clone the repository, copy <code>.env.example</code> to <code>.env</code>, fill in your <code>DISCORD_TOKEN</code>, <code>DISCORD_CLIENT_ID</code>, and <code>OWNER_ID</code>, then run <code>npm run dev</code> (development) or <code>npm run build &amp;&amp; npm start</code> (production). SQLite is used by default — set <code>DATABASE_URL</code> to a PostgreSQL connection string for production deployments.
+      </div>
     </div>
 
   </main>
 
+  <footer class="site-footer">
+    <div class="site-footer__brand">
+      <img src="assets/images/astra-logo.png" alt="Astra" width="24" height="24">
+      ASTRA
+    </div>
+    <p class="site-footer__tagline">Nova v7.0.0 · Tactical Discord Intelligence</p>
+    <div class="site-footer__links">
+      <a href="features.html" class="site-footer__link">Sectors</a>
+      <a href="commands.html" class="site-footer__link">Protocols</a>
+      <a href="changelog.html" class="site-footer__link">Mission Logs</a>
+      <a href="faq.html" class="site-footer__link">FAQ</a>
+      <a href="support.html" class="site-footer__link">Support</a>
+      <a href="privacy.html" class="site-footer__link">Privacy</a>
+      <a href="terms.html" class="site-footer__link">Terms</a>
+    </div>
+    <p class="site-footer__copy">&copy; 2026 Astra. All rights reserved. Built under the Astra Community License v2.1.</p>
+  </footer>
+
   <script>
     window.addEventListener('scroll', () => {
-      const nav = document.getElementById('navbar');
-      if (window.scrollY > 50) {
-        nav.classList.add('nav-titan--scrolled');
-      } else {
-        nav.classList.remove('nav-titan--scrolled');
-      }
+      document.getElementById('navbar').classList.toggle('nav-titan--scrolled', window.scrollY > 50);
     });
   </script>
 </body>

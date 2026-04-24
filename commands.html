@@ -4,54 +4,117 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Protocols — Astra</title>
-  <meta name="description" content="Astra v7.0.0 command registry and tactical protocols.">
+  <meta name="description" content="Astra v7.0.0 Nova — complete command registry and tactical protocols.">
   <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
   <style>
+    .filter-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 36px;
+    }
+    .filter-btn {
+      padding: 8px 18px;
+      border-radius: 8px;
+      border: 1px solid var(--glass-border);
+      background: var(--glass-bg);
+      color: #94a3b8;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: 'Inter', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: rgba(52, 152, 219, 0.15);
+      border-color: var(--primary-neon);
+      color: #fff;
+    }
+    .sector-label {
+      font-family: var(--font-tactical);
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--primary-neon);
+      margin: 40px 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .sector-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--glass-border);
+    }
     .command-row {
       background: var(--glass-bg);
       border: 1px solid var(--glass-border);
-      padding: 20px;
+      padding: 18px 22px;
       border-radius: 12px;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      transition: all 0.3s ease;
+      gap: 16px;
+      transition: all 0.25s ease;
       -webkit-backdrop-filter: blur(10px);
       backdrop-filter: blur(10px);
     }
     .command-row:hover {
       border-color: var(--primary-neon);
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(52, 152, 219, 0.06);
     }
+    .command-row[data-hidden="true"] { display: none; }
+    .command-info { min-width: 0; }
     .command-name {
       font-family: var(--font-tactical);
       color: var(--primary-neon);
       font-weight: 700;
-      font-size: 1.1rem;
+      font-size: 0.95rem;
+      margin-bottom: 4px;
     }
     .command-desc {
       color: #94a3b8;
-      font-size: 0.95rem;
+      font-size: 0.875rem;
+      line-height: 1.4;
+    }
+    .command-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+      flex-shrink: 0;
     }
     .command-badge {
-      font-size: 0.7rem;
-      padding: 4px 8px;
-      border-radius: 4px;
-      background: rgba(52, 152, 219, 0.1);
-      border: 1px solid var(--primary-neon);
-      color: var(--primary-neon);
+      font-size: 0.65rem;
+      padding: 3px 9px;
+      border-radius: 5px;
       text-transform: uppercase;
       font-weight: 800;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+    .badge-public  { background: rgba(46,204,113,0.12); border: 1px solid rgba(46,204,113,0.4);  color: #2ecc71; }
+    .badge-staff   { background: rgba(241,196,15,0.12);  border: 1px solid rgba(241,196,15,0.4);  color: #f1c40f; }
+    .badge-admin   { background: rgba(231,76,60,0.12);   border: 1px solid rgba(231,76,60,0.4);   color: #e74c3c; }
+    .badge-owner   { background: rgba(155,89,182,0.12);  border: 1px solid rgba(155,89,182,0.4);  color: #9b59b6; }
+    .badge-new     { background: rgba(52,152,219,0.15);  border: 1px solid rgba(52,152,219,0.5);  color: #3498db; }
+    @media (max-width: 600px) {
+      .command-row { flex-direction: column; align-items: flex-start; }
+      .command-meta { flex-direction: row; align-items: center; }
     }
   </style>
 </head>
 <body>
   <div class="hero-titan__mesh"></div>
-  
+
   <nav class="nav-titan" id="navbar">
     <div class="nav-container">
       <a href="index.html" class="nav-logo">
@@ -60,7 +123,7 @@
       </a>
       <div class="nav-links">
         <a href="features.html" class="nav-link">Sectors</a>
-        <a href="commands.html" class="nav-link" style="color: #fff;">Protocols</a>
+        <a href="commands.html" class="nav-link" style="color:#fff;">Protocols</a>
         <a href="changelog.html" class="nav-link">Mission Logs</a>
         <a href="support.html" class="nav-link">Support</a>
       </div>
@@ -69,77 +132,483 @@
 
   <header class="page-header">
     <h1 class="page-header__title">TACTICAL PROTOCOLS</h1>
-    <p class="page-header__subtitle">Explore the high-clearance commands and autonomous routines programmed into the Astra Titan engine.</p>
+    <p class="page-header__subtitle">The complete Astra v7.0.0 Nova command registry — every slash command, its permission tier, and what it does.</p>
   </header>
 
-  <main class="container" style="max-width: 900px; margin: 0 auto; padding-bottom: 100px; padding-inline: 20px;">
-    
-    <div class="command-row">
-      <div>
-        <div class="command-name">/setup_server</div>
-        <div class="command-desc">Initiate a total hierarchy purge and APEX reconstruction.</div>
-      </div>
-      <span class="command-badge">Admin</span>
+  <main class="container" style="max-width: 960px; margin: 0 auto; padding-bottom: 100px; padding-inline: 20px;">
+
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="moderation">Moderation</button>
+      <button class="filter-btn" data-filter="leveling">Leveling</button>
+      <button class="filter-btn" data-filter="economy">Economy</button>
+      <button class="filter-btn" data-filter="ticket">Tickets</button>
+      <button class="filter-btn" data-filter="giveaway">Giveaways</button>
+      <button class="filter-btn" data-filter="welcome">Welcome</button>
+      <button class="filter-btn" data-filter="utility">Utility</button>
+      <button class="filter-btn" data-filter="system">System</button>
     </div>
 
-    <div class="command-row">
-      <div>
+    <!-- MODERATION -->
+    <div class="sector-label" data-sector="moderation">🛡️ Moderation Sector</div>
+
+    <div class="command-row" data-sector="moderation">
+      <div class="command-info">
+        <div class="command-name">/mod kick</div>
+        <div class="command-desc">Eject a member from the sector with an optional reason. Respects role hierarchy.</div>
+      </div>
+      <div class="command-meta"><span class="command-badge badge-staff">Staff</span></div>
+    </div>
+
+    <div class="command-row" data-sector="moderation">
+      <div class="command-info">
+        <div class="command-name">/mod ban</div>
+        <div class="command-desc">Permanently blacklist a member. Optionally delete up to 7 days of their messages.</div>
+      </div>
+      <div class="command-meta"><span class="command-badge badge-staff">Staff</span></div>
+    </div>
+
+    <div class="command-row" data-sector="moderation">
+      <div class="command-info">
+        <div class="command-name">/mod unban</div>
+        <div class="command-desc">Revoke an active ban by user ID. Logs an unban case automatically.</div>
+      </div>
+      <div class="command-meta">
+        <span class="command-badge badge-staff">Staff</span>
+        <span class="command-badge badge-new">New</span>
+      </div>
+    </div>
+
+    <div class="command-row" data-sector="moderation">
+      <div class="command-info">
+        <div class="command-name">/mod timeout</div>
+        <div class="command-desc">Apply a timed suspension (1 min – 28 days). Member is silenced across all channels.</div>
+      </div>
+      <div class="command-meta"><span class="command-badge badge-staff">Staff</span></div>
+    </div>
+
+    <div class="command-row" data-sector="moderation">
+      <div class="command-info">
+        <div class="command-name">/mod warn</div>
+        <div class="command-desc">Issue a formal warning — logged as a case and DM'd to the target operative.</div>
+      </div>
+      <div class="command-meta">
+        <span class="command-badge badge-staff">Staff</span>
+        <span class="command-badge badge-new">New</span>
+      </div>
+    </div>
+
+    <div class="command-row" data-sector="moderation">
+      <div class="command-info">
+        <div class="command-name">/mod purge</div>
+        <div class="command-desc">Bulk-delete 1–100 messages. Messages older than 14 days are automatically skipped.</div>
+      </div>
+      <div class="command-meta"><span class="command-badge badge-staff">Staff</span></div>
+    </div>
+
+    <div class="command-row" data-sector="moderation">
+      <div class="command-info">
+        <div class="command-name">/mod case</div>
+        <div class="command-desc">Retrieve a specific moderation case by its number in this server.</div>
+      </div>
+      <div class="command-meta">
+        <span class="command-badge badge-staff">Staff</span>
+        <span class="command-badge badge-new">New</span>
+      </div>
+    </div>
+
+    <div class="command-row" data-sector="moderation">
+      <div class="command-info">
+        <div class="command-name">/mod history</div>
+        <div class="command-desc">View the complete moderation history for any operative — up to 15 most recent cases.</div>
+      </div>
+      <div class="command-meta">
+        <span class="command-badge badge-staff">Staff</span>
+        <span class="command-badge badge-new">New</span>
+      </div>
+    </div>
+
+    <!-- LEVELING -->
+    <div class="sector-label" data-sector="leveling">📈 Intelligence Sector (Leveling)</div>
+
+    <div class="command-row" data-sector="leveling">
+      <div class="command-info">
+        <div class="command-name">/leveling rank</div>
+        <div class="command-desc">View your current level, XP, and a visual ASCII progress bar toward the next rank.</div>
+      </div>
+      <div class="command-meta"><span class="command-badge badge-public">Public</span></div>
+    </div>
+
+    <div class="command-row" data-sector="leveling">
+      <div class="command-info">
+        <div class="command-name">/leveling leaderboard</div>
+        <div class="command-desc">Global top-10 operatives ranked by level and XP with live username resolution.</div>
+      </div>
+      <div class="command-meta">
+        <span class="command-badge badge-public">Public</span>
+        <span class="command-badge badge-new">New</span>
+      </div>
+    </div>
+
+    <!-- ECONOMY -->
+    <div class="sector-label" data-sector="economy">💰 Fiscal Sector (Economy)</div>
+
+    <div class="command-row" data-sector="economy">
+      <div class="command-info">
+        <div class="command-name">/economy daily</div>
+        <div class="command-desc">Claim your daily credit ration of 2,500 credits. Resets every 24 hours.</div>
+      </div>
+      <div class="command-meta"><span class="command-badge badge-public">Public</span></div>
+    </div>
+
+    <div class="command-row" data-sector="economy">
+      <div class="command-info">
+        <div class="command-name">/economy work</div>
+        <div class="command-desc">Complete a tactical assignment for 250–750 credits. 1-hour cooldown between deployments.</div>
+      </div>
+      <div class="command-meta">
+        <span class="command-badge badge-public">Public</span>
+        <span class="command-badge badge-new">New</span>
+      </div>
+    </div>
+
+    <div class="command-row" data-sector="economy">
+      <div class="command-info">
+        <div class="command-name">/economy mine</div>
+        <div class="command-desc">High-risk extraction protocol. 70% chance of earning 500–2,500 cr, 30% chance of losing up to 1,000 cr. 30-min cooldown.</div>
+      </div>
+      <div class="command-meta">
+        <span class="command-badge badge-public">Public</span>
+        <span class="command-badge badge-new">New</span>
+      </div>
+    </div>
+
+    <div class="command-row" data-sector="economy">
+      <div class="command-info">
+        <div class="command-name">/economy balance</div>
+        <div class="command-desc">View your credit balance or check any other operative's fiscal status.</div>
+      </div>
+      <div class="command-meta"><span class="command-badge badge-public">Public</span></div>
+    </div>
+
+    <div class="command-row" data-sector="economy">
+      <div class="command-info">
+        <div class="command-name">/economy pay</div>
+        <div class="command-desc">Transfer credits to another operative. Cannot pay yourself or bots.</div>
+      </div>
+      <div class="command-meta"><span class="command-badge badge-public">Public</span></div>
+    </div>
+
+    <div class="command-row" data-sector="economy">
+      <div class="command-info">
+        <div class="command-name">/economy leaderboard</div>
+        <div class="command-desc">Global top-10 wealthiest operatives across all Astra-linked communities.</div>
+      </div>
+      <div class="command-meta">
+        <span class="command-badge badge-public">Public</span>
+        <span class="command-badge badge-new">New</span>
+      </div>
+    </div>
+
+    <!-- TICKETS -->
+    <div class="sector-label" data-sector="ticket">🎫 Logistics Sector (Tickets)</div>
+
+    <div class="command-row" data-sector="ticket">
+      <div class="command-info">
+        <div class="command-name">/ticket create</div>
+        <div class="command-desc">Opens a private support channel visible only to you, staff, and Astra. One active ticket per user.</div>
+      </div>
+      <div class="command-meta">
+        <span class="command-badge badge-public">Public</span>
+        <span class="command-badge badge-new">New</span>
+      </div>
+    </div>
+
+    <div class="command-row" data-sector="ticket">
+      <div class="command-info">
+        <div class="command-name">/ticket close</div>
+        <div class="command-desc">Close the current ticket. Channel is deleted after a 5-second grace period.</div>
+      </div>
+      <div class="command-meta">
+        <span class="command-badge badge-public">Public</span>
+        <span class="command-badge badge-new">New</span>
+      </div>
+    </div>
+
+    <div class="command-row" data-sector="ticket">
+      <div class="command-info">
+        <div class="command-name">/ticket add</div>
+        <div class="command-desc">Grant a user view and write access to the current ticket channel.</div>
+      </div>
+      <div class="command-meta">
+        <span class="command-badge badge-public">Public</span>
+        <span class="command-badge badge-new">New</span>
+      </div>
+    </div>
+
+    <div class="command-row" data-sector="ticket">
+      <div class="command-info">
+        <div class="command-name">/ticket remove</div>
+        <div class="command-desc">Revoke a user's access to the current ticket. Cannot remove the ticket creator.</div>
+      </div>
+      <div class="command-meta">
+        <span class="command-badge badge-public">Public</span>
+        <span class="command-badge badge-new">New</span>
+      </div>
+    </div>
+
+    <!-- GIVEAWAYS -->
+    <div class="sector-label" data-sector="giveaway">🎉 Entertainment Sector (Giveaways)</div>
+
+    <div class="command-row" data-sector="giveaway">
+      <div class="command-info">
+        <div class="command-name">/giveaway start</div>
+        <div class="command-desc">Launch a timed giveaway. Members enter by reacting 🎉. Supports up to 10 winners and auto-ends on expiry.</div>
+      </div>
+      <div class="command-meta">
+        <span class="command-badge badge-staff">Staff</span>
+        <span class="command-badge badge-new">New</span>
+      </div>
+    </div>
+
+    <div class="command-row" data-sector="giveaway">
+      <div class="command-info">
+        <div class="command-name">/giveaway end</div>
+        <div class="command-desc">Immediately end a giveaway and draw winners from current 🎉 reactions.</div>
+      </div>
+      <div class="command-meta">
+        <span class="command-badge badge-staff">Staff</span>
+        <span class="command-badge badge-new">New</span>
+      </div>
+    </div>
+
+    <div class="command-row" data-sector="giveaway">
+      <div class="command-info">
+        <div class="command-name">/giveaway reroll</div>
+        <div class="command-desc">Pick a fresh set of winners for a completed giveaway using a new random draw.</div>
+      </div>
+      <div class="command-meta">
+        <span class="command-badge badge-staff">Staff</span>
+        <span class="command-badge badge-new">New</span>
+      </div>
+    </div>
+
+    <!-- WELCOME -->
+    <div class="sector-label" data-sector="welcome">👋 Welcome Sector</div>
+
+    <div class="command-row" data-sector="welcome">
+      <div class="command-info">
+        <div class="command-name">/welcome set-channel</div>
+        <div class="command-desc">Set the channel where welcome messages are sent when new members join.</div>
+      </div>
+      <div class="command-meta">
+        <span class="command-badge badge-admin">Admin</span>
+        <span class="command-badge badge-new">New</span>
+      </div>
+    </div>
+
+    <div class="command-row" data-sector="welcome">
+      <div class="command-info">
+        <div class="command-name">/welcome set-message</div>
+        <div class="command-desc">Customise the welcome text. Use <code>{user}</code> and <code>{server}</code> as dynamic placeholders.</div>
+      </div>
+      <div class="command-meta">
+        <span class="command-badge badge-admin">Admin</span>
+        <span class="command-badge badge-new">New</span>
+      </div>
+    </div>
+
+    <div class="command-row" data-sector="welcome">
+      <div class="command-info">
+        <div class="command-name">/welcome set-role</div>
+        <div class="command-desc">Set a role to be automatically assigned to every new member on join.</div>
+      </div>
+      <div class="command-meta">
+        <span class="command-badge badge-admin">Admin</span>
+        <span class="command-badge badge-new">New</span>
+      </div>
+    </div>
+
+    <div class="command-row" data-sector="welcome">
+      <div class="command-info">
+        <div class="command-name">/welcome set-farewell</div>
+        <div class="command-desc">Configure a farewell channel and message triggered when a member leaves the server.</div>
+      </div>
+      <div class="command-meta">
+        <span class="command-badge badge-admin">Admin</span>
+        <span class="command-badge badge-new">New</span>
+      </div>
+    </div>
+
+    <div class="command-row" data-sector="welcome">
+      <div class="command-info">
+        <div class="command-name">/welcome test</div>
+        <div class="command-desc">Send a test welcome embed to the configured channel to preview your setup instantly.</div>
+      </div>
+      <div class="command-meta">
+        <span class="command-badge badge-admin">Admin</span>
+        <span class="command-badge badge-new">New</span>
+      </div>
+    </div>
+
+    <div class="command-row" data-sector="welcome">
+      <div class="command-info">
+        <div class="command-name">/welcome view</div>
+        <div class="command-desc">Display the current welcome configuration — channel, role, and message previews.</div>
+      </div>
+      <div class="command-meta">
+        <span class="command-badge badge-admin">Admin</span>
+        <span class="command-badge badge-new">New</span>
+      </div>
+    </div>
+
+    <!-- UTILITY -->
+    <div class="sector-label" data-sector="utility">🚀 Utility Sector</div>
+
+    <div class="command-row" data-sector="utility">
+      <div class="command-info">
+        <div class="command-name">/utility remind</div>
+        <div class="command-desc">Schedule a personal reminder for N minutes from now. Delivered in the current channel.</div>
+      </div>
+      <div class="command-meta"><span class="command-badge badge-public">Public</span></div>
+    </div>
+
+    <div class="command-row" data-sector="utility">
+      <div class="command-info">
+        <div class="command-name">/utility poll</div>
+        <div class="command-desc">Create a reaction-based community poll with 2–10 options. Members vote with number emojis.</div>
+      </div>
+      <div class="command-meta"><span class="command-badge badge-public">Public</span></div>
+    </div>
+
+    <div class="command-row" data-sector="utility">
+      <div class="command-info">
         <div class="command-name">/utility userinfo</div>
-        <div class="command-desc">Generate a diagnostic report on a specific operative.</div>
+        <div class="command-desc">Operative diagnostic profile — join date, top role, account creation, and Discord ID.</div>
       </div>
-      <span class="command-badge">Public</span>
+      <div class="command-meta"><span class="command-badge badge-public">Public</span></div>
     </div>
 
-    <div class="command-row">
-      <div>
+    <div class="command-row" data-sector="utility">
+      <div class="command-info">
         <div class="command-name">/utility serverinfo</div>
-        <div class="command-desc">Analyze sector telemetry and security status.</div>
+        <div class="command-desc">Sector telemetry: member count, channels, boost tier, verification level, and owner.</div>
       </div>
-      <span class="command-badge">Public</span>
+      <div class="command-meta"><span class="command-badge badge-public">Public</span></div>
     </div>
 
-    <div class="command-row">
-      <div>
-        <div class="command-name">/leveling status</div>
-        <div class="command-desc">Analyze your current XP matrix and rank trajectory.</div>
+    <!-- SYSTEM -->
+    <div class="sector-label" data-sector="system">📊 Info &amp; System Sector</div>
+
+    <div class="command-row" data-sector="system">
+      <div class="command-info">
+        <div class="command-name">/info avatar</div>
+        <div class="command-desc">Display the high-resolution avatar of any operative at 1024 × 1024 pixels.</div>
       </div>
-      <span class="command-badge">Public</span>
+      <div class="command-meta"><span class="command-badge badge-public">Public</span></div>
     </div>
 
-    <div class="command-row">
-      <div>
-        <div class="command-name">/economy claim</div>
-        <div class="command-desc">Execute daily fiscal allowance protocol.</div>
+    <div class="command-row" data-sector="system">
+      <div class="command-info">
+        <div class="command-name">/info stats</div>
+        <div class="command-desc">Live system diagnostics — uptime, memory usage, latency, Nova version, and guild count.</div>
       </div>
-      <span class="command-badge">Public</span>
+      <div class="command-meta"><span class="command-badge badge-public">Public</span></div>
     </div>
 
-    <div class="command-row">
-      <div>
-        <div class="command-name">/moderation clear</div>
-        <div class="command-desc">Perform a localized frequency wipe (Clear messages).</div>
+    <div class="command-row" data-sector="system">
+      <div class="command-info">
+        <div class="command-name">/info user</div>
+        <div class="command-desc">Detailed intelligence report on a member — ID, join date, roles, and account age.</div>
       </div>
-      <span class="command-badge">Staff</span>
+      <div class="command-meta"><span class="command-badge badge-public">Public</span></div>
     </div>
 
-    <div class="command-row">
-      <div>
-        <div class="command-name">/system status</div>
-        <div class="command-desc">Check real-time shard health and API latency.</div>
+    <div class="command-row" data-sector="system">
+      <div class="command-info">
+        <div class="command-name">/info server</div>
+        <div class="command-desc">Sector profile — owner, creation date, member count, channels, roles, and boost tier.</div>
       </div>
-      <span class="command-badge">Public</span>
+      <div class="command-meta"><span class="command-badge badge-public">Public</span></div>
+    </div>
+
+    <div class="command-row" data-sector="system">
+      <div class="command-info">
+        <div class="command-name">/system update</div>
+        <div class="command-desc">Display the Nova v7.0.0 release summary with all new features listed.</div>
+      </div>
+      <div class="command-meta"><span class="command-badge badge-public">Public</span></div>
+    </div>
+
+    <div class="command-row" data-sector="system">
+      <div class="command-info">
+        <div class="command-name">/system alert</div>
+        <div class="command-desc">Broadcast a system-wide alert to all Astra-linked sectors simultaneously.</div>
+      </div>
+      <div class="command-meta"><span class="command-badge badge-owner">Owner</span></div>
+    </div>
+
+    <div class="command-row" data-sector="system">
+      <div class="command-info">
+        <div class="command-name">/setup_server</div>
+        <div class="command-desc">Full Apex hierarchy reconstruction — purges all channels and roles, then rebuilds the entire sector structure from scratch.</div>
+      </div>
+      <div class="command-meta"><span class="command-badge badge-admin">Admin</span></div>
+    </div>
+
+    <div class="command-row" data-sector="system">
+      <div class="command-info">
+        <div class="command-name">/dev sync</div>
+        <div class="command-desc">Synchronise slash commands — guild (fast), global (delayed), or clear all registrations.</div>
+      </div>
+      <div class="command-meta"><span class="command-badge badge-owner">Owner</span></div>
+    </div>
+
+    <div class="command-row" data-sector="system">
+      <div class="command-info">
+        <div class="command-name">/dev ping</div>
+        <div class="command-desc">Check real-time API latency and bot uptime.</div>
+      </div>
+      <div class="command-meta"><span class="command-badge badge-owner">Owner</span></div>
     </div>
 
   </main>
 
+  <footer class="site-footer">
+    <div class="site-footer__brand">
+      <img src="assets/images/astra-logo.png" alt="Astra" width="24" height="24">
+      ASTRA
+    </div>
+    <p class="site-footer__tagline">Nova v7.0.0 · Tactical Discord Intelligence</p>
+    <div class="site-footer__links">
+      <a href="features.html" class="site-footer__link">Sectors</a>
+      <a href="commands.html" class="site-footer__link">Protocols</a>
+      <a href="changelog.html" class="site-footer__link">Mission Logs</a>
+      <a href="faq.html" class="site-footer__link">FAQ</a>
+      <a href="support.html" class="site-footer__link">Support</a>
+      <a href="privacy.html" class="site-footer__link">Privacy</a>
+      <a href="terms.html" class="site-footer__link">Terms</a>
+    </div>
+    <p class="site-footer__copy">&copy; 2026 Astra. All rights reserved. Built under the Astra Community License v2.1.</p>
+  </footer>
+
   <script>
     window.addEventListener('scroll', () => {
-      const nav = document.getElementById('navbar');
-      if (window.scrollY > 50) {
-        nav.classList.add('nav-titan--scrolled');
-      } else {
-        nav.classList.remove('nav-titan--scrolled');
-      }
+      document.getElementById('navbar').classList.toggle('nav-titan--scrolled', window.scrollY > 50);
+    });
+
+    const buttons = document.querySelectorAll('.filter-btn');
+    const rows = document.querySelectorAll('.command-row');
+    const labels = document.querySelectorAll('.sector-label');
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        rows.forEach(row => { row.dataset.hidden = (filter === 'all' || row.dataset.sector === filter) ? 'false' : 'true'; });
+        labels.forEach(lbl => { lbl.style.display = (filter === 'all' || lbl.dataset.sector === filter) ? '' : 'none'; });
+      });
     });
   </script>
 </body>
