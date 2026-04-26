@@ -107,6 +107,7 @@ class DatabaseManager {
                 last_daily ${TEXT},
                 last_work ${TEXT},
                 last_mine ${TEXT},
+                last_rob ${TEXT},
                 blacklisted ${BOOL} DEFAULT FALSE
             )`,
             `CREATE TABLE IF NOT EXISTS giveaways (
@@ -128,7 +129,9 @@ class DatabaseManager {
                 description ${TEXT},
                 price ${INT},
                 stock ${INT} DEFAULT -1,
-                production_rate ${INT} DEFAULT 0
+                production_rate ${INT} DEFAULT 0,
+                item_type ${TEXT} DEFAULT 'consumable',
+                emoji ${TEXT} DEFAULT '📦'
             )`,
             `CREATE TABLE IF NOT EXISTS user_inventory (
                 id ${PK},
@@ -159,10 +162,11 @@ class DatabaseManager {
             await this.execute(query);
         }
 
-        // v7.0 migrations — safe to run on existing databases
+        // v7.0+ migrations — safe to run on existing databases
         const migrations = [
             `ALTER TABLE users ADD COLUMN last_work ${TEXT}`,
             `ALTER TABLE users ADD COLUMN last_mine ${TEXT}`,
+            `ALTER TABLE users ADD COLUMN last_rob ${TEXT}`,
             `ALTER TABLE guilds ADD COLUMN automod_anti_spam ${BOOL} DEFAULT FALSE`,
             `ALTER TABLE guilds ADD COLUMN automod_anti_invite ${BOOL} DEFAULT FALSE`,
             `ALTER TABLE guilds ADD COLUMN automod_anti_link ${BOOL} DEFAULT FALSE`,
@@ -170,7 +174,9 @@ class DatabaseManager {
             `CREATE TABLE IF NOT EXISTS leveling_configs (guild_id ${INT} PRIMARY KEY, announcement_channel_id ${INT})`,
             `CREATE TABLE IF NOT EXISTS level_roles (id ${PK}, guild_id ${INT}, level ${INT}, role_id ${INT}, UNIQUE(guild_id, level))`,
             `CREATE TABLE IF NOT EXISTS user_inventory (id ${PK}, user_id ${INT}, item_id ${INT}, quantity ${INT} DEFAULT 1, last_harvest ${TEXT})`,
-            `CREATE TABLE IF NOT EXISTS user_stocks (user_id ${INT} PRIMARY KEY, shares ${INT} DEFAULT 0, invested_amount ${INT} DEFAULT 0)`
+            `CREATE TABLE IF NOT EXISTS user_stocks (user_id ${INT} PRIMARY KEY, shares ${INT} DEFAULT 0, invested_amount ${INT} DEFAULT 0)`,
+            `ALTER TABLE shop_items ADD COLUMN item_type ${TEXT} DEFAULT 'consumable'`,
+            `ALTER TABLE shop_items ADD COLUMN emoji ${TEXT} DEFAULT '📦'`
         ];
         for (const migration of migrations) {
             try {
@@ -180,7 +186,7 @@ class DatabaseManager {
             }
         }
 
-        logger.info("Database infrastructure initialized (v7.0.0 - Nova)");
+        logger.info("Database infrastructure initialized (v7.2.0 - Omega)");
     }
 
     async execute(query: string, ...params: any[]): Promise<any> {
