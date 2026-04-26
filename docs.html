@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentation — Astra</title>
+  <meta name="description" content="Technical documentation and deployment guides for Astra v7.0.0 Nova.">
+  <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    .docs-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px 100px;
+    }
+
+    .docs-sidebar {
+      position: sticky;
+      top: 100px;
+      height: fit-content;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 24px;
+      -webkit-backdrop-filter: blur(15px);
+      backdrop-filter: blur(15px);
+    }
+
+    .docs-nav-group {
+      margin-bottom: 24px;
+    }
+
+    .docs-nav-title {
+      font-family: var(--font-tactical);
+      font-size: 0.7rem;
+      color: var(--primary-neon);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+
+    .docs-nav-link {
+      display: block;
+      color: #94a3b8;
+      font-size: 0.9rem;
+      padding: 6px 0;
+      transition: color 0.2s ease;
+    }
+
+    .docs-nav-link:hover, .docs-nav-link.active {
+      color: #fff;
+    }
+
+    .docs-content {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 60px;
+      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px);
+    }
+
+    .docs-section {
+      margin-bottom: 60px;
+    }
+
+    .docs-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .docs-title {
+      font-family: var(--font-tactical);
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+
+    .docs-text {
+      color: #94a3b8;
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .docs-code-block {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 20px;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      color: #60a5fa;
+      margin-bottom: 24px;
+      overflow-x: auto;
+    }
+
+    .docs-feature-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .docs-feature-item {
+      display: flex;
+      gap: 12px;
+      color: #94a3b8;
+      margin-bottom: 12px;
+    }
+
+    .docs-feature-item::before {
+      content: '⚡';
+      color: var(--primary-neon);
+    }
+
+    @media (max-width: 900px) {
+      .docs-layout {
+        grid-template-columns: 1fr;
+      }
+      .docs-sidebar {
+        position: static;
+        margin-bottom: 20px;
+      }
+      .docs-content {
+        padding: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="hero-titan__mesh"></div>
+
+  <nav class="nav-titan" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <img src="assets/images/astra-logo.png" alt="Astra Logo" width="32" height="32">
+        ASTRA
+      </a>
+      <div class="nav-links">
+        <a href="features.html" class="nav-link">Sectors</a>
+        <a href="commands.html" class="nav-link">Protocols</a>
+        <a href="docs.html" class="nav-link" style="color:#fff;">Docs</a>
+        <a href="changelog.html" class="nav-link">Mission Logs</a>
+        <a href="support.html" class="nav-link">Support</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="page-header">
+    <h1 class="page-header__title">KNOWLEDGE ARCHIVE</h1>
+    <p class="page-header__subtitle">Technical documentation for deploying, configuring, and mastering the Astra v7.0.0 Nova engine.</p>
+  </header>
+
+  <main class="docs-layout">
+    <aside class="docs-sidebar">
+      <div class="docs-nav-group">
+        <div class="docs-nav-title">Deployment</div>
+        <a href="#quick-start" class="docs-nav-link active">Quick Start</a>
+        <a href="#inviting" class="docs-nav-link">Inviting Astra</a>
+        <a href="#permissions" class="docs-nav-link">Permissions</a>
+      </div>
+      <div class="docs-nav-group">
+        <div class="docs-nav-title">Configuration</div>
+        <a href="#moderation" class="docs-nav-link">Moderation Setup</a>
+        <a href="#leveling" class="docs-nav-link">Intelligence Config</a>
+        <a href="#economy" class="docs-nav-link">Fiscal Policies</a>
+      </div>
+      <div class="docs-nav-group">
+        <div class="docs-nav-title">Advanced</div>
+        <a href="#self-hosting" class="docs-nav-link">Self-Hosting</a>
+        <a href="#api" class="docs-nav-link">Internal API</a>
+      </div>
+    </aside>
+
+    <div class="docs-content">
+      <section id="quick-start" class="docs-section">
+        <h2 class="docs-title">Quick Start</h2>
+        <p class="docs-text">Deploying Astra to your sector is a zero-config process. Most features are autonomous and activate the moment the bot joins your server.</p>
+        <div class="docs-code-block">
+          /info stats
+        </div>
+        <p class="docs-text">Run the command above to verify system integrity once Astra is present in your member list.</p>
+      </section>
+
+      <section id="inviting" class="docs-section">
+        <h2 class="docs-title">Inviting Astra</h2>
+        <p class="docs-text">To establish a link with Astra, use the official invite portal. We recommend granting Administrator permissions for the most seamless experience across all 9 tactical sectors.</p>
+        <ul class="docs-feature-list">
+          <li class="docs-feature-item">Global Slash Command access</li>
+          <li class="docs-feature-item">Automatic channel/role management</li>
+          <li class="docs-feature-item">High-priority message processing</li>
+        </ul>
+      </section>
+
+      <section id="self-hosting" class="docs-section">
+        <h2 class="docs-title">Self-Hosting Guide</h2>
+        <p class="docs-text">Astra is open-source under the Community License v2.1. Follow these protocols for local deployment:</p>
+        <div class="docs-code-block">
+git clone https://github.com/watispro5212/astra.git
+cd astra
+npm install
+npm run dev
+        </div>
+        <p class="docs-text">Ensure your <code>.env</code> file is configured with the necessary API keys and database credentials.</p>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__brand">
+      <img src="assets/images/astra-logo.png" alt="Astra" width="24" height="24">
+      ASTRA
+    </div>
+    <p class="site-footer__tagline">Nova v7.0.0 · Tactical Discord Intelligence</p>
+    <div class="site-footer__links">
+      <a href="features.html" class="site-footer__link">Sectors</a>
+      <a href="commands.html" class="site-footer__link">Protocols</a>
+      <a href="docs.html" class="site-footer__link">Docs</a>
+      <a href="changelog.html" class="site-footer__link">Mission Logs</a>
+      <a href="faq.html" class="site-footer__link">FAQ</a>
+      <a href="support.html" class="site-footer__link">Support</a>
+      <a href="privacy.html" class="site-footer__link">Privacy</a>
+      <a href="terms.html" class="site-footer__link">Terms</a>
+    </div>
+    <p class="site-footer__copy">&copy; 2026 Astra. All rights reserved. Built under the Astra Community License v2.1.</p>
+  </footer>
+
+  <script>
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('nav-titan--scrolled', window.scrollY > 50);
+    });
+  </script>
+</body>
+</html>

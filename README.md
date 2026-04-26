@@ -1,6 +1,8 @@
-# 🛰️ Astra Tactical Bot (v6.3.0 Titan)
+# 🛰️ Astra Tactical Bot (v7.0.0 Nova)
 
-Astra is an enterprise-grade Discord moderation, community engagement, and utility bot, rebuilt in high-performance TypeScript. The v6.3.0 **Titan Update** introduces global leveling and economy systems to drive member retention.
+Astra is an enterprise-grade Discord moderation, community engagement, and utility bot, rebuilt in high-performance TypeScript. The v7.0.0 **Nova Update** introduces a full ticket system, giveaway engine, and advanced onboarding modules.
+
+**Official Website**: [https://watispro5212.github.io/astra/](https://watispro5212.github.io/astra/)
 
 ## 🚀 Quick Start (Local Development)
 

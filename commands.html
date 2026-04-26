@@ -110,6 +110,10 @@
       .command-row { flex-direction: column; align-items: flex-start; }
       .command-meta { flex-direction: row; align-items: center; }
     }
+    .cmd-inline-link { color: #3498db; text-decoration: underline; }
+    .cmd-inline-link:hover { color: #60a5fa; }
+    .commands-container { max-width: 960px; margin: 0 auto; padding-bottom: 100px; padding-inline: 20px; }
+    .commands-active { color: #fff; }
   </style>
 </head>
 <body>
@@ -123,7 +127,8 @@
       </a>
       <div class="nav-links">
         <a href="features.html" class="nav-link">Sectors</a>
-        <a href="commands.html" class="nav-link" style="color:#fff;">Protocols</a>
+        <a href="commands.html" class="nav-link commands-active">Protocols</a>
+        <a href="docs.html" class="nav-link">Docs</a>
         <a href="changelog.html" class="nav-link">Mission Logs</a>
         <a href="support.html" class="nav-link">Support</a>
       </div>
@@ -135,7 +140,7 @@
     <p class="page-header__subtitle">The complete Astra v7.0.0 Nova command registry — every slash command, its permission tier, and what it does.</p>
   </header>
 
-  <main class="container" style="max-width: 960px; margin: 0 auto; padding-bottom: 100px; padding-inline: 20px;">
+  <main class="commands-container">
 
     <div class="filter-bar">
       <button class="filter-btn active" data-filter="all">All</button>
@@ -497,6 +502,17 @@
       <div class="command-meta"><span class="command-badge badge-public">Public</span></div>
     </div>
 
+    <div class="command-row" data-sector="utility">
+      <div class="command-info">
+        <div class="command-name">/invite</div>
+        <div class="command-desc">Generate an invite link for Astra. Returns the official bot invite URL and a link to the <a href="https://watispro5212.github.io/astra/" target="_blank" rel="noopener noreferrer" class="cmd-inline-link">Astra website</a> for full documentation.</div>
+      </div>
+      <div class="command-meta">
+        <span class="command-badge badge-public">Public</span>
+        <span class="command-badge badge-new">New</span>
+      </div>
+    </div>
+
     <!-- SYSTEM -->
     <div class="sector-label" data-sector="system">📊 Info &amp; System Sector</div>
 
@@ -583,6 +599,7 @@
     <div class="site-footer__links">
       <a href="features.html" class="site-footer__link">Sectors</a>
       <a href="commands.html" class="site-footer__link">Protocols</a>
+      <a href="docs.html" class="site-footer__link">Docs</a>
       <a href="changelog.html" class="site-footer__link">Mission Logs</a>
       <a href="faq.html" class="site-footer__link">FAQ</a>
       <a href="support.html" class="site-footer__link">Support</a>
