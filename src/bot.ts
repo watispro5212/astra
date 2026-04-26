@@ -131,73 +131,81 @@ export class AstraClient extends Client {
         this.on(Events.MessageCreate, async (message) => {
             if (message.author.bot || !message.guild) return;
 
+            // Fetch prefix for this guild
+            const guildData = await db.fetchOne('SELECT prefix FROM guilds WHERE guild_id = ?', message.guild.id);
+            const prefix = guildData?.prefix || '-';
+
+            // XP System
             const now = Date.now();
             const cooldown = xpCooldowns.get(message.author.id);
 
-            if (cooldown && now - cooldown < 60000) return;
-            xpCooldowns.set(message.author.id, now);
-
-            const xpAdd = Math.floor(Math.random() * 11) + 15; // 15-25 XP
-            
-            let user = await db.fetchOne('SELECT xp, level FROM users WHERE user_id = ?', message.author.id);
-            
-            if (!user) {
-                await db.execute('INSERT INTO users (user_id, xp, level) VALUES (?, ?, ?)', message.author.id, xpAdd, 0);
-                user = { xp: xpAdd, level: 0 };
-            } else {
-                const newXp = (user.xp || 0) + xpAdd;
-                const nextLevelXp = ((user.level || 0) + 1) * 500;
-
-                if (newXp >= nextLevelXp) {
-                    const newLevel = (user.level || 0) + 1;
-                    const carryXp  = newXp - nextLevelXp; // carry remainder into next level
-                    await db.execute('UPDATE users SET xp = ?, level = ? WHERE user_id = ?', carryXp, newLevel, message.author.id);
-                    
-                    // Fetch Leveling Configs
-                    const cfg = await db.fetchOne('SELECT announcement_channel_id FROM leveling_configs WHERE guild_id = ?', message.guild.id);
-                    const milestoneRole = await db.fetchOne('SELECT role_id FROM level_roles WHERE guild_id = ? AND level = ?', message.guild.id, newLevel);
-
-                    if (milestoneRole) {
-                        const role = await message.guild.roles.fetch(milestoneRole.role_id).catch(() => null);
-                        if (role) await message.member?.roles.add(role).catch(() => {});
-                    }
-
-                    // XP bar for new level
-                    const nextXpReq    = (newLevel + 1) * 500;
-                    const barFilled    = Math.round((carryXp / nextXpReq) * 10);
-                    const progressBar  = `${'█'.repeat(barFilled)}${'░'.repeat(10 - barFilled)}`;
-
-                    const levelEmbed = new EmbedBuilder()
-                        .setColor(0x9b59b6)
-                        .setTitle('🎊 LEVEL UP — INTELLIGENCE ELEVATED')
-                        .setDescription(`**${message.author.username}** has advanced to **Level ${newLevel}**!${milestoneRole ? `\n\n🎖️ **Role Reward:** <@&${milestoneRole.role_id}>` : ''}`)
-                        .setThumbnail(message.author.displayAvatarURL())
-                        .addFields(
-                            { name: '⭐ New Level',     value: `\`${newLevel}\``,                          inline: true },
-                            { name: '🎯 Next Level',     value: `\`${nextXpReq} XP\``,                      inline: true },
-                            { name: '📊 Progress',       value: `\`[${progressBar}] ${carryXp}/${nextXpReq}\``, inline: false },
-                        )
-                        .setFooter({ text: 'Astra Intelligence Matrix • v7.5.0 Titan' })
-                        .setTimestamp();
-
-                    let targetChannel: any = message.channel;
-                    if (cfg?.announcement_channel_id) {
-                        try {
-                            const announcementChan = await message.guild.channels.fetch(cfg.announcement_channel_id);
-                            if (announcementChan && announcementChan.isTextBased()) {
-                                targetChannel = announcementChan;
-                            }
-                        } catch (err) {
-                            logger.warn(`Failed to fetch announcement channel ${cfg.announcement_channel_id}: ${err}`);
-                        }
-                    }
-
-                    await targetChannel.send({ content: `<@${message.author.id}>`, embeds: [levelEmbed] }).catch((err: any) => {
-                        logger.error(`Failed to send level-up message: ${err}`);
-                    });
+            if (!cooldown || now - cooldown >= 60000) {
+                xpCooldowns.set(message.author.id, now);
+                const xpAdd = Math.floor(Math.random() * 11) + 15;
+                let user = await db.fetchOne('SELECT xp, level FROM users WHERE user_id = ?', message.author.id);
+                
+                if (!user) {
+                    await db.execute('INSERT INTO users (user_id, xp, level) VALUES (?, ?, ?)', message.author.id, xpAdd, 0);
                 } else {
-                    await db.execute('UPDATE users SET xp = ? WHERE user_id = ?', newXp, message.author.id);
+                    const newXp = (user.xp || 0) + xpAdd;
+                    const nextLevelXp = ((user.level || 0) + 1) * 500;
+
+                    if (newXp >= nextLevelXp) {
+                        const newLevel = (user.level || 0) + 1;
+                        const carryXp  = newXp - nextLevelXp;
+                        await db.execute('UPDATE users SET xp = ?, level = ? WHERE user_id = ?', carryXp, newLevel, message.author.id);
+                        
+                        const cfg = await db.fetchOne('SELECT announcement_channel_id FROM leveling_configs WHERE guild_id = ?', message.guild.id);
+                        const milestoneRole = await db.fetchOne('SELECT role_id FROM level_roles WHERE guild_id = ? AND level = ?', message.guild.id, newLevel);
+
+                        if (milestoneRole) {
+                            const role = await message.guild.roles.fetch(milestoneRole.role_id).catch(() => null);
+                            if (role) await message.member?.roles.add(role).catch(() => {});
+                        }
+
+                        const nextXpReq    = (newLevel + 1) * 500;
+                        const barFilled    = Math.round((carryXp / nextXpReq) * 10);
+                        const progressBar  = `${'█'.repeat(barFilled)}${'░'.repeat(10 - barFilled)}`;
+
+                        const levelEmbed = new EmbedBuilder()
+                            .setColor(0x9b59b6)
+                            .setTitle('🎊 LEVEL UP — INTELLIGENCE ELEVATED')
+                            .setDescription(`**${message.author.username}** has advanced to **Level ${newLevel}**!${milestoneRole ? `\n\n🎖️ **Role Reward:** <@&${milestoneRole.role_id}>` : ''}`)
+                            .setThumbnail(message.author.displayAvatarURL())
+                            .addFields(
+                                { name: '⭐ New Level',     value: `\`${newLevel}\``,                          inline: true },
+                                { name: '🎯 Next Level',     value: `\`${nextXpReq} XP\``,                      inline: true },
+                                { name: '📊 Progress',       value: `\`[${progressBar}] ${carryXp}/${nextXpReq}\``, inline: false },
+                            )
+                            .setFooter({ text: 'Astra Intelligence Matrix • v7.5.0 Titan' })
+                            .setTimestamp();
+
+                        let targetChannel: any = message.channel;
+                        if (cfg?.announcement_channel_id) {
+                            try {
+                                const announcementChan = await message.guild.channels.fetch(cfg.announcement_channel_id);
+                                if (announcementChan && announcementChan.isTextBased()) targetChannel = announcementChan;
+                            } catch (_) {}
+                        }
+                        await targetChannel.send({ content: `<@${message.author.id}>`, embeds: [levelEmbed] }).catch(() => {});
+                    } else {
+                        await db.execute('UPDATE users SET xp = ? WHERE user_id = ?', newXp, message.author.id);
+                    }
                 }
+            }
+
+            // Prefix Command Handling
+            if (!message.content.startsWith(prefix)) return;
+
+            const args = message.content.slice(prefix.length).trim().split(/ +/);
+            const commandName = args.shift()?.toLowerCase();
+
+            if (commandName === 'ping') {
+                await message.reply(`📡 **PONG**: Tactical response time \`${this.ws.ping}ms\``);
+            } else if (commandName === 'prefix') {
+                await message.reply(`📡 **CURRENT PREFIX**: \`${prefix}\` | Use \`/prefix\` to modify.`);
+            } else if (commandName === 'stats') {
+                await message.reply(`📊 **SYSTEM STATUS**: Use \`/info stats\` for high-fidelity telemetry.`);
             }
         });
 

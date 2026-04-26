@@ -19,82 +19,83 @@ const command: Command = {
         .setName('system')
         .setDescription('⚙️ Core system operations and diagnostics.')
         .addSubcommand(sub =>
+            sub.setName('sync')
+               .setDescription('🔄 Force a complete synchronization of all tactical slash commands (Owner Only).')
+        )
+        .addSubcommand(sub =>
             sub.setName('update')
                .setDescription('📋 View the latest Astra patch notes and system changes.')
         )
         .addSubcommand(sub =>
             sub.setName('status')
                .setDescription('📡 Live system health, latency, and resource diagnostics.')
-        )
-        .addSubcommand(sub =>
-            sub.setName('ping')
-               .setDescription('🏓 Measure WebSocket heartbeat and API round-trip latency.')
-        )
-        .addSubcommand(sub =>
-            sub.setName('servers')
-               .setDescription('🌐 View sector count and deployment statistics (Owner Only).')
-        )
-        .addSubcommand(sub =>
-            sub.setName('alert')
-               .setDescription('📢 Broadcast a system-wide alert to all sectors (Owner Only).')
-               .addStringOption(opt => opt.setName('message').setDescription('Transmission content.').setRequired(true))
         ),
 
     async execute(interaction: ChatInputCommandInteraction) {
         const subcommand = interaction.options.getSubcommand();
 
+        // ── SYNC ──────────────────────────────────────────────────────────────
+        if (subcommand === 'sync') {
+            if (interaction.user.id !== config.ownerId) {
+                return interaction.reply({ content: '❌ Access Denied: Owner clearance required.', ephemeral: true });
+            }
+
+            await interaction.reply({ content: '🔄 **INITIATING NUCLEAR SYNC PROTOCOL...**\nPurging legacy command echoes and re-deploying Titan v7.5.0 assets.', ephemeral: true });
+            
+            try {
+                const count = await (interaction.client as any).syncCommands('full_purge');
+                await interaction.followUp({ content: `✅ **SYNC COMPLETE**: \`${count}\` tactical assets successfully deployed across all sectors.`, ephemeral: true });
+            } catch (err) {
+                await interaction.followUp({ content: `🚨 **SYNC FAILURE**: ${err}`, ephemeral: true });
+            }
+
         // ── UPDATE ────────────────────────────────────────────────────────────
-        if (subcommand === 'update') {
+        } else if (subcommand === 'update') {
             const embed = new EmbedBuilder()
                 .setColor(THEME.PRIMARY)
                 .setTitle(`🪐 ASTRA ${VERSION} — ${PROTOCOL} DEPLOYMENT`)
-                .setDescription('The **Titan Protocol** introduces a high-fidelity, industrial-grade operational environment. This update synchronizes the Astra ecosystem with state-of-the-art telemetry and aesthetic standards.')
-                .setThumbnail(interaction.client.user?.displayAvatarURL() ?? null)
+                .setAuthor({ name: 'ASTRA INTELLIGENCE COMMAND', iconURL: interaction.client.user?.displayAvatarURL() })
+                .setDescription('The **Titan Protocol** has been fully initialized. This deployment synchronizes the Astra ecosystem with state-of-the-art telemetry and high-fidelity operational standards.')
+                .setThumbnail('https://cdn-icons-png.flaticon.com/512/8654/8654162.png')
                 .addFields(
                     {
-                        name: '✨ What\'s New',
+                        name: '✨ TITAN ENGINE OVERHAUL',
                         value: [
-                            '• **Titan Design Language** — Premium neon-accented UI and glassmorphism.',
-                            '• **Stock Market (ATX)** — Live high-volatility financial simulation system.',
-                            '• **Tactical Shop UI** — Industrial-grade shop interfaces with asset visuals.',
-                            '• **Intelligence Suite** — Heavy overhaul of `/info` and `/utility` embeds.',
+                            '> **Premium Design Language** — Neon-accented UI and glassmorphism standards applied globally.',
+                            '> **ATX Stock Market** — Live high-volatility financial simulation system deployed.',
+                            '> **Industrial Hub** — Heavy-duty tactical shop interfaces with yield-bearing asset visuals.',
+                            '> **Prefix System** — Message-based command support enabled (Default: `-`).',
                         ].join('\n')
                     },
                     {
-                        name: '🗑️ Removed / Deprecated',
+                        name: '🔧 BUG FIXES & REFINEMENTS',
                         value: [
-                            '• **Legacy Economy Subcommands** — Merged into unified `/economy` protocol.',
-                            '• **Omega Protocol Assets** — Decommissioned in favor of Titan high-fidelity modules.',
+                            '• **Slash Command Sync** — Resolved indexing issues for `/economy harvest`.',
+                            '• **iOS Support** — Global patch for Safari interaction anomalies.',
+                            '• **Intelligence Matrix** — Stabilized memory allocation in rank diagnostics.',
                         ].join('\n')
                     },
                     {
-                        name: '🔧 Bug Fixes & Stability',
+                        name: '🚀 FUTURE TELEMETRY',
                         value: [
-                            '• **Economy Core** — Resolved critical file corruption and command logic.',
-                            '• **Safari Compatibility** — Patched `-webkit-user-select` for iOS support.',
-                            '• **Leveling UI** — Fixed XP bar overflow and memory leak in rank cards.',
+                            '• **AI Sentinel** — Neural-network powered threat detection (In-Development).',
+                            '• **Global Leaderboards** — Cross-sector wealth and intelligence rankings.',
                         ].join('\n')
-                    },
-                    {
-                        name: '🚀 Coming Soon',
-                        value: [
-                            '• **AI Sentinel** — Neural-network powered threat detection.',
-                            '• **Global Leaderboards** — Cross-sector intelligence and wealth rankings.',
-                        ].join('\n')
-                    },
-                    {
-                        name: '⚙️ Technical Infrastructure',
-                        value: `• \`discord.js v${djsVersion}\` • \`Node.js ${process.version}\` • \`PostgreSQL Enterprise\``
                     }
                 )
-                .setFooter({ text: `Astra Intelligence Division • ${VERSION} • ${PROTOCOL} Stable` })
+                .setImage('https://i.imgur.com/8Qx8R1k.png') // Placeholder for a high-fidelity banner
+                .setFooter({ text: `Astra Intelligence Division • Sector: ${interaction.guild?.name} • ${VERSION}` })
                 .setTimestamp();
 
             // Fire the updates webhook
             if (config.updatesWebhookUrl) {
                 try {
                     const wh = new WebhookClient({ url: config.updatesWebhookUrl });
-                    await wh.send({ username: 'Astra Updates', embeds: [embed] });
+                    await wh.send({ 
+                        username: 'ASTRA TITAN CORE', 
+                        avatarURL: 'https://cdn-icons-png.flaticon.com/512/3655/3655611.png',
+                        embeds: [embed] 
+                    });
                 } catch (err) {
                     logger.warn(`Updates webhook failed: ${err}`);
                 }
