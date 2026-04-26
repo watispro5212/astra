@@ -22,7 +22,7 @@ const env = configSchema.parse({
     BOT_NAME: process.env.BOT_NAME,
     BOT_THEME_COLOR: process.env.BOT_THEME_COLOR,
     DATABASE_URL: process.env.DATABASE_URL,
-    STATUS_WEBHOOK_URL: process.env.STATUS_WEBHOOK_URL || 'https://discord.com/api/webhooks/1496644595445137429/mtUUMzXet2GfhQw8OVTNOw3rMnLvrMgOgNTNxQy3OF20SoHlGOyrQHsF0GgE3a3uJucW',
+    STATUS_WEBHOOK_URL: process.env.STATUS_WEBHOOK_URL,
 });
 
 export const config = {
