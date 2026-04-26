@@ -73,30 +73,37 @@ export class StatusService {
         if (!webhook) return;
 
         const uptime     = process.uptime();
-        const totalMem   = os.totalmem() / 1024 / 1024;
-        const freeMem    = os.freemem()  / 1024 / 1024;
-        const usedMem    = totalMem - freeMem;
+        const mem        = process.memoryUsage();
+        const heapUsed   = mem.heapUsed / 1024 / 1024;
+        const heapTotal  = mem.heapTotal / 1024 / 1024;
+        const rss        = mem.rss / 1024 / 1024;
+        
         const memberCount = client.guilds.cache.reduce((a: number, g: any) => a + (g.memberCount || 0), 0);
         const ping       = client.ws.ping;
         const pingColor  = ping < 100 ? GREEN : ping < 200 ? YELLOW : RED;
 
         const embed = new EmbedBuilder()
             .setColor(pingColor)
-            .setTitle('💓 SYSTEM HEARTBEAT')
-            .setDescription('Routine stability pulse. All tactical systems operational.')
+            .setTitle('💓 SYSTEM HEARTBEAT — TITAN v7.5.0')
+            .setDescription('Operational stability pulse. Core tactical matrix is nominal.')
+            .setThumbnail('https://cdn-icons-png.flaticon.com/512/8654/8654162.png')
             .addFields(
                 { name: '⏱️ Uptime',          value: `\`${uptimeString(uptime)}\``,                          inline: true },
                 { name: '📡 Latency',         value: `\`${ping}ms\``,                                        inline: true },
                 { name: '⚙️ CPU Load',        value: `\`${os.loadavg()[0].toFixed(2)}%\``,                   inline: true },
-                { name: '🌐 Sectors',         value: `\`${client.guilds.cache.size} guilds\``,                inline: true },
+                { name: '🌐 Sectors',         value: `\`${client.guilds.cache.size}\``,                      inline: true },
                 { name: '👥 Operatives',      value: `\`${memberCount.toLocaleString()}\``,                   inline: true },
-                { name: '🔋 Memory',          value: `\`${usedMem.toFixed(0)}MB / ${totalMem.toFixed(0)}MB\`\n${memBar(usedMem, totalMem)}`, inline: false },
+                { name: '💾 Heap Memory',     value: `\`${heapUsed.toFixed(2)}MB / ${heapTotal.toFixed(2)}MB\``, inline: true },
+                { name: '🔋 Resident Set',    value: `\`${rss.toFixed(2)}MB\``,                              inline: true },
             )
-            .setFooter({ text: `Astra Intelligence Division • Heartbeat` })
+            .setFooter({ text: `Astra Intelligence Division • Pulse Telemetry` })
             .setTimestamp();
 
-        await webhook.send({ username: 'Astra Status', embeds: [embed] })
-            .catch(err => logger.error(`Status Webhook Error: ${err}`));
+        await webhook.send({ 
+            username: 'ASTRA TITAN STATUS', 
+            avatarURL: 'https://cdn-icons-png.flaticon.com/512/3655/3655611.png',
+            embeds: [embed] 
+        }).catch(err => logger.error(`Status Webhook Error: ${err}`));
     }
 
     // ── HEALTH CHECK ──────────────────────────────────────────────────────────
@@ -106,28 +113,31 @@ export class StatusService {
 
         const ping       = client.ws.ping;
         const pingStatus = ping < 100 ? '🟢 Excellent' : ping < 200 ? '🟡 Degraded' : '🔴 Critical';
-        const uptime     = process.uptime();
-        const totalMem   = os.totalmem() / 1024 / 1024;
-        const usedMem    = (os.totalmem() - os.freemem()) / 1024 / 1024;
-        const memPct     = Math.round((usedMem / totalMem) * 100);
-        const memStatus  = memPct < 60 ? '🟢 Nominal' : memPct < 85 ? '🟡 Elevated' : '🔴 Critical';
+        
+        const mem        = process.memoryUsage();
+        const heapUsed   = mem.heapUsed / 1024 / 1024;
+        const rss        = mem.rss / 1024 / 1024;
+        const memStatus  = (heapUsed / (mem.heapTotal / 1024 / 1024)) < 0.8 ? '🟢 Nominal' : '🔴 Critical';
 
         const embed = new EmbedBuilder()
             .setColor(ping < 150 ? GREEN : YELLOW)
-            .setTitle('🏥 HEALTH CHECK REPORT')
+            .setTitle('🏥 SYSTEM HEALTH DIAGNOSTICS')
             .addFields(
                 { name: '📡 WebSocket',       value: `${pingStatus} \`${ping}ms\``,                          inline: true  },
-                { name: '🔋 Memory',          value: `${memStatus} \`${memPct}%\``,                          inline: true  },
-                { name: '⏱️ Uptime',          value: `\`${uptimeString(uptime)}\``,                          inline: true  },
-                { name: '🌐 Servers',         value: `\`${client.guilds.cache.size}\``,                      inline: true  },
-                { name: '💻 CPU',             value: `\`${os.loadavg()[0].toFixed(2)} avg\``,                inline: true  },
-                { name: '🔢 Node',            value: `\`${process.version}\``,                               inline: true  },
+                { name: '💾 Matrix Heap',     value: `${memStatus} \`${heapUsed.toFixed(0)}MB\``,            inline: true  },
+                { name: '🔋 Resident Memory', value: `\`${rss.toFixed(0)}MB\``,                              inline: true  },
+                { name: '⏱️ System Uptime',   value: `\`${uptimeString(process.uptime())}\``,                inline: true  },
+                { name: '🌐 Total Sectors',   value: `\`${client.guilds.cache.size}\``,                      inline: true  },
+                { name: '💻 Load Average',    value: `\`${os.loadavg()[0].toFixed(2)}\``,                    inline: true  },
             )
-            .setFooter({ text: `Astra Health Monitor • ${VERSION}` })
+            .setFooter({ text: `Astra Health Monitor • TITAN CORE` })
             .setTimestamp();
 
-        await webhook.send({ username: 'Astra Health', embeds: [embed] })
-            .catch(err => logger.error(`Status Webhook Error: ${err}`));
+        await webhook.send({ 
+            username: 'ASTRA HEALTH', 
+            avatarURL: 'https://cdn-icons-png.flaticon.com/512/2913/2913445.png',
+            embeds: [embed] 
+        }).catch(err => logger.error(`Status Webhook Error: ${err}`));
     }
 
     // ── ERROR ─────────────────────────────────────────────────────────────────

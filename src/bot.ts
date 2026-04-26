@@ -19,6 +19,17 @@ import { ShopService } from './services/shopService';
 import * as path from 'path';
 import * as fs from 'fs';
 
+// ── GLOBAL ANOMALY INTERCEPTORS ───────────────────────────────────────────
+process.on('unhandledRejection', (reason, promise) => {
+    logger.error('Unhandled Rejection at:', promise, 'reason:', reason);
+    StatusService.sendError(reason).catch(() => {});
+});
+
+process.on('uncaughtException', (error) => {
+    logger.error('Uncaught Exception:', error);
+    StatusService.sendError(error).catch(() => {});
+});
+
 export class AstraClient extends Client {
     public commands = new Collection<string, Command>();
 

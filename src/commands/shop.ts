@@ -2,7 +2,8 @@ import {
     SlashCommandBuilder,
     ChatInputCommandInteraction,
     EmbedBuilder,
-    PermissionFlagsBits
+    PermissionFlagsBits,
+    MessageFlags
 } from 'discord.js';
 import { Command } from '../types';
 import { db } from '../core/database';
@@ -122,7 +123,7 @@ const command: Command = {
                             ...(prodRate > 0 ? [{ name: '📊 Yield', value: `\`${prodRate} cr/hr\``, inline: true }] : [])
                         )
                         .setFooter({ text: 'Astra Commerce Division v7.5.0 Titan' })],
-                    ephemeral: true
+                    flags: [MessageFlags.Ephemeral]
                 });
 
             } else if (subcommand === 'remove') {
@@ -160,7 +161,7 @@ const command: Command = {
                             { name: '📊 Yield',  value: `\`${newRate > 0 ? `${newRate} cr/hr` : 'None'}\``, inline: true }
                         )
                         .setFooter({ text: 'Astra Commerce Division v7.5.0 Titan' })],
-                    ephemeral: true
+                    flags: [MessageFlags.Ephemeral]
                 });
             }
 
@@ -214,7 +215,7 @@ const command: Command = {
             if (balance < item.price) {
                 return interaction.reply({
                     content: `❌ **INSUFFICIENT CREDITS**: You need \`${item.price.toLocaleString()} cr\`. Your balance: \`${balance.toLocaleString()} cr\``,
-                    ephemeral: true
+                    flags: [MessageFlags.Ephemeral]
                 });
             }
 

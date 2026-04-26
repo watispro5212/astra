@@ -59,20 +59,23 @@ const command: Command = {
 
         // ── RANK ──────────────────────────────────────────────────────────────
         if (sub === 'rank') {
+            await interaction.deferReply();
             const target = interaction.options.getUser('user') || interaction.user;
-            const data   = await db.fetchOne('SELECT xp, level FROM users WHERE user_id = ?', target.id);
+            
+            // Optimization: Fetch rank and stats in a single tactical sweep
+            const data = await db.fetchOne(`
+                SELECT xp, level, 
+                (SELECT COUNT(*) + 1 FROM users WHERE level > u.level OR (level = u.level AND xp > u.xp)) as position,
+                (SELECT COUNT(*) FROM users) as total
+                FROM users u WHERE user_id = ?`, target.id);
 
             if (!data) {
-                return interaction.reply({ content: '❌ No tactical data found for this operative. They need to send a message first.', ephemeral: true });
+                return interaction.editReply({ content: '❌ **INTELLIGENCE GAP**: No tactical data found for this operative. Active participation required for matrix registration.' });
             }
 
             const needed   = xpForLevel(data.level);
             const bar      = xpBar(data.xp, needed);
             const cumXp    = totalXp(data.level, data.xp);
-
-            // Server rank position
-            const allUsers = await db.fetchAll('SELECT user_id, xp, level FROM users ORDER BY level DESC, xp DESC');
-            const position = allUsers.findIndex((u: any) => u.user_id === target.id) + 1;
 
             const embed = new EmbedBuilder()
                 .setColor(0x9b59b6)
@@ -81,14 +84,14 @@ const command: Command = {
                 .setThumbnail(target.displayAvatarURL({ size: 256 }))
                 .addFields(
                     { name: '⭐ Level',         value: `\`${data.level}\``,                           inline: true },
-                    { name: '🏅 Server Rank',   value: `\`#${position} / ${allUsers.length}\``,      inline: true },
+                    { name: '🏅 Sector Rank',   value: `\`#${data.position} / ${data.total}\``,      inline: true },
                     { name: '🔢 Total XP',      value: `\`${cumXp.toLocaleString()} XP\``,           inline: true },
-                    { name: '📊 Progress to Next Level', value: `\`[${bar}]\`\n\`${data.xp.toLocaleString()} / ${needed.toLocaleString()} XP\``, inline: false },
+                    { name: '📊 Matrix Progression', value: `\`[${bar}]\`\n\`${data.xp.toLocaleString()} / ${needed.toLocaleString()} XP\``, inline: false },
                 )
                 .setFooter({ text: `Astra Intelligence Matrix • ${VER}` })
                 .setTimestamp();
 
-            return interaction.reply({ embeds: [embed] });
+            return interaction.editReply({ embeds: [embed] });
 
         // ── LEADERBOARD ───────────────────────────────────────────────────────
         } else if (sub === 'leaderboard') {

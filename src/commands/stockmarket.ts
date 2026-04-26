@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
+import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, MessageFlags } from 'discord.js';
 import { Command } from '../types';
 import { db } from '../core/database';
 import { StockMarketService, STOCKS } from '../services/stockMarketService';
@@ -77,7 +77,7 @@ const command: Command = {
             if (!user || user.balance < cost) {
                 return interaction.reply({ 
                     content: `❌ **INSUFFICIENT FUNDS**: Acquisition of **${shares}** shares in \`${symbol}\` requires \`${cost.toLocaleString()}\` credits.`, 
-                    ephemeral: true 
+                    flags: [MessageFlags.Ephemeral]
                 });
             }
 
@@ -115,7 +115,7 @@ const command: Command = {
             if (!holdings || holdings.shares < shares) {
                 return interaction.reply({ 
                     content: `❌ **INSUFFICIENT HOLDINGS**: You do not possess **${shares}** shares of \`${symbol}\` to liquidate.`, 
-                    ephemeral: true 
+                    flags: [MessageFlags.Ephemeral]
                 });
             }
 

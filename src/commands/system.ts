@@ -4,7 +4,8 @@ import {
     EmbedBuilder,
     PermissionFlagsBits,
     WebhookClient,
-    version as djsVersion
+    version as djsVersion,
+    MessageFlags
 } from 'discord.js';
 import { Command } from '../types';
 import { config } from '../core/config';
@@ -37,16 +38,16 @@ const command: Command = {
         // ── SYNC ──────────────────────────────────────────────────────────────
         if (subcommand === 'sync') {
             if (interaction.user.id !== config.ownerId) {
-                return interaction.reply({ content: '❌ Access Denied: Owner clearance required.', ephemeral: true });
+                return interaction.reply({ content: '❌ Access Denied: Owner clearance required.', flags: [MessageFlags.Ephemeral] });
             }
 
-            await interaction.reply({ content: '🔄 **INITIATING NUCLEAR SYNC PROTOCOL...**\nPurging legacy command echoes and re-deploying Titan v7.5.0 assets.', ephemeral: true });
+            await interaction.reply({ content: '🔄 **INITIATING NUCLEAR SYNC PROTOCOL...**\nPurging legacy command echoes and re-deploying Titan v7.5.0 assets.', flags: [MessageFlags.Ephemeral] });
             
             try {
                 const count = await (interaction.client as any).syncCommands('full_purge');
-                await interaction.followUp({ content: `✅ **SYNC COMPLETE**: \`${count}\` tactical assets successfully deployed across all sectors.`, ephemeral: true });
+                await interaction.followUp({ content: `✅ **SYNC COMPLETE**: \`${count}\` tactical assets successfully deployed across all sectors.`, flags: [MessageFlags.Ephemeral] });
             } catch (err) {
-                await interaction.followUp({ content: `🚨 **SYNC FAILURE**: ${err}`, ephemeral: true });
+                await interaction.followUp({ content: `🚨 **SYNC FAILURE**: ${err}`, flags: [MessageFlags.Ephemeral] });
             }
 
         // ── UPDATE ────────────────────────────────────────────────────────────
@@ -112,9 +113,12 @@ const command: Command = {
             const h = Math.floor((uptime % 86400) / 3600);
             const m = Math.floor((uptime % 3600) / 60);
 
-            const totalMem  = os.totalmem()  / 1024 / 1024;
-            const usedMem   = (os.totalmem() - os.freemem()) / 1024 / 1024;
-            const memPct    = Math.round((usedMem / totalMem) * 100);
+            const mem        = process.memoryUsage();
+            const heapUsed   = mem.heapUsed / 1024 / 1024;
+            const heapTotal  = mem.heapTotal / 1024 / 1024;
+            const rss        = mem.rss / 1024 / 1024;
+            
+            const memPct    = Math.round((heapUsed / heapTotal) * 100);
             const memBar    = `${'█'.repeat(Math.round(memPct / 10))}${'░'.repeat(10 - Math.round(memPct / 10))} ${memPct}%`;
 
             const ping      = interaction.client.ws.ping;
@@ -125,7 +129,7 @@ const command: Command = {
 
             const embed = new EmbedBuilder()
                 .setColor(ping < 150 ? 0x2ecc71 : 0xf1c40f)
-                .setTitle('📡 SYSTEM STATUS — LIVE DIAGNOSTICS')
+                .setTitle('📡 SYSTEM STATUS — TITAN v7.5.0 DIAGNOSTICS')
                 .setThumbnail(interaction.client.user?.displayAvatarURL() ?? null)
                 .addFields(
                     { name: '⏱️ Uptime',         value: `\`${d}d ${h}h ${m}m\``,                               inline: true },
@@ -134,11 +138,11 @@ const command: Command = {
                     { name: '🌐 Sectors',         value: `\`${interaction.client.guilds.cache.size}\``,          inline: true },
                     { name: '👥 Operatives',      value: `\`${memberCount.toLocaleString()}\``,                  inline: true },
                     { name: '🔀 Shards',          value: `\`${shardId + 1} / ${shards}\``,                       inline: true },
-                    { name: '🔋 Memory',          value: `\`${usedMem.toFixed(0)}MB / ${totalMem.toFixed(0)}MB\`\n${memBar}`, inline: false },
-                    { name: '🖥️ Host',            value: `\`${os.hostname()} • ${os.type()} ${os.arch()}\``,   inline: true },
-                    { name: '🔢 Runtime',         value: `\`Node.js ${process.version} • discord.js v${djsVersion}\``, inline: true },
+                    { name: '💾 Heap Memory',     value: `\`${heapUsed.toFixed(0)}MB / ${heapTotal.toFixed(0)}MB\`\n${memBar}`, inline: false },
+                    { name: '🔋 Resident Set',    value: `\`${rss.toFixed(0)}MB\``,                              inline: true },
+                    { name: '🖥️ Host',            value: `\`${os.hostname()} • ${os.type()}\``,                inline: true },
                 )
-                .setFooter({ text: `Astra Intelligence Division • ${VERSION}` })
+                .setFooter({ text: `Astra Intelligence Division • ${VERSION} • TITAN CORE` })
                 .setTimestamp();
 
             return interaction.editReply({ embeds: [embed] });
