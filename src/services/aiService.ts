@@ -5,9 +5,9 @@ import { db } from '../core/database';
 import { VERSION } from '../core/constants';
 
 export const AI_MODELS = [
-    { id: 'gemini-1.5-flash', name: 'Titan Flash (Fast)', description: 'Optimized for speed and rapid tactical response.' },
-    { id: 'gemini-1.5-pro', name: 'Titan Pro (Deep)', description: 'Advanced reasoning for complex strategy and analysis.' },
-    { id: 'gemini-1.0-pro', name: 'Titan Legacy', description: 'Stable, reliable intelligence for standard protocols.' }
+    { id: 'gemini-1.5-flash-latest', name: 'Titan Flash (Fast)', description: 'Optimized for speed and rapid tactical response.' },
+    { id: 'gemini-1.5-pro-latest', name: 'Titan Pro (Deep)', description: 'Advanced reasoning for complex strategy and analysis.' },
+    { id: 'gemini-pro', name: 'Titan Legacy', description: 'Stable, reliable intelligence for standard protocols.' }
 ];
 
 export class AIService {

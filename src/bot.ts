@@ -181,6 +181,14 @@ export class AstraClient extends Client {
                         return await message.reply(`📡 **PONG**: Tactical response time \`${this.ws.ping}ms\``);
                     } else if (commandName === 'stats') {
                         return await message.reply(`📊 **SYSTEM STATUS**: Use \`/info stats\` for high-fidelity telemetry.`);
+                    } else if (['economy', 'eco', 'bal', 'balance'].includes(commandName || '')) {
+                        return await message.reply(`💰 **FISCAL OVERVIEW**: Please use \`/economy balance\` for official records.`);
+                    } else if (['ai', 'neural', 'sentinel'].includes(commandName || '')) {
+                        return await message.reply(`🤖 **NEURAL SENTINEL**: I am active. Simply type your message here to interact, or use \`/ai\` to recalibrate my matrix.`);
+                    } else if (['stockmarket', 'stocks', 'market'].includes(commandName || '')) {
+                        return await message.reply(`📈 **TACTICAL EXCHANGE**: Use \`/stockmarket market\` to view live price fluctuations.`);
+                    } else if (commandName === 'help') {
+                        return await message.reply(`🛡️ **ASTRA DM PROTOCOLS**\n\n**Neural Sentinel**: Just type a message to chat.\n**Slash Commands**: Type \`/\` to view all tactical protocols.\n**Prefix Commands**: \`-ping\`, \`-stats\`, \`-economy\`, \`-ai\`, \`-stocks\``);
                     }
                     // If prefix is used but command not found, we fall through to AI or just return
                 }

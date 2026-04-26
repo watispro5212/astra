@@ -54,14 +54,28 @@ const command: Command = {
                 return interaction.reply({ content: '❌ **ACCESS DENIED**: Owner clearance required for Sector Synchronization.', flags: [MessageFlags.Ephemeral] });
             }
 
-            await interaction.reply({ content: '🔄 **INITIATING COMMAND SYNCHRONIZATION...**\nPurging legacy command echoes and re-deploying Titan v7.5.0 assets.', flags: [MessageFlags.Ephemeral] });
+            let deferred = false;
+            try {
+                await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
+                deferred = true;
+            } catch (err) {
+                logger.warn(`Failed to defer sync interaction: ${err}`);
+            }
             
             try {
                 await (interaction.client as any).syncCommands('clear');
                 const count = await (interaction.client as any).syncCommands(process.env.NODE_ENV === 'production' ? 'global' : 'guild');
-                await interaction.editReply({ content: `✅ **SYNCHRONIZATION SUCCESSFUL**: \`${count}\` tactical assets successfully deployed across the network. All sectors are now running the Titan v7.5.0 engine.` });
+                const successMsg = `✅ **SYNCHRONIZATION SUCCESSFUL**: \`${count}\` tactical assets successfully deployed across the network. All sectors are now running the Titan v7.5.0 engine.`;
+                
+                if (deferred) {
+                    await interaction.editReply({ content: successMsg });
+                } else {
+                    await interaction.followUp({ content: successMsg, flags: [MessageFlags.Ephemeral] });
+                }
             } catch (err) {
-                await interaction.editReply({ content: `🚨 **SYNCHRONIZATION FAILURE**: ${err}` });
+                if (deferred) {
+                    await interaction.editReply({ content: `🚨 **SYNCHRONIZATION FAILURE**: ${err}` });
+                }
             }
 
         // ── UPDATE ────────────────────────────────────────────────────────────
