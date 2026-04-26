@@ -337,7 +337,7 @@ export class AstraClient extends Client {
 
                 try {
                     await command.execute(interaction);
-                } catch (error) {
+                } catch (error: any) {
                     logger.error(`Execution Error [/${interaction.commandName}]: ${error}`);
                     
                     // Transmit Diagnostic Packet to Developer
@@ -345,20 +345,27 @@ export class AstraClient extends Client {
                         commandName: interaction.commandName,
                         guild: interaction.guild,
                         user: interaction.user
-                    });
+                    }).catch(() => {});
 
                     // Sentinel Anomaly Report
-                    await StatusService.sendError(error);
+                    await StatusService.sendError(error).catch(() => {});
+
+                    // Gracefully handle "Unknown Interaction" or "Acknowledged" errors
+                    if (error.code === 10062 || error.code === 40060) return;
 
                     const errorEmbed = new EmbedBuilder()
                         .setColor(0xff0000)
                         .setTitle('⚠️ Tactical Error')
-                        .setDescription(`An unexpected error occurred during command execution. The system developer has been notified.\n\`\`\`${error}\`\`\``);
+                        .setDescription(`An unexpected error occurred during command execution. The system developer has been notified.\n\`\`\`${error.message || error}\`\`\``);
 
-                    if (interaction.replied || interaction.deferred) {
-                        await interaction.followUp({ embeds: [errorEmbed], ephemeral: true });
-                    } else {
-                        await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
+                    try {
+                        if (interaction.replied || interaction.deferred) {
+                            await interaction.editReply({ embeds: [errorEmbed] });
+                        } else {
+                            await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
+                        }
+                    } catch (replyError) {
+                        logger.error(`Failed to send error response: ${replyError}`);
                     }
                 }
             } else if (interaction.isAutocomplete()) {

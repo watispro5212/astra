@@ -80,20 +80,19 @@ export class AIService {
         return true;
     }
     public static async checkKeys(): Promise<{ index: number; status: 'ACTIVE' | 'ERROR' | 'QUOTA'; message: string }[]> {
-        const results: { index: number; status: 'ACTIVE' | 'ERROR' | 'QUOTA'; message: string }[] = [];
-        
-        for (let i = 0; i < this.keys.length; i++) {
+        const checkPromises = this.keys.map(async (key, i) => {
             try {
-                const genAI = new GoogleGenerativeAI(this.keys[i]);
+                const genAI = new GoogleGenerativeAI(key);
                 const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
                 await model.generateContent('ping');
-                results.push({ index: i, status: 'ACTIVE', message: 'Neural link established.' });
+                return { index: i, status: 'ACTIVE' as const, message: 'Neural link established.' };
             } catch (error: any) {
                 const msg = error?.message || String(error);
                 const status = (msg.includes('429') || msg.includes('quota')) ? 'QUOTA' : 'ERROR';
-                results.push({ index: i, status: status, message: msg });
+                return { index: i, status: status as any, message: msg };
             }
-        }
-        return results;
+        });
+        
+        return Promise.all(checkPromises);
     }
 }

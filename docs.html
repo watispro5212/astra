@@ -86,9 +86,14 @@
         <a href="changelog.html" class="nav-link">Mission Logs</a>
         <a href="support.html" class="nav-link">Support</a>
       </div>
-      <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands" class="btn-astra btn-astra--primary" style="padding: 10px 20px; font-size: 0.75rem;">
-        Deploy Astra
+    <div style="display: flex; gap: 12px; align-items: center;">
+      <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands" class="btn-astra btn-astra--outline" style="padding: 8px 16px; font-size: 0.75rem;">
+        Guild Install
       </a>
+      <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=1&scope=identify+applications.commands" class="btn-astra btn-astra--primary" style="padding: 8px 16px; font-size: 0.75rem;">
+        User Install
+      </a>
+    </div>
     </div>
   </nav>
 
@@ -107,6 +112,45 @@
           <div class="docs-nav-title">Deployment</div>
           <a href="#quick-start" class="docs-nav-link active">Quick Start</a>
           <a href="#inviting" class="docs-nav-link">Inviting Astra</a>
+          <a href="#user-install" class="docs-nav-link">User Installation</a>
+        </div>
+        <div class="docs-nav-group">
+          <div class="docs-nav-title">Intelligence</div>
+          <a href="#ai-sentinel" class="docs-nav-link">AI Sentinel</a>
+        </div>
+        <div class="docs-nav-group">
+          <div class="docs-nav-title">Configuration</div>
+          <a href="#economy" class="docs-nav-link">Economy Settings</a>
+          <a href="#levels" class="docs-nav-link">Leveling Config</a>
+        </div>
+      </aside>
+
+      <div class="docs-content">
+        <div class="card card--astra" id="quick-start">
+          <h2 style="color: var(--color-primary); margin-bottom: 1rem;">🚀 Mission Briefing</h2>
+          <p>
+            Welcome to the <strong>Astra Intelligence Matrix</strong>. This guide will help you configure your tactical operations and deploy neural assets.
+          </p>
+        </div>
+
+        <div class="card card--astra" id="user-install">
+          <h2 style="color: var(--color-primary); margin-bottom: 1rem;">🛰️ User-Installed App Protocol</h2>
+          <p>
+            Astra now supports <strong>User-Installation</strong>, allowing you to deploy the bot's intelligence to your personal Discord account.
+          </p>
+          <ul style="list-style: none; padding-left: 0;">
+            <li style="margin-bottom: 0.5rem;">🔹 <strong>Global Accessibility:</strong> Use Astra commands in any server, DM, or Group DM.</li>
+            <li style="margin-bottom: 0.5rem;">🔹 <strong>DM AI Sentinel:</strong> Direct message Astra to interact with the Neural Sentinel.</li>
+            <li style="margin-bottom: 0.5rem;">🔹 <strong>Privacy First:</strong> Your interactions are private and locked to your neural signature.</li>
+          </ul>
+          <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+            <h4 style="margin-bottom: 0.5rem;">Installation Steps:</h4>
+            <ol style="padding-left: 1.2rem;">
+              <li>Click the <strong>"Establish Link"</strong> or <strong>"Deploy Astra"</strong> button.</li>
+              <li>Select <strong>"Try it Now"</strong> (User Install) on the Discord authorization page.</li>
+              <li>Authorize the <code>identify</code> and <code>applications.commands</code> scopes.</li>
+            </ol>
+          </div>
         </div>
         <div class="docs-nav-group">
           <div class="docs-nav-title">Sectors</div>
