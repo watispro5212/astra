@@ -192,6 +192,15 @@ class DatabaseManager {
                 system_prompt ${TEXT},
                 usage_count ${INT} DEFAULT 0,
                 last_used ${TEXT}
+            )`,
+            // TEMPORAL REMINDERS
+            `CREATE TABLE IF NOT EXISTS reminders (
+                id ${PK},
+                guild_id ${TEXT},
+                channel_id ${TEXT},
+                user_id ${TEXT},
+                message ${TEXT},
+                remind_at ${TEXT}
             )`
         ];
 
