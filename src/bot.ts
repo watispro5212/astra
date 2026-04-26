@@ -94,7 +94,7 @@ export class AstraClient extends Client {
 
             // Rotating Status Engine
             const statuses = [
-                () => ({ name: `Nova v7.0.0 | /system update`, type: 0 }),
+                () => ({ name: `Omega v7.2.0 | /system update`, type: 0 }),
                 () => ({ name: `${c.guilds.cache.size} Sectors`, type: 3 }),
                 () => ({ name: `${c.users.cache.size} Members`, type: 2 }),
                 () => ({ name: `Tactical Excellence`, type: 1 })
@@ -113,11 +113,12 @@ export class AstraClient extends Client {
             const { GiveawayService } = require('./services/giveawayService');
             GiveawayService.startChecker(this);
 
-            this.user?.setActivity('Nova v7.0.0 | /system update', { type: ActivityType.Watching });
+            this.user?.setActivity('Omega v7.2.0 | /system update', { type: ActivityType.Watching });
 
             // Sentinel Status Pulse
             await StatusService.sendSystemOnline(c);
             StatusService.startHeartbeat(this);
+            StatusService.startHealthCheck(this);
 
             // Industrial Yield Engine
             PassiveIncomeService.startService();
@@ -184,6 +185,15 @@ export class AstraClient extends Client {
                     await db.execute('UPDATE users SET xp = ? WHERE user_id = ?', newXp, message.author.id);
                 }
             }
+        });
+
+        // Server Count Webhook
+        this.on(Events.GuildCreate, async (guild) => {
+            try { await StatusService.sendServerCountUpdate(this, true, guild.name); } catch (_) {}
+        });
+
+        this.on(Events.GuildDelete, async (guild) => {
+            try { await StatusService.sendServerCountUpdate(this, false, guild.name); } catch (_) {}
         });
 
         // Welcome & Farewell System

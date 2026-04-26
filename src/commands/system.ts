@@ -1,89 +1,230 @@
-import { 
-    SlashCommandBuilder, 
-    ChatInputCommandInteraction, 
-    EmbedBuilder, 
+import {
+    SlashCommandBuilder,
+    ChatInputCommandInteraction,
+    EmbedBuilder,
     PermissionFlagsBits,
-    TextChannel
+    version as djsVersion
 } from 'discord.js';
 import { Command } from '../types';
 import { config } from '../core/config';
 import { db } from '../core/database';
+import { StatusService } from '../services/statusService';
 import logger from '../core/logger';
+import os from 'os';
+
+const VERSION = 'v7.2.0 "Omega Protocol"';
+const THEME   = 0x5865F2;
 
 const command: Command = {
     data: new SlashCommandBuilder()
         .setName('system')
-        .setDescription('⚙️ Core system operations.')
+        .setDescription('⚙️ Core system operations and diagnostics.')
         .addSubcommand(sub =>
             sub.setName('update')
-                .setDescription('View the latest Astra intelligence and system updates.')
+               .setDescription('📋 View the latest Astra patch notes and system changes.')
+        )
+        .addSubcommand(sub =>
+            sub.setName('status')
+               .setDescription('📡 Live system health, latency, and resource diagnostics.')
+        )
+        .addSubcommand(sub =>
+            sub.setName('ping')
+               .setDescription('🏓 Measure WebSocket heartbeat and API round-trip latency.')
+        )
+        .addSubcommand(sub =>
+            sub.setName('servers')
+               .setDescription('🌐 View sector count and deployment statistics (Owner Only).')
         )
         .addSubcommand(sub =>
             sub.setName('alert')
-                .setDescription('Broadcast a system-wide alert (Owner Only).')
-                .addStringOption(opt => opt.setName('message').setDescription('The transmission content.').setRequired(true))
+               .setDescription('📢 Broadcast a system-wide alert to all sectors (Owner Only).')
+               .addStringOption(opt => opt.setName('message').setDescription('Transmission content.').setRequired(true))
         ),
 
     async execute(interaction: ChatInputCommandInteraction) {
         const subcommand = interaction.options.getSubcommand();
 
+        // ── UPDATE ────────────────────────────────────────────────────────────
         if (subcommand === 'update') {
             const embed = new EmbedBuilder()
-                .setColor(0x3498db)
-                .setTitle('🚀 Astra v7.0.0: Nova Update')
-                .setDescription('Nova is the most comprehensive Astra release to date — introducing ticketing, giveaways, welcome systems, expanded moderation, and a full economy overhaul.')
+                .setColor(THEME)
+                .setTitle(`🚀 ASTRA ${VERSION} — PATCH NOTES`)
+                .setDescription('The **Omega Protocol** update is the most significant Astra release to date, delivering a full economy overhaul, shop marketplace improvements, and a new status intelligence pipeline.')
+                .setThumbnail(interaction.client.user?.displayAvatarURL() ?? null)
                 .addFields(
-                    { name: '🎫 Ticket System', value: '• `/ticket create` — Open a private support ticket with staff.\n• `/ticket close/add/remove` — Full ticket lifecycle management.' },
-                    { name: '🎉 Giveaway Engine', value: '• `/giveaway start` — Host timed giveaways with reaction entry.\n• `/giveaway end/reroll` — Draw or redraw winners at any time.' },
-                    { name: '👋 Welcome System', value: '• `/welcome set-channel/set-message/set-role` — Fully configurable welcome & auto-role.\n• `/welcome test` — Preview your configuration instantly.' },
-                    { name: '🛡️ Moderation+', value: '• `/mod warn/unban` — New warn and unban protocols.\n• `/mod case/history` — Full case management per operative.' },
-                    { name: '💰 Economy+', value: '• `/economy leaderboard` — Top 10 richest operatives.\n• `/economy work` — Hourly credit generation protocol.' },
-                    { name: '📊 Leveling+', value: '• `/leveling leaderboard` — Global intelligence ranking.\n• Visual progress bars in `/leveling rank`.' },
-                    { name: '🌐 Web Terminal', value: '[Visit Dashboard](https://astrabot-1n54.onrender.com)' }
+                    {
+                        name: '💰 Economy Overhaul',
+                        value: [
+                            '• `/economy harvest` — Collect passive income from assets',
+                            '• `/economy rob` — 40% heist against other operatives',
+                            '• `/economy gamble` — 45% win-rate wager protocol',
+                            '• `/economy slots` — 3-reel slot machine with jackpot',
+                            '• `/economy coinflip` — Fair 50/50 double-or-nothing',
+                            '• All commands now show **balance after action**',
+                        ].join('\n')
+                    },
+                    {
+                        name: '🛒 Shop Marketplace',
+                        value: [
+                            '• Items now grouped by **category** (Passive / Consumable / Role)',
+                            '• `/shop sell` — Liquidate owned assets at 50% market value',
+                            '• `/shop admin edit` — Edit any item in-place',
+                            '• `emoji` + `item-type` fields on all items',
+                            '• All purchases tracked in inventory (bug fix)',
+                        ].join('\n')
+                    },
+                    {
+                        name: '📡 Status Intelligence',
+                        value: [
+                            '• Webhook fires on **boot, heartbeat, health-check, error, server join/leave**',
+                            '• `/system status` — Live diagnostics with memory bar',
+                            '• `/system ping` — WebSocket + API latency',
+                            '• `/system servers` — Global sector statistics',
+                            '• Health-check scheduler runs every 60 minutes',
+                        ].join('\n')
+                    },
+                    {
+                        name: '🐛 Bug Fixes',
+                        value: [
+                            '• Mine could drop balance below 0 — fixed',
+                            '• Shop inventory SQL crash (`si.item_id`) — fixed',
+                            '• Stray syntax errors in `info.ts` / `utility.ts` — fixed',
+                        ].join('\n')
+                    },
+                    {
+                        name: '⚙️ Infrastructure',
+                        value: [
+                            `• discord.js \`v${djsVersion}\``,
+                            '• Database schema v7.2.0 — new `last_rob`, `item_type`, `emoji` columns',
+                            '• `Command.execute` return-type widened for early-return pattern',
+                        ].join('\n')
+                    }
                 )
-                .setThumbnail(interaction.client.user?.displayAvatarURL()!)
-                .setFooter({ text: 'Astra Tactical Systems • Nova Release 7.0.0' })
+                .setFooter({ text: `Astra Tactical Systems • ${VERSION} • Released 2026` })
                 .setTimestamp();
 
-            await interaction.reply({ embeds: [embed] });
+            return interaction.reply({ embeds: [embed] });
 
-        } else if (subcommand === 'alert') {
-            // Owner Check
+        // ── STATUS ────────────────────────────────────────────────────────────
+        } else if (subcommand === 'status') {
+            await interaction.deferReply();
+
+            const uptime    = process.uptime();
+            const d = Math.floor(uptime / 86400);
+            const h = Math.floor((uptime % 86400) / 3600);
+            const m = Math.floor((uptime % 3600) / 60);
+
+            const totalMem  = os.totalmem()  / 1024 / 1024;
+            const usedMem   = (os.totalmem() - os.freemem()) / 1024 / 1024;
+            const memPct    = Math.round((usedMem / totalMem) * 100);
+            const memBar    = `${'█'.repeat(Math.round(memPct / 10))}${'░'.repeat(10 - Math.round(memPct / 10))} ${memPct}%`;
+
+            const ping      = interaction.client.ws.ping;
+            const pingLabel = ping < 100 ? '🟢' : ping < 200 ? '🟡' : '🔴';
+            const shardId   = interaction.client.shard?.ids[0] ?? 0;
+            const shards    = interaction.client.shard?.count ?? 1;
+            const memberCount = interaction.client.guilds.cache.reduce((a, g) => a + (g.memberCount || 0), 0);
+
+            const embed = new EmbedBuilder()
+                .setColor(ping < 150 ? 0x2ecc71 : 0xf1c40f)
+                .setTitle('📡 SYSTEM STATUS — LIVE DIAGNOSTICS')
+                .setThumbnail(interaction.client.user?.displayAvatarURL() ?? null)
+                .addFields(
+                    { name: '⏱️ Uptime',         value: `\`${d}d ${h}h ${m}m\``,                               inline: true },
+                    { name: `${pingLabel} Latency`, value: `\`${ping}ms\``,                                      inline: true },
+                    { name: '⚙️ CPU Load',        value: `\`${os.loadavg()[0].toFixed(2)}%\``,                  inline: true },
+                    { name: '🌐 Sectors',         value: `\`${interaction.client.guilds.cache.size}\``,          inline: true },
+                    { name: '👥 Operatives',      value: `\`${memberCount.toLocaleString()}\``,                  inline: true },
+                    { name: '🔀 Shards',          value: `\`${shardId + 1} / ${shards}\``,                       inline: true },
+                    { name: '🔋 Memory',          value: `\`${usedMem.toFixed(0)}MB / ${totalMem.toFixed(0)}MB\`\n${memBar}`, inline: false },
+                    { name: '🖥️ Host',            value: `\`${os.hostname()} • ${os.type()} ${os.arch()}\``,   inline: true },
+                    { name: '🔢 Runtime',         value: `\`Node.js ${process.version} • discord.js v${djsVersion}\``, inline: true },
+                )
+                .setFooter({ text: `Astra Intelligence Division • ${VERSION}` })
+                .setTimestamp();
+
+            return interaction.editReply({ embeds: [embed] });
+
+        // ── PING ──────────────────────────────────────────────────────────────
+        } else if (subcommand === 'ping') {
+            const sent = await interaction.reply({ content: '📡 **ANALYZING HEARTBEAT...**', fetchReply: true });
+            const rtt  = sent.createdTimestamp - interaction.createdTimestamp;
+            const ws   = interaction.client.ws.ping;
+
+            const wsLabel  = ws  < 100 ? '🟢 Excellent' : ws  < 200 ? '🟡 Good'    : '🔴 Poor';
+            const rttLabel = rtt < 150 ? '🟢 Fast'      : rtt < 300 ? '🟡 Average' : '🔴 Slow';
+
+            const embed = new EmbedBuilder()
+                .setColor(ws < 100 ? 0x2ecc71 : ws < 200 ? 0xf1c40f : 0xe74c3c)
+                .setTitle('🏓 HEARTBEAT ANALYSIS')
+                .addFields(
+                    { name: '🔌 WebSocket',  value: `${wsLabel}\n\`${ws}ms\``,    inline: true },
+                    { name: '📡 API (RTT)',  value: `${rttLabel}\n\`${rtt}ms\``,  inline: true },
+                )
+                .setFooter({ text: `Astra Network Telemetry • ${VERSION}` })
+                .setTimestamp();
+
+            return interaction.editReply({ content: '', embeds: [embed] });
+
+        // ── SERVERS ───────────────────────────────────────────────────────────
+        } else if (subcommand === 'servers') {
             if (interaction.user.id !== config.ownerId) {
-                await interaction.reply({ content: '❌ Access Denied: Administrator clearance required.', ephemeral: true });
-                return;
+                return interaction.reply({ content: '❌ Access Denied: Owner clearance required.', ephemeral: true });
+            }
+
+            await interaction.deferReply({ ephemeral: true });
+            const guilds = interaction.client.guilds.cache;
+            const totalMembers = guilds.reduce((a, g) => a + (g.memberCount || 0), 0);
+
+            const guildList = guilds
+                .sort((a, b) => (b.memberCount || 0) - (a.memberCount || 0))
+                .first(15)
+                .map((g, i) => `\`${i + 1}.\` **${g.name}** — \`${g.memberCount?.toLocaleString() ?? '?'}\` members`)
+                .join('\n');
+
+            const embed = new EmbedBuilder()
+                .setColor(THEME)
+                .setTitle('🌐 SECTOR DEPLOYMENT OVERVIEW')
+                .setDescription(guildList || 'No sectors online.')
+                .addFields(
+                    { name: '📊 Total Sectors',    value: `\`${guilds.size}\``,                     inline: true },
+                    { name: '👥 Total Operatives', value: `\`${totalMembers.toLocaleString()}\``,    inline: true },
+                )
+                .setFooter({ text: `Showing top 15 by member count • ${VERSION}` })
+                .setTimestamp();
+
+            return interaction.editReply({ embeds: [embed] });
+
+        // ── ALERT ─────────────────────────────────────────────────────────────
+        } else if (subcommand === 'alert') {
+            if (interaction.user.id !== config.ownerId) {
+                return interaction.reply({ content: '❌ Access Denied: Owner clearance required.', ephemeral: true });
             }
 
             const message = interaction.options.getString('message')!;
             await interaction.deferReply({ ephemeral: true });
 
             let successCount = 0;
-            const guilds = interaction.client.guilds.cache;
-
             const alertEmbed = new EmbedBuilder()
                 .setColor(0xff0000)
                 .setTitle('⚠️ SYSTEM-WIDE ALERT')
                 .setDescription(message)
-                .setThumbnail(interaction.client.user?.displayAvatarURL()!)
-                .setFooter({ text: 'Official Transmission from Astra Core' })
+                .setThumbnail(interaction.client.user?.displayAvatarURL() ?? null)
+                .setFooter({ text: `Official Transmission from Astra Core • ${VERSION}` })
                 .setTimestamp();
 
-            // Broadcast to first available channel in each guild (simple approach)
-            for (const guild of guilds.values()) {
+            for (const guild of interaction.client.guilds.cache.values()) {
                 try {
-                    // Try to find a log channel from our DB first
-                    const guildConfig = await db.fetchOne("SELECT log_channel_id FROM guilds WHERE guild_id = ?", guild.id);
-                    let channel = null;
+                    const guildConfig = await db.fetchOne('SELECT log_channel_id FROM guilds WHERE guild_id = ?', guild.id);
+                    let channel: any = null;
 
                     if (guildConfig?.log_channel_id) {
                         channel = await guild.channels.fetch(guildConfig.log_channel_id).catch(() => null);
                     }
-
                     if (!channel) {
-                        channel = guild.channels.cache.find(c => c.isTextBased() && c.permissionsFor(guild.members.me!).has(PermissionFlagsBits.SendMessages));
+                        channel = guild.channels.cache.find(c => c.isTextBased() && c.permissionsFor(guild.members.me!)?.has(PermissionFlagsBits.SendMessages));
                     }
-
-                    if (channel && channel.isTextBased()) {
+                    if (channel?.isTextBased()) {
                         await (channel as any).send({ embeds: [alertEmbed] });
                         successCount++;
                     }
@@ -92,7 +233,13 @@ const command: Command = {
                 }
             }
 
-            await interaction.editReply({ content: `✅ Alert broadcast complete. Reached **${successCount}** sectors (guilds).` });
+            // Also fire the webhook so you can track it
+            await StatusService.sendError(
+                new Error(`SYSTEM ALERT broadcast to ${successCount} sectors: "${message}"`),
+                { commandName: 'system alert', userId: interaction.user.id }
+            ).catch(() => {});
+
+            return interaction.editReply({ content: `✅ Alert broadcast complete. Reached **${successCount}** of **${interaction.client.guilds.cache.size}** sectors.` });
         }
     }
 };

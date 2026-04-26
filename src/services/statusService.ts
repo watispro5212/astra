@@ -3,82 +3,189 @@ import { config } from '../core/config';
 import logger from '../core/logger';
 import os from 'os';
 
+const VERSION = 'v7.2.0 "Omega Protocol"';
+const ACCENT  = 0x5865F2; // blurple-ish accent for all status embeds
+const GREEN   = 0x2ecc71;
+const RED     = 0xe74c3c;
+const BLUE    = 0x3498db;
+const YELLOW  = 0xf1c40f;
+
+function uptimeString(seconds: number): string {
+    const d = Math.floor(seconds / 86400);
+    const h = Math.floor((seconds % 86400) / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = Math.floor(seconds % 60);
+    return d ? `${d}d ${h}h ${m}m` : `${h}h ${m}m ${s}s`;
+}
+
+function memBar(used: number, total: number): string {
+    const pct = Math.round((used / total) * 100);
+    const filled = Math.round(pct / 10);
+    return `${'█'.repeat(filled)}${'░'.repeat(10 - filled)} ${pct}%`;
+}
+
 export class StatusService {
     private static webhook: WebhookClient | null = null;
 
-    private static getWebhook() {
+    private static getWebhook(): WebhookClient | null {
         if (!this.webhook && config.statusWebhookUrl) {
             this.webhook = new WebhookClient({ url: config.statusWebhookUrl });
         }
         return this.webhook;
     }
 
+    // ── BOOT ─────────────────────────────────────────────────────────────────
     public static async sendSystemOnline(client: any) {
         const webhook = this.getWebhook();
         if (!webhook) return;
 
+        const totalMem   = os.totalmem()  / 1024 / 1024;
+        const freeMem    = os.freemem()   / 1024 / 1024;
+        const usedMem    = totalMem - freeMem;
+        const memberCount = client.guilds.cache.reduce((a: number, g: any) => a + (g.memberCount || 0), 0);
+
         const embed = new EmbedBuilder()
-            .setTitle('🟢 SYSTEM ONLINE')
-            .setDescription('Astra Tactical Engine has been initialized and is now monitoring all sectors.')
-            .setColor(0x2ecc71)
+            .setColor(GREEN)
+            .setTitle('🟢 ASTRA ONLINE — BOOT SEQUENCE COMPLETE')
+            .setDescription(`**${VERSION}** has initialized successfully. All systems are nominal.`)
+            .setThumbnail(client.user?.displayAvatarURL() ?? null)
             .addFields(
-                { name: '🛰️ Version', value: 'v7.0.0 "Enterprise"', inline: true },
-                { name: '📡 Sectors', value: `${client.guilds.cache.size.toString()}`, inline: true },
-                { name: '👤 Operatives', value: `${client.users.cache.size.toString()}`, inline: true }
+                { name: '🛰️ Version',         value: `\`${VERSION}\``,                                     inline: true },
+                { name: '🌐 Sectors',          value: `\`${client.guilds.cache.size} guilds\``,              inline: true },
+                { name: '👥 Operatives',       value: `\`${memberCount.toLocaleString()} members\``,         inline: true },
+                { name: '💻 Host',             value: `\`${os.hostname()}\``,                                inline: true },
+                { name: '🖥️ Platform',         value: `\`${os.type()} ${os.arch()}\``,                      inline: true },
+                { name: '📡 WebSocket',        value: `\`${client.ws.ping}ms\``,                             inline: true },
+                { name: '🔋 Memory',           value: `\`${usedMem.toFixed(0)}MB / ${totalMem.toFixed(0)}MB\`\n${memBar(usedMem, totalMem)}`, inline: false },
+                { name: '⚙️ Node.js',          value: `\`${process.version}\``,                              inline: true },
+                { name: '🕐 Boot Time',        value: `<t:${Math.floor(Date.now() / 1000)}:R>`,              inline: true },
             )
-            .addFields(
-                { name: '💻 Host OS', value: `${os.type()} ${os.release()}`, inline: true },
-                { name: '🔋 Memory', value: `${(os.freemem() / 1024 / 1024 / 1024).toFixed(2)}GB / ${(os.totalmem() / 1024 / 1024 / 1024).toFixed(2)}GB`, inline: true }
-            )
+            .setFooter({ text: `Astra Intelligence Division • ${new Date().toUTCString()}` })
             .setTimestamp();
 
-        await webhook.send({ embeds: [embed] }).catch(err => logger.error(`Status Webhook Error: ${err}`));
+        await webhook.send({ username: 'Astra Status', embeds: [embed] })
+            .catch(err => logger.error(`Status Webhook Error: ${err}`));
     }
 
+    // ── HEARTBEAT ─────────────────────────────────────────────────────────────
     public static async sendHeartbeat(client: any) {
         const webhook = this.getWebhook();
         if (!webhook) return;
 
-        const uptime = process.uptime();
-        const days = Math.floor(uptime / 86400);
-        const hours = Math.floor((uptime % 86400) / 3600);
-        const minutes = Math.floor((uptime % 3600) / 60);
+        const uptime     = process.uptime();
+        const totalMem   = os.totalmem() / 1024 / 1024;
+        const freeMem    = os.freemem()  / 1024 / 1024;
+        const usedMem    = totalMem - freeMem;
+        const memberCount = client.guilds.cache.reduce((a: number, g: any) => a + (g.memberCount || 0), 0);
+        const ping       = client.ws.ping;
+        const pingColor  = ping < 100 ? GREEN : ping < 200 ? YELLOW : RED;
 
         const embed = new EmbedBuilder()
+            .setColor(pingColor)
             .setTitle('💓 SYSTEM HEARTBEAT')
-            .setDescription('Sector stability confirmed. Astra remains operational.')
-            .setColor(0x3498db)
+            .setDescription('Routine stability pulse. All tactical systems operational.')
             .addFields(
-                { name: '⏱️ Uptime', value: `${days}d ${hours}h ${minutes}m`, inline: true },
-                { name: '📶 Latency', value: `${client.ws.ping}ms`, inline: true },
-                { name: '⚙️ CPU Load', value: `${os.loadavg()[0].toFixed(2)}%`, inline: true }
+                { name: '⏱️ Uptime',          value: `\`${uptimeString(uptime)}\``,                          inline: true },
+                { name: '📡 Latency',         value: `\`${ping}ms\``,                                        inline: true },
+                { name: '⚙️ CPU Load',        value: `\`${os.loadavg()[0].toFixed(2)}%\``,                   inline: true },
+                { name: '🌐 Sectors',         value: `\`${client.guilds.cache.size} guilds\``,                inline: true },
+                { name: '👥 Operatives',      value: `\`${memberCount.toLocaleString()}\``,                   inline: true },
+                { name: '🔋 Memory',          value: `\`${usedMem.toFixed(0)}MB / ${totalMem.toFixed(0)}MB\`\n${memBar(usedMem, totalMem)}`, inline: false },
             )
+            .setFooter({ text: `Astra Intelligence Division • Heartbeat` })
             .setTimestamp();
 
-        await webhook.send({ embeds: [embed] }).catch(err => logger.error(`Status Webhook Error: ${err}`));
+        await webhook.send({ username: 'Astra Status', embeds: [embed] })
+            .catch(err => logger.error(`Status Webhook Error: ${err}`));
     }
 
-    public static async sendError(error: any) {
+    // ── HEALTH CHECK ──────────────────────────────────────────────────────────
+    public static async sendHealthCheck(client: any) {
+        const webhook = this.getWebhook();
+        if (!webhook) return;
+
+        const ping       = client.ws.ping;
+        const pingStatus = ping < 100 ? '🟢 Excellent' : ping < 200 ? '🟡 Degraded' : '🔴 Critical';
+        const uptime     = process.uptime();
+        const totalMem   = os.totalmem() / 1024 / 1024;
+        const usedMem    = (os.totalmem() - os.freemem()) / 1024 / 1024;
+        const memPct     = Math.round((usedMem / totalMem) * 100);
+        const memStatus  = memPct < 60 ? '🟢 Nominal' : memPct < 85 ? '🟡 Elevated' : '🔴 Critical';
+
+        const embed = new EmbedBuilder()
+            .setColor(ping < 150 ? GREEN : YELLOW)
+            .setTitle('🏥 HEALTH CHECK REPORT')
+            .addFields(
+                { name: '📡 WebSocket',       value: `${pingStatus} \`${ping}ms\``,                          inline: true  },
+                { name: '🔋 Memory',          value: `${memStatus} \`${memPct}%\``,                          inline: true  },
+                { name: '⏱️ Uptime',          value: `\`${uptimeString(uptime)}\``,                          inline: true  },
+                { name: '🌐 Servers',         value: `\`${client.guilds.cache.size}\``,                      inline: true  },
+                { name: '💻 CPU',             value: `\`${os.loadavg()[0].toFixed(2)} avg\``,                inline: true  },
+                { name: '🔢 Node',            value: `\`${process.version}\``,                               inline: true  },
+            )
+            .setFooter({ text: `Astra Health Monitor • ${VERSION}` })
+            .setTimestamp();
+
+        await webhook.send({ username: 'Astra Health', embeds: [embed] })
+            .catch(err => logger.error(`Status Webhook Error: ${err}`));
+    }
+
+    // ── ERROR ─────────────────────────────────────────────────────────────────
+    public static async sendError(error: any, context?: { commandName?: string; userId?: string; guildId?: string }) {
+        const webhook = this.getWebhook();
+        if (!webhook) return;
+
+        const stack = (error?.stack || String(error)).substring(0, 900);
+        const fields: any[] = [
+            { name: '⚠️ Error', value: `\`\`\`${error?.message || error}\`\`\`` },
+            { name: '📂 Stack', value: `\`\`\`${stack}\`\`\`` },
+        ];
+
+        if (context?.commandName) fields.push({ name: '🔧 Command', value: `\`/${context.commandName}\``, inline: true });
+        if (context?.userId)      fields.push({ name: '👤 User',    value: `\`${context.userId}\``,       inline: true });
+        if (context?.guildId)     fields.push({ name: '🌐 Guild',   value: `\`${context.guildId}\``,      inline: true });
+
+        const embed = new EmbedBuilder()
+            .setColor(RED)
+            .setTitle('🚨 SYSTEM ANOMALY DETECTED')
+            .setDescription('A critical error has been captured by the Astra error pipeline.')
+            .addFields(fields)
+            .setFooter({ text: `Astra Error Reporter • ${VERSION}` })
+            .setTimestamp();
+
+        await webhook.send({ username: 'Astra Errors', embeds: [embed] })
+            .catch(err => logger.error(`Status Webhook Error: ${err}`));
+    }
+
+    // ── SERVER COUNT EVENT ────────────────────────────────────────────────────
+    public static async sendServerCountUpdate(client: any, joined: boolean, guildName: string) {
         const webhook = this.getWebhook();
         if (!webhook) return;
 
         const embed = new EmbedBuilder()
-            .setTitle('🚨 SYSTEM ANOMALY')
-            .setDescription('A critical error has been detected in the tactical core.')
-            .setColor(0xe74c3c)
+            .setColor(joined ? GREEN : RED)
+            .setTitle(joined ? '📥 NEW SECTOR ADDED' : '📤 SECTOR DEPARTED')
+            .setDescription(joined
+                ? `Astra has been deployed to a new sector: **${guildName}**`
+                : `Astra has been removed from sector: **${guildName}**`)
             .addFields(
-                { name: '⚠️ Error Message', value: `\`\`\`${error.message || error}\`\`\`` },
-                { name: '📂 Trace', value: `\`\`\`${(error.stack || 'No stack trace available').substring(0, 1000)}\`\`\`` }
+                { name: '🌐 Total Sectors', value: `\`${client.guilds.cache.size} guilds\``, inline: true }
             )
+            .setFooter({ text: `Astra Intelligence Division • ${VERSION}` })
             .setTimestamp();
 
-        await webhook.send({ embeds: [embed] }).catch(err => logger.error(`Status Webhook Error: ${err}`));
+        await webhook.send({ username: 'Astra Status', embeds: [embed] })
+            .catch(err => logger.error(`Status Webhook Error: ${err}`));
     }
 
+    // ── SCHEDULERS ────────────────────────────────────────────────────────────
     public static startHeartbeat(client: any) {
-        // Send heartbeat every 30 minutes
-        setInterval(() => {
-            this.sendHeartbeat(client);
-        }, 30 * 60 * 1000);
+        // Heartbeat every 30 minutes
+        setInterval(() => { this.sendHeartbeat(client); }, 30 * 60 * 1000);
+    }
+
+    public static startHealthCheck(client: any) {
+        // Health check every hour
+        setInterval(() => { this.sendHealthCheck(client); }, 60 * 60 * 1000);
     }
 }
