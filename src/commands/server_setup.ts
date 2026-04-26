@@ -33,7 +33,7 @@ export default {
                 ? '⚠️ **NUCLEAR PROTOCOL ACTIVE**: Purging all channels and roles for Apex deployment...' 
                 : '🔄 **SYNC PROTOCOL ACTIVE**: Expanding sector architecture to Apex standards...')
             .setColor(isNuclear ? 0xe74c3c : 0x3498db)
-            .setFooter({ text: 'Astra Architect v6.3.0 Apex' })
+            .setFooter({ text: 'Astra Architect v7.0.0 Nova' })
             .setTimestamp();
 
         await interaction.editReply({ embeds: [startEmbed] });

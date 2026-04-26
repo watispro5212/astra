@@ -1,15 +1,18 @@
-# 🛰️ Astra Server Identity & Assets (v2.8.0)
+# 🛰️ Astra Server Identity & Assets (v7.0.0 Nova)
+
 
 ## 🏆 Server Identity
+
 *Use these in your Server Settings -> Overview.*
 
 - **Server Name**: `Astra HQ | Official Support & Community`
 - **Server Description**: 
-  > The official central hub for Astra—the next-generation Discord automation engine. Connect with the architects, get precision support, and join the laboratory for future features. Explore the power of Astra.
+  > The official central hub for Astra—the high-performance Discord engine. Connect with the architects, get precision support, and join the laboratory for future features. Experience the Nova evolution.
 
 ---
 
 ## 1. 📜 THE MASTER RULES
+
 *Post these in `#📜 rules` as a single, clean message.*
 
 > ### 🛑 Server Rules & Guidelines
@@ -47,18 +50,25 @@
 ---
 
 ## 2. 👋 THE WELCOME SIGN
+
 *Stylized message for `#👋 welcome`.*
 
-> ### ✨ Welcome to Astra, {user}!
-> You've just landed in the official laboratory and support hub for the **Astra Bot**. 
+> ### ✨ Welcome to Astra HQ, {user}
+
+> You've just landed in the official laboratory and support hub for the **Astra Bot Nova v7.0.0**. 
 > 
 > **Your Next Steps:**
 > 1. ✅ **Verification**: Finish the onboarding flow or head to `#✅ verify`.
 > 2. 🧭 **Navigation**: Check `#📢 server-guide` to see what's happening.
 > 3. 🚀 **Updates**: Get the `Announcement Ping` role in `#🧩 choose-roles` to stay in the loop.
 > 
-> **Need the Bot?**
-> [Invite Astra to your server](https://astra-bot.com/invite) | [Read the Documentation](https://astra-bot.com/docs)
+> **Quick Access Protocols:**
+> - `/invite` — Bring Astra to your sector.
+> - `/utility remind` — Set personal alerts.
+> - `/economy daily` — Claim your credits.
+> 
+> **Resources:**
+> [Official Website](https://watispro5212.github.io/astra/) | [Technical Documentation](https://watispro5212.github.io/astra/docs.html)
 > 
 > *Welcome to the collective!*
 
@@ -75,14 +85,19 @@
 > - Chat with other users in `#🆘 community-help`.
 > 
 > **📢 Stay Informed**
-> - `#📢 announcements`: Critical news only.
-> - `#🚀 updates`: Every new feature and patch.
-> - `#📝 changelog`: Raw technical logs.
+> - `#📢 announcements`: Critical project news.
+> - `#🚀 updates`: Real-time feature deployments.
+> - `#📝 changelog`: Raw mission logs and patch notes.
 > 
 > **🧪 Get Involved**
 > - Become a `Bot Tester` to access `#🧪 bot-testing`.
 > - Report glitches in `#🐞 bug-reports`.
 > - Share your setup in `#📷 server-showcase`.
+> 
+> **⚡ Essential Commands**
+> - `/info stats` — Check system health and latency.
+> - `/help` — View the full protocol registry.
+> - `/support` — Get a direct link to this sector.
 
 ---
 
@@ -103,8 +118,8 @@
 ### Question 2: Which notifications would you like?
 *Goal: Assign ping roles.*
 - **Option 1**: 🔔 "Major Project Announcements" -> `News Ping`
-- **Option 2**: 🛠️ "Developer & Hackathon News" -> `Update Ping`
-- **Option 3**: 🧪 "Beta Testing Alerts" -> `Lab Ping`
+- **Option 2**: 🛠️ "Developer & Patch Updates" -> `Update Ping`
+- **Option 3**: 🧪 "Experimental Lab Alerts" -> `Lab Ping`
 
 ---
 
@@ -147,15 +162,12 @@
 
 ### Layer 1: Discord Native Protection
 - **Anti-Spam Filter**: Blocks messages containing repetitive text or excessive emojis.
-- **Phishing Protection**: Automatically blocks known malicious links from the Discord global database.
+- **Phishing Protection**: Automatically blocks known malicious links.
 
 ### Layer 2: Astra Custom Filters
 - **Spam Threshold**: 5 messages per 5 seconds. Violations result in a 1-hour timeout.
-- **Link Blocker**: Only `Premium` and `Astra Contributor` roles can post links in general chat.
+- **Link Blocker**: Only `Verified` and higher roles can post links in general chat.
 - **Invite Blocker**: Disallows posting invites to other Discord servers.
-
-### Layer 3: The "Laboratory" Lockdown
-- Only `Bot Tester` and above can upload files or post links in the Laboratory category.
 
 ---
 
@@ -163,12 +175,12 @@
 *Complete these tasks after running the `/setup_server` command.*
 
 ### 🛠️ Administrative Cleanup
-- [ ] **Restore Sovereignty**: Re-assign yourself the `👑 Owner` role (the setup bot may have deleted the old one).
-- [ ] **Hierarchy Check**: Verify that `👑 Owner` is at the very top of the roles list in Server Settings.
+- [ ] **Restore Sovereignty**: Re-assign yourself the `👑 Owner` role.
+- [ ] **Hierarchy Check**: Verify that `👑 Owner` is at the very top.
 
 ### 🧩 Community & Onboarding
 - [ ] **Enable Community**: Go to `Server Settings -> Community -> Enable Community`.
-- [ ] **Setup Onboarding**: Follow the **Section 4** schematics to configure your native Discord onboarding questions.
+- [ ] **Setup Onboarding**: Follow the **Section 4** schematics.
 - [ ] **Rules Agreement**: Enable "Member Screening" and paste the rules from **Section 1**.
 
 ### 💬 Channel Population
@@ -176,9 +188,5 @@
 - [ ] **Server Guide**: Copy-paste the **Section 3** template into `#📢 server-guide`.
 - [ ] **The Rules**: Post the full rule set from **Section 1** in `#📜 rules` and pin it.
 
-### 🛡️ Security Audit
-- [ ] **Verify AutoMod**: Check `Server Settings -> Safety Setup -> AutoMod` to ensure the Astra shields are active.
-- [ ] **Permissions Check**: Ensure that `@everyone` cannot send messages in the categories marked `public_read`.
-
 ---
-*Blueprint Version: 2.10.0 (Launch Ready)*
+*Blueprint Version: 7.0.0 (Nova Ready)*

@@ -19,11 +19,12 @@ Astra is an enterprise-grade Discord moderation, community engagement, and utili
 
 ---
 
-## 💎 v6.3.0 Titan Features
-- **📊 Global Leveling**: Track user engagement with message-based XP and tactical rank lookup (`/rank`).
-- **💰 Integrated Economy**: Claim daily rewards and transfer credits between operatives (`/economy`).
-- **🛡️ Hardened Moderation**: Professional-grade ejection and blacklist systems with hierarchy protection.
-- **📡 Shard Telemetry**: Real-time system diagnostics and rotating status engine.
+## 💎 v7.0.0 Nova Features
+- **📊 Global Leveling**: Re-engineered XP tracking with tactical rank progression (`/rank`).
+- **💰 Dynamic Economy**: High-stakes credit system with market liquidation and rob protocols (`/economy`).
+- **🛡️ Hardened Moderation**: Enterprise-grade ban/kick systems with multi-layered AutoMod protection.
+- **📡 Nova Telemetry**: Live system diagnostics, memory monitoring, and WebSocket health checks (`/system status`).
+- **🎫 Support Desk**: Integrated private ticket threads for technical assistance.
 
 ---
 

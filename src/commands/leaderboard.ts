@@ -43,9 +43,12 @@ const command: Command = {
                 ...memberIds
             );
 
-            const lines = users.map((u, i) =>
-                `${rank(i)} <@${u.user_id}> — Level \`${u.level}\` · \`${u.xp} XP\``
-            );
+            const lines: string[] = [];
+            for (let i = 0; i < users.length; i++) {
+                let name = `User ${users[i].user_id}`;
+                try { name = (await interaction.client.users.fetch(users[i].user_id)).username; } catch (_) {}
+                lines.push(`${rank(i)} **${name}** — Level \`${users[i].level}\` · \`${users[i].xp} XP\``);
+            }
 
             await interaction.editReply({
                 embeds: [new EmbedBuilder()

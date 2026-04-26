@@ -532,15 +532,19 @@ const command: Command = {
             }
 
             const medals = ['👑', '🥈', '🥉'];
-            const description = top.map((entry, i) =>
-                `${medals[i] ?? `**${i + 1}.**`} <@${entry.user_id}> — \`${((entry.balance || 0) + (entry.bank_balance || 0)).toLocaleString()} cr\``
-            ).join('\n');
+            const lines: string[] = [];
+            for (let i = 0; i < top.length; i++) {
+                let name = `User ${top[i].user_id}`;
+                try { name = (await interaction.client.users.fetch(top[i].user_id)).username; } catch (_) {}
+                const net = ((top[i].balance || 0) + (top[i].bank_balance || 0)).toLocaleString();
+                lines.push(`${medals[i] ?? `**${i + 1}.**`} **${name}** — \`${net} cr\``);
+            }
 
             return interaction.editReply({ embeds: [new EmbedBuilder()
                 .setColor(0xf1c40f)
                 .setTitle('🏆 GLOBAL FISCAL LEADERBOARD')
-                .setDescription(description)
-                .setFooter({ text: 'Net worth = Liquid + Vault • Astra v7.2.0' })
+                .setDescription(lines.join('\n'))
+                .setFooter({ text: 'Net worth = Liquid + Vault • Astra v7.0.0' })
                 .setTimestamp()] });
 
         // ── STATS ─────────────────────────────────────────────────────────────

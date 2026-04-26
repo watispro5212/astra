@@ -3,6 +3,7 @@ import {
     ChatInputCommandInteraction,
     EmbedBuilder,
     PermissionFlagsBits,
+    WebhookClient,
     version as djsVersion
 } from 'discord.js';
 import { Command } from '../types';
@@ -12,8 +13,8 @@ import { StatusService } from '../services/statusService';
 import logger from '../core/logger';
 import os from 'os';
 
-const VERSION = 'v7.2.0 "Omega Protocol"';
-const THEME   = 0x5865F2;
+const VERSION = 'v7.0.0 "Nova Protocol"';
+const THEME   = 0x3498db;
 
 const command: Command = {
     data: new SlashCommandBuilder()
@@ -102,6 +103,16 @@ const command: Command = {
                 )
                 .setFooter({ text: `Astra Tactical Systems • ${VERSION} • Released 2026` })
                 .setTimestamp();
+
+            // Fire the updates webhook so the official channel receives patch notes automatically
+            if (config.updatesWebhookUrl) {
+                try {
+                    const wh = new WebhookClient({ url: config.updatesWebhookUrl });
+                    await wh.send({ username: 'Astra Updates', embeds: [embed] });
+                } catch (err) {
+                    logger.warn(`Updates webhook failed: ${err}`);
+                }
+            }
 
             return interaction.reply({ embeds: [embed] });
 
