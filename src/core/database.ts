@@ -176,7 +176,10 @@ class DatabaseManager {
             `CREATE TABLE IF NOT EXISTS user_inventory (id ${PK}, user_id ${INT}, item_id ${INT}, quantity ${INT} DEFAULT 1, last_harvest ${TEXT})`,
             `CREATE TABLE IF NOT EXISTS user_stocks (user_id ${INT} PRIMARY KEY, shares ${INT} DEFAULT 0, invested_amount ${INT} DEFAULT 0)`,
             `ALTER TABLE shop_items ADD COLUMN item_type ${TEXT} DEFAULT 'consumable'`,
-            `ALTER TABLE shop_items ADD COLUMN emoji ${TEXT} DEFAULT '📦'`
+            `ALTER TABLE shop_items ADD COLUMN emoji ${TEXT} DEFAULT '📦'`,
+            `ALTER TABLE users ADD COLUMN bank_balance ${INT} DEFAULT 0`,
+            `ALTER TABLE users ADD COLUMN total_earned ${INT} DEFAULT 0`,
+            `ALTER TABLE users ADD COLUMN daily_streak ${INT} DEFAULT 0`
         ];
         for (const migration of migrations) {
             try {

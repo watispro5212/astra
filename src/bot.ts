@@ -149,7 +149,8 @@ export class AstraClient extends Client {
 
                 if (newXp >= nextLevelXp) {
                     const newLevel = (user.level || 0) + 1;
-                    await db.execute('UPDATE users SET xp = ?, level = ? WHERE user_id = ?', 0, newLevel, message.author.id);
+                    const carryXp  = newXp - nextLevelXp; // carry remainder into next level
+                    await db.execute('UPDATE users SET xp = ?, level = ? WHERE user_id = ?', carryXp, newLevel, message.author.id);
                     
                     // Fetch Leveling Configs
                     const cfg = await db.fetchOne('SELECT announcement_channel_id FROM leveling_configs WHERE guild_id = ?', message.guild.id);
@@ -160,11 +161,23 @@ export class AstraClient extends Client {
                         if (role) await message.member?.roles.add(role).catch(() => {});
                     }
 
+                    // XP bar for new level
+                    const nextXpReq    = (newLevel + 1) * 500;
+                    const barFilled    = Math.round((carryXp / nextXpReq) * 10);
+                    const progressBar  = `${'█'.repeat(barFilled)}${'░'.repeat(10 - barFilled)}`;
+
                     const levelEmbed = new EmbedBuilder()
                         .setColor(0x9b59b6)
-                        .setTitle('🎊 Level Elevated')
-                        .setDescription(`Congratulations **${message.author.username}**, you have reached **Level ${newLevel}**!${milestoneRole ? `\n\n**Reward Granted:** <@&${milestoneRole.role_id}>` : ''}`)
-                        .setFooter({ text: 'Astra Intelligence System v7.0.0' });
+                        .setTitle('🎊 LEVEL UP — INTELLIGENCE ELEVATED')
+                        .setDescription(`**${message.author.username}** has advanced to **Level ${newLevel}**!${milestoneRole ? `\n\n🎖️ **Role Reward:** <@&${milestoneRole.role_id}>` : ''}`)
+                        .setThumbnail(message.author.displayAvatarURL())
+                        .addFields(
+                            { name: '⭐ New Level',     value: `\`${newLevel}\``,                          inline: true },
+                            { name: '🎯 Next Level',     value: `\`${nextXpReq} XP\``,                      inline: true },
+                            { name: '📊 Progress',       value: `\`[${progressBar}] ${carryXp}/${nextXpReq}\``, inline: false },
+                        )
+                        .setFooter({ text: 'Astra Intelligence Matrix • v7.2.0' })
+                        .setTimestamp();
 
                     let targetChannel: any = message.channel;
                     if (cfg?.announcement_channel_id) {

@@ -101,6 +101,20 @@ const command: Command = {
         .addSubcommand(sub =>
             sub.setName('leaderboard')
                .setDescription('View the top 10 wealthiest operatives globally.')
+        )
+        .addSubcommand(sub =>
+            sub.setName('stats')
+               .setDescription('📊 View your fiscal statistics and performance report.')
+               .addUserOption(opt => opt.setName('user').setDescription('Target operative.'))
+        )
+        .addSubcommand(sub =>
+            sub.setName('bank')
+               .setDescription('🏦 Deposit or withdraw credits from your secure vault.')
+               .addStringOption(opt => opt.setName('action').setDescription('Deposit or withdraw.').setRequired(true).addChoices(
+                   { name: 'Deposit', value: 'deposit' },
+                   { name: 'Withdraw', value: 'withdraw' }
+               ))
+               .addIntegerOption(opt => opt.setName('amount').setDescription('Credit amount.').setRequired(true).setMinValue(1))
         ),
 
     async execute(interaction: ChatInputCommandInteraction) {
@@ -449,19 +463,36 @@ const command: Command = {
         // ── BALANCE ───────────────────────────────────────────────────────────
         } else if (subcommand === 'balance') {
             const target = interaction.options.getUser('user') || interaction.user;
-            const data = await db.fetchOne('SELECT balance, xp, level FROM users WHERE user_id = ?', target.id);
+            const data = await db.fetchOne('SELECT balance, bank_balance, xp, level, total_earned, daily_streak FROM users WHERE user_id = ?', target.id);
             const balance = data?.balance ?? 0;
+            const bank    = data?.bank_balance ?? 0;
+
+            // Pending harvest
+            const inventory = await db.fetchAll(`
+                SELECT ui.last_harvest, si.production_rate
+                FROM user_inventory ui
+                JOIN shop_items si ON ui.item_id = si.id
+                WHERE ui.user_id = ? AND si.production_rate > 0
+            `, target.id);
+            let pendingHarvest = 0;
+            for (const inv of inventory) {
+                const hrs = (Date.now() - new Date(inv.last_harvest).getTime()) / 3600000;
+                pendingHarvest += Math.floor(hrs * inv.production_rate);
+            }
 
             return interaction.reply({ embeds: [new EmbedBuilder()
                 .setColor(0x3498db)
                 .setAuthor({ name: target.username, iconURL: target.displayAvatarURL() })
                 .setTitle('💳 FISCAL STATUS')
                 .addFields(
-                    { name: '💰 Liquid Credits', value: `\`${balance.toLocaleString()} cr\``, inline: true },
-                    { name: '⭐ Level', value: `\`${data?.level ?? 0}\``, inline: true },
-                    { name: '🛰️ Sector', value: `\`${interaction.guildId || 'Global'}\``, inline: true }
+                    { name: '💰 Liquid Credits', value: `\`${balance.toLocaleString()} cr\``,      inline: true },
+                    { name: '🏦 Vault Balance',  value: `\`${bank.toLocaleString()} cr\``,         inline: true },
+                    { name: '💼 Total Assets',   value: `\`${(balance + bank).toLocaleString()} cr\``, inline: true },
+                    { name: '⭐ Level',           value: `\`${data?.level ?? 0}\``,                 inline: true },
+                    { name: '🔥 Daily Streak',   value: `\`${data?.daily_streak ?? 0} days\``,     inline: true },
+                    { name: '🌾 Pending Harvest', value: `\`${pendingHarvest.toLocaleString()} cr\``, inline: true },
                 )
-                .setFooter({ text: 'Astra Intelligence Agency' })
+                .setFooter({ text: 'Astra Intelligence Agency • Fiscal Report' })
                 .setTimestamp()] });
 
         // ── PAY ───────────────────────────────────────────────────────────────
@@ -494,7 +525,7 @@ const command: Command = {
         // ── LEADERBOARD ───────────────────────────────────────────────────────
         } else if (subcommand === 'leaderboard') {
             await interaction.deferReply();
-            const top = await db.fetchAll('SELECT user_id, balance FROM users ORDER BY balance DESC LIMIT 10');
+            const top = await db.fetchAll('SELECT user_id, balance, bank_balance FROM users ORDER BY (balance + COALESCE(bank_balance, 0)) DESC LIMIT 10');
 
             if (!top || top.length === 0) {
                 return interaction.editReply({ content: '❌ Global fiscal diagnostic returned zero data.' });
@@ -502,15 +533,84 @@ const command: Command = {
 
             const medals = ['👑', '🥈', '🥉'];
             const description = top.map((entry, i) =>
-                `${medals[i] ?? `**${i + 1}.**`} <@${entry.user_id}> — \`${(entry.balance || 0).toLocaleString()} cr\``
+                `${medals[i] ?? `**${i + 1}.**`} <@${entry.user_id}> — \`${((entry.balance || 0) + (entry.bank_balance || 0)).toLocaleString()} cr\``
             ).join('\n');
 
             return interaction.editReply({ embeds: [new EmbedBuilder()
                 .setColor(0xf1c40f)
                 .setTitle('🏆 GLOBAL FISCAL LEADERBOARD')
                 .setDescription(description)
-                .setFooter({ text: 'Top 10 High-Worth Operatives • Astra v7.2.0' })
+                .setFooter({ text: 'Net worth = Liquid + Vault • Astra v7.2.0' })
                 .setTimestamp()] });
+
+        // ── STATS ─────────────────────────────────────────────────────────────
+        } else if (subcommand === 'stats') {
+            const target   = interaction.options.getUser('user') || interaction.user;
+            const data     = await db.fetchOne(
+                'SELECT balance, bank_balance, total_earned, daily_streak, level FROM users WHERE user_id = ?',
+                target.id
+            );
+            const total    = data?.total_earned    ?? 0;
+            const streak   = data?.daily_streak    ?? 0;
+            const liquid   = data?.balance         ?? 0;
+            const bank     = data?.bank_balance    ?? 0;
+            const netWorth = liquid + bank;
+
+            return interaction.reply({ embeds: [new EmbedBuilder()
+                .setColor(0x9b59b6)
+                .setAuthor({ name: target.username, iconURL: target.displayAvatarURL() })
+                .setTitle('📊 OPERATIVE FISCAL REPORT')
+                .addFields(
+                    { name: '💰 Net Worth',      value: `\`${netWorth.toLocaleString()} cr\``,   inline: true },
+                    { name: '📈 Total Earned',   value: `\`${total.toLocaleString()} cr\``,      inline: true },
+                    { name: '🔥 Daily Streak',   value: `\`${streak} days\``,                    inline: true },
+                    { name: '💳 Liquid',         value: `\`${liquid.toLocaleString()} cr\``,     inline: true },
+                    { name: '🏦 Vault',          value: `\`${bank.toLocaleString()} cr\``,       inline: true },
+                    { name: '⭐ Level',           value: `\`${data?.level ?? 0}\``,              inline: true },
+                )
+                .setFooter({ text: 'Astra Intelligence Agency • Operative Stats' })
+                .setTimestamp()] });
+
+        // ── BANK ──────────────────────────────────────────────────────────────
+        } else if (subcommand === 'bank') {
+            const action = interaction.options.getString('action')!;
+            const amount = interaction.options.getInteger('amount')!;
+            const data   = await db.fetchOne('SELECT balance, bank_balance FROM users WHERE user_id = ?', userId);
+            const liquid = data?.balance      ?? 0;
+            const vault  = data?.bank_balance ?? 0;
+
+            if (action === 'deposit') {
+                if (liquid < amount) {
+                    return interaction.reply({ content: `❌ Insufficient liquid credits. You have \`${liquid.toLocaleString()} cr\`.`, ephemeral: true });
+                }
+                await db.execute('UPDATE users SET balance = balance - ?, bank_balance = COALESCE(bank_balance, 0) + ? WHERE user_id = ?', amount, amount, userId);
+                const after = await db.fetchOne('SELECT balance, bank_balance FROM users WHERE user_id = ?', userId);
+                return interaction.reply({ embeds: [new EmbedBuilder()
+                    .setColor(0x2ecc71)
+                    .setTitle('🏦 VAULT DEPOSIT CONFIRMED')
+                    .setDescription(`Secured **${amount.toLocaleString()} cr** in your vault.`)
+                    .addFields(
+                        { name: '💰 Liquid', value: `\`${(after?.balance ?? 0).toLocaleString()} cr\``,      inline: true },
+                        { name: '🏦 Vault',  value: `\`${(after?.bank_balance ?? 0).toLocaleString()} cr\``, inline: true },
+                    )
+                    .setFooter({ text: 'Vault credits are safe from rob/gamble events.' })] });
+
+            } else {
+                if (vault < amount) {
+                    return interaction.reply({ content: `❌ Insufficient vault balance. Your vault holds \`${vault.toLocaleString()} cr\`.`, ephemeral: true });
+                }
+                await db.execute('UPDATE users SET balance = balance + ?, bank_balance = bank_balance - ? WHERE user_id = ?', amount, amount, userId);
+                const after = await db.fetchOne('SELECT balance, bank_balance FROM users WHERE user_id = ?', userId);
+                return interaction.reply({ embeds: [new EmbedBuilder()
+                    .setColor(0x3498db)
+                    .setTitle('🏦 VAULT WITHDRAWAL CONFIRMED')
+                    .setDescription(`Withdrawn **${amount.toLocaleString()} cr** to liquid balance.`)
+                    .addFields(
+                        { name: '💰 Liquid', value: `\`${(after?.balance ?? 0).toLocaleString()} cr\``,      inline: true },
+                        { name: '🏦 Vault',  value: `\`${(after?.bank_balance ?? 0).toLocaleString()} cr\``, inline: true },
+                    )
+                    .setFooter({ text: 'Astra Secure Fiscal Vault • v7.2.0' })] });
+            }
         }
     }
 };
