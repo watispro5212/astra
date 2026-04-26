@@ -2,11 +2,13 @@ import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, Message
 import { Command } from '../types';
 import { AI_MODELS, AIService } from '../services/aiService';
 import { THEME, VERSION } from '../core/constants';
+import { config } from '../core/config';
 
 const command: Command = {
     data: new SlashCommandBuilder()
         .setName('ai')
         .setDescription('🤖 Neural Sentinel Configuration.')
+        .setDMPermission(true)
         .addSubcommand(sub => 
             sub.setName('model')
                .setDescription('🛰️ Select your preferred AI intelligence model.')
@@ -22,6 +24,10 @@ const command: Command = {
         .addSubcommand(sub =>
             sub.setName('info')
                .setDescription('📊 View details about available neural models.')
+        )
+        .addSubcommand(sub =>
+            sub.setName('status')
+               .setDescription('📡 Perform an integrity check on the Neural Link Array.')
         ),
 
     async execute(interaction: ChatInputCommandInteraction) {
@@ -67,6 +73,28 @@ const command: Command = {
 
             embed.setFooter({ text: `Astra Neural Systems • v${VERSION}` }).setTimestamp();
             await interaction.reply({ embeds: [embed], flags: [MessageFlags.Ephemeral] });
+
+        } else if (subcommand === 'status') {
+            await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
+
+            const results = await AIService.checkKeys();
+            
+            const embed = new EmbedBuilder()
+                .setColor(THEME.PRIMARY)
+                .setTitle('📡 NEURAL LINK ARRAY | STATUS')
+                .setDescription(`Current operational status of the **v${VERSION}** neural nodes.`)
+                .setTimestamp();
+
+            for (const res of results) {
+                const icon = res.status === 'ACTIVE' ? '✅' : res.status === 'QUOTA' ? '⚠️' : '❌';
+                embed.addFields({
+                    name: `${icon} Node ${res.index}`,
+                    value: `**Status**: ${res.status}\n**Key**: \`${config.aiApiKeys[res.index].substring(0, 8)}...***\n**Report**: \`${res.message.substring(0, 100)}\``,
+                    inline: false
+                });
+            }
+
+            await interaction.editReply({ embeds: [embed] });
         }
     }
 };

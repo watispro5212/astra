@@ -10,6 +10,7 @@ const command: Command = {
     data: new SlashCommandBuilder()
         .setName('leaderboard')
         .setDescription('📊 View the top-tier operative rankings.')
+        .setDMPermission(false)
         .addSubcommand(sub =>
             sub.setName('server')
                .setDescription('Display the top 10 operatives by level in this sector.')

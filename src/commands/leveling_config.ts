@@ -13,6 +13,7 @@ const command: Command = {
     data: new SlashCommandBuilder()
         .setName('leveling_config')
         .setDescription('⚙️ Manage the Astra Intelligence Matrix configuration.')
+        .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
         .addSubcommand(sub =>
             sub.setName('channel')

@@ -27,6 +27,7 @@ const command: Command = {
     data: new SlashCommandBuilder()
         .setName('leveling')
         .setDescription('📊 Astra Intelligence Matrix — Progression & Global Rankings.')
+        .setDMPermission(false)
         .addSubcommand(sub =>
             sub.setName('rank')
                .setDescription('📈 View your tactical rank and XP progression.')

@@ -7,6 +7,7 @@ const command: Command = {
     data: new SlashCommandBuilder()
         .setName('prefix')
         .setDescription('🛠️ Configure the tactical command prefix for this sector.')
+        .setDMPermission(false)
         .addStringOption(opt => 
             opt.setName('new_prefix')
                .setDescription('The new character to use for message-based commands.')

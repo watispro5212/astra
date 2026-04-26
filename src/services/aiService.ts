@@ -79,4 +79,21 @@ export class AIService {
         );
         return true;
     }
+    public static async checkKeys(): Promise<{ index: number; status: 'ACTIVE' | 'ERROR' | 'QUOTA'; message: string }[]> {
+        const results: { index: number; status: 'ACTIVE' | 'ERROR' | 'QUOTA'; message: string }[] = [];
+        
+        for (let i = 0; i < this.keys.length; i++) {
+            try {
+                const genAI = new GoogleGenerativeAI(this.keys[i]);
+                const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+                await model.generateContent('ping');
+                results.push({ index: i, status: 'ACTIVE', message: 'Neural link established.' });
+            } catch (error: any) {
+                const msg = error?.message || String(error);
+                const status = (msg.includes('429') || msg.includes('quota')) ? 'QUOTA' : 'ERROR';
+                results.push({ index: i, status: status, message: msg });
+            }
+        }
+        return results;
+    }
 }

@@ -5,7 +5,8 @@ import { THEME, VERSION, PROTOCOL } from '../core/constants';
 const command: Command = {
     data: new SlashCommandBuilder()
         .setName('invite')
-        .setDescription('🔗 Obtain sector access codes for Astra.'),
+        .setDescription('🔗 Obtain sector access codes for Astra.')
+        .setDMPermission(false),
 
     async execute(interaction: ChatInputCommandInteraction) {
         const inviteUrl = `https://discord.com/api/oauth2/authorize?client_id=${interaction.client.user.id}&permissions=8&scope=bot%20applications.commands`;

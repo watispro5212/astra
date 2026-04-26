@@ -13,6 +13,7 @@ const command: Command = {
     data: new SlashCommandBuilder()
         .setName('giveaway')
         .setDescription('🎉 Host and manage community giveaways.')
+        .setDMPermission(false)
         .addSubcommand(sub =>
             sub.setName('start')
                 .setDescription('Start a new giveaway in this channel.')

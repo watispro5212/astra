@@ -48,6 +48,7 @@ const command: Command = {
     data: new SlashCommandBuilder()
         .setName('economy')
         .setDescription('💰 Astra Fiscal & Extraction Systems.')
+        .setDMPermission(true)
         .addSubcommand(sub =>
             sub.setName('daily')
                .setDescription('Claim your daily credit allocation.')

@@ -14,6 +14,7 @@ const command: Command = {
     data: new SlashCommandBuilder()
         .setName('ticket')
         .setDescription('🎫 Astra Support Ticket System.')
+        .setDMPermission(false)
         .addSubcommand(sub =>
             sub.setName('create')
                 .setDescription('Open a private support ticket with staff.')

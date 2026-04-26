@@ -31,6 +31,7 @@ const command: Command = {
     data: new SlashCommandBuilder()
         .setName('shop')
         .setDescription('🛒 Access the Apex Marketplace.')
+        .setDMPermission(false)
         .addSubcommand(sub =>
             sub.setName('view')
                .setDescription('Browse all available items in the marketplace.')

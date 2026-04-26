@@ -13,6 +13,7 @@ const command: Command = {
     data: new SlashCommandBuilder()
         .setName('welcome')
         .setDescription('👋 Configure welcome and farewell messages for your sector.')
+        .setDMPermission(false)
         .addSubcommand(sub =>
             sub.setName('set-channel')
                 .setDescription('Set the channel where welcome messages are sent.')

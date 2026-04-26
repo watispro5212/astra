@@ -14,6 +14,7 @@ const command: Command = {
     data: new SlashCommandBuilder()
         .setName('mod')
         .setDescription('🛡️ Tactical Moderation Suite.')
+        .setDMPermission(false)
         .addSubcommand(sub =>
             sub.setName('kick')
                 .setDescription('Eject a member from the sector.')

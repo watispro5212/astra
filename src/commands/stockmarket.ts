@@ -20,6 +20,7 @@ const command: Command = {
     data: new SlashCommandBuilder()
         .setName('stockmarket')
         .setDescription('📈 Access the Astra Tactical Exchange (ATX).')
+        .setDMPermission(true)
         .addSubcommand(sub => 
             sub.setName('market')
                .setDescription('🛰️ View current market prices and global trends.')

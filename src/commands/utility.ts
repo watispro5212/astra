@@ -7,6 +7,7 @@ const command: Command = {
     data: new SlashCommandBuilder()
         .setName('utility')
         .setDescription('🚀 Essential system utilities and diagnostics.')
+        .setDMPermission(false)
         .addSubcommand(sub =>
             sub.setName('ping')
                 .setDescription('📡 Measure WebSocket and API heartbeat.')

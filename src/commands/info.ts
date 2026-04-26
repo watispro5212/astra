@@ -14,6 +14,7 @@ const command: Command = {
     data: new SlashCommandBuilder()
         .setName('info')
         .setDescription('📊 Access sector intelligence and system diagnostics.')
+        .setDMPermission(false)
         .addSubcommand(sub =>
             sub.setName('avatar')
                 .setDescription('🛰️ Extract high-fidelity avatar data of an operative.')

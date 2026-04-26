@@ -18,6 +18,7 @@ const command: Command = {
     data: new SlashCommandBuilder()
         .setName('system')
         .setDescription('⚙️ Core system operations and diagnostics.')
+        .setDMPermission(false)
         .addSubcommand(sub =>
             sub.setName('sync')
                .setDescription('🔄 Force a complete synchronization of all tactical slash commands (Owner Only).')

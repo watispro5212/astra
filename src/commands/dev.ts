@@ -7,6 +7,7 @@ const command: Command = {
     data: new SlashCommandBuilder()
         .setName('dev')
         .setDescription('🛠️ Administrator Tactical Utilities.')
+        .setDMPermission(false)
         .addSubcommand(sub =>
             sub.setName('sync')
                 .setDescription('Synchronize application commands.')

@@ -7,6 +7,7 @@ export default {
     data: new SlashCommandBuilder()
         .setName('setup_server')
         .setDescription('🏗️ APEX RECONSTRUCTION: Massive infrastructure deployment with metadata.')
+        .setDMPermission(false)
         .addBooleanOption(opt => 
             opt.setName('nuclear')
                .setDescription('⚠️ DANGER: Delete ALL channels AND roles before rebuilding?')

@@ -102,6 +102,7 @@
     .badge-staff   { background: rgba(234, 179, 8, 0.1);   border: 1px solid rgba(234, 179, 8, 0.3);   color: #fde047; }
     .badge-admin   { background: rgba(239, 68, 68, 0.1);   border: 1px solid rgba(239, 68, 68, 0.3);   color: #f87171; }
     .badge-owner   { background: rgba(168, 85, 247, 0.1);  border: 1px solid rgba(168, 85, 247, 0.3);  color: #c084fc; }
+    .badge-dm      { background: rgba(59, 130, 246, 0.1);   border: 1px solid rgba(59, 130, 246, 0.3);   color: var(--color-primary-light); }
     .badge-new     { background: var(--grad-titan); border: none; color: #fff; }
 
     @media (max-width: 768px) {
@@ -193,7 +194,10 @@
         <div class="command-name">/economy daily</div>
         <div class="command-desc">Claim your daily credit ration of 2,500 credits. Resets every 24 hours.</div>
       </div>
-      <div class="command-meta"><span class="command-badge badge-public">Public</span></div>
+      <div class="command-meta">
+        <span class="command-badge badge-dm">DM Compatible</span>
+        <span class="command-badge badge-public">Public</span>
+      </div>
     </div>
 
     <div class="command-row animate-reveal" data-sector="economy">
@@ -205,6 +209,40 @@
         <span class="command-badge badge-public">Public</span>
         <span class="command-badge badge-new">Titan</span>
       </div>
+    </div>
+
+    <!-- NEURAL -->
+    <div class="sector-label animate-reveal" data-sector="ai">🤖 Neural Intelligence Sector</div>
+
+    <div class="command-row animate-reveal" data-sector="ai">
+      <div class="command-info">
+        <div class="command-name">/ai model</div>
+        <div class="command-desc">Recalibrate the AI Sentinel's neural matrix. Choose between Titan Flash or Titan Pro.</div>
+      </div>
+      <div class="command-meta">
+        <span class="command-badge badge-dm">DM Compatible</span>
+        <span class="command-badge badge-public">Public</span>
+        <span class="command-badge badge-new">Titan</span>
+      </div>
+    </div>
+
+    <div class="command-row animate-reveal" data-sector="ai">
+      <div class="command-info">
+        <div class="command-name">/ai status</div>
+        <div class="command-desc">Diagnostic report for all neural nodes — check credit availability and node health.</div>
+      </div>
+      <div class="command-meta">
+        <span class="command-badge badge-dm">DM Compatible</span>
+        <span class="command-badge badge-public">Public</span>
+      </div>
+    </div>
+
+    <div class="command-row animate-reveal" data-sector="ai">
+      <div class="command-info">
+        <div class="command-name">/ai info</div>
+        <div class="command-desc">Retrieve technical specifications for available neural intelligence models.</div>
+      </div>
+      <div class="command-meta"><span class="command-badge badge-public">Public</span></div>
     </div>
 
     <!-- SYSTEM -->

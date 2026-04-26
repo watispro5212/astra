@@ -112,6 +112,7 @@
           <div class="docs-nav-title">Sectors</div>
           <a href="#moderation" class="docs-nav-link">Moderation Setup</a>
           <a href="#economy" class="docs-nav-link">Industrial Hub</a>
+          <a href="#ai-sentinel" class="docs-nav-link">Neural Sentinel</a>
         </div>
         <div class="docs-nav-group">
           <div class="docs-nav-title">Legal</div>
@@ -135,10 +136,21 @@
         <section id="ai-sentinel" class="docs-section animate-reveal">
           <div class="glass-card">
             <h2>Neural Sentinel</h2>
-            <p class="docs-text">The **AI Sentinel** is a high-concurrency neural processing module that operates exclusively within secure **Direct Message (DM)** sectors. It provides tactical assistance, intel analysis, and general support.</p>
+            <p class="docs-text">The **AI Sentinel** is a high-availability neural processing module that operates exclusively within secure **Direct Message (DM)** sectors. It features a **Triple-Key Redundant Array** with automated **Spectral Cycling** failover.</p>
+            
+            <h3>API Key Acquisition</h3>
+            <p class="docs-text">To maintain operational integrity, Astra requires valid Google Gemini API keys. If your current nodes are reporting <code>EXHAUSTED</code> or <code>QUOTA_EXCEEDED</code>, follow these steps:</p>
             <div class="docs-code-block">
-              Trigger: Send a message to Astra in DMs<br>
-              Protocol: Neural Link (Gemini Matrix)
+              1. Navigate to <a href="https://aistudio.google.com/" target="_blank" style="color: var(--color-primary-light);">Google AI Studio</a><br>
+              2. Generate a new API Key (Gemini 1.5 Flash recommended)<br>
+              3. Update the keys in your <code>.env</code> configuration
+            </div>
+            
+            <h3>Tactical Commands</h3>
+            <div class="docs-code-block">
+              /ai model — Switch between speed and analysis modes<br>
+              /ai status — Diagnostic report for all neural nodes<br>
+              /ai reset — Clear current conversational context
             </div>
             <p class="docs-text">Operatives can recalibrate the Sentinel's neural matrix (change models) using the <code>/ai model</code> command. Available models include Titan Flash (Speed) and Titan Pro (Deep Analysis).</p>
           </div>
