@@ -168,13 +168,28 @@ export class AstraClient extends Client {
         this.on(Events.MessageCreate, async (message) => {
             if (message.author.bot) return;
 
-            // ── AI SENTINEL (DM ONLY) ──────────────────────────────────────────
+            // ── DM PROTOCOLS (AI & PREFIX COMMANDS) ───────────────────────────
             if (!message.guild) {
+                const prefix = '-'; // Default prefix for DMs since /prefix is removed
+
+                // Check for Prefix Commands first
+                if (message.content.startsWith(prefix)) {
+                    const args = message.content.slice(prefix.length).trim().split(/ +/);
+                    const commandName = args.shift()?.toLowerCase();
+
+                    if (commandName === 'ping') {
+                        return await message.reply(`📡 **PONG**: Tactical response time \`${this.ws.ping}ms\``);
+                    } else if (commandName === 'stats') {
+                        return await message.reply(`📊 **SYSTEM STATUS**: Use \`/info stats\` for high-fidelity telemetry.`);
+                    }
+                    // If prefix is used but command not found, we fall through to AI or just return
+                }
+
+                // AI SENTINEL
                 try {
                     await message.channel.sendTyping();
                     const response = await AIService.generateResponse(message.author.id, message.content);
                     
-                    // Split response if it exceeds Discord's 2000 character limit
                     if (response.length > 2000) {
                         const chunks = response.match(/[\s\S]{1,2000}/g) || [];
                         for (const chunk of chunks) {
@@ -189,11 +204,7 @@ export class AstraClient extends Client {
                 return;
             }
 
-            // ── GUILD COMMANDS & XP ────────────────────────────────────────────
-            // Fetch prefix for this guild
-            const guildData = await db.fetchOne('SELECT prefix FROM guilds WHERE guild_id = ?', message.guild.id);
-            const prefix = guildData?.prefix || '-';
-
+            // ── GUILD COMMANDS & XP (NO PREFIX COMMANDS HERE) ──────────────────
             // XP System
             const now = Date.now();
             const cooldown = xpCooldowns.get(message.author.id);
@@ -251,20 +262,6 @@ export class AstraClient extends Client {
                         await db.execute('UPDATE users SET xp = ? WHERE user_id = ?', newXp, message.author.id);
                     }
                 }
-            }
-
-            // Prefix Command Handling
-            if (!message.content.startsWith(prefix)) return;
-
-            const args = message.content.slice(prefix.length).trim().split(/ +/);
-            const commandName = args.shift()?.toLowerCase();
-
-            if (commandName === 'ping') {
-                await message.reply(`📡 **PONG**: Tactical response time \`${this.ws.ping}ms\``);
-            } else if (commandName === 'prefix') {
-                await message.reply(`📡 **CURRENT PREFIX**: \`${prefix}\` | Use \`/prefix\` to modify.`);
-            } else if (commandName === 'stats') {
-                await message.reply(`📊 **SYSTEM STATUS**: Use \`/info stats\` for high-fidelity telemetry.`);
             }
         });
 
