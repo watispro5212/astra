@@ -1,137 +1,78 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Documentation — Astra</title>
-  <meta name="description" content="Technical documentation and deployment guides for Astra v7.3.0 Omega.">
+  <meta name="description" content="Technical documentation and deployment guides for Astra v7.5.0 Titan.">
   <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
   <style>
     .docs-layout {
       display: grid;
-      grid-template-columns: 280px 1fr;
+      grid-template-columns: 300px 1fr;
       gap: 40px;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px 100px;
+      margin-top: 60px;
     }
-
     .docs-sidebar {
       position: sticky;
-      top: 100px;
+      top: 120px;
       height: fit-content;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 16px;
-      padding: 24px;
-      -webkit-backdrop-filter: blur(15px);
-      backdrop-filter: blur(15px);
     }
-
-    .docs-nav-group {
-      margin-bottom: 24px;
-    }
-
+    .docs-nav-group { margin-bottom: 32px; }
     .docs-nav-title {
-      font-family: var(--font-tactical);
-      font-size: 0.7rem;
-      color: var(--primary-neon);
+      font-family: var(--font-heading);
+      font-size: 0.75rem;
+      color: var(--color-primary);
       text-transform: uppercase;
       letter-spacing: 2px;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
     }
-
     .docs-nav-link {
       display: block;
-      color: #94a3b8;
+      color: var(--color-text-dim);
       font-size: 0.9rem;
-      padding: 6px 0;
-      transition: color 0.2s ease;
+      padding: 8px 0;
+      transition: var(--transition-base);
     }
-
     .docs-nav-link:hover, .docs-nav-link.active {
       color: #fff;
+      transform: translateX(4px);
     }
-
-    .docs-content {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 20px;
-      padding: 60px;
-      -webkit-backdrop-filter: blur(20px);
-      backdrop-filter: blur(20px);
-    }
-
-    .docs-section {
-      margin-bottom: 60px;
-    }
-
-    .docs-section:last-child {
-      margin-bottom: 0;
-    }
-
-    .docs-title {
-      font-family: var(--font-tactical);
-      font-size: 1.8rem;
-      margin-bottom: 20px;
+    .docs-section { margin-bottom: 80px; }
+    .docs-section h2 {
+      font-family: var(--font-heading);
+      font-size: 1.75rem;
       color: #fff;
+      margin-bottom: 24px;
     }
-
     .docs-text {
-      color: #94a3b8;
+      color: var(--color-text-dim);
       line-height: 1.8;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
-
     .docs-code-block {
       background: rgba(0, 0, 0, 0.3);
       border: 1px solid var(--glass-border);
       border-radius: 12px;
-      padding: 20px;
+      padding: 24px;
       font-family: var(--font-mono);
       font-size: 0.9rem;
-      color: #60a5fa;
-      margin-bottom: 24px;
-      overflow-x: auto;
+      color: var(--color-primary-light);
+      margin-bottom: 32px;
     }
-
-    .docs-feature-list {
-      list-style: none;
-      padding: 0;
-    }
-
-    .docs-feature-item {
-      display: flex;
-      gap: 12px;
-      color: #94a3b8;
-      margin-bottom: 12px;
-    }
-
-    .docs-feature-item::before {
-      content: '⚡';
-      color: var(--primary-neon);
-    }
-
-    @media (max-width: 900px) {
-      .docs-layout {
-        grid-template-columns: 1fr;
-      }
-      .docs-sidebar {
-        position: static;
-        margin-bottom: 20px;
-      }
-      .docs-content {
-        padding: 30px;
-      }
+    @media (max-width: 992px) {
+      .docs-layout { grid-template-columns: 1fr; }
+      .docs-sidebar { display: none; }
     }
   </style>
 </head>
 <body>
-  <div class="hero-titan__mesh"></div>
+  <div class="astra-mesh"></div>
+  <div class="astra-grid"></div>
 
+  <!-- NAVIGATION -->
   <nav class="nav-titan" id="navbar">
     <div class="nav-container">
       <a href="index.html" class="nav-logo">
@@ -141,90 +82,134 @@
       <div class="nav-links">
         <a href="features.html" class="nav-link">Sectors</a>
         <a href="commands.html" class="nav-link">Protocols</a>
-        <a href="docs.html" class="nav-link" style="color:#fff;">Docs</a>
+        <a href="docs.html" class="nav-link">Docs</a>
         <a href="changelog.html" class="nav-link">Mission Logs</a>
         <a href="support.html" class="nav-link">Support</a>
       </div>
+      <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands" class="btn-astra btn-astra--primary" style="padding: 10px 20px; font-size: 0.75rem;">
+        Deploy Astra
+      </a>
     </div>
   </nav>
 
-  <header class="page-header">
-    <h1 class="page-header__title">KNOWLEDGE ARCHIVE</h1>
-    <p class="page-header__subtitle">Technical documentation for deploying, configuring, and mastering the Astra v7.3.0 Omega engine.</p>
+  <!-- HEADER -->
+  <header class="section" style="padding-top: 160px; padding-bottom: 40px;">
+    <div class="container">
+      <h1 class="h1-titan text-gradient">KNOWLEDGE ARCHIVE</h1>
+      <p class="text-dim" style="max-width: 700px;">Technical documentation for deploying and configuring the Astra v7.5.0 Titan engine.</p>
+    </div>
   </header>
 
-  <main class="docs-layout">
-    <aside class="docs-sidebar">
-      <div class="docs-nav-group">
-        <div class="docs-nav-title">Deployment</div>
-        <a href="#quick-start" class="docs-nav-link active">Quick Start</a>
-        <a href="#inviting" class="docs-nav-link">Inviting Astra</a>
-        <a href="#permissions" class="docs-nav-link">Permissions</a>
-      </div>
-      <div class="docs-nav-group">
-        <div class="docs-nav-title">Configuration</div>
-        <a href="#moderation" class="docs-nav-link">Moderation Setup</a>
-        <a href="#leveling" class="docs-nav-link">Intelligence Config</a>
-        <a href="#economy" class="docs-nav-link">Fiscal Policies</a>
-      </div>
-      <div class="docs-nav-group">
-        <div class="docs-nav-title">Advanced</div>
-        <a href="#proprietary" class="docs-nav-link">License Policy</a>
-        <a href="#api" class="docs-nav-link">Internal API</a>
-      </div>
-    </aside>
-
-    <div class="docs-content">
-      <section id="quick-start" class="docs-section">
-        <h2 class="docs-title">Quick Start</h2>
-        <p class="docs-text">Deploying Astra to your sector is a zero-config process. Most features are autonomous and activate the moment the bot joins your server.</p>
-        <div class="docs-code-block">
-          /info stats
+  <main class="container" style="padding-bottom: 120px;">
+    <div class="docs-layout">
+      <aside class="docs-sidebar">
+        <div class="docs-nav-group">
+          <div class="docs-nav-title">Deployment</div>
+          <a href="#quick-start" class="docs-nav-link active">Quick Start</a>
+          <a href="#inviting" class="docs-nav-link">Inviting Astra</a>
         </div>
-        <p class="docs-text">Run the command above to verify system integrity once Astra is present in your member list.</p>
-      </section>
+        <div class="docs-nav-group">
+          <div class="docs-nav-title">Sectors</div>
+          <a href="#moderation" class="docs-nav-link">Moderation Setup</a>
+          <a href="#economy" class="docs-nav-link">Industrial Hub</a>
+        </div>
+        <div class="docs-nav-group">
+          <div class="docs-nav-title">Legal</div>
+          <a href="#proprietary" class="docs-nav-link">Proprietary Notice</a>
+        </div>
+      </aside>
 
-      <section id="inviting" class="docs-section">
-        <h2 class="docs-title">Inviting Astra</h2>
-        <p class="docs-text">To establish a link with Astra, use the official invite portal. We recommend granting Administrator permissions for the most seamless experience across all 9 tactical sectors.</p>
-        <ul class="docs-feature-list">
-          <li class="docs-feature-item">Global Slash Command access</li>
-          <li class="docs-feature-item">Automatic channel/role management</li>
-          <li class="docs-feature-item">High-priority message processing</li>
-        </ul>
-      </section>
+      <div class="docs-content">
+        <section id="quick-start" class="docs-section animate-reveal">
+          <div class="glass-card">
+            <h2>Quick Start</h2>
+            <p class="docs-text">Deploying Astra to your server is a zero-config process. Most features are autonomous and activate the moment the bot joins your server.</p>
+            <div class="docs-code-block">
+              /info stats
+            </div>
+            <p class="docs-text">Execute the command above to verify system integrity once Astra is present in your member list.</p>
+          </div>
+        </section>
 
-      <section id="proprietary" class="docs-section">
-        <h2 class="docs-title">Proprietary Notice</h2>
-        <p class="docs-text">As of v7.3.0 "Omega Protocol", Astra has transitioned to a <strong>Proprietary / Closed Source</strong> development model. Public redistribution, modification, or self-hosting of the Astra source code is strictly prohibited under the ASTRA PROPRIETARY LICENSE (APL) v2.2.</p>
-        <p class="docs-text">This decision was made to ensure the highest level of security for our enterprise-grade community infrastructure and to maintain the integrity of our global economy systems.</p>
-      </section>
+        <section id="inviting" class="docs-section animate-reveal">
+          <div class="glass-card">
+            <h2>Inviting Astra</h2>
+            <p class="docs-text">To establish a link with Astra, use the official invite portal. We recommend granting Administrator permissions for the most seamless experience across all 12 tactical sectors.</p>
+            <ul class="report-list">
+              <li style="margin-bottom: 12px; color: var(--color-text-dim);">› Global Slash Command access required</li>
+              <li style="margin-bottom: 12px; color: var(--color-text-dim);">› Automatic channel/role management</li>
+              <li style="margin-bottom: 12px; color: var(--color-text-dim);">› High-priority message processing</li>
+            </ul>
+          </div>
+        </section>
+
+        <section id="proprietary" class="docs-section animate-reveal">
+          <div class="glass-card">
+            <h2>Proprietary Notice</h2>
+            <p class="docs-text">As of v7.5.0 'Titan', Astra has transitioned to a <strong>Proprietary / Closed Source</strong> development model. Redistribution or modification of the Astra source code is strictly prohibited under the ASTRA PROPRIETARY LICENSE (APL) v2.5.</p>
+            <p class="docs-text">This decision ensures the highest level of security for our community infrastructure and maintains the integrity of the global economy systems.</p>
+          </div>
+        </section>
+      </div>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="site-footer__brand">
-      <img src="assets/images/astra-logo.png" alt="Astra" width="24" height="24">
-      ASTRA
+  <!-- FOOTER -->
+  <footer class="footer-titan">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand__logo">
+            <img src="assets/images/astra-logo.png" alt="Astra" width="32" height="32">
+            ASTRA
+          </div>
+          <p class="footer-brand__desc">
+            Astra v7.5.0 'Titan' — Engineered for the high-concurrency demands of elite Discord communities worldwide.
+          </p>
+        </div>
+        <div>
+          <h4 class="footer-head">Architecture</h4>
+          <div class="footer-links">
+            <a href="features.html" class="footer-link">Sectors</a>
+            <a href="commands.html" class="footer-link">Protocols</a>
+            <a href="docs.html" class="footer-link">Docs</a>
+          </div>
+        </div>
+        <div>
+          <h4 class="footer-head">Command</h4>
+          <div class="footer-links">
+            <a href="support.html" class="footer-link">Support Hub</a>
+            <a href="faq.html" class="footer-link">Field FAQ</a>
+            <a href="changelog.html" class="footer-link">Mission Logs</a>
+          </div>
+        </div>
+        <div>
+          <h4 class="footer-head">Legal</h4>
+          <div class="footer-links">
+            <a href="privacy.html" class="footer-link">Privacy Policy</a>
+            <a href="terms.html" class="footer-link">Terms of Service</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Astra. All rights reserved.</span>
+        <span>Astra Proprietary License v2.5</span>
+      </div>
     </div>
-    <p class="site-footer__tagline">Omega v7.3.0 · Tactical Discord Intelligence</p>
-    <div class="site-footer__links">
-      <a href="features.html" class="site-footer__link">Sectors</a>
-      <a href="commands.html" class="site-footer__link">Protocols</a>
-      <a href="docs.html" class="site-footer__link">Docs</a>
-      <a href="changelog.html" class="site-footer__link">Mission Logs</a>
-      <a href="faq.html" class="site-footer__link">FAQ</a>
-      <a href="support.html" class="site-footer__link">Support</a>
-      <a href="privacy.html" class="site-footer__link">Privacy</a>
-      <a href="terms.html" class="site-footer__link">Terms</a>
-    </div>
-    <p class="site-footer__copy">&copy; 2026 Astra. All rights reserved. Licensed under the ASTRA PROPRIETARY LICENSE (APL) v2.2.</p>
   </footer>
 
   <script>
     window.addEventListener('scroll', () => {
       document.getElementById('navbar').classList.toggle('nav-titan--scrolled', window.scrollY > 50);
     });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.animate-reveal').forEach(el => observer.observe(el));
   </script>
 </body>
 </html>

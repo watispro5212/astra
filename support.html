@@ -1,147 +1,87 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Support — Astra</title>
-  <meta name="description" content="Astra v7.3.0 Omega support resources — join the official sector, browse the FAQ, or submit a bug report.">
+  <meta name="description" content="Astra v7.5.0 Titan support resources — join the official sector or browse the FAQ.">
   <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
   <style>
-    .support-main {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding-bottom: 100px;
-      padding-inline: 20px;
-    }
-
     .support-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 28px;
-      margin-bottom: 60px;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 32px;
+      margin-top: 60px;
     }
-
-    .support-card {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 20px;
-      padding: 40px 30px;
-      -webkit-backdrop-filter: blur(20px);
-      backdrop-filter: blur(20px);
-      text-align: center;
-      transition: border-color 0.3s ease, transform 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    .status-card {
+      margin-top: 60px;
     }
-
-    .support-card:hover {
-      border-color: var(--primary-neon);
-      transform: translateY(-4px);
-    }
-
-    .support-card__icon { font-size: 3rem; margin-bottom: 20px; }
-
-    .support-card__title {
-      font-family: var(--font-tactical);
-      font-size: 1rem;
-      color: #fff;
-      margin-bottom: 12px;
-    }
-
-    .support-card__desc {
-      color: #94a3b8;
-      font-size: 0.9rem;
-      line-height: 1.6;
-      margin-bottom: 28px;
-      flex: 1;
-    }
-
-    .btn-titan--full {
-      justify-content: center;
-      width: 100%;
-    }
-
-    .info-card {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 16px;
-      padding: 32px;
-      -webkit-backdrop-filter: blur(15px);
-      backdrop-filter: blur(15px);
-      margin-bottom: 20px;
-    }
-
-    .info-card__title {
-      font-family: var(--font-tactical);
-      font-size: 0.9rem;
-      color: #fff;
-      margin-bottom: 14px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .info-card__body {
-      color: #94a3b8;
-      font-size: 0.9rem;
-      line-height: 1.7;
-    }
-
-    .info-card__body code {
-      background: rgba(52, 152, 219, 0.12);
-      border: 1px solid rgba(52, 152, 219, 0.3);
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85em;
-      color: #60a5fa;
-    }
-
-    .info-card__intro { max-width: 100%; margin-bottom: 12px; }
-    .info-card__note  { max-width: 100%; margin-top: 12px; }
-
-    .report-list {
-      padding-left: 0;
-      list-style: none;
-    }
-
-    .report-list__item {
-      padding: 5px 0;
-      color: #94a3b8;
-    }
-
     .status-row {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 10px 0;
+      gap: 16px;
+      padding: 16px 0;
       border-bottom: 1px solid var(--glass-border);
     }
-
     .status-row:last-child { border-bottom: none; }
-
     .status-dot {
-      width: 9px;
-      height: 9px;
+      width: 10px;
+      height: 10px;
       border-radius: 50%;
       background: #2ecc71;
-      box-shadow: 0 0 8px rgba(46, 204, 113, 0.6);
-      flex-shrink: 0;
+      box-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
     }
-
-    .status-label { color: #94a3b8; font-size: 0.875rem; flex: 1; }
-    .status-value { color: #2ecc71; font-size: 0.8rem; font-weight: 600; }
-
-    .nav-link--active { color: #fff; }
+    .status-label {
+      flex: 1;
+      color: var(--color-text-dim);
+      font-size: 0.95rem;
+    }
+    .status-value {
+      color: #2ecc71;
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .report-box {
+      margin-top: 32px;
+      padding: 24px;
+      background: rgba(59, 130, 246, 0.05);
+      border-radius: 12px;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+    .report-box h4 {
+      color: var(--color-primary-light);
+      margin-bottom: 12px;
+      font-family: var(--font-heading);
+      font-size: 0.9rem;
+    }
+    .report-list {
+      list-style: none;
+      padding: 0;
+    }
+    .report-list li {
+      color: var(--color-text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 8px;
+      padding-left: 18px;
+      position: relative;
+    }
+    .report-list li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--color-primary);
+    }
   </style>
 </head>
 <body>
-  <div class="hero-titan__mesh"></div>
+  <div class="astra-mesh"></div>
+  <div class="astra-grid"></div>
 
+  <!-- NAVIGATION -->
   <nav class="nav-titan" id="navbar">
     <div class="nav-container">
       <a href="index.html" class="nav-logo">
@@ -153,119 +93,135 @@
         <a href="commands.html" class="nav-link">Protocols</a>
         <a href="docs.html" class="nav-link">Docs</a>
         <a href="changelog.html" class="nav-link">Mission Logs</a>
-        <a href="support.html" class="nav-link nav-link--active">Support</a>
+        <a href="support.html" class="nav-link">Support</a>
       </div>
+      <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands" class="btn-astra btn-astra--primary" style="padding: 10px 20px; font-size: 0.75rem;">
+        Deploy Astra
+      </a>
     </div>
   </nav>
 
-  <header class="page-header">
-    <h1 class="page-header__title">SUPPORT SECTOR</h1>
-    <p class="page-header__subtitle">Need assistance with Astra Omega v7.3.0? Choose a channel below — our Vanguard team responds fastest in the official Discord sector.</p>
+  <!-- HEADER -->
+  <header class="section" style="padding-top: 160px; padding-bottom: 40px;">
+    <div class="container">
+      <h1 class="h1-titan text-gradient">SUPPORT HUB</h1>
+      <p class="text-dim" style="max-width: 600px;">Assistance for the Astra v7.5.0 Titan engine. Our Vanguard team responds fastest in the official Discord sector.</p>
+    </div>
   </header>
 
-  <main class="support-main">
-
-    <!-- Support channels -->
+  <!-- CONTENT -->
+  <main class="container" style="padding-bottom: 120px;">
+    
     <div class="support-grid">
-      <div class="support-card">
-        <span class="support-card__icon">🏢</span>
-        <h3 class="support-card__title">OFFICIAL SECTOR</h3>
-        <p class="support-card__desc">Join the Astra HQ Discord server to get direct support from the Vanguard development team, report bugs, and follow release announcements.</p>
-        <a href="https://discord.gg/astra" class="btn-titan btn-titan--primary btn-titan--full">Enter Sector</a>
+      <div class="glass-card animate-reveal" style="text-align: center;">
+        <div style="font-size: 3rem; margin-bottom: 24px;">🏢</div>
+        <h3 style="font-family: var(--font-heading); margin-bottom: 16px;">OFFICIAL SECTOR</h3>
+        <p class="text-dim" style="margin-bottom: 24px; font-size: 0.95rem;">Join the Astra HQ for direct support, bug reports, and mission announcements.</p>
+        <a href="https://discord.gg/astra" class="btn-astra btn-astra--primary" style="width: 100%; justify-content: center;">Enter Sector</a>
       </div>
 
-      <div class="support-card">
-        <span class="support-card__icon">📜</span>
-        <h3 class="support-card__title">KNOWLEDGE BASE</h3>
-        <p class="support-card__desc">Browse the archival FAQ for instant answers to the most common questions about setup, features, commands, and v7.3 changes.</p>
-        <a href="faq.html" class="btn-titan btn-titan--secondary btn-titan--full">Browse FAQ</a>
-      </div>
-
-      <div class="support-card">
-        <span class="support-card__icon">📋</span>
-        <h3 class="support-card__title">COMMAND REGISTRY</h3>
-        <p class="support-card__desc">Not sure which command to use? The full v7.3.0 protocol registry lists every command with its permission tier and description.</p>
-        <a href="commands.html" class="btn-titan btn-titan--secondary btn-titan--full">View Commands</a>
+      <div class="glass-card animate-reveal" style="text-align: center;">
+        <div style="font-size: 3rem; margin-bottom: 24px;">📜</div>
+        <h3 style="font-family: var(--font-heading); margin-bottom: 16px;">FIELD FAQ</h3>
+        <p class="text-dim" style="margin-bottom: 24px; font-size: 0.95rem;">Instant intelligence for the most common deployment questions.</p>
+        <a href="faq.html" class="btn-astra btn-astra--secondary" style="width: 100%; justify-content: center;">Browse FAQ</a>
       </div>
     </div>
 
-    <!-- System status -->
-    <div class="info-card">
-      <div class="info-card__title">⚡ System Status — Omega v7.3.0</div>
+    <div class="glass-card status-card animate-reveal">
+      <h3 style="font-family: var(--font-heading); margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
+        <span style="color: var(--color-primary);">⚡</span> SYSTEM TELEMETRY
+      </h3>
       <div class="status-row">
         <span class="status-dot"></span>
-        <span class="status-label">Bot Gateway</span>
-        <span class="status-value">Operational</span>
+        <span class="status-label">Titan Core Gateway</span>
+        <span class="status-value">Active</span>
       </div>
       <div class="status-row">
         <span class="status-dot"></span>
-        <span class="status-label">Database</span>
-        <span class="status-value">Operational</span>
+        <span class="status-label">Neural Database (PostgreSQL)</span>
+        <span class="status-value">Active</span>
       </div>
       <div class="status-row">
         <span class="status-dot"></span>
-        <span class="status-label">Reminder Service</span>
-        <span class="status-value">Operational</span>
-      </div>
-      <div class="status-row">
-        <span class="status-dot"></span>
-        <span class="status-label">Giveaway Service</span>
-        <span class="status-value">Operational</span>
+        <span class="status-label">Industrial Commerce Engine</span>
+        <span class="status-value">Active</span>
       </div>
       <div class="status-row">
         <span class="status-dot"></span>
         <span class="status-label">Vanguard Error Reporter</span>
-        <span class="status-value">Operational</span>
+        <span class="status-value">Active</span>
       </div>
-    </div>
 
-    <!-- How to report -->
-    <div class="info-card">
-      <div class="info-card__title">🐛 Reporting a Bug or Anomaly</div>
-      <div class="info-card__body">
-        <p class="info-card__intro">If you encounter unexpected behavior, the fastest resolution path is the official Discord sector. When reporting, include:</p>
+      <div class="report-box">
+        <h4>REPORTING ANOMALIES</h4>
+        <p class="text-dim" style="font-size: 0.85rem; margin-bottom: 12px;">If you encounter unexpected behavior, provide the following in the Support Sector:</p>
         <ul class="report-list">
-          <li class="report-list__item">› The exact command you ran (e.g. <code>/mod warn</code>)</li>
-          <li class="report-list__item">› The error message or unexpected output you received</li>
-          <li class="report-list__item">› Your server ID and approximate time of the incident</li>
+          <li>The exact command protocol executed.</li>
+          <li>Visual evidence (screenshots) of the anomaly.</li>
+          <li>Server ID and approximate timestamp.</li>
         </ul>
-        <p class="info-card__note">The <strong>Vanguard Error Reporter</strong> is active in Omega v7.3.0 — critical failures are automatically DM'd to the development team, so many issues are resolved before users even report them.</p>
-      </div>
-    </div>
-
-    <!-- Proprietary Notice -->
-    <div class="info-card">
-      <div class="info-card__title">🔒 Proprietary Architecture</div>
-      <div class="info-card__body">
-        As of v7.3.0, Astra has transitioned to a <strong>Proprietary / Closed Source</strong> model. Redistribution or modification of the Astra source code is strictly prohibited. For licensing inquiries, contact the development team in the official Discord sector.
       </div>
     </div>
 
   </main>
 
-  <footer class="site-footer">
-    <div class="site-footer__brand">
-      <img src="assets/images/astra-logo.png" alt="Astra" width="24" height="24">
-      ASTRA
+  <!-- FOOTER -->
+  <footer class="footer-titan">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand__logo">
+            <img src="assets/images/astra-logo.png" alt="Astra" width="32" height="32">
+            ASTRA
+          </div>
+          <p class="footer-brand__desc">
+            Astra v7.5.0 'Titan' — Engineered for the high-concurrency demands of elite Discord communities worldwide.
+          </p>
+        </div>
+        <div>
+          <h4 class="footer-head">Architecture</h4>
+          <div class="footer-links">
+            <a href="features.html" class="footer-link">Sectors</a>
+            <a href="commands.html" class="footer-link">Protocols</a>
+            <a href="docs.html" class="footer-link">Docs</a>
+          </div>
+        </div>
+        <div>
+          <h4 class="footer-head">Command</h4>
+          <div class="footer-links">
+            <a href="support.html" class="footer-link">Support Hub</a>
+            <a href="faq.html" class="footer-link">Field FAQ</a>
+            <a href="changelog.html" class="footer-link">Mission Logs</a>
+          </div>
+        </div>
+        <div>
+          <h4 class="footer-head">Legal</h4>
+          <div class="footer-links">
+            <a href="privacy.html" class="footer-link">Privacy Policy</a>
+            <a href="terms.html" class="footer-link">Terms of Service</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Astra. All rights reserved.</span>
+        <span>Astra Proprietary License v2.5</span>
+      </div>
     </div>
-    <p class="site-footer__tagline">Omega v7.3.0 · Tactical Discord Intelligence</p>
-    <div class="site-footer__links">
-      <a href="features.html" class="site-footer__link">Sectors</a>
-      <a href="commands.html" class="site-footer__link">Protocols</a>
-      <a href="docs.html" class="site-footer__link">Docs</a>
-      <a href="changelog.html" class="site-footer__link">Mission Logs</a>
-      <a href="faq.html" class="site-footer__link">FAQ</a>
-      <a href="support.html" class="site-footer__link">Support</a>
-      <a href="privacy.html" class="site-footer__link">Privacy</a>
-      <a href="terms.html" class="site-footer__link">Terms</a>
-    </div>
-    <p class="site-footer__copy">&copy; 2026 Astra. All rights reserved. Licensed under the ASTRA PROPRIETARY LICENSE (APL) v2.2.</p>
   </footer>
 
   <script>
     window.addEventListener('scroll', () => {
       document.getElementById('navbar').classList.toggle('nav-titan--scrolled', window.scrollY > 50);
     });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.animate-reveal').forEach(el => observer.observe(el));
   </script>
 </body>
 </html>

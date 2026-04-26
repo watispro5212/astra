@@ -1,61 +1,61 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Privacy Policy — Astra</title>
-  <meta name="description" content="Privacy Policy for Astra v7.3.0 Omega Enterprise Core.">
+  <meta name="description" content="Privacy Policy for Astra v7.5.0 Titan Enterprise Core.">
   <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
   <style>
     .legal-card {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      padding: 40px;
-      border-radius: 24px;
-      -webkit-backdrop-filter: blur(20px);
-      backdrop-filter: blur(20px);
-      margin-bottom: 40px;
+      margin-top: 60px;
+      padding: 60px;
     }
-    .legal-section {
-      margin-bottom: 35px;
-    }
+    .legal-section { margin-bottom: 48px; }
     .legal-title {
-      font-family: var(--font-tactical);
-      color: var(--primary-neon);
+      font-family: var(--font-heading);
+      color: var(--color-primary-light);
       font-size: 1.25rem;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 16px;
+    }
+    .legal-title span {
+      font-size: 0.8rem;
+      opacity: 0.5;
     }
     .legal-text {
-      color: #94a3b8;
+      color: var(--color-text-dim);
       line-height: 1.8;
-      font-size: 0.95rem;
+      font-size: 1rem;
     }
-    .legal-text strong {
-      color: #fff;
-    }
+    .legal-text strong { color: #fff; }
     .data-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 20px;
-      margin: 20px 0;
+      margin-top: 24px;
     }
     .data-box {
+      padding: 24px;
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid var(--glass-border);
-      padding: 20px;
       border-radius: 12px;
+    }
+    @media (max-width: 768px) {
+      .legal-card { padding: 30px; }
+      .data-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <div class="hero-titan__mesh"></div>
-  
+  <div class="astra-mesh"></div>
+  <div class="astra-grid"></div>
+
+  <!-- NAVIGATION -->
   <nav class="nav-titan" id="navbar">
     <div class="nav-container">
       <a href="index.html" class="nav-logo">
@@ -69,17 +69,24 @@
         <a href="changelog.html" class="nav-link">Mission Logs</a>
         <a href="support.html" class="nav-link">Support</a>
       </div>
+      <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands" class="btn-astra btn-astra--primary" style="padding: 10px 20px; font-size: 0.75rem;">
+        Deploy Astra
+      </a>
     </div>
   </nav>
 
-  <header class="page-header">
-    <h1 class="page-header__title">PRIVACY POLICY</h1>
-    <p class="page-header__subtitle">archival protocols regarding the acquisition and persistence of operative data.</p>
+  <!-- HEADER -->
+  <header class="section" style="padding-top: 160px; padding-bottom: 40px;">
+    <div class="container" style="max-width: 900px;">
+      <h1 class="h1-titan text-gradient">PRIVACY POLICY</h1>
+      <p class="text-dim">Archival protocols regarding the acquisition and persistence of operative data.</p>
+    </div>
   </header>
 
-  <main class="container" style="max-width: 900px; margin: 0 auto; padding-bottom: 100px; padding-inline: 20px;">
-    
-    <div class="legal-card">
+  <!-- CONTENT -->
+  <main class="container" style="max-width: 900px; padding-bottom: 120px;">
+    <div class="glass-card legal-card animate-reveal">
+      
       <div class="legal-section">
         <div class="legal-title"><span>01</span> DATA ACQUISITION</div>
         <p class="legal-text">
@@ -87,79 +94,92 @@
         </p>
         <div class="data-grid">
           <div class="data-box">
-            <strong>Public Data</strong>
-            <p class="legal-text" style="font-size: 0.85rem; margin-top: 10px;">User IDs, Usernames, Guild IDs, and Role hierarchies.</p>
+            <strong style="display: block; margin-bottom: 8px;">Public Data</strong>
+            <p class="legal-text" style="font-size: 0.85rem;">User IDs, Usernames, Guild IDs, and Role hierarchies.</p>
           </div>
           <div class="data-box">
-            <strong>System Data</strong>
-            <p class="legal-text" style="font-size: 0.85rem; margin-top: 10px;">Message timestamps, Command execution logs, and XP levels.</p>
+            <strong style="display: block; margin-bottom: 8px;">System Data</strong>
+            <p class="legal-text" style="font-size: 0.85rem;">Message timestamps, Command logs, and XP levels.</p>
           </div>
         </div>
       </div>
 
       <div class="legal-section">
-        <div class="legal-title"><span>02</span> DATA PERSISTENCE (POSTGRESQL)</div>
+        <div class="legal-title"><span>02</span> DATA PERSISTENCE</div>
         <p class="legal-text">
-          Operative data is persisted within an encrypted **PostgreSQL cluster**. This includes your leveling matrix, economy balance, and active support tickets. We do not store message content, images, or sensitive personal information outside of active moderation logs.
+          Operative data is persisted within an encrypted **PostgreSQL cluster**. This includes leveling matrices, economy balances, and active support tickets. We do not store message content or private communication.
         </p>
       </div>
 
       <div class="legal-section">
-        <div class="legal-title"><span>03</span> VANGUARD ERROR REPORTING</div>
+        <div class="legal-title"><span>03</span> USER RIGHTS</div>
         <p class="legal-text">
-          In the event of a system anomaly, a diagnostic packet is transmitted to the Astra Core Team. This packet contains the Error Stack Trace and the Context ID. No private user communication is ever included in these reports.
+          Operatives have the right to request a total wipe of their data from the Astra Intelligence Matrix. To initiate a **Right to Erasure**, join our Support Sector.
         </p>
       </div>
 
-      <div class="legal-section">
-        <div class="legal-title"><span>04</span> USER RIGHTS & ERASURE</div>
-        <p class="legal-text">
-          Citizens have the right to request a total wipe of their data from the Astra Intelligence Matrix. To initiate a **Right to Erasure**, join our Support Sector or use the `/utility request-wipe` protocol (where available).
-        </p>
-      </div>
-
-      <div class="legal-section">
-        <div class="legal-title"><span>05</span> THIRD-PARTY TRANSMISSION</div>
-        <p class="legal-text">
-          Astra never sells or distributes operative data to third-party entities. All data remains within the Astra Secure Network for the sole purpose of guild moderation and utility.
-        </p>
-      </div>
-
-      <p class="legal-text" style="font-size: 0.8rem; margin-top: 50px;">
-        Last Updated: April 26, 2026 • Astra Privacy Sector v7.3.0
+      <p class="legal-text" style="font-size: 0.8rem; margin-top: 60px; opacity: 0.5;">
+        Last Updated: April 26, 2026 • Astra Privacy Sector v7.5.0
       </p>
     </div>
-
   </main>
 
-  <footer class="site-footer">
-    <div class="site-footer__brand">
-      <img src="assets/images/astra-logo.png" alt="Astra" width="24" height="24">
-      ASTRA
+  <!-- FOOTER -->
+  <footer class="footer-titan">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand__logo">
+            <img src="assets/images/astra-logo.png" alt="Astra" width="32" height="32">
+            ASTRA
+          </div>
+          <p class="footer-brand__desc">
+            Astra v7.5.0 'Titan' — Engineered for the high-concurrency demands of elite Discord communities worldwide.
+          </p>
+        </div>
+        <div>
+          <h4 class="footer-head">Architecture</h4>
+          <div class="footer-links">
+            <a href="features.html" class="footer-link">Sectors</a>
+            <a href="commands.html" class="footer-link">Protocols</a>
+            <a href="docs.html" class="footer-link">Docs</a>
+          </div>
+        </div>
+        <div>
+          <h4 class="footer-head">Command</h4>
+          <div class="footer-links">
+            <a href="support.html" class="footer-link">Support Hub</a>
+            <a href="faq.html" class="footer-link">Field FAQ</a>
+            <a href="changelog.html" class="footer-link">Mission Logs</a>
+          </div>
+        </div>
+        <div>
+          <h4 class="footer-head">Legal</h4>
+          <div class="footer-links">
+            <a href="privacy.html" class="footer-link">Privacy Policy</a>
+            <a href="terms.html" class="footer-link">Terms of Service</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Astra. All rights reserved.</span>
+        <span>Astra Proprietary License v2.5</span>
+      </div>
     </div>
-    <p class="site-footer__tagline">Omega v7.3.0 · Tactical Discord Intelligence</p>
-    <div class="site-footer__links">
-      <a href="features.html" class="site-footer__link">Sectors</a>
-      <a href="commands.html" class="site-footer__link">Protocols</a>
-      <a href="docs.html" class="site-footer__link">Docs</a>
-      <a href="changelog.html" class="site-footer__link">Mission Logs</a>
-      <a href="faq.html" class="site-footer__link">FAQ</a>
-      <a href="support.html" class="site-footer__link">Support</a>
-      <a href="privacy.html" class="site-footer__link">Privacy</a>
-      <a href="terms.html" class="site-footer__link">Terms</a>
-    </div>
-    <p class="site-footer__copy">&copy; 2026 Astra. All rights reserved. Licensed under the ASTRA PROPRIETARY LICENSE (APL) v2.2.</p>
   </footer>
 
   <script>
     window.addEventListener('scroll', () => {
-      const nav = document.getElementById('navbar');
-      if (window.scrollY > 50) {
-        nav.classList.add('nav-titan--scrolled');
-      } else {
-        nav.classList.remove('nav-titan--scrolled');
-      }
+      document.getElementById('navbar').classList.toggle('nav-titan--scrolled', window.scrollY > 50);
     });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.animate-reveal').forEach(el => observer.observe(el));
   </script>
 </body>
 </html>

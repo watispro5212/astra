@@ -3,6 +3,33 @@
 All notable changes to Astra are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [7.5.0] — April 26, 2026
+
+### 🪐 Titan Protocol Deployment
+
+A massive aesthetic and structural overhaul. Transitioned the entire Astra ecosystem to the **Titan** design language, featuring high-fidelity glassmorphism, neural grid effects, and an integrated industrial commerce portal.
+
+#### 🎨 Web Portal v2.0 (Titan)
+
+- **UI Engine 2.0** — Complete rewrite of the Astra web portal with premium design tokens.
+- **Glassmorphism 2.0** — Implemented multi-layered blur effects and neon-accented borders across all sub-pages.
+- **Industrial Hub Integration** — The web portal now directly showcases shop inventory with tactical mockups.
+- **Responsive Telemetry** — Added live system status indicators to the Support Hub.
+- **Archival Timeline** — Overhauled Mission Logs with a sleek vertical timeline layout.
+
+#### 🏬 Commerce Protocol
+
+- **Shop Synchronization** — The web display is now 1:1 with the `shopService.ts` kernel.
+- **Role Integration** — Shop items can now be configured to grant specific server roles upon acquisition.
+- **Tactical Inventory** — Added Energy Drinks, Tactical Badges, and Armor to the core marketplace.
+
+#### 🛡️ Moderation & Utility
+
+- **Case Persistence** — Hardened the PostgreSQL case logging for high-concurrency moderation.
+- **Command Registry v2** — Updated all tactical protocols with new permission tiers and descriptions.
+
+---
+
 ## [7.2.0] — April 26, 2026
 
 ### ⚡ Omega Protocol

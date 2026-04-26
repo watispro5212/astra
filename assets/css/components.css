@@ -1,238 +1,284 @@
 /*
-  ASTRA NOVA COMPONENT SYSTEM v7.0.0
+  ASTRA NOVA COMPONENT SYSTEM v7.5.0 'Titan'
   Engineered for high-fidelity glassmorphism and tactical telemetry.
 */
-
-:root {
-  --primary-neon: #3498db;
-  --secondary-neon: #9b59b6;
-  --titan-bg: #070a13;
-  --glass-bg: rgba(15, 20, 35, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --font-main: 'Inter', sans-serif;
-  --font-tactical: 'Orbitron', sans-serif;
-}
-
-body {
-  font-family: var(--font-main);
-  background-color: var(--titan-bg);
-  color: #fff;
-  margin: 0;
-  overflow-x: hidden;
-}
-
-/* --- TITAN BACKGROUNDS --- */
-.hero-titan__mesh {
-  position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background-image: 
-    radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
-    radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
-    radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
-  z-index: -1;
-  opacity: 0.6;
-}
 
 /* --- TITAN NAVIGATION --- */
 .nav-titan {
   position: fixed;
   top: 0; left: 0; width: 100%;
   z-index: 1000;
-  padding: 20px 0;
-  transition: all 0.3s ease;
+  padding: 24px 0;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .nav-titan--scrolled {
-  background: rgba(7, 10, 19, 0.8);
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
-  padding: 15px 0;
+  background: rgba(5, 7, 10, 0.7);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+  padding: 16px 0;
   border-bottom: 1px solid var(--glass-border);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .nav-container {
-  max-width: 1200px;
+  max-width: 1300px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
+  padding: 0 32px;
 }
 
 .nav-logo {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   text-decoration: none;
   color: #fff;
-  font-family: var(--font-tactical);
-  font-weight: 700;
-  font-size: 1.25rem;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.4rem;
+  letter-spacing: 2px;
+}
+
+.nav-logo img {
+  filter: drop-shadow(0 0 10px var(--color-primary-glow));
 }
 
 .nav-links {
   display: flex;
-  gap: 30px;
+  gap: 40px;
 }
 
 .nav-link {
   text-decoration: none;
-  color: #94a3b8;
-  font-weight: 500;
-  transition: color 0.3s ease;
-  font-size: 0.9rem;
-}
-
-.nav-link:hover {
-  color: #fff;
-}
-
-/* --- TITAN BUTTONS --- */
-.btn-titan {
-  padding: 14px 28px;
-  border-radius: 12px;
+  color: var(--color-text-dim);
   font-weight: 600;
-  text-decoration: none;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 0.95rem;
-}
-
-.btn-titan--primary {
-  background: #fff;
-  color: #000;
-  box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
-}
-
-.btn-titan--primary:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 40px rgba(255, 255, 255, 0.2);
-}
-
-.btn-titan--secondary {
-  background: var(--glass-bg);
-  color: #fff;
-  border: 1px solid var(--glass-border);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-}
-
-.btn-titan--secondary:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.3);
-  transform: translateY(-3px);
-}
-
-/* --- TITAN FOOTER --- */
-.site-footer {
-  border-top: 1px solid var(--glass-border);
-  padding: 60px 20px 40px;
-  text-align: center;
-  background: rgba(7, 10, 19, 0.6);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-}
-
-.site-footer__brand {
-  font-family: var(--font-tactical);
-  font-size: 1.1rem;
-  color: #fff;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-.site-footer__tagline {
-  color: #64748b;
   font-size: 0.85rem;
-  margin-bottom: 30px;
-}
-
-.site-footer__links {
-  display: flex;
-  gap: 24px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-bottom: 30px;
-}
-
-.site-footer__link {
-  color: #94a3b8;
-  text-decoration: none;
-  font-size: 0.875rem;
-  transition: color 0.2s ease;
-}
-
-.site-footer__link:hover {
-  color: var(--primary-neon);
-}
-
-.site-footer__copy {
-  color: #475569;
-  font-size: 0.8rem;
-}
-
-/* --- BADGE --- */
-.badge {
-  display: inline-block;
-  padding: 5px 12px;
-  background: linear-gradient(90deg, var(--primary-neon), var(--secondary-neon));
-  border-radius: 20px;
-  font-size: 0.7rem;
-  font-weight: 800;
-  letter-spacing: 2px;
   text-transform: uppercase;
-  box-shadow: 0 0 20px rgba(52, 152, 219, 0.4);
-  color: #fff;
+  letter-spacing: 1.5px;
+  transition: var(--transition-base);
+  position: relative;
 }
 
-/* --- TITAN CARDS --- */
-.telemetry-card {
-  background: var(--glass-bg);
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0;
+  width: 0; height: 2px;
+  background: var(--grad-titan);
+  transition: var(--transition-base);
+}
+
+.nav-link:hover { color: #fff; }
+.nav-link:hover::after { width: 100%; }
+
+/* --- TACTICAL STATS --- */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--glass-border);
   border: 1px solid var(--glass-border);
-  padding: 30px;
-  border-radius: 20px;
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
-  transition: all 0.3s ease;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-top: -60px;
+  position: relative;
+  z-index: 20;
+}
+
+.stat-box {
+  background: var(--color-bg-alt);
+  padding: 40px 20px;
+  text-align: center;
+  transition: var(--transition-base);
+}
+
+.stat-box:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.stat-box__value {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 2.2rem;
+  font-weight: 900;
+  background: var(--grad-titan);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+}
+
+.stat-box__label {
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* --- TACTICAL CARDS --- */
+.sector-card {
+  padding: 40px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--glass-border);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, transparent 100%);
+  transition: var(--transition-base);
   height: 100%;
 }
 
-.telemetry-card:hover {
-  border-color: var(--primary-neon);
-  transform: translateY(-5px);
+.sector-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: var(--glow-primary);
+  transform: translateY(-8px);
 }
 
-.telemetry-card__title {
-  font-family: var(--font-tactical);
+.sector-card__icon {
+  width: 64px;
+  height: 64px;
+  background: rgba(59, 130, 246, 0.1);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  margin-bottom: 24px;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.sector-card__title {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+}
+
+.sector-card__desc {
+  font-size: 0.95rem;
+  color: var(--color-text-dim);
+  line-height: 1.6;
+}
+
+/* --- INDUSTRIAL SHOP --- */
+.shop-item {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 24px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--glass-border);
+  transition: var(--transition-base);
+}
+
+.shop-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--color-secondary);
+}
+
+.shop-item__icon {
+  width: 56px;
+  height: 56px;
+  background: var(--grad-dark);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  border: 1px solid var(--glass-border);
+}
+
+.shop-item__info h4 {
+  font-family: var(--font-subheading);
   font-size: 1.1rem;
-  margin-bottom: 10px;
+  margin-bottom: 4px;
+}
+
+.shop-item__info p {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.shop-item__price {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+/* --- FOOTER --- */
+.footer-titan {
+  border-top: 1px solid var(--glass-border);
+  padding: 100px 0 60px;
+  background: var(--color-bg-alt);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 60px;
+  margin-bottom: 80px;
+}
+
+.footer-brand__logo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.footer-brand__desc {
+  color: var(--color-text-muted);
+  max-width: 300px;
+  font-size: 0.9rem;
+}
+
+.footer-head {
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 24px;
   color: #fff;
 }
 
-/* --- TITAN PAGE HEADERS --- */
-.page-header {
-  padding: 160px 20px 80px;
-  text-align: center;
-  max-width: 800px;
-  margin: 0 auto;
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.page-header__title {
-  font-family: var(--font-tactical);
-  font-size: 3rem;
-  margin-bottom: 20px;
-  background: linear-gradient(to bottom, #fff 0%, #aaa 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.footer-link {
+  color: var(--color-text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: var(--transition-base);
 }
 
-.page-header__subtitle {
-  color: #94a3b8;
-  font-size: 1.1rem;
-  line-height: 1.6;
+.footer-link:hover {
+  color: var(--color-primary);
+}
+
+.footer-bottom {
+  padding-top: 40px;
+  border-top: 1px solid var(--glass-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+}
+
+@media (max-width: 992px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 576px) {
+  .footer-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
 }

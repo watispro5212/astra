@@ -1,49 +1,48 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Terms of Service — Astra</title>
-  <meta name="description" content="Terms of Service for Astra v7.3.0 Omega Enterprise Core.">
+  <meta name="description" content="Terms of Service for Astra v7.5.0 Titan Enterprise Core.">
   <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
   <style>
     .legal-card {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      padding: 40px;
-      border-radius: 24px;
-      -webkit-backdrop-filter: blur(20px);
-      backdrop-filter: blur(20px);
-      margin-bottom: 40px;
+      margin-top: 60px;
+      padding: 60px;
     }
-    .legal-section {
-      margin-bottom: 35px;
-    }
+    .legal-section { margin-bottom: 48px; }
     .legal-title {
-      font-family: var(--font-tactical);
-      color: var(--primary-neon);
+      font-family: var(--font-heading);
+      color: var(--color-primary-light);
       font-size: 1.25rem;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 16px;
+    }
+    .legal-title span {
+      font-size: 0.8rem;
+      opacity: 0.5;
     }
     .legal-text {
-      color: #94a3b8;
+      color: var(--color-text-dim);
       line-height: 1.8;
-      font-size: 0.95rem;
+      font-size: 1rem;
     }
-    .legal-text strong {
-      color: #fff;
+    .legal-text strong { color: #fff; }
+    @media (max-width: 768px) {
+      .legal-card { padding: 30px; }
     }
   </style>
 </head>
 <body>
-  <div class="hero-titan__mesh"></div>
-  
+  <div class="astra-mesh"></div>
+  <div class="astra-grid"></div>
+
+  <!-- NAVIGATION -->
   <nav class="nav-titan" id="navbar">
     <div class="nav-container">
       <a href="index.html" class="nav-logo">
@@ -57,17 +56,24 @@
         <a href="changelog.html" class="nav-link">Mission Logs</a>
         <a href="support.html" class="nav-link">Support</a>
       </div>
+      <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands" class="btn-astra btn-astra--primary" style="padding: 10px 20px; font-size: 0.75rem;">
+        Deploy Astra
+      </a>
     </div>
   </nav>
 
-  <header class="page-header">
-    <h1 class="page-header__title">TERMS OF SERVICE</h1>
-    <p class="page-header__subtitle">The legal protocols governing the use of the Astra v7.3.0 Omega Enterprise Core engine.</p>
+  <!-- HEADER -->
+  <header class="section" style="padding-top: 160px; padding-bottom: 40px;">
+    <div class="container" style="max-width: 900px;">
+      <h1 class="h1-titan text-gradient">TERMS OF SERVICE</h1>
+      <p class="text-dim">The legal protocols governing the use of the Astra v7.5.0 Titan engine.</p>
+    </div>
   </header>
 
-  <main class="container" style="max-width: 900px; margin: 0 auto; padding-bottom: 100px; padding-inline: 20px;">
-    
-    <div class="legal-card">
+  <!-- CONTENT -->
+  <main class="container" style="max-width: 900px; padding-bottom: 120px;">
+    <div class="glass-card legal-card animate-reveal">
+      
       <div class="legal-section">
         <div class="legal-title"><span>01</span> ACCEPTANCE OF PROTOCOLS</div>
         <p class="legal-text">
@@ -78,69 +84,86 @@
       <div class="legal-section">
         <div class="legal-title"><span>02</span> USAGE CLEARANCE</div>
         <p class="legal-text">
-          Astra is provided as an enterprise-grade moderation and utility tool. Users are prohibited from utilizing Astra for:
-          <br>• Automated spam or flooding of Discord APIs.
-          <br>• Hostile takeovers or malicious server disruption.
-          <br>• Distribution of content that violates the Discord Terms of Service.
+          Astra is provided as an enterprise-grade moderation and utility tool. Users are prohibited from utilizing Astra for automated spam, hostile takeovers, or any action that violates the Discord Terms of Service.
         </p>
       </div>
 
       <div class="legal-section">
         <div class="legal-title"><span>03</span> DATA PERSISTENCE</div>
         <p class="legal-text">
-          Astra utilizes a high-concurrency **PostgreSQL architecture** to maintain leveling, economy, and configuration state. While we strive for 100% data integrity, Astra is not liable for data loss caused by API failures or upstream database anomalies.
+          Astra utilizes a high-concurrency **PostgreSQL architecture** to maintain state. While we strive for 100% data integrity, Astra is not liable for data loss caused by upstream API failures or database anomalies.
         </p>
       </div>
 
       <div class="legal-section">
         <div class="legal-title"><span>04</span> VANGUARD TELEMETRY</div>
         <p class="legal-text">
-          Our **Vanguard Error Reporter** may transmit diagnostic packets during system failures. These packets include non-sensitive metadata (Server ID, Command Name, Error Logs) to facilitate rapid anomaly resolution. By using Astra, you consent to this diagnostic telemetry.
+          Our Vanguard Error Reporter transmits diagnostic packets during failures. These include non-sensitive metadata (Server ID, Command Name) to facilitate rapid resolution. Usage of Astra implies consent to this telemetry.
         </p>
       </div>
 
-      <div class="legal-section">
-        <div class="legal-title"><span>05</span> TERMINATION OF SERVICE</div>
-        <p class="legal-text">
-          Astra Core Developers reserve the right to blacklist guilds or users who engage in malicious exploitation of Astra's autonomous routines.
-        </p>
-      </div>
-
-      <p class="legal-text" style="font-size: 0.8rem; margin-top: 50px;">
-        Last Updated: April 26, 2026 • Astra Legal Sector v7.3.0
+      <p class="legal-text" style="font-size: 0.8rem; margin-top: 60px; opacity: 0.5;">
+        Last Updated: April 26, 2026 • Astra Legal Sector v7.5.0
       </p>
     </div>
-
   </main>
 
-  <footer class="site-footer">
-    <div class="site-footer__brand">
-      <img src="assets/images/astra-logo.png" alt="Astra" width="24" height="24">
-      ASTRA
+  <!-- FOOTER -->
+  <footer class="footer-titan">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand__logo">
+            <img src="assets/images/astra-logo.png" alt="Astra" width="32" height="32">
+            ASTRA
+          </div>
+          <p class="footer-brand__desc">
+            Astra v7.5.0 'Titan' — Engineered for the high-concurrency demands of elite Discord communities worldwide.
+          </p>
+        </div>
+        <div>
+          <h4 class="footer-head">Architecture</h4>
+          <div class="footer-links">
+            <a href="features.html" class="footer-link">Sectors</a>
+            <a href="commands.html" class="footer-link">Protocols</a>
+            <a href="docs.html" class="footer-link">Docs</a>
+          </div>
+        </div>
+        <div>
+          <h4 class="footer-head">Command</h4>
+          <div class="footer-links">
+            <a href="support.html" class="footer-link">Support Hub</a>
+            <a href="faq.html" class="footer-link">Field FAQ</a>
+            <a href="changelog.html" class="footer-link">Mission Logs</a>
+          </div>
+        </div>
+        <div>
+          <h4 class="footer-head">Legal</h4>
+          <div class="footer-links">
+            <a href="privacy.html" class="footer-link">Privacy Policy</a>
+            <a href="terms.html" class="footer-link">Terms of Service</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Astra. All rights reserved.</span>
+        <span>Astra Proprietary License v2.5</span>
+      </div>
     </div>
-    <p class="site-footer__tagline">Omega v7.3.0 · Tactical Discord Intelligence</p>
-    <div class="site-footer__links">
-      <a href="features.html" class="site-footer__link">Sectors</a>
-      <a href="commands.html" class="site-footer__link">Protocols</a>
-      <a href="docs.html" class="site-footer__link">Docs</a>
-      <a href="changelog.html" class="site-footer__link">Mission Logs</a>
-      <a href="faq.html" class="site-footer__link">FAQ</a>
-      <a href="support.html" class="site-footer__link">Support</a>
-      <a href="privacy.html" class="site-footer__link">Privacy</a>
-      <a href="terms.html" class="site-footer__link">Terms</a>
-    </div>
-    <p class="site-footer__copy">&copy; 2026 Astra. All rights reserved. Licensed under the ASTRA PROPRIETARY LICENSE (APL) v2.2.</p>
   </footer>
 
   <script>
     window.addEventListener('scroll', () => {
-      const nav = document.getElementById('navbar');
-      if (window.scrollY > 50) {
-        nav.classList.add('nav-titan--scrolled');
-      } else {
-        nav.classList.remove('nav-titan--scrolled');
-      }
+      document.getElementById('navbar').classList.toggle('nav-titan--scrolled', window.scrollY > 50);
     });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.animate-reveal').forEach(el => observer.observe(el));
   </script>
 </body>
 </html>

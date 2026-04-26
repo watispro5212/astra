@@ -1,109 +1,102 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mission Logs — Astra</title>
-  <meta name="description" content="Astra v7.3.0 Omega deployment history and mission logs.">
+  <meta name="description" content="Astra v7.5.0 'Titan' deployment history and mission logs.">
   <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
   <style>
-    .log-entry {
-      border-left: 2px solid var(--primary-neon);
-      margin-left: 20px;
-      padding-left: 30px;
-      padding-bottom: 50px;
+    .log-timeline {
       position: relative;
+      padding-left: 40px;
+      margin-top: 40px;
+    }
+    .log-timeline::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--glass-border);
+    }
+    .log-entry {
+      position: relative;
+      margin-bottom: 60px;
     }
     .log-entry::before {
       content: '';
       position: absolute;
-      left: -9px;
-      top: 0;
-      width: 16px;
-      height: 16px;
+      left: -45px; top: 8px;
+      width: 12px; height: 12px;
       border-radius: 50%;
-      background: var(--titan-bg);
-      border: 2px solid var(--primary-neon);
-      box-shadow: 0 0 10px var(--primary-neon);
+      background: var(--color-bg);
+      border: 2px solid var(--color-primary);
+      box-shadow: 0 0 10px var(--color-primary-glow);
+      z-index: 2;
     }
-    .log-entry--major::before {
-      background: var(--primary-neon);
-      box-shadow: 0 0 20px var(--primary-neon);
-      width: 20px;
-      height: 20px;
-      left: -11px;
-    }
-    .log-card {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      padding: 30px;
-      border-radius: 16px;
-      -webkit-backdrop-filter: blur(15px);
-      backdrop-filter: blur(15px);
-    }
-    .log-card--nova {
-      border-color: rgba(52, 152, 219, 0.4);
-      background: rgba(52, 152, 219, 0.06);
+    .log-entry.major::before {
+      background: var(--color-primary);
+      width: 16px; height: 16px;
+      left: -47px;
     }
     .log-version {
-      font-family: var(--font-tactical);
+      font-family: var(--font-heading);
       font-size: 1.5rem;
-      color: #fff;
       margin-bottom: 8px;
     }
-    .log-codename {
+    .log-date {
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 24px;
+    }
+    .log-badge {
       display: inline-block;
-      padding: 3px 10px;
-      background: linear-gradient(90deg, var(--primary-neon), var(--secondary-neon));
-      border-radius: 12px;
+      padding: 4px 12px;
+      background: var(--grad-titan);
+      border-radius: 100px;
       font-size: 0.7rem;
       font-weight: 800;
-      letter-spacing: 1.5px;
       text-transform: uppercase;
-      margin-bottom: 12px;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
     }
-    .log-date {
-      color: #64748b;
+    .log-content h4 {
+      font-family: var(--font-heading);
       font-size: 0.85rem;
+      color: var(--color-primary);
       text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 20px;
-    }
-    .log-category {
-      font-family: var(--font-tactical);
-      font-size: 0.75rem;
-      color: var(--primary-neon);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin: 18px 0 8px;
+      letter-spacing: 1.5px;
+      margin: 24px 0 12px;
     }
     .log-list {
       list-style: none;
       padding: 0;
-      margin: 0;
     }
-    .log-item {
-      color: #94a3b8;
-      margin-bottom: 8px;
-      display: flex;
-      gap: 12px;
-      font-size: 0.93rem;
-      line-height: 1.5;
+    .log-list li {
+      position: relative;
+      padding-left: 20px;
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+      color: var(--color-text-dim);
     }
-    .log-item::before {
-      content: '•';
-      color: var(--primary-neon);
-      font-weight: 800;
-      flex-shrink: 0;
+    .log-list li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--color-primary);
+      font-weight: 700;
     }
   </style>
 </head>
 <body>
-  <div class="hero-titan__mesh"></div>
+  <div class="astra-mesh"></div>
+  <div class="astra-grid"></div>
 
+  <!-- NAVIGATION -->
   <nav class="nav-titan" id="navbar">
     <div class="nav-container">
       <a href="index.html" class="nav-logo">
@@ -114,170 +107,144 @@
         <a href="features.html" class="nav-link">Sectors</a>
         <a href="commands.html" class="nav-link">Protocols</a>
         <a href="docs.html" class="nav-link">Docs</a>
-        <a href="changelog.html" class="nav-link" style="color: #fff;">Mission Logs</a>
+        <a href="changelog.html" class="nav-link">Mission Logs</a>
         <a href="support.html" class="nav-link">Support</a>
       </div>
+      <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands" class="btn-astra btn-astra--primary" style="padding: 10px 20px; font-size: 0.75rem;">
+        Deploy Astra
+      </a>
     </div>
   </nav>
 
-  <header class="page-header">
-    <h1 class="page-header__title">MISSION LOGS</h1>
-    <p class="page-header__subtitle">The complete archival history of the Astra deployment — every upgrade, fix, and tactical advancement documented.</p>
+  <!-- HEADER -->
+  <header class="section" style="padding-top: 160px; padding-bottom: 60px;">
+    <div class="container">
+      <h1 class="h1-titan text-gradient">MISSION LOGS</h1>
+      <p class="text-dim" style="max-width: 600px;">The complete archival history of the Astra deployment — every upgrade, fix, and tactical advancement documented.</p>
+    </div>
   </header>
 
-  <main class="container" style="max-width: 800px; margin: 0 auto; padding-bottom: 100px; padding-inline: 20px;">
-
-    <!-- v7.3.0 OMEGA -->
-    <div class="log-entry log-entry--major">
-      <div class="log-card log-card--nova" style="border-color: rgba(155, 89, 182, 0.4); background: rgba(155, 89, 182, 0.06);">
-        <div class="log-version">v7.3.0</div>
-        <span class="log-codename" style="background: linear-gradient(90deg, #9b59b6, #8e44ad);">Omega</span>
-        <div class="log-date">APRIL 26, 2026</div>
-
-        <div class="log-category">Tactical Overhaul</div>
-        <ul class="log-list">
-          <li class="log-item"><strong>Proprietary Transition</strong> — Officially moved to a Closed Source development model under APL v2.2.</li>
-          <li class="log-item"><strong>Marketplace Expansion</strong> — `/shop admin add` now supports <code>Role Rewards</code>, granting Discord roles upon purchase.</li>
-          <li class="log-item"><strong>Auto-Seeding Engine</strong> — New server deployments now automatically populate the marketplace with tactical starter kits.</li>
-          <li class="log-item"><strong>High-Fidelity Branding</strong> — Complete replacement of all assets with the new "Omega Protocol" tactical logo.</li>
-          <li class="log-item"><strong>Economy Logic Refactor</strong> — Leaderboards now resolve full usernames instead of IDs for improved operative identification.</li>
-          <li class="log-item"><strong>Global Version Sync</strong> — All internal system diagnostics and footers synchronized to v7.3.0.</li>
-        </ul>
+  <!-- CONTENT -->
+  <main class="container" style="padding-bottom: 120px;">
+    <div class="log-timeline">
+      
+      <!-- v7.5.0 TITAN -->
+      <div class="log-entry major animate-reveal">
+        <div class="glass-card" style="border-color: rgba(59, 130, 246, 0.3); background: rgba(59, 130, 246, 0.05);">
+          <span class="log-badge">Titan v7.5.0</span>
+          <h2 class="log-version">Titan Protocol Deployment</h2>
+          <div class="log-date">APRIL 26, 2026</div>
+          
+          <div class="log-content">
+            <h4>Aesthetic Overhaul</h4>
+            <ul class="log-list">
+              <li><strong>UI Engine 2.0</strong> — Complete transition to high-fidelity 'Titan' design language.</li>
+              <li><strong>Glassmorphism 2.0</strong> — Deeper blurs, multi-layered gradients, and optimized CSS performance.</li>
+              <li><strong>Industrial Hub</strong> — Integrated tactical commerce display directly into the core portal.</li>
+            </ul>
+            <h4>Functional Updates</h4>
+            <ul class="log-list">
+              <li><strong>Neural Latency Optimization</strong> — Optimized background checker frequency for economy and giveaways.</li>
+              <li><strong>Commerce Protocol</strong> — Shop system now supports automated role granting and item effects.</li>
+            </ul>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <!-- v7.0.0 NOVA -->
-    <div class="log-entry log-entry--major">
-      <div class="log-card log-card--nova">
-        <div class="log-version">v7.0.0</div>
-        <span class="log-codename">Nova</span>
-        <div class="log-date">APRIL 22, 2026</div>
-
-        <div class="log-category">New Features</div>
-        <ul class="log-list">
-          <li class="log-item">Deployed full <strong>Ticket System</strong> — create, close, add/remove users from private staff channels.</li>
-          <li class="log-item">Launched <strong>Giveaway Engine</strong> — timed reaction-based giveaways with auto-end, manual end, and reroll.</li>
-          <li class="log-item">Introduced <strong>Welcome &amp; Farewell System</strong> — configurable messages, auto-role assignment, farewell channel.</li>
-          <li class="log-item">Added <code>/mod warn</code> — issues formal warnings logged as mod cases and DM'd to the target.</li>
-          <li class="log-item">Added <code>/mod unban</code> — revoke active bans by user ID with case logging.</li>
-          <li class="log-item">Added <code>/mod case</code> — look up any case by number in the current server.</li>
-          <li class="log-item">Added <code>/mod history</code> — view full moderation history for any operative.</li>
-          <li class="log-item">Added <code>/economy work</code> — hourly assignments generating 100–300 credits.</li>
-          <li class="log-item">Added <code>/economy leaderboard</code> — global top 10 wealthiest operatives.</li>
-          <li class="log-item">Added <code>/leveling leaderboard</code> — global top 10 by level and XP.</li>
-          <li class="log-item">Renamed <code>/rank</code> to <code>/leveling rank</code> with visual ASCII progress bar.</li>
-          <li class="log-item">Deployed <strong>GiveawayService</strong> background checker — auto-ends expired giveaways every 60 seconds.</li>
-        </ul>
-
-        <div class="log-category">Fixes &amp; Improvements</div>
-        <ul class="log-list">
-          <li class="log-item">Fixed broken <code>@media (prefers-reduced-motion)</code> CSS rule — missing <code>@media</code> wrapper caused parse error.</li>
-          <li class="log-item">Fixed hardcoded owner ID in <code>/system alert</code> — now reads from environment config.</li>
-          <li class="log-item">Fixed version string in <code>/info stats</code> — previously hardcoded as v6.3.0.</li>
-          <li class="log-item">Removed unused <code>promisify</code> import from database module.</li>
-          <li class="log-item">Removed unused <code>Guild</code> import from ModerationService.</li>
-          <li class="log-item">Updated bot status rotator to display Nova v7.0.0.</li>
-          <li class="log-item">Updated <code>/system update</code> embed with full Nova feature summary.</li>
-          <li class="log-item">Economy <code>balance</code> now formats numbers with locale separators.</li>
-          <li class="log-item">Added v7.0 database schema migrations — safe to apply on existing databases.</li>
-          <li class="log-item">Website: all page titles, meta descriptions, and badges updated to v7.0.0.</li>
-          <li class="log-item">Website: commands page fully rewritten to reflect actual command names and all new protocols.</li>
-          <li class="log-item">Website: features page updated with all 9 tactical sectors.</li>
-          <li class="log-item">Added site-wide footer with navigation links and license info.</li>
-          <li class="log-item">Added hover transitions for buttons in <code>components.css</code>.</li>
-        </ul>
+      <!-- v7.3.0 OMEGA -->
+      <div class="log-entry major animate-reveal">
+        <div class="glass-card">
+          <span class="log-badge" style="background: var(--grad-cyber);">Omega v7.3.0</span>
+          <h2 class="log-version">Omega Protocol</h2>
+          <div class="log-date">APRIL 26, 2026</div>
+          <div class="log-content">
+            <h4>Tactical Overhaul</h4>
+            <ul class="log-list">
+              <li><strong>Proprietary Transition</strong> — Officially moved to a Closed Source development model under APL v2.5.</li>
+              <li><strong>Marketplace Expansion</strong> — Role Rewards now fully functional within the shop ecosystem.</li>
+              <li><strong>Auto-Seeding Engine</strong> — Automated inventory deployment for new sectors.</li>
+            </ul>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <!-- v6.3.2 -->
-    <div class="log-entry">
-      <div class="log-card">
-        <div class="log-version">v6.3.2 "Titan Expansion"</div>
-        <div class="log-date">APRIL 22, 2026</div>
-        <ul class="log-list">
-          <li class="log-item">Deployed Elite Tier moderation hierarchy (Admin, Mod, Trial Mod).</li>
-          <li class="log-item">Integrated Marketplace and Archive sectors into Apex Infrastructure.</li>
-          <li class="log-item">Implemented Portal-Wide "Titan Dashboard" UI Overhaul.</li>
-          <li class="log-item">Hardened cross-browser compatibility for glassmorphism effects.</li>
-        </ul>
+      <!-- v7.0.0 NOVA -->
+      <div class="log-entry major animate-reveal">
+        <div class="glass-card">
+          <span class="log-badge" style="background: var(--color-secondary);">Nova v7.0.0</span>
+          <h2 class="log-version">Nova Initialization</h2>
+          <div class="log-date">APRIL 22, 2026</div>
+          <div class="log-content">
+            <h4>New Features</h4>
+            <ul class="log-list">
+              <li>Deployed full <strong>Ticket System</strong> with private channel routing.</li>
+              <li>Launched <strong>Giveaway Engine</strong> with reaction-based logic.</li>
+              <li>Introduced <strong>Welcome & Farewell</strong> automation suite.</li>
+              <li>Integrated <strong>Vanguard Error Reporter</strong> for real-time telemetry.</li>
+            </ul>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <!-- v6.3.1 -->
-    <div class="log-entry">
-      <div class="log-card">
-        <div class="log-version">v6.3.1 "Titan Restoration"</div>
-        <div class="log-date">APRIL 22, 2026</div>
-        <ul class="log-list">
-          <li class="log-item">Restored official high-fidelity branding across all sectors.</li>
-          <li class="log-item">Deployed Nuclear Protocol for absolute server reconstruction.</li>
-          <li class="log-item">Synchronized Vanguard Error Reporter for real-time developer telemetry.</li>
-        </ul>
-      </div>
     </div>
-
-    <!-- v6.3.0 -->
-    <div class="log-entry">
-      <div class="log-card">
-        <div class="log-version">v6.3.0 "Titan Alpha"</div>
-        <div class="log-date">APRIL 21, 2026</div>
-        <ul class="log-list">
-          <li class="log-item">Initial deployment of the Titan Intelligence Suite.</li>
-          <li class="log-item">Launched Global XP Synchronization engine.</li>
-          <li class="log-item">Introduced Economy Sector with daily credit allocations and peer transfers.</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- v6.2.0 -->
-    <div class="log-entry">
-      <div class="log-card">
-        <div class="log-version">v6.2.0 "Postgres Uplift"</div>
-        <div class="log-date">APRIL 20, 2026</div>
-        <ul class="log-list">
-          <li class="log-item">Migrated from SQLite-only to dual SQLite/PostgreSQL support.</li>
-          <li class="log-item">Implemented async connection pooling and enterprise schema.</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- v6.1.0 -->
-    <div class="log-entry">
-      <div class="log-card">
-        <div class="log-version">v6.1.0 "TypeScript Rewrite"</div>
-        <div class="log-date">APRIL 2026</div>
-        <ul class="log-list">
-          <li class="log-item">Complete TypeScript migration from Python codebase.</li>
-          <li class="log-item">Removed all Patreon paywall restrictions — fully free.</li>
-        </ul>
-      </div>
-    </div>
-
   </main>
 
-  <footer class="site-footer">
-    <div class="site-footer__brand">
-      <img src="assets/images/astra-logo.png" alt="Astra" width="24" height="24">
-      ASTRA
+  <!-- FOOTER -->
+  <footer class="footer-titan">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand__logo">
+            <img src="assets/images/astra-logo.png" alt="Astra" width="32" height="32">
+            ASTRA
+          </div>
+          <p class="footer-brand__desc">
+            Astra v7.5.0 'Titan' — Engineered for the high-concurrency demands of elite Discord communities worldwide.
+          </p>
+        </div>
+        <div>
+          <h4 class="footer-head">Architecture</h4>
+          <div class="footer-links">
+            <a href="features.html" class="footer-link">Sectors</a>
+            <a href="commands.html" class="footer-link">Protocols</a>
+            <a href="docs.html" class="footer-link">Docs</a>
+          </div>
+        </div>
+        <div>
+          <h4 class="footer-head">Command</h4>
+          <div class="footer-links">
+            <a href="support.html" class="footer-link">Support Hub</a>
+            <a href="faq.html" class="footer-link">Field FAQ</a>
+            <a href="changelog.html" class="footer-link">Mission Logs</a>
+          </div>
+        </div>
+        <div>
+          <h4 class="footer-head">Legal</h4>
+          <div class="footer-links">
+            <a href="privacy.html" class="footer-link">Privacy Policy</a>
+            <a href="terms.html" class="footer-link">Terms of Service</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Astra. All rights reserved.</span>
+        <span>Astra Proprietary License v2.5</span>
+      </div>
     </div>
-    <p class="site-footer__tagline">Omega v7.3.0 · Tactical Discord Intelligence</p>
-    <div class="site-footer__links">
-      <a href="features.html" class="site-footer__link">Sectors</a>
-      <a href="commands.html" class="site-footer__link">Protocols</a>
-      <a href="docs.html" class="site-footer__link">Docs</a>
-      <a href="changelog.html" class="site-footer__link">Mission Logs</a>
-      <a href="faq.html" class="site-footer__link">FAQ</a>
-      <a href="support.html" class="site-footer__link">Support</a>
-      <a href="privacy.html" class="site-footer__link">Privacy</a>
-      <a href="terms.html" class="site-footer__link">Terms</a>
-    </div>
-    <p class="site-footer__copy">&copy; 2026 Astra. All rights reserved. Licensed under the ASTRA PROPRIETARY LICENSE (APL) v2.2.</p>
   </footer>
 
   <script>
     window.addEventListener('scroll', () => {
       document.getElementById('navbar').classList.toggle('nav-titan--scrolled', window.scrollY > 50);
     });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.animate-reveal').forEach(el => observer.observe(el));
   </script>
 </body>
 </html>
