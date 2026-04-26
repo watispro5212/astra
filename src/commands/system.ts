@@ -13,7 +13,7 @@ import { StatusService } from '../services/statusService';
 import logger from '../core/logger';
 import os from 'os';
 
-const VERSION = 'v7.0.0 "Nova Protocol"';
+const VERSION = 'v7.3.0 "Omega Protocol"';
 const THEME   = 0x3498db;
 
 const command: Command = {
@@ -50,58 +50,51 @@ const command: Command = {
             const embed = new EmbedBuilder()
                 .setColor(THEME)
                 .setTitle(`🚀 ASTRA ${VERSION} — PATCH NOTES`)
-                .setDescription('The **Omega Protocol** update is the most significant Astra release to date, delivering a full economy overhaul, shop marketplace improvements, and a new status intelligence pipeline.')
+                .setDescription('The **Omega Protocol** update is a proprietary, high-performance release delivering a full economy overhaul, advanced marketplace logic, and synchronized telemetry pipelines.')
                 .setThumbnail(interaction.client.user?.displayAvatarURL() ?? null)
                 .addFields(
                     {
-                        name: '💰 Economy Overhaul',
+                        name: '🔐 Proprietary Status',
+                        value: '• Astra v7.3.0 is **NOT open source**. This software is private property.\n• Redistribution or commercial use without authorization is prohibited.'
+                    },
+                    {
+                        name: '💰 Economy & Fiscal Protocols',
                         value: [
+                            '• `/economy leaderboard` — Now resolves **usernames** globally',
                             '• `/economy harvest` — Collect passive income from assets',
-                            '• `/economy rob` — 40% heist against other operatives',
-                            '• `/economy gamble` — 45% win-rate wager protocol',
-                            '• `/economy slots` — 3-reel slot machine with jackpot',
-                            '• `/economy coinflip` — Fair 50/50 double-or-nothing',
-                            '• All commands now show **balance after action**',
+                            '• `/economy rob` — 40% heist success rate with risk penalty',
+                            '• `/economy slots` — High-stakes jackpot system (×50 multiplier)',
+                            '• All fiscal actions now report **balance delta** in real-time',
                         ].join('\n')
                     },
                     {
-                        name: '🛒 Shop Marketplace',
+                        name: '🛒 Apex Marketplace',
                         value: [
-                            '• Items now grouped by **category** (Passive / Consumable / Role)',
-                            '• `/shop sell` — Liquidate owned assets at 50% market value',
-                            '• `/shop admin edit` — Edit any item in-place',
-                            '• `emoji` + `item-type` fields on all items',
-                            '• All purchases tracked in inventory (bug fix)',
+                            '• `/shop admin add` — Enhanced item categorization and tracking',
+                            '• `/shop sell` — Liquidate assets for 50% market value',
+                            '• Auto-inventory tracking fixed for all transaction types',
+                            '• Improved description and stock handling for rare assets',
                         ].join('\n')
                     },
                     {
-                        name: '📡 Status Intelligence',
+                        name: '📡 System Intelligence',
                         value: [
-                            '• Webhook fires on **boot, heartbeat, health-check, error, server join/leave**',
-                            '• `/system status` — Live diagnostics with memory bar',
-                            '• `/system ping` — WebSocket + API latency',
-                            '• `/system servers` — Global sector statistics',
-                            '• Health-check scheduler runs every 60 minutes',
-                        ].join('\n')
-                    },
-                    {
-                        name: '🐛 Bug Fixes',
-                        value: [
-                            '• Mine could drop balance below 0 — fixed',
-                            '• Shop inventory SQL crash (`si.item_id`) — fixed',
-                            '• Stray syntax errors in `info.ts` / `utility.ts` — fixed',
+                            '• Dual-webhook synchronization: Status (Health) vs Updates (Announcements)',
+                            '• `/system update` — Automatically broadcasts to the official update channel',
+                            '• `/system status` — Refined memory bar and resource diagnostics',
+                            '• Latency tracking upgraded to full WebSocket + API RTT analysis',
                         ].join('\n')
                     },
                     {
                         name: '⚙️ Infrastructure',
                         value: [
                             `• discord.js \`v${djsVersion}\``,
-                            '• Database schema v7.2.0 — new `last_rob`, `item_type`, `emoji` columns',
-                            '• `Command.execute` return-type widened for early-return pattern',
+                            '• Database schema v7.3.0 — Synchronized user lookup optimization',
+                            '• Logic re-engineered for closed-source deployment stability',
                         ].join('\n')
                     }
                 )
-                .setFooter({ text: `Astra Tactical Systems • ${VERSION} • Released 2026` })
+                .setFooter({ text: `Astra Tactical Systems • ${VERSION} • Proprietary Build` })
                 .setTimestamp();
 
             // Fire the updates webhook so the official channel receives patch notes automatically

@@ -6,6 +6,7 @@ import {
 } from 'discord.js';
 import { Command } from '../types';
 import { db } from '../core/database';
+import logger from '../core/logger';
 
 const SELL_REFUND_RATE = 0.50; // 50% refund on sell-back
 
@@ -60,6 +61,7 @@ const command: Command = {
                            { name: '🎁 Consumable',     value: 'consumable' },
                            { name: '🎭 Role Reward',    value: 'role' }
                        ))
+                       .addRoleOption(opt => opt.setName('role').setDescription('Role to grant (role items only).'))
                        .addStringOption(opt => opt.setName('emoji').setDescription('Display emoji for the item (e.g. 🛸).'))
                        .addIntegerOption(opt => opt.setName('production-rate').setDescription('Passive income per hour (passive items only).').setMinValue(0))
                        .addStringOption(opt => opt.setName('description').setDescription('Item description.'))
@@ -101,10 +103,11 @@ const command: Command = {
                 const prodRate     = interaction.options.getInteger('production-rate') ?? 0;
                 const description  = interaction.options.getString('description') ?? 'No description provided.';
                 const stock        = interaction.options.getInteger('stock') ?? -1;
+                const roleId       = interaction.options.getRole('role')?.id;
 
                 await db.execute(
-                    'INSERT INTO shop_items (guild_id, name, description, price, production_rate, stock, item_type, emoji) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-                    guildId, name, description, price, prodRate, stock, itemType, emoji
+                    'INSERT INTO shop_items (guild_id, name, description, price, production_rate, stock, item_type, emoji, role_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                    guildId, name, description, price, prodRate, stock, itemType, emoji, roleId
                 );
 
                 return interaction.reply({
@@ -118,7 +121,7 @@ const command: Command = {
                             { name: '📦 Stock',    value: `\`${stock === -1 ? '∞' : stock}\``,       inline: true },
                             ...(prodRate > 0 ? [{ name: '📊 Yield', value: `\`${prodRate} cr/hr\``, inline: true }] : [])
                         )
-                        .setFooter({ text: 'Astra Commerce Division v7.2.0' })],
+                        .setFooter({ text: 'Astra Commerce Division v7.3.0' })],
                     ephemeral: true
                 });
 
@@ -156,7 +159,7 @@ const command: Command = {
                             { name: '📦 Stock',  value: `\`${newStock === -1 ? '∞' : newStock}\``,       inline: true },
                             { name: '📊 Yield',  value: `\`${newRate > 0 ? `${newRate} cr/hr` : 'None'}\``, inline: true }
                         )
-                        .setFooter({ text: 'Astra Commerce Division v7.2.0' })],
+                        .setFooter({ text: 'Astra Commerce Division v7.3.0' })],
                     ephemeral: true
                 });
             }
@@ -174,7 +177,7 @@ const command: Command = {
             const embed = new EmbedBuilder()
                 .setTitle(`🛒 APEX MARKETPLACE — ${interaction.guild!.name}`)
                 .setColor(0xf1c40f)
-                .setFooter({ text: `${items.length} item(s) available • Astra Commerce Division v7.2.0` })
+                .setFooter({ text: `${items.length} item(s) available • Astra Commerce Division v7.3.0` })
                 .setTimestamp();
 
             if (items.length === 0) {
@@ -218,12 +221,11 @@ const command: Command = {
             // Deduct cost
             await db.execute('UPDATE users SET balance = balance - ? WHERE user_id = ?', item.price, interaction.user.id);
 
-            // Reduce stock if finite
+            // Reduction in stock
             if (item.stock > 0) {
                 await db.execute('UPDATE shop_items SET stock = stock - 1 WHERE id = ?', id);
             }
 
-            // FIX: Record ALL purchases in inventory (not just passive items)
             const existing = await db.fetchOne('SELECT id, quantity FROM user_inventory WHERE user_id = ? AND item_id = ?', interaction.user.id, id);
             if (existing) {
                 await db.execute('UPDATE user_inventory SET quantity = quantity + 1 WHERE id = ?', existing.id);
@@ -232,6 +234,28 @@ const command: Command = {
                     'INSERT INTO user_inventory (user_id, item_id, quantity, last_harvest) VALUES (?, ?, 1, ?)',
                     interaction.user.id, item.id, new Date().toISOString()
                 );
+            }
+
+            // Handle Role Grant
+            if (item.item_type === 'role' && item.role_id) {
+                const member = await interaction.guild?.members.fetch(interaction.user.id).catch(() => null);
+                const role = await interaction.guild?.roles.fetch(item.role_id).catch(() => null);
+                if (member && role) {
+                    await member.roles.add(role).catch(err => {
+                        logger.error(`Failed to grant role ${item.role_id} to ${interaction.user.id}: ${err}`);
+                    });
+                }
+            }
+
+            // Handle Role Grant
+            if (item.item_type === 'role' && item.role_id) {
+                const member = await interaction.guild?.members.fetch(interaction.user.id).catch(() => null);
+                const role = await interaction.guild?.roles.fetch(item.role_id).catch(() => null);
+                if (member && role) {
+                    await member.roles.add(role).catch(err => {
+                        logger.error(`Failed to grant role ${item.role_id} to ${interaction.user.id}: ${err}`);
+                    });
+                }
             }
 
             const after = await db.fetchOne('SELECT balance FROM users WHERE user_id = ?', interaction.user.id);
@@ -245,7 +269,7 @@ const command: Command = {
                         { name: '💸 Spent',         value: `\`-${item.price.toLocaleString()} cr\``, inline: true },
                         { name: '💳 New Balance',    value: `\`${(after?.balance ?? 0).toLocaleString()} cr\``, inline: true }
                     )
-                    .setFooter({ text: 'Astra Commerce Division v7.2.0' })]
+                    .setFooter({ text: 'Astra Commerce Division v7.3.0' })]
             });
 
         // ── SELL ──────────────────────────────────────────────────────────────
@@ -285,7 +309,7 @@ const command: Command = {
                         { name: '💰 Refund',      value: `\`+${refund.toLocaleString()} cr\``, inline: true },
                         { name: '💳 New Balance', value: `\`${(after?.balance ?? 0).toLocaleString()} cr\``, inline: true }
                     )
-                    .setFooter({ text: 'Sell price is 50% of purchase price.' })]
+                    .setFooter({ text: 'Sell price is 50% of purchase price. • Astra Commerce Division v7.3.0' })]
             });
 
         // ── INVENTORY ─────────────────────────────────────────────────────────

@@ -266,7 +266,7 @@ const command: Command = {
                     { name: '💰 Total Collected', value: `\`+${totalHarvest.toLocaleString()} cr\``, inline: true },
                     { name: '💳 New Balance', value: `\`${(after?.balance ?? 0).toLocaleString()} cr\``, inline: true }
                 )
-                .setFooter({ text: 'Astra Industrial Yield Engine v7.2.0' })
+                .setFooter({ text: 'Astra Industrial Yield Engine v7.3.0' })
                 .setTimestamp()] });
 
         // ── ROB ───────────────────────────────────────────────────────────────
@@ -544,7 +544,7 @@ const command: Command = {
                 .setColor(0xf1c40f)
                 .setTitle('🏆 GLOBAL FISCAL LEADERBOARD')
                 .setDescription(lines.join('\n'))
-                .setFooter({ text: 'Net worth = Liquid + Vault • Astra v7.0.0' })
+                .setFooter({ text: 'Net worth = Liquid + Vault • Astra v7.3.0' })
                 .setTimestamp()] });
 
         // ── STATS ─────────────────────────────────────────────────────────────

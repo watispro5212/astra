@@ -131,7 +131,8 @@ class DatabaseManager {
                 stock ${INT} DEFAULT -1,
                 production_rate ${INT} DEFAULT 0,
                 item_type ${TEXT} DEFAULT 'consumable',
-                emoji ${TEXT} DEFAULT '📦'
+                emoji ${TEXT} DEFAULT '📦',
+                role_id ${TEXT}
             )`,
             `CREATE TABLE IF NOT EXISTS user_inventory (
                 id ${PK},
@@ -179,7 +180,8 @@ class DatabaseManager {
             `ALTER TABLE shop_items ADD COLUMN emoji ${TEXT} DEFAULT '📦'`,
             `ALTER TABLE users ADD COLUMN bank_balance ${INT} DEFAULT 0`,
             `ALTER TABLE users ADD COLUMN total_earned ${INT} DEFAULT 0`,
-            `ALTER TABLE users ADD COLUMN daily_streak ${INT} DEFAULT 0`
+            `ALTER TABLE users ADD COLUMN daily_streak ${INT} DEFAULT 0`,
+            `ALTER TABLE shop_items ADD COLUMN role_id ${TEXT}`
         ];
         for (const migration of migrations) {
             try {
@@ -189,7 +191,7 @@ class DatabaseManager {
             }
         }
 
-        logger.info("Database infrastructure initialized (v7.2.0 - Omega)");
+        logger.info("Database infrastructure initialized (v7.3.0 - Omega)");
     }
 
     async execute(query: string, ...params: any[]): Promise<any> {

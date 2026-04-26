@@ -1,6 +1,6 @@
-# 🛰️ Astra Tactical Bot (v7.0.0 Nova)
+# 🛰️ Astra Tactical Bot (v7.3.0 Omega Protocol)
 
-Astra is an enterprise-grade Discord moderation, community engagement, and utility bot, rebuilt in high-performance TypeScript. The v7.0.0 **Nova Update** introduces a full ticket system, giveaway engine, and advanced onboarding modules.
+Astra is an enterprise-grade Discord moderation, community engagement, and utility bot, rebuilt in high-performance TypeScript. The v7.3.0 **Omega Protocol** update is a proprietary, closed-source release featuring a full economy overhaul, shop marketplace, and advanced system diagnostics.
 
 **Official Website**: [https://watispro5212.github.io/astra/](https://watispro5212.github.io/astra/)
 
@@ -19,7 +19,7 @@ Astra is an enterprise-grade Discord moderation, community engagement, and utili
 
 ---
 
-## 💎 v7.0.0 Nova Features
+## 💎 v7.3.0 Omega Protocol Features
 - **📊 Global Leveling**: Re-engineered XP tracking with tactical rank progression (`/rank`).
 - **💰 Dynamic Economy**: High-stakes credit system with market liquidation and rob protocols (`/economy`).
 - **🛡️ Hardened Moderation**: Enterprise-grade ban/kick systems with multi-layered AutoMod protection.
@@ -47,5 +47,6 @@ The Astra dashboard is designed for **Render Static Sites**. It includes full Sa
 ---
 
 ## ⚖️ Legal & Security
+- **Proprietary Status**: Astra is **NOT open source**. This software is private property of the author. Redistribution, selling, or re-hosting without permission is strictly prohibited.
 - **Privacy**: We store minimal user data (User ID, XP, Balance) strictly for feature functionality.
 - **Security**: Hardened against SQL injection and permission escalation.

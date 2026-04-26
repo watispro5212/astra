@@ -15,6 +15,7 @@ import { Command } from './types';
 import { ErrorReporter } from './core/error_reporter';
 import { StatusService } from './services/statusService';
 import { PassiveIncomeService } from './services/passiveIncomeService';
+import { ShopService } from './services/shopService';
 import * as path from 'path';
 import * as fs from 'fs';
 
@@ -94,7 +95,7 @@ export class AstraClient extends Client {
 
             // Rotating Status Engine
             const statuses = [
-                () => ({ name: `Omega v7.2.0 | /system update`, type: 0 }),
+                () => ({ name: `Omega v7.3.0 | /system update`, type: 0 }),
                 () => ({ name: `${c.guilds.cache.size} Sectors`, type: 3 }),
                 () => ({ name: `${c.users.cache.size} Members`, type: 2 }),
                 () => ({ name: `Tactical Excellence`, type: 1 })
@@ -113,7 +114,7 @@ export class AstraClient extends Client {
             const { GiveawayService } = require('./services/giveawayService');
             GiveawayService.startChecker(this);
 
-            this.user?.setActivity('Omega v7.2.0 | /system update', { type: ActivityType.Watching });
+            this.user?.setActivity('Omega v7.3.0 | /system update', { type: ActivityType.Watching });
 
             // Sentinel Status Pulse
             await StatusService.sendSystemOnline(c);
@@ -176,7 +177,7 @@ export class AstraClient extends Client {
                             { name: '🎯 Next Level',     value: `\`${nextXpReq} XP\``,                      inline: true },
                             { name: '📊 Progress',       value: `\`[${progressBar}] ${carryXp}/${nextXpReq}\``, inline: false },
                         )
-                        .setFooter({ text: 'Astra Intelligence Matrix • v7.2.0' })
+                        .setFooter({ text: 'Astra Intelligence Matrix • v7.3.0' })
                         .setTimestamp();
 
                     let targetChannel: any = message.channel;
@@ -202,7 +203,10 @@ export class AstraClient extends Client {
 
         // Server Count Webhook
         this.on(Events.GuildCreate, async (guild) => {
-            try { await StatusService.sendServerCountUpdate(this, true, guild.name); } catch (_) {}
+            try { 
+                await StatusService.sendServerCountUpdate(this, true, guild.name); 
+                await ShopService.seedGuildShop(guild.id);
+            } catch (_) {}
         });
 
         this.on(Events.GuildDelete, async (guild) => {
