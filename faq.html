@@ -172,22 +172,35 @@
     </div>
 
     <div class="faq-group animate-reveal">
-      <div class="faq-group-title">Economy & Commerce</div>
+      <div class="faq-group-title">Cloud Infrastructure</div>
       
       <div class="faq-item">
-        <h3>How does the Industrial Hub work?</h3>
-        <div class="faq-answer">
-          The Industrial Hub (Shop) allows administrators to create a custom marketplace. Members can earn credits via <code>/economy daily</code> and <code>/economy work</code>, then trade them for roles, items, or consumables.
-        </div>
-      </div>
-      <!-- Re-added proper question wrapper for the last one -->
-      <div class="faq-item">
         <div class="faq-question">
-          <h3>How does the Industrial Hub work?</h3>
+          <h3>Why was my data resetting before?</h3>
           <span class="faq-icon">↓</span>
         </div>
         <div class="faq-answer">
-          The Industrial Hub allows administrators to deploy a custom marketplace. Members earn credits via work missions and daily allocations, which can be traded for roles, inventory items, or tactical consumables.
+          Legacy versions of Astra utilized local SQLite storage, which was purged during deployment cycles. **Titan v7.5.0** has migrated to **Supabase Cloud (PostgreSQL)**, ensuring your intelligence and financial assets are stored permanently in a redundant, high-performance database.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          <h3>Why are some protocols (like /economy harvest) missing?</h3>
+          <span class="faq-icon">↓</span>
+        </div>
+        <div class="faq-answer">
+          Due to Discord's global command caching, some protocols may experience indexing delays. If a command does not appear in your terminal, an administrator must execute the <code>/system sync</code> protocol to force a sector-wide re-indexing of tactical assets.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          <h3>How do I recalibrate the command prefix?</h3>
+          <span class="faq-icon">↓</span>
+        </div>
+        <div class="faq-answer">
+          Astra supports dual-mode interaction. The default prefix for message-based commands is <code>-</code>. Administrators can change this at any time by executing the <code>/prefix set</code> command.
         </div>
       </div>
     </div>

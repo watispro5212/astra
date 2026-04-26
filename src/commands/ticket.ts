@@ -4,7 +4,8 @@ import {
     EmbedBuilder,
     PermissionFlagsBits,
     ChannelType,
-    TextChannel
+    TextChannel,
+    MessageFlags
 } from 'discord.js';
 import { Command } from '../types';
 import { db } from '../core/database';
@@ -45,11 +46,11 @@ const command: Command = {
                 guild.id, interaction.user.id
             );
             if (existing) {
-                await interaction.reply({ content: `❌ You already have an open ticket: <#${existing.channel_id}>`, ephemeral: true });
+                await interaction.reply({ content: `❌ You already have an open ticket: <#${existing.channel_id}>`, flags: [MessageFlags.Ephemeral] });
                 return;
             }
 
-            await interaction.deferReply({ ephemeral: true });
+            await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
             const cfg = await db.fetchOne('SELECT * FROM ticket_configs WHERE guild_id = ?', guild.id);
             const everyone = guild.roles.everyone;
@@ -106,7 +107,7 @@ const command: Command = {
             const isOwner = interaction.user.id === ticket.user_id;
             const isStaff = member?.permissions?.has(PermissionFlagsBits.ManageChannels);
             if (!isOwner && !isStaff) {
-                await interaction.reply({ content: '❌ Only the ticket creator or staff can close this ticket.', ephemeral: true });
+                await interaction.reply({ content: '❌ Only the ticket creator or staff can close this ticket.', flags: [MessageFlags.Ephemeral] });
                 return;
             }
 
@@ -147,7 +148,7 @@ const command: Command = {
             }
             const user = interaction.options.getUser('user')!;
             if (user.id === ticket.user_id) {
-                await interaction.reply({ content: '❌ Cannot remove the ticket creator.', ephemeral: true });
+                await interaction.reply({ content: '❌ Cannot remove the ticket creator.', flags: [MessageFlags.Ephemeral] });
                 return;
             }
             const channel = interaction.channel as TextChannel;

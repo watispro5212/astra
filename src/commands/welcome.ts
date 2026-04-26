@@ -3,7 +3,8 @@ import {
     ChatInputCommandInteraction,
     EmbedBuilder,
     PermissionFlagsBits,
-    ChannelType
+    ChannelType,
+    MessageFlags
 } from 'discord.js';
 import { Command } from '../types';
 import { db } from '../core/database';
@@ -52,6 +53,7 @@ const command: Command = {
     async execute(interaction: ChatInputCommandInteraction) {
         const subcommand = interaction.options.getSubcommand();
         const guildId = interaction.guildId!;
+        await interaction.deferReply();
 
         const upsert = async (data: Record<string, any>) => {
             const exists = await db.fetchOne('SELECT 1 FROM welcome_configs WHERE guild_id = ?', guildId);
@@ -75,7 +77,7 @@ const command: Command = {
         if (subcommand === 'set-channel') {
             const channel = interaction.options.getChannel('channel')!;
             await upsert({ channel_id: channel.id });
-            await interaction.reply({ embeds: [new EmbedBuilder()
+            await interaction.editReply({ embeds: [new EmbedBuilder()
                 .setColor(0x2ecc71)
                 .setTitle('✅ Welcome Channel Set')
                 .setDescription(`Welcome messages will be sent to <#${channel.id}>.`)] });
@@ -86,7 +88,7 @@ const command: Command = {
             const preview = message
                 .replace('{user}', `**${interaction.user.username}**`)
                 .replace('{server}', `**${interaction.guild!.name}**`);
-            await interaction.reply({ embeds: [new EmbedBuilder()
+            await interaction.editReply({ embeds: [new EmbedBuilder()
                 .setColor(0x2ecc71)
                 .setTitle('✅ Welcome Message Set')
                 .addFields({ name: 'Preview', value: preview })] });
@@ -94,7 +96,7 @@ const command: Command = {
         } else if (subcommand === 'set-role') {
             const role = interaction.options.getRole('role')!;
             await upsert({ auto_role_id: role.id });
-            await interaction.reply({ embeds: [new EmbedBuilder()
+            await interaction.editReply({ embeds: [new EmbedBuilder()
                 .setColor(0x2ecc71)
                 .setTitle('✅ Auto-Role Set')
                 .setDescription(`New members will automatically receive the **${role.name}** role.`)] });
@@ -103,7 +105,7 @@ const command: Command = {
             const channel = interaction.options.getChannel('channel')!;
             const message = interaction.options.getString('message') ?? '{user} has left the sector.';
             await upsert({ farewell_channel_id: channel.id, farewell_message: message });
-            await interaction.reply({ embeds: [new EmbedBuilder()
+            await interaction.editReply({ embeds: [new EmbedBuilder()
                 .setColor(0x2ecc71)
                 .setTitle('✅ Farewell System Configured')
                 .addFields(
@@ -114,12 +116,12 @@ const command: Command = {
         } else if (subcommand === 'test') {
             const cfg = await db.fetchOne('SELECT * FROM welcome_configs WHERE guild_id = ?', guildId);
             if (!cfg?.channel_id) {
-                await interaction.reply({ content: '❌ No welcome channel set. Use `/welcome set-channel` first.', ephemeral: true });
+                await interaction.editReply({ content: '❌ No welcome channel set. Use `/welcome set-channel` first.' });
                 return;
             }
             const channel = await interaction.guild!.channels.fetch(cfg.channel_id).catch(() => null);
             if (!channel?.isTextBased()) {
-                await interaction.reply({ content: '❌ Welcome channel not found or not a text channel.', ephemeral: true });
+                await interaction.editReply({ content: '❌ Welcome channel not found or not a text channel.' });
                 return;
             }
             const text = (cfg.message ?? 'Welcome {user} to **{server}**!')
@@ -133,11 +135,11 @@ const command: Command = {
                 .setFooter({ text: 'Astra Welcome System • v7.0.0' })
                 .setTimestamp();
             await (channel as any).send({ embeds: [embed] });
-            await interaction.reply({ content: '✅ Test welcome message sent!', ephemeral: true });
+            await interaction.editReply({ content: '✅ Test welcome message sent!' });
 
         } else if (subcommand === 'view') {
             const cfg = await db.fetchOne('SELECT * FROM welcome_configs WHERE guild_id = ?', guildId);
-            await interaction.reply({ embeds: [new EmbedBuilder()
+            await interaction.editReply({ embeds: [new EmbedBuilder()
                 .setColor(0x3498db)
                 .setTitle('👋 Welcome Configuration')
                 .addFields(

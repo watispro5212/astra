@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
+import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, MessageFlags } from 'discord.js';
 import { ReminderService } from '../services/reminderService';
 import { Command } from '../types';
 import { THEME, VERSION, PROTOCOL } from '../core/constants';
@@ -28,7 +28,7 @@ const command: Command = {
         const subcommand = interaction.options.getSubcommand();
 
         if (subcommand === 'ping') {
-            const sent = await interaction.reply({ content: '📡 **ANALYZING HEARTBEAT...**', fetchReply: true, ephemeral: true });
+            const sent = await interaction.reply({ content: '📡 **ANALYZING HEARTBEAT...**', fetchReply: true, flags: [MessageFlags.Ephemeral] });
             const latency = sent.createdTimestamp - interaction.createdTimestamp;
             
             const embed = new EmbedBuilder()
@@ -48,7 +48,7 @@ const command: Command = {
             
             const minutes = parseInt(timeStr);
             if (isNaN(minutes) || minutes < 1) {
-                return interaction.reply({ content: '❌ **INVALID TEMPORAL DATA**: Please specify a valid positive integer.', ephemeral: true });
+                return interaction.reply({ content: '❌ **INVALID TEMPORAL DATA**: Please specify a valid positive integer.', flags: [MessageFlags.Ephemeral] });
             }
 
             const remindAt = new Date(Date.now() + minutes * 60000);
@@ -76,7 +76,7 @@ const command: Command = {
             const options = optionsStr.split(',').map(o => o.trim()).filter(o => o.length > 0);
 
             if (options.length < 2 || options.length > 10) {
-                return interaction.reply({ content: '❌ **INVALID CONFIGURATION**: Polls require between 2 and 10 options.', ephemeral: true });
+                return interaction.reply({ content: '❌ **INVALID CONFIGURATION**: Polls require between 2 and 10 options.', flags: [MessageFlags.Ephemeral] });
             }
 
             const emojis = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'];

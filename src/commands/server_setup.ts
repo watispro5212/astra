@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, ChatInputCommandInteraction, PermissionFlagsBits, EmbedBuilder, ChannelType, PermissionsBitField, OverwriteResolvable, TextChannel } from 'discord.js';
+import { SlashCommandBuilder, ChatInputCommandInteraction, PermissionFlagsBits, EmbedBuilder, ChannelType, PermissionsBitField, OverwriteResolvable, TextChannel, MessageFlags } from 'discord.js';
 import logger from '../core/logger';
 
 const TARGET_GUILD_ID = '1494909279159980192';
@@ -17,12 +17,12 @@ export default {
         if (interaction.guildId !== TARGET_GUILD_ID) {
             await interaction.reply({ 
                 content: '❌ **TRANSMISSION DENIED**: This protocol is restricted to the Astra Prime Sector.', 
-                ephemeral: true 
+                flags: [MessageFlags.Ephemeral]
             });
             return;
         }
 
-        await interaction.deferReply({ ephemeral: true });
+        await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
         const isNuclear = interaction.options.getBoolean('nuclear');
         const guild = interaction.guild!;

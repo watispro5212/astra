@@ -1,9 +1,9 @@
-import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
+import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, PermissionFlagsBits, MessageFlags } from 'discord.js';
 import { Command } from '../types';
 import { db } from '../core/database';
 import { config } from '../core/config';
 
-const VER = 'v7.2.0';
+const VER = 'v7.5.0';
 
 // XP required to reach level N+1
 function xpForLevel(level: number): number {
@@ -12,13 +12,13 @@ function xpForLevel(level: number): number {
 
 // Calculate total XP across all levels
 function totalXp(level: number, currentXp: number): number {
-    let total = currentXp;
+    let total = Number(currentXp);
     for (let l = 0; l < level; l++) total += xpForLevel(l);
     return total;
 }
 
 function xpBar(xp: number, needed: number): string {
-    const pct    = Math.min(Math.floor((xp / needed) * 100), 100);
+    const pct    = Math.min(Math.floor((Number(xp) / needed) * 100), 100);
     const filled = Math.round(pct / 10);
     return `${'█'.repeat(filled)}${'░'.repeat(10 - filled)} ${pct}%`;
 }
@@ -73,9 +73,15 @@ const command: Command = {
                 return interaction.editReply({ content: '❌ **INTELLIGENCE GAP**: No tactical data found for this operative. Active participation required for matrix registration.' });
             }
 
-            const needed   = xpForLevel(data.level);
-            const bar      = xpBar(data.xp, needed);
-            const cumXp    = totalXp(data.level, data.xp);
+            // Ensure BigInt/Strings from Postgres are converted to Numbers
+            const level    = Number(data.level);
+            const xp       = Number(data.xp);
+            const position = Number(data.position);
+            const total    = Number(data.total);
+
+            const needed   = xpForLevel(level);
+            const bar      = xpBar(xp, needed);
+            const cumXp    = totalXp(level, xp);
 
             const embed = new EmbedBuilder()
                 .setColor(0x9b59b6)
@@ -83,12 +89,12 @@ const command: Command = {
                 .setTitle('📈 INTELLIGENCE RANK FILE')
                 .setThumbnail(target.displayAvatarURL({ size: 256 }))
                 .addFields(
-                    { name: '⭐ Level',         value: `\`${data.level}\``,                           inline: true },
-                    { name: '🏅 Sector Rank',   value: `\`#${data.position} / ${data.total}\``,      inline: true },
-                    { name: '🔢 Total XP',      value: `\`${cumXp.toLocaleString()} XP\``,           inline: true },
-                    { name: '📊 Matrix Progression', value: `\`[${bar}]\`\n\`${data.xp.toLocaleString()} / ${needed.toLocaleString()} XP\``, inline: false },
+                    { name: '⭐ Level',         value: `\`${level}\``,                           inline: true },
+                    { name: '🏅 Sector Rank',   value: `\`#${position} / ${total}\``,            inline: true },
+                    { name: '🔢 Total XP',      value: `\`${cumXp.toLocaleString()} XP\``,       inline: true },
+                    { name: '📊 Matrix Progression', value: `\`[${bar}]\`\n\`${xp.toLocaleString()} / ${needed.toLocaleString()} XP\``, inline: false },
                 )
-                .setFooter({ text: `Astra Intelligence Matrix • ${VER}` })
+                .setFooter({ text: `Astra Intelligence Matrix • v7.5.0` })
                 .setTimestamp();
 
             return interaction.editReply({ embeds: [embed] });
@@ -103,10 +109,9 @@ const command: Command = {
             }
 
             const medals = ['👑', '🥈', '🥉'];
-            const lines: string[] = [];
-
-            for (let i = 0; i < top.length; i++) {
-                const entry = top[i];
+            
+            // Parallel fetch for optimal performance
+            const lines = await Promise.all(top.map(async (entry, i) => {
                 let username = `User ${entry.user_id}`;
                 try {
                     const u = await interaction.client.users.fetch(entry.user_id);
@@ -115,8 +120,8 @@ const command: Command = {
 
                 const cumXp = totalXp(entry.level, entry.xp);
                 const prefix = medals[i] ?? `\`${i + 1}.\``;
-                lines.push(`${prefix} **${username}** — Level \`${entry.level}\` · \`${cumXp.toLocaleString()} XP\``);
-            }
+                return `${prefix} **${username}** — Level \`${entry.level}\` · \`${cumXp.toLocaleString()} XP\``;
+            }));
 
             return interaction.editReply({ embeds: [new EmbedBuilder()
                 .setColor(0x9b59b6)

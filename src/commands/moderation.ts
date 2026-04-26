@@ -3,7 +3,8 @@ import {
     ChatInputCommandInteraction,
     PermissionFlagsBits,
     EmbedBuilder,
-    GuildMember
+    GuildMember,
+    MessageFlags
 } from 'discord.js';
 import { ModerationService } from '../services/moderationService';
 import { Command } from '../types';
@@ -67,18 +68,19 @@ const command: Command = {
         const guild = interaction.guild!;
 
         if (subcommand === 'kick') {
+            await interaction.deferReply();
             const member = interaction.options.getMember('member');
             const reason = interaction.options.getString('reason') || 'No reason provided';
 
             if (!(member instanceof GuildMember)) {
-                return interaction.reply({ content: '❌ Target not found in current sector.', ephemeral: true });
+                return interaction.editReply({ content: '❌ Target not found in current sector.' });
             }
             if (!member.kickable) {
-                return interaction.reply({ content: '❌ Insufficient Authority: Target is protected by system hierarchy.', ephemeral: true });
+                return interaction.editReply({ content: '❌ Insufficient Authority: Target is protected by system hierarchy.' });
             }
             const self = guild.members.me!;
             if (member.roles.highest.position >= self.roles.highest.position) {
-                return interaction.reply({ content: '❌ Permission Error: Target rank exceeds or matches Astra authority.', ephemeral: true });
+                return interaction.editReply({ content: '❌ Permission Error: Target rank exceeds or matches Astra authority.' });
             }
 
             await member.kick(reason);
@@ -100,6 +102,7 @@ const command: Command = {
             await interaction.reply({ embeds: [embed] });
 
         } else if (subcommand === 'ban') {
+            await interaction.deferReply();
             const user = interaction.options.getUser('member')!;
             const reason = interaction.options.getString('reason') || 'No reason provided';
             const deleteDays = interaction.options.getInteger('delete_messages') || 0;
@@ -109,7 +112,7 @@ const command: Command = {
                 if (member) {
                     const self = guild.members.me!;
                     if (member.roles.highest.position >= self.roles.highest.position) {
-                        return interaction.reply({ content: '❌ Permission Error: Target rank exceeds or matches Astra authority.', ephemeral: true });
+                        return interaction.editReply({ content: '❌ Permission Error: Target rank exceeds or matches Astra authority.' });
                     }
                 }
                 await guild.members.ban(user, { reason, deleteMessageSeconds: deleteDays * 86400 });

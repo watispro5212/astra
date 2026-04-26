@@ -1,9 +1,10 @@
 import { 
     SlashCommandBuilder, 
     ChatInputCommandInteraction, 
-    EmbedBuilder, 
     Role,
-    version as djsVersion 
+    EmbedBuilder,
+    version as djsVersion,
+    MessageFlags
 } from 'discord.js';
 import { Command } from '../types';
 import * as os from 'os';
@@ -42,6 +43,7 @@ const command: Command = {
         const guild = interaction.guild!;
 
         if (subcommand === 'avatar') {
+            await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
             const user = interaction.options.getUser('target') || interaction.user;
             const avatarUrl = user.displayAvatarURL({ size: 2048 });
 
@@ -53,9 +55,10 @@ const command: Command = {
                 .setFooter({ text: `Astra Intelligence Agency • ${VERSION} ${PROTOCOL}` })
                 .setTimestamp();
 
-            await interaction.reply({ embeds: [embed] });
+            await interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'stats') {
+            await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
             const uptime = process.uptime();
             const days    = Math.floor(uptime / 86400);
             const hours   = Math.floor(uptime / 3600) % 24;
@@ -85,9 +88,10 @@ const command: Command = {
                 .setFooter({ text: `Astra Global Infrastructure • All sectors nominal` })
                 .setTimestamp();
 
-            await interaction.reply({ embeds: [embed] });
+            await interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'user') {
+            await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
             const user   = interaction.options.getUser('target') || interaction.user;
             const member = await guild.members.fetch(user.id).catch(() => null);
 
@@ -118,9 +122,10 @@ const command: Command = {
             }
 
             embed.setFooter({ text: `Astra Intelligence Agency • ${VERSION}` }).setTimestamp();
-            await interaction.reply({ embeds: [embed] });
+            await interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'server') {
+            await interaction.deferReply();
             const owner    = await guild.fetchOwner();
             const channels = guild.channels.cache;
             const textChs  = channels.filter(c => c.type === 0).size;
@@ -144,12 +149,13 @@ const command: Command = {
                 .setFooter({ text: `Astra Sector Diagnostics • ${VERSION}` })
                 .setTimestamp();
 
-            await interaction.reply({ embeds: [embed] });
+            await interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'role') {
+            await interaction.deferReply();
             const role = interaction.options.getRole('role') as Role;
             if (!role?.permissions) {
-                return interaction.reply({ content: '❌ Could not resolve role data.', ephemeral: true });
+                return interaction.editReply({ content: '❌ Could not resolve role data.' });
             }
 
             // Count members with role
@@ -178,7 +184,7 @@ const command: Command = {
                 .setFooter({ text: `Astra Intelligence Agency • ${VERSION}` })
                 .setTimestamp();
 
-            await interaction.reply({ embeds: [embed] });
+            await interaction.editReply({ embeds: [embed] });
         }
     }
 };

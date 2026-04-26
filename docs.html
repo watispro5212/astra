@@ -125,27 +125,59 @@
             <h2>Quick Start</h2>
             <p class="docs-text">Deploying Astra to your sector is a streamlined process. Once the bot is present, use the following diagnostic commands to verify system integrity.</p>
             <div class="docs-code-block">
-              /system status<br>
-              /info stats
+              /system status — View core engine diagnostics<br>
+              /info stats — Global sector telemetry
             </div>
-            <p class="docs-text">The **Titan Engine** will automatically synchronize its tactical assets upon arrival. No manual registration is required.</p>
+            <p class="docs-text">The **Titan Engine** will automatically synchronize its tactical assets upon arrival. If commands do not appear, follow the synchronization protocol below.</p>
           </div>
         </section>
 
-        <section id="interface" class="docs-section animate-reveal">
+        <section id="ai-sentinel" class="docs-section animate-reveal">
           <div class="glass-card">
-            <h2>Interface Protocols</h2>
-            <p class="docs-text">Astra supports dual-mode interaction protocols to ensure maximum compatibility across all terminal types.</p>
-            
-            <h3 style="color: #fff; font-size: 1.1rem; margin-bottom: 12px;">🛰️ Slash Commands (Recommended)</h3>
-            <p class="docs-text">Modern, high-fidelity interaction via Discord's native slash command menu. All 12 tactical sectors are accessible here.</p>
-            
-            <h3 style="color: #fff; font-size: 1.1rem; margin-bottom: 12px;">🛠️ Prefix Commands (Legacy)</h3>
-            <p class="docs-text">Message-based commands for rapid execution. The default prefix is <code>-</code>, but can be customized per-server.</p>
+            <h2>Neural Sentinel</h2>
+            <p class="docs-text">The **AI Sentinel** is a high-concurrency neural processing module that operates exclusively within secure **Direct Message (DM)** sectors. It provides tactical assistance, intel analysis, and general support.</p>
             <div class="docs-code-block">
-              /prefix new_prefix: !
+              Trigger: Send a message to Astra in DMs<br>
+              Protocol: Neural Link (Gemini Matrix)
             </div>
-            <p class="docs-text">Admins can use the command above to recalibrate the tactical interface to their preference.</p>
+            <p class="docs-text">Operatives can recalibrate the Sentinel's neural matrix (change models) using the <code>/ai model</code> command. Available models include Titan Flash (Speed) and Titan Pro (Deep Analysis).</p>
+          </div>
+        </section>
+
+        <section id="prefix-protocol" class="docs-section animate-reveal">
+          <div class="glass-card">
+            <h2>Prefix Interface</h2>
+            <p class="docs-text">While Astra utilizes Slash Commands for primary protocols, a traditional **Prefix Interface** is active for rapid tactical input. The default operational prefix is <code>-</code>.</p>
+            <div class="docs-code-block">
+              Default Prefix: -<br>
+              Usage: -[command] [options]
+            </div>
+            <p class="docs-text">You can configure the sector-specific prefix using the <code>/config prefix</code> command (Administrator clearance required).</p>
+          </div>
+        </section>
+
+        <section id="sync-protocol" class="docs-section animate-reveal">
+          <div class="glass-card">
+            <h2>Command Synchronization</h2>
+            <p class="docs-text">Due to Discord's global caching, some protocols (like <code>/economy harvest</code>) may experience indexing delays. If a command is missing from your terminal:</p>
+            <div class="docs-code-block">
+              1. Type /system sync<br>
+              2. Wait for "Synchronization Successful"<br>
+              3. Restart your Discord terminal (Client)
+            </div>
+            <p class="docs-text">This forces a nuclear purge of the sector's command cache and re-deploys the latest **Titan v7.5.0** assets.</p>
+          </div>
+        </section>
+
+        <section id="infrastructure" class="docs-section animate-reveal">
+          <div class="glass-card">
+            <h2>Cloud Infrastructure</h2>
+            <p class="docs-text">Astra has migrated from legacy SQLite to **Supabase Cloud (PostgreSQL)**. This ensures permanent data persistence even across rapid deployment cycles.</p>
+            <div class="docs-code-block">
+              • High-Throughput Pooling active<br>
+              • Automated Redundancy enabled<br>
+              • Permanent Asset Persistence active
+            </div>
           </div>
         </section>
 
@@ -154,18 +186,11 @@
             <h2>Industrial Finance</h2>
             <p class="docs-text">Astra's fiscal ecosystem is divided into three primary sectors: Extraction, Industry, and Speculation.</p>
             <div class="docs-code-block">
-              /economy mine<br>
-              /economy harvest<br>
-              /stockmarket list
+              /economy mine — High-risk resource extraction<br>
+              /economy harvest — Passive industrial yield collection<br>
+              /stockmarket market — Live speculation feed
             </div>
-            <p class="docs-text">Operatives should use <code>/economy harvest</code> to collect passive income from industrial assets. If commands are missing from your terminal, execute <code>/system sync</code> to force a sector-wide asset refresh.</p>
-          </div>
-        </section>
-
-        <section id="proprietary" class="docs-section animate-reveal">
-          <div class="glass-card">
-            <h2>Proprietary Notice</h2>
-            <p class="docs-text">Astra v7.5.0 'Titan' is a **Proprietary Intelligence Platform**. Modification of core tactical logic or redistribution of the Astra engine is strictly prohibited under the ASTRA PROPRIETARY LICENSE (APL) v2.5.</p>
+            <p class="docs-text">Operatives should utilize <code>/economy harvest</code> to secure yields from their industrial infrastructure. Yields are calculated based on your total operational capacity. Note: If <code>/economy harvest</code> is not visible, use <code>/system sync</code>.</p>
           </div>
         </section>
       </div>

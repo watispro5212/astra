@@ -6,7 +6,9 @@ import {
     ActivityType, 
     REST, 
     Routes,
-    EmbedBuilder
+    EmbedBuilder,
+    Options,
+    GuildMember
 } from 'discord.js';
 import { config } from './core/config';
 import logger from './core/logger';
@@ -16,6 +18,7 @@ import { ErrorReporter } from './core/error_reporter';
 import { StatusService } from './services/statusService';
 import { PassiveIncomeService } from './services/passiveIncomeService';
 import { ShopService } from './services/shopService';
+import { AIService } from './services/aiService';
 import * as path from 'path';
 import * as fs from 'fs';
 
@@ -40,8 +43,25 @@ export class AstraClient extends Client {
                 GatewayIntentBits.GuildMessages,
                 GatewayIntentBits.GuildMembers,
                 GatewayIntentBits.MessageContent,
-                GatewayIntentBits.GuildPresences
-            ]
+                GatewayIntentBits.GuildPresences,
+                GatewayIntentBits.DirectMessages
+            ],
+            makeCache: Options.cacheWithLimits({
+                ...Options.DefaultMakeCacheSettings,
+                MessageManager: 10,
+                GuildMemberManager: {
+                    maxSize: 50,
+                    keepOverLimit: (member: GuildMember) => member.id === config.ownerId,
+                },
+                PresenceManager: 0,
+            }),
+            sweepers: {
+                ...Options.DefaultSweeperSettings,
+                messages: {
+                    interval: 3600, // Every hour
+                    lifetime: 1800, // 30 minutes
+                }
+            }
         });
     }
 
@@ -60,6 +80,11 @@ export class AstraClient extends Client {
 
             // Login
             await this.login(config.token);
+
+            // Start Background Services (Only on Shard 0 to save memory/prevent duplication)
+            if (!this.shard || this.shard.ids.includes(0)) {
+                PassiveIncomeService.startService();
+            }
         } catch (error) {
             logger.error(`Initialization Failure: ${error}`);
             process.exit(1);
@@ -128,6 +153,7 @@ export class AstraClient extends Client {
             this.user?.setActivity('Titan v7.5.0 | /system update', { type: ActivityType.Watching });
 
             // Sentinel Status Pulse
+            await StatusService.checkVersionUpdate(c);
             await StatusService.sendSystemOnline(c);
             StatusService.startHeartbeat(this);
             StatusService.startHealthCheck(this);
@@ -140,8 +166,30 @@ export class AstraClient extends Client {
         const xpCooldowns = new Map<string, number>();
 
         this.on(Events.MessageCreate, async (message) => {
-            if (message.author.bot || !message.guild) return;
+            if (message.author.bot) return;
 
+            // ── AI SENTINEL (DM ONLY) ──────────────────────────────────────────
+            if (!message.guild) {
+                try {
+                    await message.channel.sendTyping();
+                    const response = await AIService.generateResponse(message.author.id, message.content);
+                    
+                    // Split response if it exceeds Discord's 2000 character limit
+                    if (response.length > 2000) {
+                        const chunks = response.match(/[\s\S]{1,2000}/g) || [];
+                        for (const chunk of chunks) {
+                            await message.reply(chunk);
+                        }
+                    } else {
+                        await message.reply(response);
+                    }
+                } catch (err) {
+                    logger.error(`AI Sentinel DM Failure: ${err}`);
+                }
+                return;
+            }
+
+            // ── GUILD COMMANDS & XP ────────────────────────────────────────────
             // Fetch prefix for this guild
             const guildData = await db.fetchOne('SELECT prefix FROM guilds WHERE guild_id = ?', message.guild.id);
             const prefix = guildData?.prefix || '-';

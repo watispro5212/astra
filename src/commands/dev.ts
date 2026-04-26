@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
+import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, PermissionFlagsBits, MessageFlags } from 'discord.js';
 import { AstraClient } from '../bot';
 import { Command } from '../types';
 
@@ -31,7 +31,7 @@ const command: Command = {
         const subcommand = interaction.options.getSubcommand();
 
         if (subcommand === 'sync') {
-            await interaction.deferReply({ ephemeral: true });
+            await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
             const scope = interaction.options.getString('scope') as 'global' | 'guild' | 'clear';
 
             try {
@@ -61,7 +61,7 @@ const command: Command = {
                     { name: 'Uptime', value: `<t:${Math.floor((Date.now() - client.uptime!) / 1000)}:R>`, inline: true }
                 );
             
-            await interaction.reply({ embeds: [embed] });
+            await interaction.reply({ embeds: [embed], flags: [MessageFlags.Ephemeral] });
         }
     }
 };

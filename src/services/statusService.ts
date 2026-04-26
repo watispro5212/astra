@@ -1,13 +1,12 @@
 import { WebhookClient, EmbedBuilder } from 'discord.js';
 import { config } from '../core/config';
+import { db } from '../core/database';
+import { THEME, VERSION, PROTOCOL } from '../core/constants';
 import logger from '../core/logger';
 import os from 'os';
 
-const VERSION = 'v7.2.0 "Omega Protocol"';
-const ACCENT  = 0x5865F2; // blurple-ish accent for all status embeds
 const GREEN   = 0x2ecc71;
 const RED     = 0xe74c3c;
-const BLUE    = 0x3498db;
 const YELLOW  = 0xf1c40f;
 
 function uptimeString(seconds: number): string {
@@ -26,12 +25,117 @@ function memBar(used: number, total: number): string {
 
 export class StatusService {
     private static webhook: WebhookClient | null = null;
+    private static updatesWebhook: WebhookClient | null = null;
 
     private static getWebhook(): WebhookClient | null {
         if (!this.webhook && config.statusWebhookUrl) {
             this.webhook = new WebhookClient({ url: config.statusWebhookUrl });
         }
         return this.webhook;
+    }
+
+    private static getUpdatesWebhook(): WebhookClient | null {
+        if (!this.updatesWebhook && config.updatesWebhookUrl) {
+            this.updatesWebhook = new WebhookClient({ url: config.updatesWebhookUrl });
+        }
+        return this.updatesWebhook;
+    }
+
+    // ── VERSION TRACKER ──────────────────────────────────────────────────────
+    /**
+     * Checks if the bot has been updated since the last broadcast.
+     * If a new version is detected, it automatically fires the update webhook.
+     */
+    public static async checkVersionUpdate(client: any) {
+        try {
+            const currentVersion = VERSION;
+            
+            // Atomic update: only succeeds if the version in DB is different from current
+            // This prevents race conditions in sharded environments
+            const result = await db.execute(
+                'UPDATE system_meta SET value = ? WHERE key = ? AND value != ?', 
+                currentVersion, 'last_broadcasted_version', currentVersion
+            );
+
+            // If no rows were updated, it might be because the key doesn't exist yet
+            if (result.count === 0) {
+                const meta = await db.fetchOne('SELECT value FROM system_meta WHERE key = ?', 'last_broadcasted_version');
+                if (!meta) {
+                    // First time initialization
+                    await db.execute('INSERT INTO system_meta (key, value) VALUES (?, ?)', 'last_broadcasted_version', currentVersion);
+                    logger.info(`🚀 INITIAL VERSION LOCK: ${currentVersion}. Broadcasting mission update...`);
+                    await this.broadcastUpdate(client);
+                }
+            } else {
+                // Successful update from a previous version
+                logger.info(`🚀 NEW VERSION DETECTED: ${currentVersion}. Broadcasting mission update...`);
+                await this.broadcastUpdate(client);
+            }
+        } catch (err) {
+            logger.error(`Version check failure: ${err}`);
+        }
+    }
+
+    public static async broadcastUpdate(client: any) {
+        const webhook = this.getUpdatesWebhook();
+        if (!webhook) return;
+
+        const embed = this.getUpdateEmbed(client);
+        
+        await webhook.send({ 
+            username: 'ASTRA MISSION CONTROL', 
+            avatarURL: 'https://cdn-icons-png.flaticon.com/512/3655/3655611.png',
+            embeds: [embed] 
+        }).catch(err => logger.error(`Update Webhook Error: ${err}`));
+    }
+
+    public static getUpdateEmbed(client: any): EmbedBuilder {
+        return new EmbedBuilder()
+            .setColor(THEME.PRIMARY)
+            .setTitle(`🪐 ASTRA ${VERSION} — MISSION UPDATE`)
+            .setAuthor({ name: 'ASTRA INTELLIGENCE COMMAND', iconURL: client.user?.displayAvatarURL() })
+            .setDescription('The **Titan Core Engine** has been successfully transitioned to a high-performance cloud infrastructure. This update ensures permanent data persistence and superior operational stability.')
+            .setThumbnail('https://cdn-icons-png.flaticon.com/512/8654/8654162.png')
+            .addFields(
+                {
+                    name: '✨ NEW OPERATIONAL ASSETS',
+                    value: [
+                        '> **Supabase Cloud Infrastructure** — Enterprise-grade PostgreSQL persistence layer.',
+                        '> **High-Throughput Pooling** — Optimized database connection management.',
+                        '> **Titan v7.5.0 Core** — Refined telemetry and high-fidelity aesthetics.',
+                        '> **Prefix Protocol** — Message-based interface now active (Default: `-`).',
+                        '> **ATX Speculation** — Advanced stock market analysis tools.'
+                    ].join('\n')
+                },
+                {
+                    name: '🗑️ DECOMMISSIONED SYSTEMS',
+                    value: [
+                        '> **Local SQLite Storage** — Purged for enhanced reliability.',
+                        '> **Legacy Status Page** — Replaced by high-fidelity Webhook telemetry.',
+                        '> **Transient Memory** — Data no longer resets during deployment cycles.'
+                    ].join('\n')
+                },
+                {
+                    name: '🔧 SYSTEM OPTIMIZATIONS',
+                    value: [
+                        '• **Command Indexing** — Fixed visibility issues for `/economy harvest`.',
+                        '• **Intelligence Rank** — Stabilized Postgres subqueries for global rankings.',
+                        '• **Interaction Engine** — Resolved timeout anomalies during high-load periods.',
+                        '• **iOS Compatibility** — Fixed Safari-specific user-selection rendering.'
+                    ].join('\n')
+                },
+                {
+                    name: '🚀 FUTURE TELEMETRY',
+                    value: [
+                        '• **AI Sentinel** — Neural-network powered threat detection (Internal Testing).',
+                        '• **Cross-Sector Rankings** — Global intelligence and wealth leaderboards.',
+                        '• **Advanced Automation** — Enhanced server protection protocols.'
+                    ].join('\n')
+                }
+            )
+            .setImage('https://i.imgur.com/8Qx8R1k.png')
+            .setFooter({ text: `Astra Mission Update • ${PROTOCOL} • ${VERSION}` })
+            .setTimestamp();
     }
 
     // ── BOOT ─────────────────────────────────────────────────────────────────
@@ -84,7 +188,7 @@ export class StatusService {
 
         const embed = new EmbedBuilder()
             .setColor(pingColor)
-            .setTitle('💓 SYSTEM HEARTBEAT — TITAN v7.5.0')
+            .setTitle(`💓 SYSTEM HEARTBEAT — ${PROTOCOL} ${VERSION}`)
             .setDescription('Operational stability pulse. Core tactical matrix is nominal.')
             .setThumbnail('https://cdn-icons-png.flaticon.com/512/8654/8654162.png')
             .addFields(

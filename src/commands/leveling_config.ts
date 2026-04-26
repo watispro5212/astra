@@ -3,7 +3,8 @@ import {
     ChatInputCommandInteraction, 
     EmbedBuilder, 
     PermissionFlagsBits, 
-    ChannelType 
+    ChannelType,
+    MessageFlags 
 } from 'discord.js';
 import { Command } from '../types';
 import { db } from '../core/database';
@@ -50,7 +51,7 @@ const command: Command = {
                 .setDescription(`Level-Up reports will now be synchronized to <#${channel.id}>.`)
                 .setFooter({ text: 'Astra Matrix Core' });
 
-            await interaction.reply({ embeds: [embed], ephemeral: true });
+            await interaction.reply({ embeds: [embed], flags: [MessageFlags.Ephemeral] });
 
         } else if (subcommand === 'reward') {
             const level = interaction.options.getInteger('level')!;
@@ -65,7 +66,7 @@ const command: Command = {
                 .setDescription(`Members reaching **Level ${level}** will now be authorized for the <@&${role.id}> role.`)
                 .setFooter({ text: 'Astra Intelligence Matrix' });
 
-            await interaction.reply({ embeds: [embed], ephemeral: true });
+            await interaction.reply({ embeds: [embed], flags: [MessageFlags.Ephemeral] });
 
         } else if (subcommand === 'remove_reward') {
             const level = interaction.options.getInteger('level')!;
@@ -78,7 +79,7 @@ const command: Command = {
                 .setDescription(`The reward for **Level ${level}** has been purged from the matrix.`)
                 .setFooter({ text: 'Astra Matrix Core' });
 
-            await interaction.reply({ embeds: [embed], ephemeral: true });
+            await interaction.reply({ embeds: [embed], flags: [MessageFlags.Ephemeral] });
 
         } else if (subcommand === 'view') {
             const config = await db.fetchOne('SELECT announcement_channel_id FROM leveling_configs WHERE guild_id = ?', guild.id);

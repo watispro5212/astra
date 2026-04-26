@@ -1,6 +1,7 @@
-import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
+import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, MessageFlags } from 'discord.js';
 import { Command } from '../types';
 import { db } from '../core/database';
+import { THEME, VERSION, PROTOCOL } from '../core/constants';
 
 const medals = ['🥇', '🥈', '🥉'];
 const rank = (i: number) => medals[i] ?? `**${i + 1}.**`;
@@ -27,35 +28,36 @@ const command: Command = {
         await interaction.deferReply();
 
         if (subcommand === 'server') {
-            // Fetch guild members first, then query only those IDs — no string interpolation
-            const members = await interaction.guild!.members.fetch();
-            const memberIds = [...members.keys()];
+            // Fetch guild members
+            await interaction.guild!.members.fetch();
+            const memberIds = [...interaction.guild!.members.cache.keys()];
 
             if (memberIds.length === 0) {
-                await interaction.editReply({ content: '❌ Could not fetch member list.' });
+                await interaction.editReply({ content: '❌ Could not synchronize sector personnel data.' });
                 return;
             }
 
-            // Query in batches to avoid hitting SQLite variable limits
-            const placeholders = memberIds.map(() => '?').join(',');
+            // SQLite limit is typically 999 variables
+            const slicedIds = memberIds.slice(0, 990);
+            const placeholders = slicedIds.map(() => '?').join(',');
             const users = await db.fetchAll(
                 `SELECT user_id, level, xp FROM users WHERE user_id IN (${placeholders}) ORDER BY level DESC, xp DESC LIMIT 10`,
-                ...memberIds
+                ...slicedIds
             );
 
             const lines: string[] = [];
             for (let i = 0; i < users.length; i++) {
-                let name = `User ${users[i].user_id}`;
-                try { name = (await interaction.client.users.fetch(users[i].user_id)).username; } catch (_) {}
+                const user = await interaction.client.users.fetch(users[i].user_id).catch(() => null);
+                const name = user ? user.username : `Unknown Operative [${users[i].user_id}]`;
                 lines.push(`${rank(i)} **${name}** — Level \`${users[i].level}\` · \`${users[i].xp} XP\``);
             }
 
             await interaction.editReply({
                 embeds: [new EmbedBuilder()
-                    .setTitle(`📊 SECTOR LEADERBOARD: ${interaction.guild!.name}`)
-                    .setColor(0x3498db)
+                    .setTitle(`📊 SECTOR LEADERBOARD: ${interaction.guild!.name.toUpperCase()}`)
+                    .setColor(THEME.PRIMARY)
                     .setDescription(lines.length > 0 ? lines.join('\n') : 'No intelligence data recorded for this sector yet.')
-                    .setFooter({ text: 'Astra Intelligence System • v7.0.0' })
+                    .setFooter({ text: `Astra Intelligence System • ${VERSION} ${PROTOCOL}` })
                     .setTimestamp()]
             });
 
@@ -66,17 +68,17 @@ const command: Command = {
 
             const lines: string[] = [];
             for (let i = 0; i < users.length; i++) {
-                let name = `User ${users[i].user_id}`;
-                try { name = (await interaction.client.users.fetch(users[i].user_id)).username; } catch (_) {}
+                const user = await interaction.client.users.fetch(users[i].user_id).catch(() => null);
+                const name = user ? user.username : `Unknown Operative [${users[i].user_id}]`;
                 lines.push(`${rank(i)} **${name}** — Level \`${users[i].level}\` · \`${users[i].xp} XP\``);
             }
 
             await interaction.editReply({
                 embeds: [new EmbedBuilder()
-                    .setTitle('🌎 GLOBAL LEADERBOARD: Top 10 Operatives')
-                    .setColor(0xf1c40f)
+                    .setTitle('🌎 GLOBAL NETWORK RANKINGS')
+                    .setColor(THEME.ACCENT)
                     .setDescription(lines.length > 0 ? lines.join('\n') : 'No global network data found.')
-                    .setFooter({ text: 'Astra Global Network • v7.0.0' })
+                    .setFooter({ text: `Astra Global Intelligence • ${VERSION} ${PROTOCOL}` })
                     .setTimestamp()]
             });
 
@@ -87,17 +89,17 @@ const command: Command = {
 
             const lines: string[] = [];
             for (let i = 0; i < users.length; i++) {
-                let name = `User ${users[i].user_id}`;
-                try { name = (await interaction.client.users.fetch(users[i].user_id)).username; } catch (_) {}
+                const user = await interaction.client.users.fetch(users[i].user_id).catch(() => null);
+                const name = user ? user.username : `Unknown Operative [${users[i].user_id}]`;
                 lines.push(`${rank(i)} **${name}** — \`${(users[i].balance || 0).toLocaleString()} cr\``);
             }
 
             await interaction.editReply({
                 embeds: [new EmbedBuilder()
-                    .setTitle('💰 WEALTH LEADERBOARD: Top 10 Operatives')
+                    .setTitle('💰 GLOBAL FISCAL LEADERBOARD')
                     .setColor(0x2ecc71)
                     .setDescription(lines.length > 0 ? lines.join('\n') : 'No fiscal data found.')
-                    .setFooter({ text: 'Astra Fiscal Network • v7.0.0' })
+                    .setFooter({ text: `Astra Fiscal Network • ${VERSION} ${PROTOCOL}` })
                     .setTimestamp()]
             });
         }

@@ -3,7 +3,8 @@ import {
     ChatInputCommandInteraction,
     EmbedBuilder,
     PermissionFlagsBits,
-    TextChannel
+    TextChannel,
+    MessageFlags
 } from 'discord.js';
 import { Command } from '../types';
 import { db } from '../core/database';
@@ -56,11 +57,11 @@ const command: Command = {
                 interaction.guildId, interaction.channelId, msg.id, interaction.user.id, prize, winners, endsAt.toISOString()
             );
 
-            await interaction.reply({ content: `✅ Giveaway started! [Jump to it](${msg.url})`, ephemeral: true });
+            await interaction.reply({ content: `✅ Giveaway started! [Jump to it](${msg.url})`, flags: [MessageFlags.Ephemeral] });
 
         } else if (subcommand === 'end' || subcommand === 'reroll') {
             const messageId = interaction.options.getString('message_id')!;
-            await interaction.deferReply({ ephemeral: true });
+            await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
             const giveaway = await db.fetchOne(
                 'SELECT * FROM giveaways WHERE message_id = ? AND guild_id = ?',

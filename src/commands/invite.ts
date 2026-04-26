@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
+import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, MessageFlags } from 'discord.js';
 import { Command } from '../types';
 import { THEME, VERSION, PROTOCOL } from '../core/constants';
 
@@ -23,7 +23,7 @@ const command: Command = {
             .setFooter({ text: `Astra ${VERSION} ${PROTOCOL} • High-Performance Automation` })
             .setTimestamp();
 
-        await interaction.reply({ embeds: [embed] });
+        await interaction.reply({ embeds: [embed], flags: [MessageFlags.Ephemeral] });
     }
 };
 

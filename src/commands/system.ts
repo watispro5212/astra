@@ -3,7 +3,6 @@ import {
     ChatInputCommandInteraction,
     EmbedBuilder,
     PermissionFlagsBits,
-    WebhookClient,
     version as djsVersion,
     MessageFlags
 } from 'discord.js';
@@ -30,6 +29,19 @@ const command: Command = {
         .addSubcommand(sub =>
             sub.setName('status')
                .setDescription('📡 Live system health, latency, and resource diagnostics.')
+        )
+        .addSubcommand(sub =>
+            sub.setName('ping')
+               .setDescription('🏓 Analyze network heartbeat and API response times.')
+        )
+        .addSubcommand(sub =>
+            sub.setName('servers')
+               .setDescription('🌐 View top sectors where Astra is currently deployed (Owner Only).')
+        )
+        .addSubcommand(sub =>
+            sub.setName('alert')
+               .setDescription('⚠️ Broadcast a system-wide emergency transmission (Owner Only).')
+               .addStringOption(opt => opt.setName('message').setDescription('The emergency message to broadcast').setRequired(true))
         ),
 
     async execute(interaction: ChatInputCommandInteraction) {
@@ -38,70 +50,22 @@ const command: Command = {
         // ── SYNC ──────────────────────────────────────────────────────────────
         if (subcommand === 'sync') {
             if (interaction.user.id !== config.ownerId) {
-                return interaction.reply({ content: '❌ Access Denied: Owner clearance required.', flags: [MessageFlags.Ephemeral] });
+                return interaction.reply({ content: '❌ **ACCESS DENIED**: Owner clearance required for Sector Synchronization.', flags: [MessageFlags.Ephemeral] });
             }
 
-            await interaction.reply({ content: '🔄 **INITIATING NUCLEAR SYNC PROTOCOL...**\nPurging legacy command echoes and re-deploying Titan v7.5.0 assets.', flags: [MessageFlags.Ephemeral] });
+            await interaction.reply({ content: '🔄 **INITIATING COMMAND SYNCHRONIZATION...**\nPurging legacy command echoes and re-deploying Titan v7.5.0 assets.', flags: [MessageFlags.Ephemeral] });
             
             try {
-                const count = await (interaction.client as any).syncCommands('full_purge');
-                await interaction.followUp({ content: `✅ **SYNC COMPLETE**: \`${count}\` tactical assets successfully deployed across all sectors.`, flags: [MessageFlags.Ephemeral] });
+                await (interaction.client as any).syncCommands('clear');
+                const count = await (interaction.client as any).syncCommands(process.env.NODE_ENV === 'production' ? 'global' : 'guild');
+                await interaction.editReply({ content: `✅ **SYNCHRONIZATION SUCCESSFUL**: \`${count}\` tactical assets successfully deployed across the network. All sectors are now running the Titan v7.5.0 engine.` });
             } catch (err) {
-                await interaction.followUp({ content: `🚨 **SYNC FAILURE**: ${err}`, flags: [MessageFlags.Ephemeral] });
+                await interaction.editReply({ content: `🚨 **SYNCHRONIZATION FAILURE**: ${err}` });
             }
 
         // ── UPDATE ────────────────────────────────────────────────────────────
         } else if (subcommand === 'update') {
-            const embed = new EmbedBuilder()
-                .setColor(THEME.PRIMARY)
-                .setTitle(`🪐 ASTRA ${VERSION} — ${PROTOCOL} DEPLOYMENT`)
-                .setAuthor({ name: 'ASTRA INTELLIGENCE COMMAND', iconURL: interaction.client.user?.displayAvatarURL() })
-                .setDescription('The **Titan Protocol** has been fully initialized. This deployment synchronizes the Astra ecosystem with state-of-the-art telemetry and high-fidelity operational standards.')
-                .setThumbnail('https://cdn-icons-png.flaticon.com/512/8654/8654162.png')
-                .addFields(
-                    {
-                        name: '✨ TITAN ENGINE OVERHAUL',
-                        value: [
-                            '> **Premium Design Language** — Neon-accented UI and glassmorphism standards applied globally.',
-                            '> **ATX Stock Market** — Live high-volatility financial simulation system deployed.',
-                            '> **Industrial Hub** — Heavy-duty tactical shop interfaces with yield-bearing asset visuals.',
-                            '> **Prefix System** — Message-based command support enabled (Default: `-`).',
-                        ].join('\n')
-                    },
-                    {
-                        name: '🔧 BUG FIXES & REFINEMENTS',
-                        value: [
-                            '• **Slash Command Sync** — Resolved indexing issues for `/economy harvest`.',
-                            '• **iOS Support** — Global patch for Safari interaction anomalies.',
-                            '• **Intelligence Matrix** — Stabilized memory allocation in rank diagnostics.',
-                        ].join('\n')
-                    },
-                    {
-                        name: '🚀 FUTURE TELEMETRY',
-                        value: [
-                            '• **AI Sentinel** — Neural-network powered threat detection (In-Development).',
-                            '• **Global Leaderboards** — Cross-sector wealth and intelligence rankings.',
-                        ].join('\n')
-                    }
-                )
-                .setImage('https://i.imgur.com/8Qx8R1k.png') // Placeholder for a high-fidelity banner
-                .setFooter({ text: `Astra Intelligence Division • Sector: ${interaction.guild?.name} • ${VERSION}` })
-                .setTimestamp();
-
-            // Fire the updates webhook
-            if (config.updatesWebhookUrl) {
-                try {
-                    const wh = new WebhookClient({ url: config.updatesWebhookUrl });
-                    await wh.send({ 
-                        username: 'ASTRA TITAN CORE', 
-                        avatarURL: 'https://cdn-icons-png.flaticon.com/512/3655/3655611.png',
-                        embeds: [embed] 
-                    });
-                } catch (err) {
-                    logger.warn(`Updates webhook failed: ${err}`);
-                }
-            }
-
+            const embed = StatusService.getUpdateEmbed(interaction.client);
             return interaction.reply({ embeds: [embed] });
 
         // ── STATUS ────────────────────────────────────────────────────────────
@@ -234,12 +198,6 @@ const command: Command = {
                     logger.error(`Alert failed for guild ${guild.id}: ${err}`);
                 }
             }
-
-            // Also fire the webhook so you can track it
-            await StatusService.sendError(
-                new Error(`SYSTEM ALERT broadcast to ${successCount} sectors: "${message}"`),
-                { commandName: 'system alert', userId: interaction.user.id }
-            ).catch(() => {});
 
             return interaction.editReply({ content: `✅ Alert broadcast complete. Reached **${successCount}** of **${interaction.client.guilds.cache.size}** sectors.` });
         }
