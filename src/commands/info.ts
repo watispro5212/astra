@@ -7,8 +7,7 @@ import {
 } from 'discord.js';
 import { Command } from '../types';
 import * as os from 'os';
-
-const VER = 'v7.2.0';
+import { THEME, VERSION, PROTOCOL } from '../core/constants';
 
 const command: Command = {
     data: new SlashCommandBuilder()
@@ -47,11 +46,11 @@ const command: Command = {
             const avatarUrl = user.displayAvatarURL({ size: 2048 });
 
             const embed = new EmbedBuilder()
-                .setColor(0x3498db)
+                .setColor(THEME.PRIMARY)
                 .setTitle(`🖼️ AVATAR MATRIX: ${user.username.toUpperCase()}`)
                 .setImage(avatarUrl)
                 .setDescription(`[🔗 Download High-Res](${avatarUrl})`)
-                .setFooter({ text: `Astra Intelligence Agency • ${VER}` })
+                .setFooter({ text: `Astra Intelligence Agency • ${VERSION} ${PROTOCOL}` })
                 .setTimestamp();
 
             await interaction.reply({ embeds: [embed] });
@@ -73,17 +72,17 @@ const command: Command = {
             const totalShards = interaction.client.shard?.count ?? 1;
 
             const embed = new EmbedBuilder()
-                .setColor(0x2ecc71)
+                .setColor(THEME.ACCENT)
                 .setTitle('📡 ASTRA SYSTEM DIAGNOSTICS')
                 .setThumbnail(interaction.client.user?.displayAvatarURL()!)
                 .addFields(
-                    { name: '🛰️ Network', value: `\`\`\`Shard : ${shardId + 1}/${totalShards}\nPing  : ${interaction.client.ws.ping}ms\nGuilds: ${interaction.client.guilds.cache.size}\`\`\``, inline: true },
-                    { name: '💻 Core', value: `\`\`\`RAM  : ${memUsage.toFixed(1)}MB/${(totalMem).toFixed(0)}MB\nCPU  : ${os.loadavg()[0].toFixed(2)} avg\nNode : ${process.version}\`\`\``, inline: true },
-                    { name: '⏱️ Uptime', value: `\`${days}d ${hours}h ${minutes}m ${seconds}s\``, inline: true },
-                    { name: '📊 Memory', value: `\`[${memBar}] ${memPct}%\``, inline: false },
-                    { name: '🤖 Version Control', value: `\`\`\`Astra : ${VER} Omega Protocol\ndiscord.js: v${djsVersion}\nHost  : ${os.hostname()}\`\`\``, inline: false },
+                    { name: '🛰️ Network Telemetry', value: `\`\`\`Shard : ${shardId + 1}/${totalShards}\nPing  : ${interaction.client.ws.ping}ms\nGuilds: ${interaction.client.guilds.cache.size}\`\`\``, inline: true },
+                    { name: '💻 Computational Core', value: `\`\`\`RAM  : ${memUsage.toFixed(1)}MB/${(totalMem).toFixed(0)}MB\nCPU  : ${os.loadavg()[0].toFixed(2)} avg\nNode : ${process.version}\`\`\``, inline: true },
+                    { name: '⏱️ Operational Uptime', value: `\`${days}d ${hours}h ${minutes}m ${seconds}s\``, inline: true },
+                    { name: '📊 Memory Allocation', value: `\`[${memBar}] ${memPct}%\``, inline: false },
+                    { name: '🤖 Protocol Versioning', value: `\`\`\`Astra : ${VERSION} ${PROTOCOL}\ndiscord.js: v${djsVersion}\nHost  : ${os.hostname()}\`\`\``, inline: false },
                 )
-                .setFooter({ text: `Astra Global Infrastructure • All systems nominal` })
+                .setFooter({ text: `Astra Global Infrastructure • All sectors nominal` })
                 .setTimestamp();
 
             await interaction.reply({ embeds: [embed] });
@@ -93,7 +92,7 @@ const command: Command = {
             const member = await guild.members.fetch(user.id).catch(() => null);
 
             const embed = new EmbedBuilder()
-                .setColor(0x3498db)
+                .setColor(THEME.PRIMARY)
                 .setTitle(`👤 INTELLIGENCE FILE: ${user.username.toUpperCase()}`)
                 .setThumbnail(user.displayAvatarURL({ size: 512 }))
                 .addFields(
@@ -101,8 +100,8 @@ const command: Command = {
                     { name: '🤖 Bot Account',  value: `\`${user.bot ? 'Yes' : 'No'}\``,                      inline: true },
                     { name: '📅 Account Age',  value: `<t:${Math.floor(user.createdTimestamp / 1000)}:R>`,   inline: true },
                     { name: '🎖️ Top Role',    value: member?.roles.highest.name || '—',                     inline: true },
-                    { name: '🚦 Status',       value: member?.presence?.status ?? '`offline`',                inline: true },
-                    { name: '🏷️ Nickname',     value: member?.nickname ? `\`${member.nickname}\`` : '`None\`', inline: true },
+                    { name: '🚦 Status',       value: `\`${member?.presence?.status ?? 'offline'}\``,         inline: true },
+                    { name: '🏷️ Nickname',     value: member?.nickname ? `\`${member.nickname}\`` : '`None`', inline: true },
                 );
 
             if (member) {
@@ -113,12 +112,12 @@ const command: Command = {
                     .join(' ') || '`No roles`';
 
                 embed.addFields(
-                    { name: '📥 Joined Server', value: `<t:${Math.floor(member.joinedTimestamp! / 1000)}:D> (<t:${Math.floor(member.joinedTimestamp! / 1000)}:R>)`, inline: false },
-                    { name: `📜 Roles [${member.roles.cache.size - 1}]`, value: roles.length > 1024 ? roles.substring(0, 1020) + '…' : roles, inline: false },
+                    { name: '📥 Sector Admission', value: `<t:${Math.floor(member.joinedTimestamp! / 1000)}:D> (<t:${Math.floor(member.joinedTimestamp! / 1000)}:R>)`, inline: false },
+                    { name: `📜 Clearance Roles [${member.roles.cache.size - 1}]`, value: roles.length > 1024 ? roles.substring(0, 1020) + '…' : roles, inline: false },
                 );
             }
 
-            embed.setFooter({ text: `Astra Intelligence Agency • ${VER}` }).setTimestamp();
+            embed.setFooter({ text: `Astra Intelligence Agency • ${VERSION}` }).setTimestamp();
             await interaction.reply({ embeds: [embed] });
 
         } else if (subcommand === 'server') {
@@ -130,22 +129,19 @@ const command: Command = {
             const bots     = guild.members.cache.filter(m => m.user.bot).size;
 
             const embed = new EmbedBuilder()
-                .setColor(0x3498db)
+                .setColor(THEME.PRIMARY)
                 .setTitle(`🏰 SECTOR PROFILE: ${guild.name.toUpperCase()}`)
                 .setThumbnail(guild.iconURL({ size: 512 }))
                 .setImage(guild.bannerURL({ size: 1024 }) ?? null)
                 .addFields(
-                    { name: '🆔 Guild ID',      value: `\`${guild.id}\``,                                         inline: true },
+                    { name: '🆔 Sector ID',     value: `\`${guild.id}\``,                                         inline: true },
                     { name: '👑 Commander',      value: `${owner.user}`,                                           inline: true },
-                    { name: '📅 Founded',        value: `<t:${Math.floor(guild.createdTimestamp / 1000)}:D>`,      inline: true },
+                    { name: '📅 Commissioned',   value: `<t:${Math.floor(guild.createdTimestamp / 1000)}:D>`,      inline: true },
                     { name: '👥 Personnel',      value: `\`\`\`Total : ${guild.memberCount}\nHumans: ${guild.memberCount - bots}\nBots  : ${bots}\`\`\``, inline: true },
                     { name: '📐 Infrastructure', value: `\`\`\`Text : ${textChs}\nVoice: ${voiceChs}\nCat  : ${catChs}\`\`\``, inline: true },
                     { name: '✨ Sector Status',  value: `\`\`\`Boosts: ${guild.premiumSubscriptionCount || 0}\nTier  : ${guild.premiumTier}\nVerify: ${guild.verificationLevel}\`\`\``, inline: true },
-                    { name: '🌐 Locale',         value: `\`${guild.preferredLocale}\``,                           inline: true },
-                    { name: '🎭 Roles',          value: `\`${guild.roles.cache.size}\``,                           inline: true },
-                    { name: '😀 Emojis',         value: `\`${guild.emojis.cache.size}\``,                          inline: true },
                 )
-                .setFooter({ text: `Astra Sector Diagnostics • ${VER}` })
+                .setFooter({ text: `Astra Sector Diagnostics • ${VERSION}` })
                 .setTimestamp();
 
             await interaction.reply({ embeds: [embed] });
@@ -167,19 +163,19 @@ const command: Command = {
 
             const embed = new EmbedBuilder()
                 .setColor(role.color || 0x7f8c8d)
-                .setTitle(`🎖️ ROLE PROFILE: ${role.name.toUpperCase()}`)
+                .setTitle(`🎖️ CLEARANCE PROFILE: ${role.name.toUpperCase()}`)
                 .addFields(
                     { name: '🆔 Role ID',       value: `\`${role.id}\``,                                          inline: true },
-                    { name: '🎨 Colour',         value: `\`${role.hexColor}\``,                                    inline: true },
-                    { name: '📌 Position',       value: `\`#${role.position}\``,                                   inline: true },
-                    { name: '👥 Members',        value: `\`${memberCount}\``,                                      inline: true },
+                    { name: '🎨 Tactical Color', value: `\`${role.hexColor}\``,                                    inline: true },
+                    { name: '📌 Hierarchy',      value: `\`#${role.position}\``,                                   inline: true },
+                    { name: '👥 Assigned',       value: `\`${memberCount}\``,                                      inline: true },
                     { name: '🔔 Mentionable',    value: `\`${role.mentionable ? 'Yes' : 'No'}\``,                  inline: true },
                     { name: '📌 Hoisted',        value: `\`${role.hoist ? 'Yes' : 'No'}\``,                        inline: true },
-                    { name: '📅 Created',        value: `<t:${Math.floor(role.createdTimestamp / 1000)}:D>`,        inline: true },
-                    { name: '🤖 Managed',        value: `\`${role.managed ? 'Yes (Bot)' : 'No'}\``,               inline: true },
+                    { name: '📅 Established',    value: `<t:${Math.floor(role.createdTimestamp / 1000)}:D>`,        inline: true },
+                    { name: '🤖 Automated',      value: `\`${role.managed ? 'Yes (Bot)' : 'No'}\``,               inline: true },
                     { name: '🔑 Key Permissions', value: `\`\`\`${perms}\`\`\``,                                   inline: false },
                 )
-                .setFooter({ text: `Astra Intelligence Agency • ${VER}` })
+                .setFooter({ text: `Astra Intelligence Agency • ${VERSION}` })
                 .setTimestamp();
 
             await interaction.reply({ embeds: [embed] });

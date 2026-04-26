@@ -7,6 +7,7 @@ import {
 } from 'discord.js';
 import { ModerationService } from '../services/moderationService';
 import { Command } from '../types';
+import { THEME, VERSION, PROTOCOL } from '../core/constants';
 
 const command: Command = {
     data: new SlashCommandBuilder()
@@ -70,27 +71,33 @@ const command: Command = {
             const reason = interaction.options.getString('reason') || 'No reason provided';
 
             if (!(member instanceof GuildMember)) {
-                await interaction.reply({ content: '❌ Target not found in current sector.', ephemeral: true });
-                return;
+                return interaction.reply({ content: '❌ Target not found in current sector.', ephemeral: true });
             }
             if (!member.kickable) {
-                await interaction.reply({ content: '❌ Insufficient Authority: Target is protected by system hierarchy.', ephemeral: true });
-                return;
+                return interaction.reply({ content: '❌ Insufficient Authority: Target is protected by system hierarchy.', ephemeral: true });
             }
             const self = guild.members.me!;
             if (member.roles.highest.position >= self.roles.highest.position) {
-                await interaction.reply({ content: '❌ Permission Error: Target rank exceeds or matches Astra authority.', ephemeral: true });
-                return;
+                return interaction.reply({ content: '❌ Permission Error: Target rank exceeds or matches Astra authority.', ephemeral: true });
             }
 
             await member.kick(reason);
             const caseId = await ModerationService.createCase(guild.id, member.id, interaction.user.id, 'kick', reason);
 
-            await interaction.reply({ embeds: [new EmbedBuilder()
-                .setColor(0xe67e22)
-                .setTitle('⚖️ Ejection Executed')
-                .setDescription(`**Target:** ${member.user.tag}\n**Case:** #${caseId}\n**Reason:** ${reason}`)
-                .setTimestamp()] });
+            const embed = new EmbedBuilder()
+                .setColor(THEME.WARNING)
+                .setTitle('⚖️ EJECTION EXECUTED')
+                .setDescription(`The target operative has been ejected from the sector.`)
+                .addFields(
+                    { name: '👤 Operative', value: `${member.user.tag}`, inline: true },
+                    { name: '🆔 Case', value: `#${caseId}`, inline: true },
+                    { name: '📜 Reason', value: reason, inline: false }
+                )
+                .setThumbnail(member.user.displayAvatarURL())
+                .setFooter({ text: `${PROTOCOL} Enforcement • Case #${caseId}` })
+                .setTimestamp();
+
+            await interaction.reply({ embeds: [embed] });
 
         } else if (subcommand === 'ban') {
             const user = interaction.options.getUser('member')!;
@@ -102,18 +109,26 @@ const command: Command = {
                 if (member) {
                     const self = guild.members.me!;
                     if (member.roles.highest.position >= self.roles.highest.position) {
-                        await interaction.reply({ content: '❌ Permission Error: Target rank exceeds or matches Astra authority.', ephemeral: true });
-                        return;
+                        return interaction.reply({ content: '❌ Permission Error: Target rank exceeds or matches Astra authority.', ephemeral: true });
                     }
                 }
                 await guild.members.ban(user, { reason, deleteMessageSeconds: deleteDays * 86400 });
                 const caseId = await ModerationService.createCase(guild.id, user.id, interaction.user.id, 'ban', reason);
 
-                await interaction.reply({ embeds: [new EmbedBuilder()
-                    .setColor(0xc0392b)
-                    .setTitle('🚨 Blacklist Applied')
-                    .setDescription(`**Target:** ${user.tag}\n**Case:** #${caseId}\n**Reason:** ${reason}`)
-                    .setTimestamp()] });
+                const embed = new EmbedBuilder()
+                    .setColor(THEME.DANGER)
+                    .setTitle('🚨 BLACKLIST APPLIED')
+                    .setDescription(`The target operative has been permanently blacklisted.`)
+                    .addFields(
+                        { name: '👤 Operative', value: `${user.tag}`, inline: true },
+                        { name: '🆔 Case', value: `#${caseId}`, inline: true },
+                        { name: '📜 Reason', value: reason, inline: false }
+                    )
+                    .setThumbnail(user.displayAvatarURL())
+                    .setFooter({ text: `${PROTOCOL} Enforcement • Critical Violation` })
+                    .setTimestamp();
+
+                await interaction.reply({ embeds: [embed] });
             } catch (err) {
                 await interaction.reply({ content: `❌ Blacklist Failed: ${err}`, ephemeral: true });
             }
@@ -125,17 +140,24 @@ const command: Command = {
             try {
                 const ban = await guild.bans.fetch(userId).catch(() => null);
                 if (!ban) {
-                    await interaction.reply({ content: '❌ No active ban found for that user ID.', ephemeral: true });
-                    return;
+                    return interaction.reply({ content: '❌ No active ban found for that user ID.', ephemeral: true });
                 }
                 await guild.members.unban(userId, reason);
                 const caseId = await ModerationService.createCase(guild.id, userId, interaction.user.id, 'unban', reason);
 
-                await interaction.reply({ embeds: [new EmbedBuilder()
-                    .setColor(0x2ecc71)
-                    .setTitle('✅ Blacklist Revoked')
-                    .setDescription(`**User ID:** \`${userId}\`\n**Case:** #${caseId}\n**Reason:** ${reason}`)
-                    .setTimestamp()] });
+                const embed = new EmbedBuilder()
+                    .setColor(THEME.SUCCESS)
+                    .setTitle('✅ BLACKLIST REVOKED')
+                    .setDescription(`Sector access has been restored for the user.`)
+                    .addFields(
+                        { name: '🆔 User ID', value: `\`${userId}\``, inline: true },
+                        { name: '🆔 Case', value: `#${caseId}`, inline: true },
+                        { name: '📜 Reason', value: reason, inline: false }
+                    )
+                    .setFooter({ text: `${PROTOCOL} Enforcement • Restriction Lifted` })
+                    .setTimestamp();
+
+                await interaction.reply({ embeds: [embed] });
             } catch (err) {
                 await interaction.reply({ content: `❌ Unban Failed: ${err}`, ephemeral: true });
             }
@@ -146,22 +168,30 @@ const command: Command = {
             const reason = interaction.options.getString('reason') || 'No reason provided';
 
             if (!(member instanceof GuildMember)) {
-                await interaction.reply({ content: '❌ Target not found in current sector.', ephemeral: true });
-                return;
+                return interaction.reply({ content: '❌ Target not found in current sector.', ephemeral: true });
             }
             if (!member.moderatable) {
-                await interaction.reply({ content: '❌ Insufficient Authority: Target is protected by system hierarchy.', ephemeral: true });
-                return;
+                return interaction.reply({ content: '❌ Insufficient Authority: Target is protected by system hierarchy.', ephemeral: true });
             }
             try {
                 await member.timeout(duration * 60000, reason);
                 const caseId = await ModerationService.createCase(guild.id, member.id, interaction.user.id, 'timeout', reason, `${duration}m`);
 
-                await interaction.reply({ embeds: [new EmbedBuilder()
-                    .setColor(0xf1c40f)
-                    .setTitle('⏳ Temporal Suspension Active')
-                    .setDescription(`**Target:** ${member.user.tag}\n**Case:** #${caseId}\n**Duration:** ${duration} minutes\n**Reason:** ${reason}`)
-                    .setTimestamp()] });
+                const embed = new EmbedBuilder()
+                    .setColor(THEME.WARNING)
+                    .setTitle('⏳ TEMPORAL SUSPENSION')
+                    .setDescription(`The operative has been temporarily suspended from all activities.`)
+                    .addFields(
+                        { name: '👤 Operative', value: `${member.user.tag}`, inline: true },
+                        { name: '🆔 Case', value: `#${caseId}`, inline: true },
+                        { name: '⏲️ Duration', value: `${duration} minutes`, inline: true },
+                        { name: '📜 Reason', value: reason, inline: false }
+                    )
+                    .setThumbnail(member.user.displayAvatarURL())
+                    .setFooter({ text: `${PROTOCOL} Enforcement • Stability Protocol` })
+                    .setTimestamp();
+
+                await interaction.reply({ embeds: [embed] });
             } catch (err) {
                 await interaction.reply({ content: `❌ Suspension Failed: ${err}`, ephemeral: true });
             }
@@ -171,46 +201,56 @@ const command: Command = {
             const reason = interaction.options.getString('reason')!;
 
             if (!(member instanceof GuildMember)) {
-                await interaction.reply({ content: '❌ Target not found in current sector.', ephemeral: true });
-                return;
+                return interaction.reply({ content: '❌ Target not found in current sector.', ephemeral: true });
             }
             if (member.user.bot) {
-                await interaction.reply({ content: '❌ Bots cannot be warned.', ephemeral: true });
-                return;
+                return interaction.reply({ content: '❌ Bots cannot be warned.', ephemeral: true });
             }
 
             const caseId = await ModerationService.createCase(guild.id, member.id, interaction.user.id, 'warn', reason);
 
             try {
                 await member.user.send({ embeds: [new EmbedBuilder()
-                    .setColor(0xf39c12)
-                    .setTitle('⚠️ Formal Warning Issued')
-                    .setDescription(`You have received a formal warning in **${guild.name}**.\n\n**Reason:** ${reason}\n**Case:** #${caseId}`)
-                    .setFooter({ text: 'Astra Moderation System • v7.0.0' })
+                    .setColor(THEME.WARNING)
+                    .setTitle('⚠️ FORMAL WARNING ISSUED')
+                    .setDescription(`You have received a formal warning in **${guild.name}**.\nFurther violations may result in suspension or blacklist.`)
+                    .addFields(
+                        { name: '🆔 Case', value: `#${caseId}`, inline: true },
+                        { name: '📜 Reason', value: reason, inline: false }
+                    )
+                    .setFooter({ text: `Astra Moderation System • ${VERSION}` })
                     .setTimestamp()] });
-            } catch (_) { /* DMs closed — warning still logged */ }
+            } catch (_) { /* DMs closed */ }
 
-            await interaction.reply({ embeds: [new EmbedBuilder()
-                .setColor(0xf39c12)
-                .setTitle('⚠️ Warning Issued')
-                .setDescription(`**Target:** ${member.user.tag}\n**Case:** #${caseId}\n**Reason:** ${reason}`)
-                .setTimestamp()] });
+            const embed = new EmbedBuilder()
+                .setColor(THEME.WARNING)
+                .setTitle('⚠️ WARNING ISSUED')
+                .addFields(
+                    { name: '👤 Operative', value: `${member.user.tag}`, inline: true },
+                    { name: '🆔 Case', value: `#${caseId}`, inline: true },
+                    { name: '📜 Reason', value: reason, inline: false }
+                )
+                .setFooter({ text: `${PROTOCOL} Enforcement • Protocol Logged` })
+                .setTimestamp();
+
+            await interaction.reply({ embeds: [embed] });
 
         } else if (subcommand === 'purge') {
             const count = interaction.options.getInteger('count')!;
             const channel = interaction.channel;
 
             if (!channel || !('bulkDelete' in channel)) {
-                await interaction.reply({ content: '❌ Purge is only available in text channels.', ephemeral: true });
-                return;
+                return interaction.reply({ content: '❌ Purge only available in text channels.', ephemeral: true });
             }
             try {
                 const deleted = await (channel as any).bulkDelete(count, true);
-                await interaction.reply({ embeds: [new EmbedBuilder()
-                    .setColor(0x2ecc71)
-                    .setTitle('🧹 Sector Sanitization Complete')
-                    .setDescription(`Successfully purged **${deleted.size}** message(s). (Messages older than 14 days are automatically skipped.)`)
-                    .setTimestamp()], ephemeral: true });
+                const embed = new EmbedBuilder()
+                    .setColor(THEME.SUCCESS)
+                    .setTitle('🧹 SECTOR SANITIZATION')
+                    .setDescription(`Successfully purged **${deleted.size}** tactical logs from the local channel.`)
+                    .setFooter({ text: `${PROTOCOL} Maintenance • ${VERSION}` })
+                    .setTimestamp();
+                await interaction.reply({ embeds: [embed], ephemeral: true });
             } catch (err) {
                 await interaction.reply({ content: `❌ Sanitization Failed: ${err}`, ephemeral: true });
             }
@@ -220,23 +260,24 @@ const command: Command = {
             const caseData = await ModerationService.getCase(guild.id, caseNumber);
 
             if (!caseData) {
-                await interaction.reply({ content: `❌ Case #${caseNumber} not found in this sector.`, ephemeral: true });
-                return;
+                return interaction.reply({ content: `❌ Case #${caseNumber} not found in this sector.`, ephemeral: true });
             }
 
-            await interaction.reply({ embeds: [new EmbedBuilder()
-                .setColor(0x3498db)
-                .setTitle(`📁 Case #${caseNumber}`)
+            const embed = new EmbedBuilder()
+                .setColor(THEME.PRIMARY)
+                .setTitle(`📁 CASE LOG: #${caseNumber}`)
                 .addFields(
-                    { name: 'Type', value: `\`${caseData.type.toUpperCase()}\``, inline: true },
-                    { name: 'Status', value: `\`${caseData.case_status || 'active'}\``, inline: true },
-                    { name: 'Target', value: `<@${caseData.target_id}> (\`${caseData.target_id}\`)`, inline: false },
-                    { name: 'Moderator', value: `<@${caseData.moderator_id}>`, inline: true },
-                    { name: 'Duration', value: caseData.duration || 'N/A', inline: true },
-                    { name: 'Reason', value: caseData.reason || 'No reason provided', inline: false },
-                    { name: 'Timestamp', value: `<t:${Math.floor(new Date(caseData.timestamp).getTime() / 1000)}:F>`, inline: false }
+                    { name: '🔹 Type', value: `\`${caseData.type.toUpperCase()}\``, inline: true },
+                    { name: '🔸 Status', value: `\`${caseData.case_status || 'active'}\``, inline: true },
+                    { name: '👤 Target', value: `<@${caseData.target_id}>`, inline: false },
+                    { name: '🛠️ Moderator', value: `<@${caseData.moderator_id}>`, inline: true },
+                    { name: '⏲️ Duration', value: caseData.duration || 'N/A', inline: true },
+                    { name: '📜 Reason', value: caseData.reason || 'No reason provided', inline: false },
+                    { name: '📅 Timestamp', value: `<t:${Math.floor(new Date(caseData.timestamp).getTime() / 1000)}:F>`, inline: false }
                 )
-                .setFooter({ text: 'Astra Moderation System • v7.0.0' })] });
+                .setFooter({ text: `Astra Moderation Core • ${VERSION}` });
+
+            await interaction.reply({ embeds: [embed] });
 
         } else if (subcommand === 'history') {
             const user = interaction.options.getUser('member')!;
@@ -244,8 +285,7 @@ const command: Command = {
             const cases = await ModerationService.getUserHistory(guild.id, user.id);
 
             if (!cases || cases.length === 0) {
-                await interaction.editReply({ content: `✅ No moderation history found for **${user.tag}** in this sector.` });
-                return;
+                return interaction.editReply({ content: `✅ No moderation history found for **${user.tag}** in this sector.` });
             }
 
             const typeColors: Record<string, string> = { kick: '🟠', ban: '🔴', unban: '🟢', timeout: '🟡', warn: '🟡' };
@@ -253,13 +293,15 @@ const command: Command = {
                 `${typeColors[c.type] || '⚪'} **#${c.case_number}** \`${c.type.toUpperCase()}\` — ${c.reason || 'No reason'} (<t:${Math.floor(new Date(c.timestamp).getTime() / 1000)}:R>)`
             ).join('\n');
 
-            await interaction.editReply({ embeds: [new EmbedBuilder()
-                .setColor(0x3498db)
-                .setTitle(`📋 Moderation History: ${user.tag}`)
+            const embed = new EmbedBuilder()
+                .setColor(THEME.PRIMARY)
+                .setTitle(`📋 ENFORCEMENT HISTORY: ${user.tag}`)
                 .setThumbnail(user.displayAvatarURL())
                 .setDescription(lines)
-                .setFooter({ text: `${cases.length} total case(s) • Showing up to 15` })
-                .setTimestamp()] });
+                .setFooter({ text: `${cases.length} total case(s) logged in sector database.` })
+                .setTimestamp();
+
+            await interaction.editReply({ embeds: [embed] });
         }
     }
 };

@@ -1,116 +1,174 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
 import { Command } from '../types';
 import { db } from '../core/database';
+import { StockMarketService, STOCKS } from '../services/stockMarketService';
 
-const STOCK_NAME = 'ASTRA SHARES (AST)';
-
-const getCurrentPrice = () => {
-    // Deterministic price based on the current hour/minute to simulate a trend
-    const now = Date.now();
-    const basePrice = 250;
-    const volatility = 150;
-    const sinValue = Math.sin(now / (1000 * 60 * 60)); // Hourly wave
-    const cosValue = Math.cos(now / (1000 * 60 * 15)); // 15-minute wave
-    
-    return Math.floor(basePrice + (sinValue * volatility) + (cosValue * 30));
-};
+const TITAN_CYAN = 0x00d4ff;
 
 const command: Command = {
     data: new SlashCommandBuilder()
         .setName('stockmarket')
-        .setDescription('📈 Access the Astra Tactical Exchange.')
+        .setDescription('📈 Access the Astra Tactical Exchange (ATX).')
         .addSubcommand(sub => 
-            sub.setName('view')
-               .setDescription('Audit current market prices and trends.')
+            sub.setName('market')
+               .setDescription('🛰️ View current market prices and global trends.')
         )
         .addSubcommand(sub => 
             sub.setName('buy')
-               .setDescription('Purchase shares in Astra Tactical.')
-               .addIntegerOption(opt => opt.setName('amount').setDescription('Number of shares to acquire.').setRequired(true))
+               .setDescription('💸 Purchase shares in a listed sector.')
+               .addStringOption(opt => 
+                   opt.setName('symbol')
+                      .setDescription('The stock symbol (e.g., AST, TITN)')
+                      .setRequired(true)
+                      .addChoices(
+                          ...STOCKS.map(s => ({ name: `${s.symbol} - ${s.name}`, value: s.symbol }))
+                      )
+               )
+               .addIntegerOption(opt => opt.setName('shares').setDescription('Number of shares to acquire.').setRequired(true).setMinValue(1))
         )
         .addSubcommand(sub => 
             sub.setName('sell')
-               .setDescription('Liquidate shares for sector credits.')
-               .addIntegerOption(opt => opt.setName('amount').setDescription('Number of shares to liquidate.').setRequired(true))
+               .setDescription('💰 Liquidate shares for sector credits.')
+               .addStringOption(opt => 
+                   opt.setName('symbol')
+                      .setDescription('The stock symbol to liquidate')
+                      .setRequired(true)
+                      .addChoices(
+                          ...STOCKS.map(s => ({ name: `${s.symbol} - ${s.name}`, value: s.symbol }))
+                      )
+               )
+               .addIntegerOption(opt => opt.setName('shares').setDescription('Number of shares to liquidate.').setRequired(true).setMinValue(1))
         )
         .addSubcommand(sub => 
             sub.setName('portfolio')
-               .setDescription('Analyze your current holdings and net worth.')
+               .setDescription('📂 Analyze your current holdings and net worth.')
         ),
 
     async execute(interaction: ChatInputCommandInteraction) {
         const subcommand = interaction.options.getSubcommand();
-        const price = getCurrentPrice();
         const userId = interaction.user.id;
 
-        if (subcommand === 'view') {
+        if (subcommand === 'market') {
             const embed = new EmbedBuilder()
-                .setTitle(`📊 TACTICAL EXCHANGE: ${STOCK_NAME}`)
-                .setColor(0x2ecc71)
+                .setTitle('🛰️ ASTRA TACTICAL EXCHANGE | GLOBAL FEED')
+                .setColor(TITAN_CYAN)
+                .setDescription('Real-time telemetry from the industrial financial grid.')
+                .setThumbnail('https://cdn-icons-png.flaticon.com/512/2620/2620582.png');
+
+            for (const stock of STOCKS) {
+                const { price, trend, indicator } = StockMarketService.getTrend(stock.symbol);
+                embed.addFields({
+                    name: `${indicator} ${stock.name} (${stock.symbol})`,
+                    value: `\`\`\`Price : ${price.toLocaleString()} cr\nTrend : ${trend}\nSector: ${stock.description}\`\`\``,
+                    inline: false
+                });
+            }
+
+            embed.setFooter({ text: 'Titan Financial Engine v7.5.0 • Live Telemetry' }).setTimestamp();
+            await interaction.reply({ embeds: [embed] });
+
+        } else if (subcommand === 'buy') {
+            const symbol = interaction.options.getString('symbol')!;
+            const shares = interaction.options.getInteger('shares')!;
+            const price  = StockMarketService.getPrice(symbol);
+            const cost   = shares * price;
+
+            const user = await db.fetchOne('SELECT balance FROM users WHERE user_id = ?', userId);
+            if (!user || user.balance < cost) {
+                return interaction.reply({ 
+                    content: `❌ **INSUFFICIENT FUNDS**: Acquisition of **${shares}** shares in \`${symbol}\` requires \`${cost.toLocaleString()}\` credits.`, 
+                    ephemeral: true 
+                });
+            }
+
+            await db.execute('UPDATE users SET balance = balance - ? WHERE user_id = ?', cost, userId);
+            
+            // Track stocks in a more robust way
+            const existing = await db.fetchOne('SELECT shares FROM user_stocks WHERE user_id = ? AND stock_symbol = ?', userId, symbol);
+            if (existing) {
+                await db.execute('UPDATE user_stocks SET shares = shares + ? WHERE user_id = ? AND stock_symbol = ?', shares, userId, symbol);
+            } else {
+                await db.execute('INSERT INTO user_stocks (user_id, stock_symbol, shares) VALUES (?, ?, ?)', userId, symbol, shares);
+            }
+
+            const embed = new EmbedBuilder()
+                .setTitle('✅ ACQUISITION SUCCESSFUL')
+                .setColor(0x00ffaa)
+                .setDescription(`You have successfully acquired shares in **${symbol}**.`)
                 .addFields(
-                    { name: '💰 Current Value', value: `\`${price} Credits\` per share`, inline: true },
-                    { name: '📉 Market Status', value: 'Operational', inline: true },
-                    { name: '📈 Forecast', value: price > 250 ? '📈 Bullish' : '📉 Bearish', inline: true }
+                    { name: '📦 Shares Acquired', value: `\`${shares.toLocaleString()}\``, inline: true },
+                    { name: '💰 Price per Share', value: `\`${price.toLocaleString()} cr\``, inline: true },
+                    { name: '💳 Total Cost', value: `\`${cost.toLocaleString()} cr\``, inline: true }
                 )
-                .setFooter({ text: 'Astra Market Engine v7.0.0' })
+                .setFooter({ text: 'Astra Exchange Confirmation' })
                 .setTimestamp();
 
             await interaction.reply({ embeds: [embed] });
 
-        } else if (subcommand === 'buy') {
-            const amount = interaction.options.getInteger('amount')!;
-            const totalCost = amount * price;
-
-            const user = await db.fetchOne('SELECT balance FROM users WHERE user_id = ?', userId);
-            if (!user || user.balance < totalCost) {
-                await interaction.reply({ content: `❌ **INSUFFICIENT CREDITS**: This acquisition requires \`${totalCost}\` credits.`, ephemeral: true });
-                return;
-            }
-
-            await db.execute('UPDATE users SET balance = balance - ? WHERE user_id = ?', totalCost, userId);
-            
-            const existing = await db.fetchOne('SELECT shares FROM user_stocks WHERE user_id = ?', userId);
-            if (existing) {
-                await db.execute('UPDATE user_stocks SET shares = shares + ?, invested_amount = invested_amount + ? WHERE user_id = ?', amount, totalCost, userId);
-            } else {
-                await db.execute('INSERT INTO user_stocks (user_id, shares, invested_amount) VALUES (?, ?, ?)', userId, amount, totalCost);
-            }
-
-            await interaction.reply({ content: `✅ **ACQUISITION SUCCESS**: You have acquired **${amount}** shares in ${STOCK_NAME} for \`${totalCost}\` credits.` });
-
         } else if (subcommand === 'sell') {
-            const amount = interaction.options.getInteger('amount')!;
-            const totalValue = amount * price;
+            const symbol = interaction.options.getString('symbol')!;
+            const shares = interaction.options.getInteger('shares')!;
+            const price  = StockMarketService.getPrice(symbol);
+            const value  = shares * price;
 
-            const holdings = await db.fetchOne('SELECT shares FROM user_stocks WHERE user_id = ?', userId);
-            if (!holdings || holdings.shares < amount) {
-                await interaction.reply({ content: '❌ **LIQUIDATION FAILED**: You do not possess the required shares for this transaction.', ephemeral: true });
-                return;
+            const holdings = await db.fetchOne('SELECT shares FROM user_stocks WHERE user_id = ? AND stock_symbol = ?', userId, symbol);
+            if (!holdings || holdings.shares < shares) {
+                return interaction.reply({ 
+                    content: `❌ **INSUFFICIENT HOLDINGS**: You do not possess **${shares}** shares of \`${symbol}\` to liquidate.`, 
+                    ephemeral: true 
+                });
             }
 
-            await db.execute('UPDATE users SET balance = balance + ? WHERE user_id = ?', totalValue, userId);
-            await db.execute('UPDATE user_stocks SET shares = shares - ? WHERE user_id = ?', amount, userId);
-
-            await interaction.reply({ content: `✅ **LIQUIDATION SUCCESS**: You have sold **${amount}** shares for \`${totalValue}\` credits.` });
-
-        } else if (subcommand === 'portfolio') {
-            const holdings = await db.fetchOne('SELECT shares, invested_amount FROM user_stocks WHERE user_id = ?', userId);
-            const user = await db.fetchOne('SELECT balance FROM users WHERE user_id = ?', userId);
-
-            const shares = holdings?.shares || 0;
-            const netWorth = (shares * price) + (user?.balance || 0);
+            await db.execute('UPDATE users SET balance = balance + ? WHERE user_id = ?', value, userId);
+            await db.execute('UPDATE user_stocks SET shares = shares - ? WHERE user_id = ? AND stock_symbol = ?', shares, userId, symbol);
 
             const embed = new EmbedBuilder()
-                .setTitle(`📊 PORTFOLIO DIAGNOSTIC: ${interaction.user.username}`)
-                .setColor(0x3498db)
+                .setTitle('✅ LIQUIDATION SUCCESSFUL')
+                .setColor(0xffaa00)
+                .setDescription(`You have successfully liquidated shares in **${symbol}**.`)
                 .addFields(
-                    { name: '📦 Shares Held', value: `\`${shares}\` shares`, inline: true },
-                    { name: '💰 Liquid Credits', value: `\`${user?.balance || 0}\``, inline: true },
-                    { name: '💎 Net Worth', value: `\`${netWorth}\` credits`, inline: true }
+                    { name: '📦 Shares Sold', value: `\`${shares.toLocaleString()}\``, inline: true },
+                    { name: '💰 Value per Share', value: `\`${price.toLocaleString()} cr\``, inline: true },
+                    { name: '💳 Total Received', value: `\`${value.toLocaleString()} cr\``, inline: true }
                 )
-                .setFooter({ text: 'Astra Market Engine v7.0.0' })
+                .setFooter({ text: 'Astra Exchange Confirmation' })
                 .setTimestamp();
 
+            await interaction.reply({ embeds: [embed] });
+
+        } else if (subcommand === 'portfolio') {
+            const holdings = await db.fetchAll('SELECT stock_symbol, shares FROM user_stocks WHERE user_id = ? AND shares > 0', userId);
+            const user = await db.fetchOne('SELECT balance FROM users WHERE user_id = ?', userId);
+
+            let totalPortfolioValue = 0;
+            const embed = new EmbedBuilder()
+                .setTitle(`📊 PORTFOLIO DIAGNOSTIC | ${interaction.user.username.toUpperCase()}`)
+                .setColor(TITAN_CYAN)
+                .setThumbnail(interaction.user.displayAvatarURL());
+
+            if (holdings.length === 0) {
+                embed.setDescription('No active holdings detected in the Astra Tactical Exchange.');
+            } else {
+                for (const h of holdings) {
+                    const price = StockMarketService.getPrice(h.stock_symbol);
+                    const val = h.shares * price;
+                    totalPortfolioValue += val;
+                    embed.addFields({
+                        name: `${h.stock_symbol} Holdings`,
+                        value: `\`\`\`Shares: ${h.shares.toLocaleString()}\nValue : ${val.toLocaleString()} cr\`\`\``,
+                        inline: true
+                    });
+                }
+            }
+
+            const netWorth = totalPortfolioValue + (user?.balance || 0);
+
+            embed.addFields(
+                { name: '💰 Liquid Credits', value: `\`${(user?.balance || 0).toLocaleString()} cr\``, inline: false },
+                { name: '💎 Net Worth', value: `\`${netWorth.toLocaleString()} cr\``, inline: false }
+            );
+
+            embed.setFooter({ text: 'Astra Financial Intelligence • Titan v7.5.0' }).setTimestamp();
             await interaction.reply({ embeds: [embed] });
         }
     }

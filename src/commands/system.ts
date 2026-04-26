@@ -10,11 +10,9 @@ import { Command } from '../types';
 import { config } from '../core/config';
 import { db } from '../core/database';
 import { StatusService } from '../services/statusService';
+import { THEME, VERSION, PROTOCOL } from '../core/constants';
 import logger from '../core/logger';
 import os from 'os';
-
-const VERSION = 'v7.3.0 "Omega Protocol"';
-const THEME   = 0x3498db;
 
 const command: Command = {
     data: new SlashCommandBuilder()
@@ -48,56 +46,51 @@ const command: Command = {
         // ── UPDATE ────────────────────────────────────────────────────────────
         if (subcommand === 'update') {
             const embed = new EmbedBuilder()
-                .setColor(THEME)
-                .setTitle(`🚀 ASTRA ${VERSION} — PATCH NOTES`)
-                .setDescription('The **Omega Protocol** update is a proprietary, high-performance release delivering a full economy overhaul, advanced marketplace logic, and synchronized telemetry pipelines.')
+                .setColor(THEME.PRIMARY)
+                .setTitle(`🪐 ASTRA ${VERSION} — ${PROTOCOL} DEPLOYMENT`)
+                .setDescription('The **Titan Protocol** introduces a high-fidelity, industrial-grade operational environment. This update synchronizes the Astra ecosystem with state-of-the-art telemetry and aesthetic standards.')
                 .setThumbnail(interaction.client.user?.displayAvatarURL() ?? null)
                 .addFields(
                     {
-                        name: '🔐 Proprietary Status',
-                        value: '• Astra v7.3.0 is **NOT open source**. This software is private property.\n• Redistribution or commercial use without authorization is prohibited.'
-                    },
-                    {
-                        name: '💰 Economy & Fiscal Protocols',
+                        name: '✨ What\'s New',
                         value: [
-                            '• `/economy leaderboard` — Now resolves **usernames** globally',
-                            '• `/economy harvest` — Collect passive income from assets',
-                            '• `/economy rob` — 40% heist success rate with risk penalty',
-                            '• `/economy slots` — High-stakes jackpot system (×50 multiplier)',
-                            '• All fiscal actions now report **balance delta** in real-time',
+                            '• **Titan Design Language** — Premium neon-accented UI and glassmorphism.',
+                            '• **Stock Market (ATX)** — Live high-volatility financial simulation system.',
+                            '• **Tactical Shop UI** — Industrial-grade shop interfaces with asset visuals.',
+                            '• **Intelligence Suite** — Heavy overhaul of `/info` and `/utility` embeds.',
                         ].join('\n')
                     },
                     {
-                        name: '🛒 Apex Marketplace',
+                        name: '🗑️ Removed / Deprecated',
                         value: [
-                            '• `/shop admin add` — Enhanced item categorization and tracking',
-                            '• `/shop sell` — Liquidate assets for 50% market value',
-                            '• Auto-inventory tracking fixed for all transaction types',
-                            '• Improved description and stock handling for rare assets',
+                            '• **Legacy Economy Subcommands** — Merged into unified `/economy` protocol.',
+                            '• **Omega Protocol Assets** — Decommissioned in favor of Titan high-fidelity modules.',
                         ].join('\n')
                     },
                     {
-                        name: '📡 System Intelligence',
+                        name: '🔧 Bug Fixes & Stability',
                         value: [
-                            '• Dual-webhook synchronization: Status (Health) vs Updates (Announcements)',
-                            '• `/system update` — Automatically broadcasts to the official update channel',
-                            '• `/system status` — Refined memory bar and resource diagnostics',
-                            '• Latency tracking upgraded to full WebSocket + API RTT analysis',
+                            '• **Economy Core** — Resolved critical file corruption and command logic.',
+                            '• **Safari Compatibility** — Patched `-webkit-user-select` for iOS support.',
+                            '• **Leveling UI** — Fixed XP bar overflow and memory leak in rank cards.',
                         ].join('\n')
                     },
                     {
-                        name: '⚙️ Infrastructure',
+                        name: '🚀 Coming Soon',
                         value: [
-                            `• discord.js \`v${djsVersion}\``,
-                            '• Database schema v7.3.0 — Synchronized user lookup optimization',
-                            '• Logic re-engineered for closed-source deployment stability',
+                            '• **AI Sentinel** — Neural-network powered threat detection.',
+                            '• **Global Leaderboards** — Cross-sector intelligence and wealth rankings.',
                         ].join('\n')
+                    },
+                    {
+                        name: '⚙️ Technical Infrastructure',
+                        value: `• \`discord.js v${djsVersion}\` • \`Node.js ${process.version}\` • \`PostgreSQL Enterprise\``
                     }
                 )
-                .setFooter({ text: `Astra Tactical Systems • ${VERSION} • Proprietary Build` })
+                .setFooter({ text: `Astra Intelligence Division • ${VERSION} • ${PROTOCOL} Stable` })
                 .setTimestamp();
 
-            // Fire the updates webhook so the official channel receives patch notes automatically
+            // Fire the updates webhook
             if (config.updatesWebhookUrl) {
                 try {
                     const wh = new WebhookClient({ url: config.updatesWebhookUrl });
@@ -187,7 +180,7 @@ const command: Command = {
                 .join('\n');
 
             const embed = new EmbedBuilder()
-                .setColor(THEME)
+                .setColor(THEME.PRIMARY)
                 .setTitle('🌐 SECTOR DEPLOYMENT OVERVIEW')
                 .setDescription(guildList || 'No sectors online.')
                 .addFields(

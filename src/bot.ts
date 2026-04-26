@@ -95,7 +95,7 @@ export class AstraClient extends Client {
 
             // Rotating Status Engine
             const statuses = [
-                () => ({ name: `Omega v7.3.0 | /system update`, type: 0 }),
+                () => ({ name: `Titan v7.5.0 | /system update`, type: 0 }),
                 () => ({ name: `${c.guilds.cache.size} Sectors`, type: 3 }),
                 () => ({ name: `${c.users.cache.size} Members`, type: 2 }),
                 () => ({ name: `Tactical Excellence`, type: 1 })
@@ -114,7 +114,7 @@ export class AstraClient extends Client {
             const { GiveawayService } = require('./services/giveawayService');
             GiveawayService.startChecker(this);
 
-            this.user?.setActivity('Omega v7.3.0 | /system update', { type: ActivityType.Watching });
+            this.user?.setActivity('Titan v7.5.0 | /system update', { type: ActivityType.Watching });
 
             // Sentinel Status Pulse
             await StatusService.sendSystemOnline(c);
@@ -177,7 +177,7 @@ export class AstraClient extends Client {
                             { name: '🎯 Next Level',     value: `\`${nextXpReq} XP\``,                      inline: true },
                             { name: '📊 Progress',       value: `\`[${progressBar}] ${carryXp}/${nextXpReq}\``, inline: false },
                         )
-                        .setFooter({ text: 'Astra Intelligence Matrix • v7.3.0' })
+                        .setFooter({ text: 'Astra Intelligence Matrix • v7.5.0 Titan' })
                         .setTimestamp();
 
                     let targetChannel: any = message.channel;
@@ -227,7 +227,7 @@ export class AstraClient extends Client {
                             .setTitle('👋 New Operative Arrived')
                             .setDescription(msg)
                             .setThumbnail(member.user.displayAvatarURL())
-                            .setFooter({ text: `Astra Welcome System • v7.0.0` })
+                            .setFooter({ text: `Astra Welcome System • v7.5.0 Titan` })
                             .setTimestamp();
                         await (channel as any).send({ embeds: [welcomeEmbed] });
                     }

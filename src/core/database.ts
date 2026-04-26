@@ -153,9 +153,11 @@ class DatabaseManager {
                 UNIQUE(guild_id, level)
             )`,
             `CREATE TABLE IF NOT EXISTS user_stocks (
-                user_id ${INT} PRIMARY KEY,
+                user_id ${INT},
+                stock_symbol ${TEXT},
                 shares ${INT} DEFAULT 0,
-                invested_amount ${INT} DEFAULT 0
+                invested_amount ${INT} DEFAULT 0,
+                PRIMARY KEY (user_id, stock_symbol)
             )`
         ];
 
@@ -191,7 +193,7 @@ class DatabaseManager {
             }
         }
 
-        logger.info("Database infrastructure initialized (v7.3.0 - Omega)");
+        logger.info("Database infrastructure initialized (v7.5.0 - Titan)");
     }
 
     async execute(query: string, ...params: any[]): Promise<any> {

@@ -1,6 +1,7 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
 import { ReminderService } from '../services/reminderService';
 import { Command } from '../types';
+import { THEME, VERSION, PROTOCOL } from '../core/constants';
 
 const command: Command = {
     data: new SlashCommandBuilder()
@@ -31,13 +32,13 @@ const command: Command = {
             const latency = sent.createdTimestamp - interaction.createdTimestamp;
             
             const embed = new EmbedBuilder()
-                .setColor(0x3498db)
+                .setColor(THEME.PRIMARY)
                 .setTitle('🛰️ SYSTEM HEARTBEAT')
                 .addFields(
                     { name: '🔌 WebSocket', value: `\`${interaction.client.ws.ping}ms\``, inline: true },
                     { name: '📡 API Latency', value: `\`${latency}ms\``, inline: true }
                 )
-                .setFooter({ text: 'Astra Network Telemetry • All systems nominal' });
+                .setFooter({ text: `${PROTOCOL} Telemetry • ${VERSION} • All systems nominal` });
 
             await interaction.editReply({ content: null, embeds: [embed] });
 
@@ -47,8 +48,7 @@ const command: Command = {
             
             const minutes = parseInt(timeStr);
             if (isNaN(minutes) || minutes < 1) {
-                await interaction.reply({ content: '❌ **INVALID TEMPORAL DATA**: Please specify a valid positive integer.', ephemeral: true });
-                return;
+                return interaction.reply({ content: '❌ **INVALID TEMPORAL DATA**: Please specify a valid positive integer.', ephemeral: true });
             }
 
             const remindAt = new Date(Date.now() + minutes * 60000);
@@ -62,11 +62,11 @@ const command: Command = {
             );
 
             const embed = new EmbedBuilder()
-                .setColor(0x2ecc71)
+                .setColor(THEME.SUCCESS)
                 .setTitle('🔔 REMINDER SYNCHRONIZED')
-                .setDescription(`Temporal notification established. I will alert you in **${minutes} minutes**.`)
+                .setDescription(`Temporal notification established. Alerting in **${minutes} minutes**.`)
                 .addFields({ name: '📝 Transmission Content', value: `\`\`\`${message}\`\`\`` })
-                .setFooter({ text: `Alert scheduled for ${remindAt.toLocaleTimeString()}` });
+                .setFooter({ text: `Alert scheduled for ${remindAt.toLocaleTimeString()} • ${PROTOCOL}` });
 
             await interaction.reply({ embeds: [embed] });
 
@@ -76,8 +76,7 @@ const command: Command = {
             const options = optionsStr.split(',').map(o => o.trim()).filter(o => o.length > 0);
 
             if (options.length < 2 || options.length > 10) {
-                await interaction.reply({ content: '❌ **INVALID CONFIGURATION**: Polls require between 2 and 10 options for statistical significance.', ephemeral: true });
-                return;
+                return interaction.reply({ content: '❌ **INVALID CONFIGURATION**: Polls require between 2 and 10 options.', ephemeral: true });
             }
 
             const emojis = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'];
@@ -87,10 +86,10 @@ const command: Command = {
             }
 
             const embed = new EmbedBuilder()
-                .setColor(0x3498db)
+                .setColor(THEME.PRIMARY)
                 .setTitle(`📊 TACTICAL POLL: ${question.toUpperCase()}`)
                 .setDescription(description)
-                .setFooter({ text: `Inquiry authorized by ${interaction.user.username}` })
+                .setFooter({ text: `Inquiry authorized by ${interaction.user.username} • ${VERSION}` })
                 .setTimestamp();
 
             const pollMessage = await interaction.reply({ embeds: [embed], fetchReply: true });
