@@ -244,7 +244,7 @@ const command: Command = {
         } else if (subcommand === 'harvest') {
             await interaction.deferReply();
             const inventory = await db.fetchAll(`
-                SELECT ui.id, ui.last_harvest, si.name, si.production_rate, si.emoji
+                SELECT ui.id, ui.quantity, ui.last_harvest, si.name, si.production_rate, si.emoji
                 FROM user_inventory ui
                 JOIN shop_items si ON ui.item_id = si.id
                 WHERE ui.user_id = ? AND si.production_rate > 0
@@ -258,13 +258,20 @@ const command: Command = {
             const lines: string[] = [];
 
             for (const inv of inventory) {
-                const hoursElapsed = (Date.now() - new Date(inv.last_harvest).getTime()) / 3600000;
-                const pendingCredits = Math.floor(hoursElapsed * inv.production_rate);
+                const lastHarvestTime = new Date(inv.last_harvest).getTime();
+                const hoursElapsed = (Date.now() - lastHarvestTime) / 3600000;
+                const totalRate = inv.production_rate * (inv.quantity || 1);
+                const pendingCredits = Math.floor(hoursElapsed * totalRate);
 
                 if (pendingCredits > 0) {
                     totalHarvest += pendingCredits;
-                    lines.push(`${inv.emoji ?? '📦'} **${inv.name}** — \`+${pendingCredits.toLocaleString()} cr\``);
-                    await db.execute('UPDATE user_inventory SET last_harvest = ? WHERE id = ?', new Date().toISOString(), inv.id);
+                    lines.push(`${inv.emoji ?? '📦'} **${inv.name}** ×${inv.quantity} — \`+${pendingCredits.toLocaleString()} cr\``);
+                    
+                    // Fixed fractional loss
+                    const exactMsGained = (pendingCredits / totalRate) * 3600000;
+                    const newHarvestTime = new Date(lastHarvestTime + exactMsGained);
+                    
+                    await db.execute('UPDATE user_inventory SET last_harvest = ? WHERE id = ?', newHarvestTime.toISOString(), inv.id);
                 }
             }
 

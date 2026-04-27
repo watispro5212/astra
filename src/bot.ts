@@ -159,8 +159,7 @@ export class AstraClient extends Client {
             StatusService.startHeartbeat(this);
             StatusService.startHealthCheck(this);
 
-            // Industrial Yield Engine
-            PassiveIncomeService.startService();
+            // Industrial Yield Engine is already initialized in setup phase
         });
 
         // Tactical Intelligence (Leveling System)

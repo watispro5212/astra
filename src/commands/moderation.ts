@@ -100,7 +100,7 @@ const command: Command = {
                 .setFooter({ text: `${PROTOCOL} Enforcement • Case #${caseId}` })
                 .setTimestamp();
 
-            await interaction.reply({ embeds: [embed] });
+            await interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'ban') {
             await interaction.deferReply();
@@ -132,19 +132,20 @@ const command: Command = {
                     .setFooter({ text: `${PROTOCOL} Enforcement • Critical Violation` })
                     .setTimestamp();
 
-                await interaction.reply({ embeds: [embed] });
+                await interaction.editReply({ embeds: [embed] });
             } catch (err) {
-                await interaction.reply({ content: `❌ Blacklist Failed: ${err}`, ephemeral: true });
+                await interaction.editReply({ content: `❌ Blacklist Failed: ${err}` });
             }
 
         } else if (subcommand === 'unban') {
+            await interaction.deferReply();
             const userId = interaction.options.getString('user_id')!;
             const reason = interaction.options.getString('reason') || 'No reason provided';
 
             try {
                 const ban = await guild.bans.fetch(userId).catch(() => null);
                 if (!ban) {
-                    return interaction.reply({ content: '❌ No active ban found for that user ID.', ephemeral: true });
+                    return interaction.editReply({ content: '❌ No active ban found for that user ID.' });
                 }
                 await guild.members.unban(userId, reason);
                 const caseId = await ModerationService.createCase(guild.id, userId, interaction.user.id, 'unban', reason);
@@ -161,21 +162,22 @@ const command: Command = {
                     .setFooter({ text: `${PROTOCOL} Enforcement • Restriction Lifted` })
                     .setTimestamp();
 
-                await interaction.reply({ embeds: [embed] });
+                await interaction.editReply({ embeds: [embed] });
             } catch (err) {
-                await interaction.reply({ content: `❌ Unban Failed: ${err}`, ephemeral: true });
+                await interaction.editReply({ content: `❌ Unban Failed: ${err}` });
             }
 
         } else if (subcommand === 'timeout') {
+            await interaction.deferReply();
             const member = interaction.options.getMember('member');
             const duration = interaction.options.getInteger('duration')!;
             const reason = interaction.options.getString('reason') || 'No reason provided';
 
             if (!(member instanceof GuildMember)) {
-                return interaction.reply({ content: '❌ Target not found in current sector.', ephemeral: true });
+                return interaction.editReply({ content: '❌ Target not found in current sector.' });
             }
             if (!member.moderatable) {
-                return interaction.reply({ content: '❌ Insufficient Authority: Target is protected by system hierarchy.', ephemeral: true });
+                return interaction.editReply({ content: '❌ Insufficient Authority: Target is protected by system hierarchy.' });
             }
             try {
                 await member.timeout(duration * 60000, reason);
@@ -195,20 +197,21 @@ const command: Command = {
                     .setFooter({ text: `${PROTOCOL} Enforcement • Stability Protocol` })
                     .setTimestamp();
 
-                await interaction.reply({ embeds: [embed] });
+                await interaction.editReply({ embeds: [embed] });
             } catch (err) {
-                await interaction.reply({ content: `❌ Suspension Failed: ${err}`, ephemeral: true });
+                await interaction.editReply({ content: `❌ Suspension Failed: ${err}` });
             }
 
         } else if (subcommand === 'warn') {
+            await interaction.deferReply();
             const member = interaction.options.getMember('member');
             const reason = interaction.options.getString('reason')!;
 
             if (!(member instanceof GuildMember)) {
-                return interaction.reply({ content: '❌ Target not found in current sector.', ephemeral: true });
+                return interaction.editReply({ content: '❌ Target not found in current sector.' });
             }
             if (member.user.bot) {
-                return interaction.reply({ content: '❌ Bots cannot be warned.', ephemeral: true });
+                return interaction.editReply({ content: '❌ Bots cannot be warned.' });
             }
 
             const caseId = await ModerationService.createCase(guild.id, member.id, interaction.user.id, 'warn', reason);
@@ -237,14 +240,15 @@ const command: Command = {
                 .setFooter({ text: `${PROTOCOL} Enforcement • Protocol Logged` })
                 .setTimestamp();
 
-            await interaction.reply({ embeds: [embed] });
+            await interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'purge') {
+            await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
             const count = interaction.options.getInteger('count')!;
             const channel = interaction.channel;
 
             if (!channel || !('bulkDelete' in channel)) {
-                return interaction.reply({ content: '❌ Purge only available in text channels.', ephemeral: true });
+                return interaction.editReply({ content: '❌ Purge only available in text channels.' });
             }
             try {
                 const deleted = await (channel as any).bulkDelete(count, true);
@@ -254,9 +258,9 @@ const command: Command = {
                     .setDescription(`Successfully purged **${deleted.size}** tactical logs from the local channel.`)
                     .setFooter({ text: `${PROTOCOL} Maintenance • ${VERSION}` })
                     .setTimestamp();
-                await interaction.reply({ embeds: [embed], ephemeral: true });
+                await interaction.editReply({ embeds: [embed] });
             } catch (err) {
-                await interaction.reply({ content: `❌ Sanitization Failed: ${err}`, ephemeral: true });
+                await interaction.editReply({ content: `❌ Sanitization Failed: ${err}` });
             }
 
         } else if (subcommand === 'case') {

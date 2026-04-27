@@ -25,10 +25,14 @@ export class StockMarketService {
         const stock = STOCKS.find(s => s.symbol === symbol);
         if (!stock) return 0;
 
-        // Use multiple sine waves for more natural price movement
-        const wave1 = Math.sin(timestamp / (1000 * 60 * 60 * 4)); // 4 hour cycle
-        const wave2 = Math.cos(timestamp / (1000 * 60 * 30));     // 30 min cycle
-        const wave3 = Math.sin(timestamp / (1000 * 60 * 5));      // 5 min noise
+        // Generate a pseudo-random seed constraint per symbol to disjoint the market waves
+        const hash = symbol.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) * 864000;
+        const sTime = timestamp + hash;
+
+        // Use multiple sine waves for more natural, independent price movement
+        const wave1 = Math.sin(sTime / (1000 * 60 * 60 * 4)); // 4 hour cycle
+        const wave2 = Math.cos(sTime / (1000 * 60 * 30));     // 30 min cycle
+        const wave3 = Math.sin(sTime / (1000 * 60 * 5));      // 5 min noise
         
         const variance = (wave1 * 0.5) + (wave2 * 0.3) + (wave3 * 0.2);
         const finalPrice = stock.basePrice * (1 + (variance * stock.volatility));

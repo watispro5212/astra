@@ -98,53 +98,42 @@ const command: Command = {
             }
 
             if (subcommand === 'add') {
-                const name         = interaction.options.getString('name')!;
-                const price        = interaction.options.getInteger('price')!;
-                const itemType     = interaction.options.getString('item-type') ?? 'consumable';
-                const emoji        = interaction.options.getString('emoji') ?? '📦';
-                const prodRate     = interaction.options.getInteger('production-rate') ?? 0;
-                const description  = interaction.options.getString('description') ?? 'No description provided.';
-                const stock        = interaction.options.getInteger('stock') ?? -1;
-                const roleId       = interaction.options.getRole('role')?.id;
+                const name = interaction.options.getString('name')!;
+                const price = interaction.options.getInteger('price')!;
+                const type = interaction.options.getString('item-type') || 'consumable';
+                const role = interaction.options.getRole('role');
+                const emoji = interaction.options.getString('emoji') || '📦';
+                const rate = interaction.options.getInteger('production-rate') || 0;
+                const desc = interaction.options.getString('description') || 'No description available.';
+                const stock = interaction.options.getInteger('stock') ?? -1;
 
                 await db.execute(
-                    'INSERT INTO shop_items (guild_id, name, description, price, production_rate, stock, item_type, emoji, role_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                    guildId, name, description, price, prodRate, stock, itemType, emoji, roleId
+                    'INSERT INTO shop_items (guild_id, name, price, item_type, role_id, emoji, production_rate, description, stock) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                    guildId, name, price, type, role?.id || null, emoji, rate, desc, stock
                 );
 
-                return interaction.reply({
-                    embeds: [new EmbedBuilder()
-                        .setColor(0x2ecc71)
-                        .setTitle('✅ ITEM LISTED')
-                        .setDescription(`${emoji} **${name}** has been added to the marketplace.`)
-                        .addFields(
-                            { name: '💰 Price',    value: `\`${price.toLocaleString()} cr\``,      inline: true },
-                            { name: '📂 Type',     value: `\`${itemType}\``,                         inline: true },
-                            { name: '📦 Stock',    value: `\`${stock === -1 ? '∞' : stock}\``,       inline: true },
-                            ...(prodRate > 0 ? [{ name: '📊 Yield', value: `\`${prodRate} cr/hr\``, inline: true }] : [])
-                        )
-                        .setFooter({ text: 'Astra Commerce Division v8.0.1 Quantum' })],
-                    flags: [MessageFlags.Ephemeral]
-                });
+                return interaction.reply({ content: `✅ Successfully added **${name}** to the marketplace.`, flags: [MessageFlags.Ephemeral] });
+            }
 
-            } else if (subcommand === 'remove') {
+            if (subcommand === 'remove') {
                 const id = interaction.options.getInteger('id')!;
-                const item = await db.fetchOne('SELECT name, emoji FROM shop_items WHERE id = ? AND guild_id = ?', id, guildId);
-                if (!item) return interaction.reply({ content: `❌ Item ID \`${id}\` not found in this sector's marketplace.`, ephemeral: true });
+                const item = await db.fetchOne('SELECT name FROM shop_items WHERE id = ? AND guild_id = ?', id, guildId);
+                if (!item) return interaction.reply({ content: '❌ Item not found.', ephemeral: true });
 
                 await db.execute('DELETE FROM shop_items WHERE id = ? AND guild_id = ?', id, guildId);
-                return interaction.reply({ content: `✅ **DECOMMISSIONED**: ${item.emoji ?? '📦'} **${item.name}** has been purged from the marketplace.`, ephemeral: true });
+                return interaction.reply({ content: `✅ Item **${item.name}** (ID: \`${id}\`) has been decommissioned.`, flags: [MessageFlags.Ephemeral] });
+            }
 
-            } else if (subcommand === 'edit') {
+            if (subcommand === 'edit') {
                 const id = interaction.options.getInteger('id')!;
                 const item = await db.fetchOne('SELECT * FROM shop_items WHERE id = ? AND guild_id = ?', id, guildId);
-                if (!item) return interaction.reply({ content: `❌ Item ID \`${id}\` not found.`, ephemeral: true });
+                if (!item) return interaction.reply({ content: '❌ Item not found.', ephemeral: true });
 
-                const newPrice   = interaction.options.getInteger('price')         ?? item.price;
-                const newStock   = interaction.options.getInteger('stock')         ?? item.stock;
-                const newDesc    = interaction.options.getString('description')    ?? item.description;
-                const newRate    = interaction.options.getInteger('production-rate') ?? item.production_rate;
-                const newEmoji   = interaction.options.getString('emoji')          ?? item.emoji;
+                const newPrice = interaction.options.getInteger('price') ?? item.price;
+                const newStock = interaction.options.getInteger('stock') ?? item.stock;
+                const newDesc = interaction.options.getString('description') ?? item.description;
+                const newRate = interaction.options.getInteger('production-rate') ?? item.production_rate;
+                const newEmoji = interaction.options.getString('emoji') ?? item.emoji;
 
                 await db.execute(
                     'UPDATE shop_items SET price = ?, stock = ?, description = ?, production_rate = ?, emoji = ? WHERE id = ? AND guild_id = ?',
@@ -171,6 +160,7 @@ const command: Command = {
 
         // ── VIEW ──────────────────────────────────────────────────────────────
         if (subcommand === 'view') {
+            await interaction.deferReply();
             const items = await db.fetchAll(
                 'SELECT id, name, description, price, production_rate, stock, item_type, emoji FROM shop_items WHERE guild_id = ? ORDER BY item_type, price',
                 guildId
@@ -200,24 +190,39 @@ const command: Command = {
                 embed.setDescription(sections.join('\n\n'));
             }
 
-            return interaction.reply({ embeds: [embed] });
+            return interaction.editReply({ embeds: [embed] });
 
         // ── BUY ───────────────────────────────────────────────────────────────
         } else if (subcommand === 'buy') {
             const id = interaction.options.getInteger('id')!;
+            await interaction.deferReply();
+
             const item = await db.fetchOne('SELECT * FROM shop_items WHERE id = ? AND guild_id = ?', id, guildId);
 
-            if (!item) return interaction.reply({ content: '❌ **INVALID TARGET**: Item ID not found in current sector marketplace.', ephemeral: true });
-            if (item.stock === 0) return interaction.reply({ content: '❌ **OUT OF STOCK**: This item is no longer available.', ephemeral: true });
+            if (!item) return interaction.editReply({ content: '❌ **INVALID TARGET**: Item ID not found in current sector marketplace.' });
+            if (item.stock === 0) return interaction.editReply({ content: '❌ **OUT OF STOCK**: This item is no longer available.' });
 
             const userData = await db.fetchOne('SELECT balance FROM users WHERE user_id = ?', interaction.user.id);
             const balance = userData?.balance ?? 0;
 
             if (balance < item.price) {
-                return interaction.reply({
-                    content: `❌ **INSUFFICIENT CREDITS**: You need \`${item.price.toLocaleString()} cr\`. Your balance: \`${balance.toLocaleString()} cr\``,
-                    flags: [MessageFlags.Ephemeral]
+                return interaction.editReply({
+                    content: `❌ **INSUFFICIENT CREDITS**: You need \`${item.price.toLocaleString()} cr\`. Your balance: \`${balance.toLocaleString()} cr\``
                 });
+            }
+
+            // CHECK & HARVEST EXISTING (To prevent exploits when adding quantity)
+            if (item.item_type === 'passive') {
+                const existing = await db.fetchOne('SELECT * FROM user_inventory WHERE user_id = ? AND item_id = ?', interaction.user.id, id);
+                if (existing) {
+                    const hoursElapsed = (Date.now() - new Date(existing.last_harvest).getTime()) / 3600000;
+                    const totalRate = item.production_rate * existing.quantity;
+                    const pending = Math.floor(hoursElapsed * totalRate);
+                    if (pending > 0) {
+                        await db.execute('UPDATE users SET balance = balance + ? WHERE user_id = ?', pending, interaction.user.id);
+                        logger.info(`Shop: Auto-harvested ${pending} cr for ${interaction.user.id} before item purchase catchup.`);
+                    }
+                }
             }
 
             // Deduct cost
@@ -230,7 +235,7 @@ const command: Command = {
 
             const existing = await db.fetchOne('SELECT id, quantity FROM user_inventory WHERE user_id = ? AND item_id = ?', interaction.user.id, id);
             if (existing) {
-                await db.execute('UPDATE user_inventory SET quantity = quantity + 1 WHERE id = ?', existing.id);
+                await db.execute('UPDATE user_inventory SET quantity = quantity + 1, last_harvest = ? WHERE id = ?', new Date().toISOString(), existing.id);
             } else {
                 await db.execute(
                     'INSERT INTO user_inventory (user_id, item_id, quantity, last_harvest) VALUES (?, ?, 1, ?)',
@@ -243,17 +248,11 @@ const command: Command = {
                 const member = await interaction.guild?.members.fetch(interaction.user.id).catch(() => null);
                 const role = await interaction.guild?.roles.fetch(item.role_id).catch(() => null);
                 if (member && role) {
-                    await member.roles.add(role).catch(err => {
-                        logger.error(`Failed to grant role ${item.role_id} to ${interaction.user.id}: ${err}`);
-                    });
-                }
-            }
-
-            // Handle Role Grant
-            if (item.item_type === 'role' && item.role_id) {
-                const member = await interaction.guild?.members.fetch(interaction.user.id).catch(() => null);
-                const role = await interaction.guild?.roles.fetch(item.role_id).catch(() => null);
-                if (member && role) {
+                    if (member.roles.cache.has(role.id)) {
+                        // Refund if they already had the role
+                        await db.execute('UPDATE users SET balance = balance + ? WHERE user_id = ?', item.price, interaction.user.id);
+                        return interaction.editReply({ content: `❌ **AUTHORITY CONFLICT**: You already possess the **${role.name}** clearance. Credits refunded.` });
+                    }
                     await member.roles.add(role).catch(err => {
                         logger.error(`Failed to grant role ${item.role_id} to ${interaction.user.id}: ${err}`);
                     });
@@ -262,7 +261,7 @@ const command: Command = {
 
             const after = await db.fetchOne('SELECT balance FROM users WHERE user_id = ?', interaction.user.id);
 
-            return interaction.reply({
+            return interaction.editReply({
                 embeds: [new EmbedBuilder()
                     .setColor(0x2ecc71)
                     .setTitle('✅ ACQUISITION CONFIRMED')
@@ -277,20 +276,33 @@ const command: Command = {
         // ── SELL ──────────────────────────────────────────────────────────────
         } else if (subcommand === 'sell') {
             const id = interaction.options.getInteger('id')!;
+            await interaction.deferReply();
+
             const invEntry = await db.fetchOne(
-                'SELECT ui.id AS inv_id, ui.quantity, si.name, si.price, si.emoji FROM user_inventory ui JOIN shop_items si ON ui.item_id = si.id WHERE ui.user_id = ? AND ui.item_id = ?',
+                'SELECT ui.id AS inv_id, ui.quantity, ui.last_harvest, si.name, si.price, si.emoji, si.production_rate, si.item_type FROM user_inventory ui JOIN shop_items si ON ui.item_id = si.id WHERE ui.user_id = ? AND ui.item_id = ?',
                 interaction.user.id, id
             );
 
             if (!invEntry) {
-                return interaction.reply({ content: `❌ You don't own item ID \`${id}\`. Check \`/shop inventory\`.`, ephemeral: true });
+                return interaction.editReply({ content: `❌ You don't own item ID \`${id}\`. Check \`/shop inventory\`.` });
+            }
+
+            // Harvest before selling to prevent loss of pending income
+            if (invEntry.item_type === 'passive') {
+                const hoursElapsed = (Date.now() - new Date(invEntry.last_harvest).getTime()) / 3600000;
+                const totalRate = invEntry.production_rate * invEntry.quantity;
+                const pending = Math.floor(hoursElapsed * totalRate);
+                if (pending > 0) {
+                    await db.execute('UPDATE users SET balance = balance + ? WHERE user_id = ?', pending, interaction.user.id);
+                }
             }
 
             const refund = Math.floor(invEntry.price * SELL_REFUND_RATE);
 
             // Remove from inventory (1 unit)
             if (invEntry.quantity > 1) {
-                await db.execute('UPDATE user_inventory SET quantity = quantity - 1 WHERE id = ?', invEntry.inv_id);
+                // If selling 1 unit of a passive stack, we still need to reset the timestamp for the remaining ones since we just harvested
+                await db.execute('UPDATE user_inventory SET quantity = quantity - 1, last_harvest = ? WHERE id = ?', new Date().toISOString(), invEntry.inv_id);
             } else {
                 await db.execute('DELETE FROM user_inventory WHERE id = ?', invEntry.inv_id);
             }
@@ -302,7 +314,7 @@ const command: Command = {
             );
             const after = await db.fetchOne('SELECT balance FROM users WHERE user_id = ?', interaction.user.id);
 
-            return interaction.reply({
+            return interaction.editReply({
                 embeds: [new EmbedBuilder()
                     .setColor(0x3498db)
                     .setTitle('💱 ASSET SOLD')
@@ -316,7 +328,7 @@ const command: Command = {
 
         // ── INVENTORY ─────────────────────────────────────────────────────────
         } else if (subcommand === 'inventory') {
-            // FIX: was using si.item_id — correct column is si.id (already joined via ui.item_id = si.id)
+            await interaction.deferReply();
             const inventory = await db.fetchAll(`
                 SELECT ui.quantity, ui.last_harvest, si.id AS item_id, si.name, si.production_rate, si.item_type, si.emoji
                 FROM user_inventory ui
@@ -326,7 +338,7 @@ const command: Command = {
             `, interaction.user.id);
 
             if (!inventory || inventory.length === 0) {
-                return interaction.reply({ content: '❌ Your inventory is empty. Visit `/shop view` to browse available assets.', ephemeral: true });
+                return interaction.editReply({ content: '❌ Your inventory is empty. Visit `/shop view` to browse available assets.' });
             }
 
             const grouped = groupBy(inventory, i => i.item_type ?? 'consumable');
@@ -338,7 +350,7 @@ const command: Command = {
                     let extra = '';
                     if (inv.production_rate > 0) {
                         const pending = Math.floor(
-                            ((Date.now() - new Date(inv.last_harvest).getTime()) / 3600000) * inv.production_rate
+                            ((Date.now() - new Date(inv.last_harvest).getTime()) / 3600000) * inv.production_rate * (inv.quantity || 1)
                         );
                         extra = ` · 📊 \`${inv.production_rate} cr/hr\` · Pending: \`${pending.toLocaleString()} cr\``;
                     }
@@ -347,7 +359,7 @@ const command: Command = {
                 sections.push(`${header}\n${lines.join('\n')}`);
             }
 
-            return interaction.reply({
+            return interaction.editReply({
                 embeds: [new EmbedBuilder()
                     .setColor(0x3498db)
                     .setTitle(`📦 ASSET INVENTORY — ${interaction.user.username}`)

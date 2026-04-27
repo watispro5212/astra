@@ -22,6 +22,7 @@ export class ShopService {
                 description: 'Increases passive income yield by +50 cr/hr.',
                 price: 2500,
                 type: 'passive',
+                productionRate: 50,
                 roleId: null
             },
             {
@@ -57,8 +58,8 @@ export class ShopService {
 
                 if (!exists) {
                     await db.execute(
-                        'INSERT INTO shop_items (guild_id, name, description, price, item_type, role_id) VALUES (?, ?, ?, ?, ?, ?)',
-                        guildId, item.name, item.description, item.price, item.type, item.roleId
+                        'INSERT INTO shop_items (guild_id, name, description, price, item_type, production_rate, role_id) VALUES (?, ?, ?, ?, ?, ?, ?)',
+                        guildId, item.name, item.description, item.price, item.type, (item as any).productionRate || 0, item.roleId
                     );
                 }
             }

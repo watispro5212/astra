@@ -92,8 +92,14 @@ const command: Command = {
                 }
 
                 const winnerCount = Math.min(giveaway.winners, eligible.length);
-                const shuffled = eligible.sort(() => Math.random() - 0.5);
-                const selected = shuffled.slice(0, winnerCount);
+                
+                // Fisher-Yates Shuffle for true randomness
+                for (let i = eligible.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [eligible[i], eligible[j]] = [eligible[j], eligible[i]];
+                }
+
+                const selected = eligible.slice(0, winnerCount);
                 const mentions = selected.map(w => `<@${w.id}>`).join(', ');
 
                 const resultEmbed = new EmbedBuilder()
