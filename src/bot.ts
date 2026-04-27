@@ -346,6 +346,9 @@ export class AstraClient extends Client {
                 try {
                     await command.execute(interaction);
                 } catch (error: any) {
+                    // Gracefully ignore harmless "Unknown Interaction" or "Acknowledged" network timeouts
+                    if (error.code === 10062 || error.code === 40060) return;
+
                     logger.error(`Execution Error [/${interaction.commandName}]: ${error}`);
                     
                     // Transmit Diagnostic Packet to Developer
@@ -357,9 +360,6 @@ export class AstraClient extends Client {
 
                     // Sentinel Anomaly Report
                     await StatusService.sendError(error).catch(() => {});
-
-                    // Gracefully handle "Unknown Interaction" or "Acknowledged" errors
-                    if (error.code === 10062 || error.code === 40060) return;
 
                     const errorEmbed = new EmbedBuilder()
                         .setColor(0xff0000)

@@ -13,5 +13,5 @@ export const THEME = {
     INFO: 0x3b82f6
 };
 
-export const VERSION = 'v7.5.0';
-export const PROTOCOL = 'Titan';
+export const VERSION = 'v8.0.0';
+export const PROTOCOL = 'Quantum';
