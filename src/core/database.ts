@@ -27,10 +27,10 @@ class DatabaseManager {
                 
                 // Test connection
                 const client = await this.pool.connect();
-                logger.info('📡 Astra Intelligence: Established link with Supabase/PostgreSQL Network.');
+                logger.info('📡 Astra: Connected to the cloud database!');
                 client.release();
             } catch (error) {
-                logger.error(`🚨 Critical Database Link Failure (Supabase): ${error}`);
+                logger.error(`🚨 Couldn't connect to the cloud database: ${error}`);
                 throw error;
             }
         } else {
@@ -43,7 +43,7 @@ class DatabaseManager {
             }
 
             this.sqliteDb = new sqlite3.Database(pathStr);
-            logger.info(`💾 Connected to Local SQLite Vault: ${pathStr}`);
+            logger.info(`💾 Connected to my local storage: ${pathStr}`);
         }
     }
 
@@ -58,7 +58,7 @@ class DatabaseManager {
         const BOOL = "BOOLEAN";
 
         const queries = [
-            // GULDS & SECTOR CONFIG
+            // SERVERS & SETTINGS
             `CREATE TABLE IF NOT EXISTS guilds (
                 guild_id ${TEXT} PRIMARY KEY,
                 prefix ${TEXT} DEFAULT '-',
@@ -70,7 +70,7 @@ class DatabaseManager {
                 automod_anti_link ${BOOL} DEFAULT FALSE,
                 automod_spam_threshold ${INT} DEFAULT 5
             )`,
-            // USERS & FISCAL RECORDS
+            // USERS & MONEY
             `CREATE TABLE IF NOT EXISTS users (
                 user_id ${TEXT} PRIMARY KEY,
                 xp ${INT} DEFAULT 0,
@@ -140,7 +140,7 @@ class DatabaseManager {
                 ended ${BOOL} DEFAULT FALSE,
                 winner_ids ${TEXT}
             )`,
-            // INDUSTRIAL COMMERCE
+            // SHOP
             `CREATE TABLE IF NOT EXISTS shop_items (
                 id ${PK},
                 guild_id ${TEXT},
@@ -202,7 +202,7 @@ class DatabaseManager {
                 message ${TEXT},
                 remind_at ${TEXT}
             )`,
-            // SYNDICATES (FACTIONS)
+            // TEAMS
             `CREATE TABLE IF NOT EXISTS syndicates (
                 id ${PK},
                 name ${TEXT} UNIQUE,
@@ -227,7 +227,7 @@ class DatabaseManager {
             }
         }
 
-        logger.info("📡 Astra Database Infrastructure: Online & Synchronized (Quantum v8.0.0)");
+        logger.info("📡 Astra Database: Ready to go! (v8.0.0)");
     }
 
     async execute(query: string, ...params: any[]): Promise<{ rows: any[], count: number }> {

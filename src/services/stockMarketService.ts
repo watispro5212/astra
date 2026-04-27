@@ -1,7 +1,6 @@
-
 /**
- * ASTRA STOCK MARKET SERVICE v8.0.1 'Quantum'
- * High-fidelity financial simulation engine.
+ * ASTRA STOCK MARKET SERVICE v8.0.1
+ * Fun financial simulation for the Astra community.
  */
 
 export interface Stock {
@@ -13,11 +12,11 @@ export interface Stock {
 }
 
 export const STOCKS: Stock[] = [
-    { symbol: 'AST',  name: 'Astra Tactical',    basePrice: 500,  volatility: 0.15, description: 'Core infrastructure and AI development.' },
-    { symbol: 'TITN', name: 'Quantum Industries',  basePrice: 1200, volatility: 0.08, description: 'Heavy manufacturing and planetary engineering.' },
-    { symbol: 'NRG',  name: 'Neural Grid',       basePrice: 350,  volatility: 0.25, description: 'Global data mesh and synaptic networks.' },
-    { symbol: 'VOID', name: 'Void Energy',       basePrice: 2100, volatility: 0.12, description: 'Advanced energy harvesting and storage.' },
-    { symbol: 'QNTM', name: 'Quantum Logistics', basePrice: 150,  volatility: 0.40, description: 'Hyper-speed delivery and quantum computing.' }
+    { symbol: 'AST',  name: 'Astra Core',        basePrice: 500,  volatility: 0.15, description: 'The main team building Astra.' },
+    { symbol: 'SHOP', name: 'Astra Shop',        basePrice: 1200, volatility: 0.08, description: 'Selling items and roles across the world.' },
+    { symbol: 'DATA', name: 'Astra Network',     basePrice: 350,  volatility: 0.25, description: 'Connecting servers together safely.' },
+    { symbol: 'SUN',  name: 'Solar Energy',      basePrice: 2100, volatility: 0.12, description: 'Clean power for the future.' },
+    { symbol: 'MOVE', name: 'Astra Delivery',    basePrice: 150,  volatility: 0.40, description: 'Fast shipping for everyone.' }
 ];
 
 export class StockMarketService {

@@ -67,7 +67,7 @@
   position: absolute;
   bottom: -4px; left: 0;
   width: 0; height: 2px;
-  background: var(--grad-titan);
+  background: var(--grad-astra);
   transition: var(--transition-base);
 }
 
@@ -104,7 +104,7 @@
   font-family: var(--font-heading);
   font-size: 2.2rem;
   font-weight: 900;
-  background: var(--grad-titan);
+  background: var(--grad-astra);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

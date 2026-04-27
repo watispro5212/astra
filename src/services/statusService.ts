@@ -1,7 +1,7 @@
 import { WebhookClient, EmbedBuilder } from 'discord.js';
 import { config } from '../core/config';
 import { db } from '../core/database';
-import { THEME, VERSION, PROTOCOL } from '../core/constants';
+import { THEME, VERSION } from '../core/constants';
 import logger from '../core/logger';
 import os from 'os';
 
@@ -92,45 +92,45 @@ export class StatusService {
     public static getUpdateEmbed(client: any): EmbedBuilder {
         return new EmbedBuilder()
             .setColor(THEME.PRIMARY)
-            .setTitle(`🪐 ASTRA ${VERSION} — MISSION UPDATE`)
-            .setAuthor({ name: 'ASTRA INTELLIGENCE COMMAND', iconURL: client.user?.displayAvatarURL() })
-            .setDescription('The **Quantum Engine** has been successfully transitioned to operate across open-source native Large Language Models via OpenRouter APIs. This update drastically mitigates API exhaustion.')
+            .setTitle(`🪐 ASTRA ${VERSION} — UPDATE`)
+            .setAuthor({ name: 'ASTRA NEWS', iconURL: client.user?.displayAvatarURL() })
+            .setDescription('I have updated how my brain works! I now use a smarter and faster way to talk to you using new AI tools. This means I can answer you even faster than before.')
             .setThumbnail('https://cdn-icons-png.flaticon.com/512/8654/8654162.png')
             .addFields(
                 {
-                    name: '✨ NEW OPERATIONAL ASSETS',
+                    name: '✨ NEW BRAIN UPDATES',
                     value: [
-                        '> **OpenRouter Matrix** — Converted `aiService` payload structure to stream directly to open-source models.',
-                        '> **Free Model Synergy** — Models unlocked explicitly as `Tencent HY3`, `MiniMax m2.5`, and `Gemma 4 26B`.',
-                        '> **Automated Fallback** — Replaced GPT-4o fallback arrays with pure OpenRouter Free Tier endpoints.'
+                        '> **Faster Thinking** — I can now think much faster by using more efficient pathways.',
+                        '> **Free Model Usage** — I can use new, free AI models to help answer your questions.',
+                        '> **Better Backup** — If one brain gets tired, I can quickly switch to another one.'
                     ].join('\n')
                 },
                 {
-                    name: '🗑️ DECOMMISSIONED SYSTEMS',
+                    name: '🗑️ CLEANED UP STUFF',
                     value: [
-                        '> **Google Gemini SDK** — Completely wiped the native SDK in favor of OpenRouter REST fetches.',
-                        '> **Legacy Array Parsing** — Phased out `db.get` attempts on `user_profiles` logic arrays.'
+                        '> **Old Code** — Removed old ways of thinking that were slow.',
+                        '> **Better Storage** — Changed how I remember things to be more reliable.'
                     ].join('\n')
                 },
                 {
-                    name: '🔧 SYSTEM OPTIMIZATIONS',
+                    name: '🔧 BEHIND THE SCENES',
                     value: [
-                        '• **Sync Recalibration** — Addressed PROTOCOL ERROR regarding neural arrays in `/ai model`.',
-                        '• **PostgreSQL Mapping** — Resolved core NoSQL object crashes inside TS profile generation.',
-                        '• **Presence Engine** — Realtime sync of Discord Status to system `$VERSION` arrays.'
+                        '• **Bug Fixes** — Fixed some errors where my brain would get confused.',
+                        '• **Smoother Experience** — Made everything feel a bit more snappy.',
+                        '• **Status Update** — My status now updates correctly with my version.'
                     ].join('\n')
                 },
                 {
-                    name: '🚀 FUTURE TELEMETRY',
+                    name: '🚀 WHAT IS NEXT',
                     value: [
-                        '• **AI Sentinel Vision** — Imgur/Native Discord attachment image scanning routines.',
-                        '• **Cross-Sector Rankings** — Global intelligence and wealth leaderboards.',
-                        '• **Advanced Automation** — Enhanced server protection protocols.'
+                        '• **Picture Scanning** — I will soon be able to look at pictures you send!',
+                        '• **Leaderboards** — See who is the richest or smartest in the world.',
+                        '• **Safety Tools** — More ways to keep your server safe and happy.'
                     ].join('\n')
                 }
             )
             .setImage('https://i.imgur.com/8Qx8R1k.png')
-            .setFooter({ text: `Astra Mission Update • ${PROTOCOL} • ${VERSION}` })
+            .setFooter({ text: `Astra Update • ${VERSION}` })
             .setTimestamp();
     }
 
@@ -146,21 +146,21 @@ export class StatusService {
 
         const embed = new EmbedBuilder()
             .setColor(GREEN)
-            .setTitle('🟢 ASTRA ONLINE — BOOT SEQUENCE COMPLETE')
-            .setDescription(`**${VERSION}** has initialized successfully. All systems are nominal.`)
+            .setTitle('🟢 ASTRA IS ONLINE')
+            .setDescription(`I am ready to help! All systems are working perfectly.`)
             .setThumbnail(client.user?.displayAvatarURL() ?? null)
             .addFields(
                 { name: '🛰️ Version',         value: `\`${VERSION}\``,                                     inline: true },
-                { name: '🌐 Sectors',          value: `\`${client.guilds.cache.size} guilds\``,              inline: true },
-                { name: '👥 Operatives',       value: `\`${memberCount.toLocaleString()} members\``,         inline: true },
-                { name: '💻 Host',             value: `\`${os.hostname()}\``,                                inline: true },
-                { name: '🖥️ Platform',         value: `\`${os.type()} ${os.arch()}\``,                      inline: true },
-                { name: '📡 WebSocket',        value: `\`${client.ws.ping}ms\``,                             inline: true },
+                { name: '🌐 Servers',          value: `\`${client.guilds.cache.size} servers\``,              inline: true },
+                { name: '👥 Users',            value: `\`${memberCount.toLocaleString()} members\``,         inline: true },
+                { name: '💻 Computer',         value: `\`${os.hostname()}\``,                                inline: true },
+                { name: '🖥️ System',           value: `\`${os.type()} ${os.arch()}\``,                      inline: true },
+                { name: '📡 Connection',       value: `\`${client.ws.ping}ms\``,                             inline: true },
                 { name: '🔋 Memory',           value: `\`${usedMem.toFixed(0)}MB / ${totalMem.toFixed(0)}MB\`\n${memBar(usedMem, totalMem)}`, inline: false },
                 { name: '⚙️ Node.js',          value: `\`${process.version}\``,                              inline: true },
                 { name: '🕐 Boot Time',        value: `<t:${Math.floor(Date.now() / 1000)}:R>`,              inline: true },
             )
-            .setFooter({ text: `Astra Intelligence Division • ${new Date().toUTCString()}` })
+            .setFooter({ text: `Astra Support • ${new Date().toUTCString()}` })
             .setTimestamp();
 
         await webhook.send({ username: 'Astra Status', embeds: [embed] })
@@ -184,23 +184,23 @@ export class StatusService {
 
         const embed = new EmbedBuilder()
             .setColor(pingColor)
-            .setTitle(`💓 SYSTEM HEARTBEAT — ${PROTOCOL} ${VERSION}`)
-            .setDescription('Operational stability pulse. Core tactical matrix is nominal.')
+            .setTitle(`💓 I AM ALIVE — ${VERSION}`)
+            .setDescription('Everything is running smoothly. My brain is working just fine.')
             .setThumbnail('https://cdn-icons-png.flaticon.com/512/8654/8654162.png')
             .addFields(
                 { name: '⏱️ Uptime',          value: `\`${uptimeString(uptime)}\``,                          inline: true },
-                { name: '📡 Latency',         value: `\`${ping}ms\``,                                        inline: true },
-                { name: '⚙️ CPU Load',        value: `\`${os.loadavg()[0].toFixed(2)}%\``,                   inline: true },
-                { name: '🌐 Sectors',         value: `\`${client.guilds.cache.size}\``,                      inline: true },
-                { name: '👥 Operatives',      value: `\`${memberCount.toLocaleString()}\``,                   inline: true },
-                { name: '💾 Heap Memory',     value: `\`${heapUsed.toFixed(2)}MB / ${heapTotal.toFixed(2)}MB\``, inline: true },
-                { name: '🔋 Resident Set',    value: `\`${rss.toFixed(2)}MB\``,                              inline: true },
+                { name: '📡 Speed',           value: `\`${ping}ms\``,                                        inline: true },
+                { name: '⚙️ Workload',        value: `\`${os.loadavg()[0].toFixed(2)}%\``,                   inline: true },
+                { name: '🌐 Servers',         value: `\`${client.guilds.cache.size}\``,                      inline: true },
+                { name: '👥 Users',           value: `\`${memberCount.toLocaleString()}\``,                   inline: true },
+                { name: '💾 Brain Memory',    value: `\`${heapUsed.toFixed(2)}MB / ${heapTotal.toFixed(2)}MB\``, inline: true },
+                { name: '🔋 Extra Memory',    value: `\`${rss.toFixed(2)}MB\``,                              inline: true },
             )
-            .setFooter({ text: `Astra Intelligence Division • Pulse Telemetry` })
+            .setFooter({ text: `Astra Bot • Live Status Update` })
             .setTimestamp();
 
         await webhook.send({ 
-            username: 'ASTRA QUANTUM STATUS', 
+            username: 'Astra Status', 
             avatarURL: 'https://cdn-icons-png.flaticon.com/512/3655/3655611.png',
             embeds: [embed] 
         }).catch(err => logger.error(`Status Webhook Error: ${err}`));
@@ -221,16 +221,16 @@ export class StatusService {
 
         const embed = new EmbedBuilder()
             .setColor(ping < 150 ? GREEN : YELLOW)
-            .setTitle('🏥 SYSTEM HEALTH DIAGNOSTICS')
+            .setTitle('🏥 HOW AM I DOING?')
             .addFields(
-                { name: '📡 WebSocket',       value: `${pingStatus} \`${ping}ms\``,                          inline: true  },
-                { name: '💾 Matrix Heap',     value: `${memStatus} \`${heapUsed.toFixed(0)}MB\``,            inline: true  },
-                { name: '🔋 Resident Memory', value: `\`${rss.toFixed(0)}MB\``,                              inline: true  },
-                { name: '⏱️ System Uptime',   value: `\`${uptimeString(process.uptime())}\``,                inline: true  },
-                { name: '🌐 Total Sectors',   value: `\`${client.guilds.cache.size}\``,                      inline: true  },
-                { name: '💻 Load Average',    value: `\`${os.loadavg()[0].toFixed(2)}\``,                    inline: true  },
+                { name: '📡 Connection',      value: `${pingStatus} \`${ping}ms\``,                          inline: true  },
+                { name: '💾 Brain Power',     value: `${memStatus} \`${heapUsed.toFixed(0)}MB\``,            inline: true  },
+                { name: '🔋 Extra Power',     value: `\`${rss.toFixed(0)}MB\``,                              inline: true  },
+                { name: '⏱️ How long awake',  value: `\`${uptimeString(process.uptime())}\``,                inline: true  },
+                { name: '🌐 Total Servers',   value: `\`${client.guilds.cache.size}\``,                      inline: true  },
+                { name: '💻 Busy level',      value: `\`${os.loadavg()[0].toFixed(2)}\``,                    inline: true  },
             )
-            .setFooter({ text: `Astra Health Monitor • QUANTUM CORE` })
+            .setFooter({ text: `Astra Health • ${VERSION}` })
             .setTimestamp();
 
         await webhook.send({ 
@@ -257,8 +257,8 @@ export class StatusService {
 
         const embed = new EmbedBuilder()
             .setColor(RED)
-            .setTitle('🚨 SYSTEM ANOMALY DETECTED')
-            .setDescription('A critical error has been captured by the Astra error pipeline.')
+            .setTitle('🚨 SOMETHING WENT WRONG')
+            .setDescription('I have found an error. I have sent the details to my team to fix it.')
             .addFields(fields)
             .setFooter({ text: `Astra Error Reporter • ${VERSION}` })
             .setTimestamp();
@@ -274,14 +274,14 @@ export class StatusService {
 
         const embed = new EmbedBuilder()
             .setColor(joined ? GREEN : RED)
-            .setTitle(joined ? '📥 NEW SECTOR ADDED' : '📤 SECTOR DEPARTED')
+            .setTitle(joined ? '📥 NEW SERVER' : '📤 LEFT A SERVER')
             .setDescription(joined
-                ? `Astra has been deployed to a new sector: **${guildName}**`
-                : `Astra has been removed from sector: **${guildName}**`)
+                ? `I have been added to a new server: **${guildName}**`
+                : `I have been removed from a server: **${guildName}**`)
             .addFields(
-                { name: '🌐 Total Sectors', value: `\`${client.guilds.cache.size} guilds\``, inline: true }
+                { name: '🌐 Total Servers', value: `\`${client.guilds.cache.size} servers\``, inline: true }
             )
-            .setFooter({ text: `Astra Intelligence Division • ${VERSION}` })
+            .setFooter({ text: `Astra Bot • ${VERSION}` })
             .setTimestamp();
 
         await webhook.send({ username: 'Astra Status', embeds: [embed] })

@@ -4,9 +4,9 @@ import { db } from '../core/database';
 import { VERSION } from '../core/constants';
 
 export const AI_MODELS = [
-    { id: 'tencent/hy3-preview:free', name: 'Tencent HY3 (Free)', description: 'Advanced global intelligence network.' },
-    { id: 'minimax/minimax-m2.5:free', name: 'MiniMax m2.5 (Free)', description: 'Fast and powerful deductive reasoning.' },
-    { id: 'google/gemma-4-26b-a4b-it:free', name: 'Gemma 4 26B (Free)', description: 'Massive context comprehension and logic.' }
+    { id: 'tencent/hy3-preview:free', name: 'Astra Smart (Free)', description: 'Good for general questions and help.' },
+    { id: 'minimax/minimax-m2.5:free', name: 'Astra Fast (Free)', description: 'Very fast at thinking and answering.' },
+    { id: 'google/gemma-4-26b-a4b-it:free', name: 'Astra Expert (Free)', description: 'Best for complex problems and logic.' }
 ];
 
 export class AIService {
@@ -27,13 +27,13 @@ export class AIService {
     public static async generateResponse(userId: string, prompt: string, retryCount = 0): Promise<string> {
         const key = this.getCurrentKey();
         if (!key) {
-            return "❌ **NEURAL LINK FAILURE**: No OpenRouter keys detected in the Quantum core configuration. Please contact the sector administrator.";
+            return "❌ **BRAIN DISCONNECTED**: I can't find my keys to talk to the AI brain. Please tell the server owner.";
         }
 
         // Fetch user settings
         const settings = await db.fetchOne('SELECT selected_model, system_prompt FROM user_ai_settings WHERE user_id = $1', [userId]);
         const modelId = settings?.selected_model || 'tencent/hy3-preview:free';
-        const systemPrompt = settings?.system_prompt || `You are Astra, a powerful AI assistant powered by the Quantum v${VERSION} protocol. You are helpful, tactical, and concise. You assist users exclusively in DMs.`;
+        const systemPrompt = settings?.system_prompt || `You are Astra, a helpful and friendly AI assistant. You are simple to talk to and you love helping people. You only talk to users in their DMs.`;
 
         try {
             const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
@@ -57,7 +57,7 @@ export class AIService {
             }
 
             const data: any = await response.json();
-            const reply = data.choices && data.choices[0] && data.choices[0].message.content ? data.choices[0].message.content : 'No response from Neural Network.';
+            const reply = data.choices && data.choices[0] && data.choices[0].message.content ? data.choices[0].message.content : 'I forgot what I was going to say.';
 
             // Update usage stats
             await db.execute(
@@ -72,13 +72,13 @@ export class AIService {
             
             // Check for rate limit or quota errors
             if ((errorMessage.includes('429') || errorMessage.includes('quota')) && retryCount < this.keys.length) {
-                logger.warn(`🚀 AI Sentinel: Key index ${this.currentKeyIndex} exhausted. Cycling to next frequency...`);
+                logger.warn(`🚀 Astra Brain: Key ${this.currentKeyIndex} is tired. Trying another one...`);
                 this.getNextKey();
                 return this.generateResponse(userId, prompt, retryCount + 1);
             }
 
-            logger.error(`🚨 AI Sentinel Critical Error: ${errorMessage}`);
-            return `⚠️ **NEURAL ANOMALY DETECTED**: The intelligence engine encountered an error. \n\`\`\`${errorMessage}\`\`\``;
+            logger.error(`🚨 Astra AI Error: ${errorMessage}`);
+            return `⚠️ **I GOT CONFUSED**: My AI brain had a little trouble. \n\`\`\`${errorMessage}\`\`\``;
         }
     }
 
@@ -100,9 +100,9 @@ export class AIService {
                 });
                 
                 if (response.ok) {
-                    return { index: i, status: 'ACTIVE' as const, message: 'Neural link established with OpenRouter.' };
+                    return { index: i, status: 'ACTIVE' as const, message: 'Brain is connected and happy.' };
                 } else if (response.status === 429) {
-                    return { index: i, status: 'QUOTA' as const, message: 'Rate limit or Quota exceeded.' };
+                    return { index: i, status: 'QUOTA' as const, message: 'Brain is tired (too many requests).' };
                 } else {
                     return { index: i, status: 'ERROR' as const, message: `Status ${response.status}` };
                 }

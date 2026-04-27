@@ -13,7 +13,7 @@ import {
 import { config } from './core/config';
 import logger from './core/logger';
 import { db } from './core/database';
-import { VERSION, PROTOCOL } from './core/constants';
+import { VERSION } from './core/constants';
 import { Command } from './types';
 import { ErrorReporter } from './core/error_reporter';
 import { StatusService } from './services/statusService';
@@ -67,7 +67,7 @@ export class AstraClient extends Client {
     }
 
     async init() {
-        logger.info('Initializing Astra Tactical Bot (TypeScript)...');
+        logger.info('Starting Astra Bot...');
 
         try {
             // Connect to Database
@@ -130,12 +130,12 @@ export class AstraClient extends Client {
                 await this.syncCommands('guild');
             }
 
-            // Rotating Status Engine
+            // Statuses
             const statuses = [
-                () => ({ name: `${PROTOCOL} ${VERSION} | /system update`, type: 0 }),
-                () => ({ name: `${c.guilds.cache.size} Sectors`, type: 3 }),
-                () => ({ name: `${c.users.cache.size} Members`, type: 2 }),
-                () => ({ name: `Tactical Excellence`, type: 1 })
+                () => ({ name: `v${VERSION} | /info help`, type: 0 }),
+                () => ({ name: `${c.guilds.cache.size} Servers`, type: 3 }),
+                () => ({ name: `${c.users.cache.size} People`, type: 2 }),
+                () => ({ name: `Helping Everyone`, type: 1 })
             ];
 
             let currentIndex = 0;
@@ -151,7 +151,7 @@ export class AstraClient extends Client {
             const { GiveawayService } = require('./services/giveawayService');
             GiveawayService.startChecker(this);
 
-            this.user?.setActivity(`${PROTOCOL} ${VERSION} | /system update`, { type: ActivityType.Watching });
+            this.user?.setActivity(`v${VERSION} | /info help`, { type: ActivityType.Watching });
 
             // Sentinel Status Pulse
             await StatusService.checkVersionUpdate(c);
@@ -162,13 +162,13 @@ export class AstraClient extends Client {
             // Industrial Yield Engine is already initialized in setup phase
         });
 
-        // Tactical Intelligence (Leveling System)
+        // Leveling System
         const xpCooldowns = new Map<string, number>();
 
         this.on(Events.MessageCreate, async (message) => {
             if (message.author.bot) return;
 
-            // ── DM PROTOCOLS (AI & PREFIX COMMANDS) ───────────────────────────
+            // ── DMs (AI & HELP) ───────────────────────────────────────────
             if (!message.guild) {
                 const prefix = '-'; // Default prefix for DMs since /prefix is removed
 
@@ -178,17 +178,17 @@ export class AstraClient extends Client {
                     const commandName = args.shift()?.toLowerCase();
 
                     if (commandName === 'ping') {
-                        return await message.reply(`📡 **PONG**: Tactical response time \`${this.ws.ping}ms\``);
+                        return await message.reply(`📡 **PONG**: My response time is \`${this.ws.ping}ms\``);
                     } else if (commandName === 'stats') {
-                        return await message.reply(`📊 **SYSTEM STATUS**: Use \`/info stats\` for high-fidelity telemetry.`);
+                        return await message.reply(`📊 **BOT STATS**: Use \`/info stats\` to see how I am doing.`);
                     } else if (['economy', 'eco', 'bal', 'balance'].includes(commandName || '')) {
-                        return await message.reply(`💰 **FISCAL OVERVIEW**: Please use \`/economy balance\` for official records.`);
+                        return await message.reply(`💰 **MONEY**: Please use \`/economy balance\` to check your bank.`);
                     } else if (['ai', 'neural', 'sentinel'].includes(commandName || '')) {
-                        return await message.reply(`🤖 **NEURAL SENTINEL**: I am active. Simply type your message here to interact, or use \`/ai\` to recalibrate my matrix.`);
+                        return await message.reply(`🤖 **AI CHAT**: I am awake! Just type anything here to talk to me, or use \`/ai settings\` to change how I talk.`);
                     } else if (['stockmarket', 'stocks', 'market'].includes(commandName || '')) {
-                        return await message.reply(`📈 **TACTICAL EXCHANGE**: Use \`/stockmarket market\` to view live price fluctuations.`);
+                        return await message.reply(`📈 **STOCKS**: Use \`/stockmarket market\` to see current prices.`);
                     } else if (commandName === 'help') {
-                        return await message.reply(`🛡️ **ASTRA DM PROTOCOLS**\n\n**Neural Sentinel**: Just type a message to chat.\n**Slash Commands**: Type \`/\` to view all tactical protocols.\n**Prefix Commands**: \`-ping\`, \`-stats\`, \`-economy\`, \`-ai\`, \`-stocks\``);
+                        return await message.reply(`🛡️ **ASTRA DM HELP**\n\n**Chat**: Just type a message to chat with my AI.\n**Slash Commands**: Type \`/\` to see all my commands.\n**Shortcuts**: \`-ping\`, \`-stats\`, \`-economy\`, \`-ai\`, \`-stocks\``);
                     }
                     // If prefix is used but command not found, we fall through to AI or just return
                 }
@@ -207,7 +207,7 @@ export class AstraClient extends Client {
                         await message.reply(response);
                     }
                 } catch (err) {
-                    logger.error(`AI Sentinel DM Failure: ${err}`);
+                    logger.error(`AI Assistant DM Failure: ${err}`);
                 }
                 return;
             }
@@ -247,15 +247,15 @@ export class AstraClient extends Client {
 
                         const levelEmbed = new EmbedBuilder()
                             .setColor(0x9b59b6)
-                            .setTitle('🎊 LEVEL UP — INTELLIGENCE ELEVATED')
-                            .setDescription(`**${message.author.username}** has advanced to **Level ${newLevel}**!${milestoneRole ? `\n\n🎖️ **Role Reward:** <@&${milestoneRole.role_id}>` : ''}`)
+                            .setTitle('🎊 LEVEL UP!')
+                            .setDescription(`**${message.author.username}** has reached **Level ${newLevel}**!${milestoneRole ? `\n\n🎖️ **You got a role:** <@&${milestoneRole.role_id}>` : ''}`)
                             .setThumbnail(message.author.displayAvatarURL())
                             .addFields(
                                 { name: '⭐ New Level',     value: `\`${newLevel}\``,                          inline: true },
                                 { name: '🎯 Next Level',     value: `\`${nextXpReq} XP\``,                      inline: true },
                                 { name: '📊 Progress',       value: `\`[${progressBar}] ${carryXp}/${nextXpReq}\``, inline: false },
                             )
-                            .setFooter({ text: 'Astra Intelligence Matrix • v8.0.1 Quantum' })
+                            .setFooter({ text: `Astra • v${VERSION}` })
                             .setTimestamp();
 
                         let targetChannel: any = message.channel;
@@ -273,7 +273,6 @@ export class AstraClient extends Client {
             }
         });
 
-        // Server Count Webhook
         this.on(Events.GuildCreate, async (guild) => {
             try { 
                 await StatusService.sendServerCountUpdate(this, true, guild.name); 
@@ -296,10 +295,10 @@ export class AstraClient extends Client {
                         const msg = (cfg.message || 'Welcome {user} to **{server}**!').replace('{user}', `<@${member.id}>`).replace('{server}', member.guild.name);
                         const welcomeEmbed = new EmbedBuilder()
                             .setColor(0x2ecc71)
-                            .setTitle('👋 New Operative Arrived')
+                            .setTitle('👋 Welcome to the server!')
                             .setDescription(msg)
                             .setThumbnail(member.user.displayAvatarURL())
-                            .setFooter({ text: `Astra Welcome System • v8.0.1 Quantum` })
+                            .setFooter({ text: `Astra Welcome • v${VERSION}` })
                             .setTimestamp();
                         await (channel as any).send({ embeds: [welcomeEmbed] });
                     }
@@ -322,9 +321,9 @@ export class AstraClient extends Client {
                     const msg = (cfg.farewell_message || '**{user}** has left the sector.').replace('{user}', member.user.username).replace('{server}', member.guild.name);
                     const farewellEmbed = new EmbedBuilder()
                         .setColor(0xe74c3c)
-                        .setTitle('👋 Operative Departed')
+                        .setTitle('👋 Goodbye!')
                         .setDescription(msg)
-                        .setFooter({ text: 'Astra Welcome System • v7.0.0' })
+                        .setFooter({ text: `Astra • v${VERSION}` })
                         .setTimestamp();
                     await (channel as any).send({ embeds: [farewellEmbed] });
                 }
@@ -340,7 +339,7 @@ export class AstraClient extends Client {
 
                 // Owner Check
                 if (command.ownerOnly && interaction.user.id !== config.ownerId) {
-                    return interaction.reply({ content: '❌ Access Denied: Administrator clearance required.', ephemeral: true });
+                    return interaction.reply({ content: '❌ Only my developer can use this command.', ephemeral: true });
                 }
 
                 try {
@@ -351,20 +350,20 @@ export class AstraClient extends Client {
 
                     logger.error(`Execution Error [/${interaction.commandName}]: ${error}`);
                     
-                    // Transmit Diagnostic Packet to Developer
+                    // Send error report to developer
                     await ErrorReporter.report(this, error, {
                         commandName: interaction.commandName,
                         guild: interaction.guild,
                         user: interaction.user
                     }).catch(() => {});
 
-                    // Sentinel Anomaly Report
+                    // Log error to status service
                     await StatusService.sendError(error).catch(() => {});
 
                     const errorEmbed = new EmbedBuilder()
                         .setColor(0xff0000)
-                        .setTitle('⚠️ Tactical Error')
-                        .setDescription(`An unexpected error occurred during command execution. The system developer has been notified.\n\`\`\`${error.message || error}\`\`\``);
+                        .setTitle('⚠️ Something went wrong')
+                        .setDescription(`I had a little trouble running that command. I have told my developer so they can fix it!\n\`\`\`${error.message || error}\`\`\``);
 
                     try {
                         if (interaction.replied || interaction.deferred) {
@@ -390,15 +389,15 @@ export class AstraClient extends Client {
         const commandData = Array.from(this.commands.values()).map(c => c.data.toJSON());
 
         try {
-            logger.info(`[SYNC] Initiating Command Synchronization (Scope: ${scope})...`);
+            logger.info(`[SYNC] Setting up commands (${scope})...`);
 
             if (scope === 'full_purge') {
-                logger.info('[SYNC] NUCLEAR PURGE: Eradicating all legacy command records from Discord servers...');
+                logger.info('[SYNC] Cleaning up old commands...');
                 if (config.guildId) {
                     await rest.put(Routes.applicationGuildCommands(config.clientId, config.guildId), { body: [] });
                 }
                 await rest.put(Routes.applicationCommands(config.clientId), { body: [] });
-                logger.info('[SYNC] All sectors cleared of command echoes. Re-deploying Quantum suite...');
+                logger.info('[SYNC] All old commands removed. Setting up the new ones...');
                 
                 // Re-deploy immediately after purge
                 await rest.put(Routes.applicationCommands(config.clientId), { body: commandData });

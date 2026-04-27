@@ -8,63 +8,6 @@
   <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
-  <style>
-    /* Page specific overrides or extra polish */
-    .hero-vignette {
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 50% 50%, transparent 20%, var(--color-bg) 100%);
-      pointer-events: none;
-      z-index: 1;
-    }
-    
-    .hero-badge-wrap {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 6px 16px;
-      background: rgba(59, 130, 246, 0.1);
-      border: 1px solid rgba(59, 130, 246, 0.2);
-      border-radius: 100px;
-      margin-bottom: 32px;
-      animation: fadeInUp 0.8s ease backwards;
-    }
-
-    .hero-badge-dot {
-      width: 8px;
-      height: 8px;
-      background: var(--color-primary);
-      border-radius: 50%;
-      box-shadow: 0 0 10px var(--color-primary);
-      animation: pulse-glow 2s infinite;
-    }
-
-    .hero-badge-text {
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: var(--color-primary);
-    }
-
-    .industrial-banner {
-      width: 100%;
-      border-radius: var(--radius-lg);
-      margin-bottom: 40px;
-      border: 1px solid var(--glass-border);
-      box-shadow: var(--shadow-xl);
-    }
-
-    .shop-preview-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-
-    @media (max-width: 768px) {
-      .shop-preview-grid { grid-template-columns: 1fr; }
-    }
-  </style>
 </head>
 <body>
   <div class="astra-mesh"></div>
@@ -85,10 +28,10 @@
         <a href="support.html" class="nav-link">Support</a>
       </div>
     <div class="nav-actions">
-      <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands" class="btn-astra btn-astra--outline" class="btn-small">
+      <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands" class="btn-astra btn-astra--outline btn-small">
         Add to Server
       </a>
-      <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=1&scope=identify+applications.commands" class="btn-astra btn-astra--primary" class="btn-small">
+      <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=1&scope=identify+applications.commands" class="btn-astra btn-astra--primary btn-small">
         Add to Profile
       </a>
     </div>
@@ -148,7 +91,7 @@
     <div class="container">
       <div class="text-center mb-2xl">
         <span class="hero-badge-text text-secondary">What Astra Does</span>
-        <h2 class="h2-quantum mt-sm">MAIN FEATURES</h2>
+        <h2 class="h2-astra mt-sm">MAIN FEATURES</h2>
       </div>
       
       <div class="grid grid--3">
@@ -192,7 +135,7 @@
       <div class="grid grid--2 align-center">
         <div class="animate-reveal">
           <span class="hero-badge-text text-accent">Shop & Stocks</span>
-          <h2 class="h2-quantum mt-sm mb-md">VIRTUAL SHOP & STOCK MARKET</h2>
+          <h2 class="h2-astra mt-sm mb-md">VIRTUAL SHOP & STOCK MARKET</h2>
           <p class="text-dim mb-xl">
             Astra includes a fun shop and a stock market for your server. 
             Users can buy items for roles, passive income, or trade in the stock market to earn more money.
@@ -234,7 +177,7 @@
           </div>
         </div>
         <div class="animate-reveal text-right">
-          <img src="assets/images/astra-quantum-preview.png" alt="Astra Dashboard" class="industrial-banner img-fluid">
+          <img src="assets/images/astra-dashboard-preview.png" alt="Astra Dashboard" class="industrial-banner img-fluid">
         </div>
       </div>
     </div>
@@ -244,8 +187,8 @@
   <section class="section">
     <div class="container">
       <div class="glass-card text-center cta-box">
-        <h2 class="h2-quantum mb-md">READY TO ADD ASTRA?</h2>
-        <p class="text-dim mb-xl" style="max-width: 600px; margin-inline: auto;">
+        <h2 class="h2-astra mb-md">READY TO ADD ASTRA?</h2>
+        <p class="text-dim mb-xl max-w-600 mx-auto">
           Join thousands of other servers using Astra to make their community better.
         </p>
         <div class="flex-center">
