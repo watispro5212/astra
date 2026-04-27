@@ -201,6 +201,21 @@ class DatabaseManager {
                 user_id ${TEXT},
                 message ${TEXT},
                 remind_at ${TEXT}
+            )`,
+            // SYNDICATES (FACTIONS)
+            `CREATE TABLE IF NOT EXISTS syndicates (
+                id ${PK},
+                name ${TEXT} UNIQUE,
+                owner_id ${TEXT},
+                bank ${INT} DEFAULT 0,
+                level ${INT} DEFAULT 1,
+                created_at ${TS}
+            )`,
+            `CREATE TABLE IF NOT EXISTS syndicate_members (
+                syndicate_id ${INT},
+                user_id ${TEXT} PRIMARY KEY,
+                role ${TEXT} DEFAULT 'member',
+                joined_at ${TS}
             )`
         ];
 
@@ -212,7 +227,7 @@ class DatabaseManager {
             }
         }
 
-        logger.info("📡 Astra Database Infrastructure: Online & Synchronized (Titan v7.5.0)");
+        logger.info("📡 Astra Database Infrastructure: Online & Synchronized (Quantum v8.0.0)");
     }
 
     async execute(query: string, ...params: any[]): Promise<{ rows: any[], count: number }> {

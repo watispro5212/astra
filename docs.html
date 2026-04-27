@@ -86,11 +86,11 @@
         <a href="changelog.html" class="nav-link">Mission Logs</a>
         <a href="support.html" class="nav-link">Support</a>
       </div>
-    <div style="display: flex; gap: 12px; align-items: center;">
-      <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands" class="btn-astra btn-astra--outline" style="padding: 8px 16px; font-size: 0.75rem;">
+    <div class="nav-actions">
+      <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands" class="btn-astra btn-astra--outline" class="btn-small">
         Guild Install
       </a>
-      <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=1&scope=identify+applications.commands" class="btn-astra btn-astra--primary" style="padding: 8px 16px; font-size: 0.75rem;">
+      <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=1&scope=identify+applications.commands" class="btn-astra btn-astra--primary" class="btn-small">
         User Install
       </a>
     </div>
@@ -98,14 +98,14 @@
   </nav>
 
   <!-- HEADER -->
-  <header class="section" style="padding-top: 160px; padding-bottom: 40px;">
+  <header class="section" class="page-header">
     <div class="container">
       <h1 class="h1-titan text-gradient">KNOWLEDGE ARCHIVE</h1>
-      <p class="text-dim" style="max-width: 700px;">Technical documentation for deploying and configuring the Astra v7.5.0 Titan engine.</p>
+      <p class="text-dim" class="max-w-700">Technical documentation for deploying and configuring the Astra v7.5.0 Titan engine.</p>
     </div>
   </header>
 
-  <main class="container" style="padding-bottom: 120px;">
+  <main class="container" class="page-main">
     <div class="docs-layout">
       <aside class="docs-sidebar">
         <div class="docs-nav-group">
@@ -127,24 +127,24 @@
 
       <div class="docs-content">
         <div class="card card--astra" id="quick-start">
-          <h2 style="color: var(--color-primary); margin-bottom: 1rem;">🚀 Mission Briefing</h2>
+          <h2 class="doc-heading">🚀 Mission Briefing</h2>
           <p>
             Welcome to the <strong>Astra Intelligence Matrix</strong>. This guide will help you configure your tactical operations and deploy neural assets.
           </p>
         </div>
 
         <div class="card card--astra" id="user-install">
-          <h2 style="color: var(--color-primary); margin-bottom: 1rem;">🛰️ User-Installed App Protocol</h2>
+          <h2 class="doc-heading">🛰️ User-Installed App Protocol</h2>
           <p>
             Astra now supports <strong>User-Installation</strong>, allowing you to deploy the bot's intelligence to your personal Discord account.
           </p>
-          <ul style="list-style: none; padding-left: 0;">
-            <li style="margin-bottom: 0.5rem;">🔹 <strong>Global Accessibility:</strong> Use Astra commands in any server, DM, or Group DM.</li>
-            <li style="margin-bottom: 0.5rem;">🔹 <strong>DM AI Sentinel:</strong> Direct message Astra to interact with the Neural Sentinel.</li>
-            <li style="margin-bottom: 0.5rem;">🔹 <strong>Privacy First:</strong> Your interactions are private and locked to your neural signature.</li>
+          <ul class="list-clean">
+            <li class="mb-2">🔹 <strong>Global Accessibility:</strong> Use Astra commands in any server, DM, or Group DM.</li>
+            <li class="mb-2">🔹 <strong>DM AI Sentinel:</strong> Direct message Astra to interact with the Neural Sentinel.</li>
+            <li class="mb-2">🔹 <strong>Privacy First:</strong> Your interactions are private and locked to your neural signature.</li>
           </ul>
-          <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
-            <h4 style="margin-bottom: 0.5rem;">Installation Steps:</h4>
+          <div class="doc-box">
+            <h4 class="mb-2">Installation Steps:</h4>
             <ol style="padding-left: 1.2rem;">
               <li>Click the <strong>"Establish Link"</strong> or <strong>"Deploy Astra"</strong> button.</li>
               <li>Select <strong>"Try it Now"</strong> (User Install) on the Discord authorization page.</li>
@@ -185,7 +185,7 @@
             <h3>API Key Acquisition</h3>
             <p class="docs-text">To maintain operational integrity, Astra requires valid Google Gemini API keys. If your current nodes are reporting <code>EXHAUSTED</code> or <code>QUOTA_EXCEEDED</code>, follow these steps:</p>
             <div class="docs-code-block">
-              1. Navigate to <a href="https://aistudio.google.com/" target="_blank" style="color: var(--color-primary-light);">Google AI Studio</a><br>
+              1. Navigate to <a href="https://aistudio.google.com/" target="_blank" class="text-link">Google AI Studio</a><br>
               2. Generate a new API Key (Gemini 1.5 Flash recommended)<br>
               3. Update the keys in your <code>.env</code> configuration
             </div>

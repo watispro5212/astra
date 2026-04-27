@@ -75,18 +75,22 @@ const command: Command = {
             const shardId     = interaction.client.shard?.ids[0] ?? 0;
             const totalShards = interaction.client.shard?.count ?? 1;
 
+            const networkTelemetry = `\`\`\`ansi\n\u001b[1;36mShard   :\u001b[0m ${shardId + 1}/${totalShards}\n\u001b[1;35mPing    :\u001b[0m ${interaction.client.ws.ping}ms\n\u001b[1;32mGuilds  :\u001b[0m ${interaction.client.guilds.cache.size}\`\`\``;
+            const coreTelemetry = `\`\`\`ansi\n\u001b[1;36mRAM     :\u001b[0m ${memUsage.toFixed(1)}MB / ${(totalMem).toFixed(0)}MB\n\u001b[1;35mCPU     :\u001b[0m ${os.loadavg()[0].toFixed(2)} avg\n\u001b[1;32mNode    :\u001b[0m ${process.version}\`\`\``;
+            const versionTelemetry = `\`\`\`ansi\n\u001b[1;36mAstra   :\u001b[0m ${VERSION} ${PROTOCOL}\n\u001b[1;35mdjs     :\u001b[0m v${djsVersion}\n\u001b[1;32mHost    :\u001b[0m ${os.hostname()}\`\`\``;
+
             const embed = new EmbedBuilder()
-                .setColor(THEME.ACCENT)
-                .setTitle('📡 ASTRA SYSTEM DIAGNOSTICS')
+                .setColor(THEME.PRIMARY)
+                .setTitle('📡 QUANTUM SYSTEM DIAGNOSTICS')
                 .setThumbnail(interaction.client.user?.displayAvatarURL()!)
                 .addFields(
-                    { name: '🛰️ Network Telemetry', value: `\`\`\`Shard : ${shardId + 1}/${totalShards}\nPing  : ${interaction.client.ws.ping}ms\nGuilds: ${interaction.client.guilds.cache.size}\`\`\``, inline: true },
-                    { name: '💻 Computational Core', value: `\`\`\`RAM  : ${memUsage.toFixed(1)}MB/${(totalMem).toFixed(0)}MB\nCPU  : ${os.loadavg()[0].toFixed(2)} avg\nNode : ${process.version}\`\`\``, inline: true },
-                    { name: '⏱️ Operational Uptime', value: `\`${days}d ${hours}h ${minutes}m ${seconds}s\``, inline: true },
-                    { name: '📊 Memory Allocation', value: `\`[${memBar}] ${memPct}%\``, inline: false },
-                    { name: '🤖 Protocol Versioning', value: `\`\`\`Astra : ${VERSION} ${PROTOCOL}\ndiscord.js: v${djsVersion}\nHost  : ${os.hostname()}\`\`\``, inline: false },
+                    { name: '🛰️ Network Telemetry', value: networkTelemetry, inline: true },
+                    { name: '💻 Computational Core', value: coreTelemetry, inline: true },
+                    { name: '⏱️ Operational Uptime', value: `\`\`\`ansi\n\u001b[1;32m${days}d ${hours}h ${minutes}m ${seconds}s\u001b[0m\`\`\``, inline: true },
+                    { name: '📊 Memory Allocation', value: `\`\`\`ansi\n\u001b[1;36m[${memBar}] ${memPct}%\u001b[0m\`\`\``, inline: false },
+                    { name: '🤖 Protocol Versioning', value: versionTelemetry, inline: false },
                 )
-                .setFooter({ text: `Astra Global Infrastructure • All sectors nominal` })
+                .setFooter({ text: `Astra Quantum Engine • All sectors nominal` })
                 .setTimestamp();
 
             await interaction.editReply({ embeds: [embed] });

@@ -4,13 +4,13 @@
  */
 
 export const THEME = {
-    PRIMARY: 0x00d4ff,   // Titan Cyan
-    SECONDARY: 0x8b5cf6, // Nova Purple
-    ACCENT: 0x06b6d4,    // Cyber Cyan
-    SUCCESS: 0x10b981,
-    WARNING: 0xf59e0b,
-    DANGER: 0xef4444,
-    INFO: 0x3b82f6
+    PRIMARY: 0x00FFD1,   // Neon Cyber Cyan V8
+    SECONDARY: 0xB5179E, // Deep Neon Magenta
+    ACCENT: 0xF72585,    // Neon Pink Highlight
+    SUCCESS: 0x06D6A0,   // Neon Mint Green
+    WARNING: 0xFF9F1C,   // Cyber Orange
+    DANGER: 0xFF0054,    // Crimson Red
+    INFO: 0x4361EE       // Electric Blue
 };
 
 export const VERSION = 'v8.0.0';
