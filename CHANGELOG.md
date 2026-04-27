@@ -15,11 +15,11 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [8.0.0] — April 27, 2026
 
-### 🪐 Titan Protocol Deployment
+### 🪐 Quantum Protocol Deployment
 
-A massive aesthetic and structural overhaul. Transitioned the entire Astra ecosystem to the **Titan** design language, featuring high-fidelity glassmorphism, neural grid effects, and an integrated industrial commerce portal.
+A massive aesthetic and structural overhaul. Transitioned the entire Astra ecosystem to the **Quantum** design language, featuring high-fidelity glassmorphism, neural grid effects, and an integrated industrial commerce portal.
 
-#### 🎨 Web Portal v2.0 (Titan)
+#### 🎨 Web Portal v2.0 (Quantum)
 
 - **UI Engine 2.0** — Complete rewrite of the Astra web portal with premium design tokens.
 - **Glassmorphism 2.0** — Implemented multi-layered blur effects and neon-accented borders across all sub-pages.
@@ -92,7 +92,7 @@ The "Enterprise" update synchronizes the entire Astra ecosystem to v7.0.0, final
 
 #### 📡 Infrastructure & Sync
 
-- **Ecosystem v7**: Unified the versioning standard across the `package.json`, bot kernel, and the Titan Web Portal.
+- **Ecosystem v7**: Unified the versioning standard across the `package.json`, bot kernel, and the Quantum Web Portal.
 - **Vanguard Reporter**: Hardened the global error interceptor to transmit real-time diagnostic packets during system anomalies.
 - **Scale Optimization**: Finalized the asynchronous database manager for enterprise-grade scalability.
 
@@ -102,7 +102,7 @@ The "Enterprise" update synchronizes the entire Astra ecosystem to v7.0.0, final
 
 ### ☢️ Apex Reconstruction II
 
-The "Titan" experience has been refined for maximum server purity and high-fidelity aesthetics.
+The "Quantum" experience has been refined for maximum server purity and high-fidelity aesthetics.
 
 #### 🏗️ Nuclear Protocol Expansion
 
@@ -114,7 +114,7 @@ The "Titan" experience has been refined for maximum server purity and high-fidel
 
 ## [6.3.0] — April 22, 2026
 
-### 🛰️ The Titan Update
+### 🛰️ The Quantum Update
 
 A major expansion bringing community engagement and fiscal systems back into the Astra ecosystem, now optimized for high-performance TypeScript.
 

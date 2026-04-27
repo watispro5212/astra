@@ -256,7 +256,7 @@ export class AstraClient extends Client {
                                 { name: '🎯 Next Level',     value: `\`${nextXpReq} XP\``,                      inline: true },
                                 { name: '📊 Progress',       value: `\`[${progressBar}] ${carryXp}/${nextXpReq}\``, inline: false },
                             )
-                            .setFooter({ text: 'Astra Intelligence Matrix • v7.5.0 Titan' })
+                            .setFooter({ text: 'Astra Intelligence Matrix • v8.0.1 Quantum' })
                             .setTimestamp();
 
                         let targetChannel: any = message.channel;
@@ -300,7 +300,7 @@ export class AstraClient extends Client {
                             .setTitle('👋 New Operative Arrived')
                             .setDescription(msg)
                             .setThumbnail(member.user.displayAvatarURL())
-                            .setFooter({ text: `Astra Welcome System • v7.5.0 Titan` })
+                            .setFooter({ text: `Astra Welcome System • v8.0.1 Quantum` })
                             .setTimestamp();
                         await (channel as any).send({ embeds: [welcomeEmbed] });
                     }
@@ -399,7 +399,7 @@ export class AstraClient extends Client {
                     await rest.put(Routes.applicationGuildCommands(config.clientId, config.guildId), { body: [] });
                 }
                 await rest.put(Routes.applicationCommands(config.clientId), { body: [] });
-                logger.info('[SYNC] All sectors cleared of command echoes. Re-deploying Titan suite...');
+                logger.info('[SYNC] All sectors cleared of command echoes. Re-deploying Quantum suite...');
                 
                 // Re-deploy immediately after purge
                 await rest.put(Routes.applicationCommands(config.clientId), { body: commandData });

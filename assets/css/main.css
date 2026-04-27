@@ -267,27 +267,31 @@ body {
 }
 
 .btn-astra--primary {
-  background: #fff;
+  background: var(--color-primary);
   color: #000;
-  box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 30px var(--color-primary-glow);
 }
 
 .btn-astra--primary:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 40px rgba(255, 255, 255, 0.2);
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 0 50px var(--color-primary-glow), 0 0 10px var(--color-primary);
+  background: #fff;
 }
 
 .btn-astra--outline {
-  border: 1px solid var(--glass-border);
-  color: #fff;
-  background: var(--glass-bg);
+  border: 1px solid var(--color-primary-glow);
+  color: var(--color-primary);
+  background: rgba(0, 255, 209, 0.05); /* very faint neon tint */
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
 
 .btn-astra--outline:hover {
-  border-color: #fff;
-  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--color-primary);
+  color: #fff;
+  background: var(--color-primary-glow);
+  box-shadow: 0 0 30px var(--color-primary-glow);
+  transform: scale(1.05) translateY(-2px);
 }
 
 /* --- RESPONSIVE --- */

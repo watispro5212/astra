@@ -123,7 +123,7 @@ const command: Command = {
                             { name: '📦 Stock',    value: `\`${stock === -1 ? '∞' : stock}\``,       inline: true },
                             ...(prodRate > 0 ? [{ name: '📊 Yield', value: `\`${prodRate} cr/hr\``, inline: true }] : [])
                         )
-                        .setFooter({ text: 'Astra Commerce Division v7.5.0 Titan' })],
+                        .setFooter({ text: 'Astra Commerce Division v8.0.1 Quantum' })],
                     flags: [MessageFlags.Ephemeral]
                 });
 
@@ -161,7 +161,7 @@ const command: Command = {
                             { name: '📦 Stock',  value: `\`${newStock === -1 ? '∞' : newStock}\``,       inline: true },
                             { name: '📊 Yield',  value: `\`${newRate > 0 ? `${newRate} cr/hr` : 'None'}\``, inline: true }
                         )
-                        .setFooter({ text: 'Astra Commerce Division v7.5.0 Titan' })],
+                        .setFooter({ text: 'Astra Commerce Division v8.0.1 Quantum' })],
                     flags: [MessageFlags.Ephemeral]
                 });
             }
@@ -179,7 +179,7 @@ const command: Command = {
             const embed = new EmbedBuilder()
                 .setTitle(`🛒 APEX MARKETPLACE — ${interaction.guild!.name}`)
                 .setColor(0xf1c40f)
-                .setFooter({ text: `${items.length} item(s) available • Astra Commerce Division v7.5.0 Titan` })
+                .setFooter({ text: `${items.length} item(s) available • Astra Commerce Division v8.0.1 Quantum` })
                 .setTimestamp();
 
             if (items.length === 0) {
@@ -271,7 +271,7 @@ const command: Command = {
                         { name: '💸 Spent',         value: `\`-${item.price.toLocaleString()} cr\``, inline: true },
                         { name: '💳 New Balance',    value: `\`${(after?.balance ?? 0).toLocaleString()} cr\``, inline: true }
                     )
-                    .setFooter({ text: 'Astra Commerce Division v7.5.0 Titan' })]
+                    .setFooter({ text: 'Astra Commerce Division v8.0.1 Quantum' })]
             });
 
         // ── SELL ──────────────────────────────────────────────────────────────
@@ -311,7 +311,7 @@ const command: Command = {
                         { name: '💰 Refund',      value: `\`+${refund.toLocaleString()} cr\``, inline: true },
                         { name: '💳 New Balance', value: `\`${(after?.balance ?? 0).toLocaleString()} cr\``, inline: true }
                     )
-                    .setFooter({ text: 'Sell price is 50% of purchase price. • Astra Commerce Division v7.5.0 Titan' })]
+                    .setFooter({ text: 'Sell price is 50% of purchase price. • Astra Commerce Division v8.0.1 Quantum' })]
             });
 
         // ── INVENTORY ─────────────────────────────────────────────────────────

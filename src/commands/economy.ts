@@ -504,7 +504,7 @@ const command: Command = {
                 .setColor(THEME.WARNING)
                 .setTitle('🏆 GLOBAL FISCAL LEADERBOARD')
                 .setDescription(lines.join('\n'))
-                .setFooter({ text: `Titan v7.5.0 • Ranked by Net Worth` });
+                .setFooter({ text: `Quantum v8.0.1 • Ranked by Net Worth` });
             return interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'stats') {

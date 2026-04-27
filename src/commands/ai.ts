@@ -60,7 +60,7 @@ const command: Command = {
             const embed = new EmbedBuilder()
                 .setColor(THEME.PRIMARY)
                 .setTitle('🤖 ASTRA NEURAL SENTINEL | MODELS')
-                .setDescription('The Astra AI Sentinel supports multiple Titan-class models for DM interaction.')
+                .setDescription('The Astra AI Sentinel supports multiple Quantum-class models for DM interaction.')
                 .setThumbnail('https://cdn-icons-png.flaticon.com/512/3655/3655611.png');
 
             for (const model of AI_MODELS) {

@@ -1,6 +1,6 @@
-# 🛰️ Astra Tactical Bot (v7.5.0 'Titan')
+# 🛰️ Astra Tactical Bot (v8.0.1 'Quantum')
 
-Astra is an enterprise-grade Discord moderation, community engagement, and utility bot, rebuilt in high-performance TypeScript. The v7.5.0 **'Titan'** update is a proprietary release featuring a massive high-fidelity web overhaul, Glassmorphism 2.0 components, and the new Industrial Hub (Tactical Shop) integration.
+Astra is an enterprise-grade Discord moderation, community engagement, and utility bot, rebuilt in high-performance TypeScript. The v8.0.1 **'Quantum'** update is a proprietary release featuring a massive high-fidelity web overhaul, Glassmorphism 2.0 components, and the new Industrial Hub (Tactical Shop) integration.
 
 **Official Website**: [https://watispro5212.github.io/astra/](https://watispro5212.github.io/astra/)
 
@@ -19,8 +19,8 @@ Astra is an enterprise-grade Discord moderation, community engagement, and utili
 
 ---
 
-## 💎 v7.5.0 'Titan' Features
-- **🎨 Titan Design Language**: Total web overhaul with high-fidelity glassmorphism and neural grid effects.
+## 💎 v8.0.1 'Quantum' Features
+- **🎨 Quantum Design Language**: Total web overhaul with high-fidelity glassmorphism and neural grid effects.
 - **🏬 Industrial Hub**: Integrated tactical shop display with automated role granting and inventory sync.
 - **📊 Global Leveling**: Re-engineered XP tracking with tactical rank progression (`/rank`).
 - **💰 Dynamic Economy**: High-stakes credit system with market liquidation and rob protocols (`/economy`).

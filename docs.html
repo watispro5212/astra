@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Documentation — Astra</title>
-  <meta name="description" content="Technical documentation and deployment guides for Astra v7.5.0 Titan.">
+  <meta name="description" content="Technical documentation and deployment guides for Astra v8.0.1 Quantum.">
   <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
@@ -73,7 +73,7 @@
   <div class="astra-grid"></div>
 
   <!-- NAVIGATION -->
-  <nav class="nav-titan" id="navbar">
+  <nav class="nav-quantum" id="navbar">
     <div class="nav-container">
       <a href="index.html" class="nav-logo">
         <img src="assets/images/astra-logo.png" alt="Astra Logo" width="32" height="32">
@@ -100,8 +100,8 @@
   <!-- HEADER -->
   <header class="section" class="page-header">
     <div class="container">
-      <h1 class="h1-titan text-gradient">KNOWLEDGE ARCHIVE</h1>
-      <p class="text-dim" class="max-w-700">Technical documentation for deploying and configuring the Astra v7.5.0 Titan engine.</p>
+      <h1 class="h1-quantum text-gradient">KNOWLEDGE ARCHIVE</h1>
+      <p class="text-dim" class="max-w-700">Technical documentation for deploying and configuring the Astra v8.0.1 Quantum engine.</p>
     </div>
   </header>
 
@@ -173,7 +173,7 @@
               /system status — View core engine diagnostics<br>
               /info stats — Global sector telemetry
             </div>
-            <p class="docs-text">The **Titan Engine** will automatically synchronize its tactical assets upon arrival. If commands do not appear, follow the synchronization protocol below.</p>
+            <p class="docs-text">The **Quantum Engine** will automatically synchronize its tactical assets upon arrival. If commands do not appear, follow the synchronization protocol below.</p>
           </div>
         </section>
 
@@ -196,7 +196,7 @@
               /ai status — Diagnostic report for all neural nodes<br>
               /ai reset — Clear current conversational context
             </div>
-            <p class="docs-text">Operatives can recalibrate the Sentinel's neural matrix (change models) using the <code>/ai model</code> command. Available models include Titan Flash (Speed) and Titan Pro (Deep Analysis).</p>
+            <p class="docs-text">Operatives can recalibrate the Sentinel's neural matrix (change models) using the <code>/ai model</code> command. Available models include Quantum Flash (Speed) and Quantum Pro (Deep Analysis).</p>
           </div>
         </section>
 
@@ -221,7 +221,7 @@
               2. Wait for "Synchronization Successful"<br>
               3. Restart your Discord terminal (Client)
             </div>
-            <p class="docs-text">This forces a nuclear purge of the sector's command cache and re-deploys the latest **Titan v7.5.0** assets.</p>
+            <p class="docs-text">This forces a nuclear purge of the sector's command cache and re-deploys the latest **Quantum v8.0.1** assets.</p>
           </div>
         </section>
 
@@ -254,7 +254,7 @@
   </main>
 
   <!-- FOOTER -->
-  <footer class="footer-titan">
+  <footer class="footer-quantum">
     <div class="container">
       <div class="footer-grid">
         <div>
@@ -263,7 +263,7 @@
             ASTRA
           </div>
           <p class="footer-brand__desc">
-            Astra v7.5.0 'Titan' — Engineered for the high-concurrency demands of elite Discord communities worldwide.
+            Astra v8.0.1 'Quantum' — Engineered for the high-concurrency demands of elite Discord communities worldwide.
           </p>
         </div>
         <div>
@@ -299,7 +299,7 @@
 
   <script>
     window.addEventListener('scroll', () => {
-      document.getElementById('navbar').classList.toggle('nav-titan--scrolled', window.scrollY > 50);
+      document.getElementById('navbar').classList.toggle('nav-quantum--scrolled', window.scrollY > 50);
     });
 
     const observer = new IntersectionObserver((entries) => {

@@ -65,7 +65,7 @@ const command: Command = {
             try {
                 await (interaction.client as any).syncCommands('clear');
                 const count = await (interaction.client as any).syncCommands(process.env.NODE_ENV === 'production' ? 'global' : 'guild');
-                const successMsg = `✅ **SYNCHRONIZATION SUCCESSFUL**: \`${count}\` tactical assets successfully deployed across the network. All sectors are now running the Titan v7.5.0 engine.`;
+                const successMsg = `✅ **SYNCHRONIZATION SUCCESSFUL**: \`${count}\` tactical assets successfully deployed across the network. All sectors are now running the Quantum v8.0.1 engine.`;
                 
                 if (deferred) {
                     await interaction.editReply({ content: successMsg });
@@ -108,7 +108,7 @@ const command: Command = {
 
             const embed = new EmbedBuilder()
                 .setColor(ping < 150 ? 0x2ecc71 : 0xf1c40f)
-                .setTitle('📡 SYSTEM STATUS — TITAN v7.5.0 DIAGNOSTICS')
+                .setTitle('📡 SYSTEM STATUS — QUANTUM v8.0.1 DIAGNOSTICS')
                 .setThumbnail(interaction.client.user?.displayAvatarURL() ?? null)
                 .addFields(
                     { name: '⏱️ Uptime',         value: `\`${d}d ${h}h ${m}m\``,                               inline: true },
@@ -121,7 +121,7 @@ const command: Command = {
                     { name: '🔋 Resident Set',    value: `\`${rss.toFixed(0)}MB\``,                              inline: true },
                     { name: '🖥️ Host',            value: `\`${os.hostname()} • ${os.type()}\``,                inline: true },
                 )
-                .setFooter({ text: `Astra Intelligence Division • ${VERSION} • TITAN CORE` })
+                .setFooter({ text: `Astra Intelligence Division • ${VERSION} • QUANTUM CORE` })
                 .setTimestamp();
 
             return interaction.editReply({ embeds: [embed] });

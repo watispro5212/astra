@@ -4,7 +4,7 @@ import { db } from '../core/database';
 import { StockMarketService, STOCKS } from '../services/stockMarketService';
 import { THEME, VERSION, PROTOCOL } from '../core/constants';
 
-const TITAN_CYAN = 0x00d4ff;
+const QUANTUM_CYAN = 0x00d4ff;
 
 // Generate a simple ASCII sparkline for visual flair
 function generateSparkline(history: number[]): string {
@@ -65,7 +65,7 @@ const command: Command = {
             
             const embed = new EmbedBuilder()
                 .setTitle('🛰️ ASTRA TACTICAL EXCHANGE | GLOBAL FEED')
-                .setColor(TITAN_CYAN)
+                .setColor(QUANTUM_CYAN)
                 .setDescription('Real-time telemetry from the high-volatility speculation grid.')
                 .setThumbnail('https://cdn-icons-png.flaticon.com/512/2620/2620582.png');
 
@@ -84,7 +84,7 @@ const command: Command = {
                 });
             }
 
-            embed.setFooter({ text: `Titan Financial Engine • ${PROTOCOL} • Live Telemetry` }).setTimestamp();
+            embed.setFooter({ text: `Quantum Financial Engine • ${PROTOCOL} • Live Telemetry` }).setTimestamp();
             await interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'buy') {
@@ -172,7 +172,7 @@ const command: Command = {
             
             const embed = new EmbedBuilder()
                 .setTitle(`📊 PORTFOLIO ANALYSIS | ${interaction.user.username.toUpperCase()}`)
-                .setColor(TITAN_CYAN)
+                .setColor(QUANTUM_CYAN)
                 .setThumbnail(interaction.user.displayAvatarURL());
 
             if (holdings.length === 0) {

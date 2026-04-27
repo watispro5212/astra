@@ -94,40 +94,36 @@ export class StatusService {
             .setColor(THEME.PRIMARY)
             .setTitle(`🪐 ASTRA ${VERSION} — MISSION UPDATE`)
             .setAuthor({ name: 'ASTRA INTELLIGENCE COMMAND', iconURL: client.user?.displayAvatarURL() })
-            .setDescription('The **Titan Core Engine** has been successfully transitioned to a high-performance cloud infrastructure. This update ensures permanent data persistence and superior operational stability.')
+            .setDescription('The **Quantum Engine** has been successfully transitioned to operate across open-source native Large Language Models via OpenRouter APIs. This update drastically mitigates API exhaustion.')
             .setThumbnail('https://cdn-icons-png.flaticon.com/512/8654/8654162.png')
             .addFields(
                 {
                     name: '✨ NEW OPERATIONAL ASSETS',
                     value: [
-                        '> **Supabase Cloud Infrastructure** — Enterprise-grade PostgreSQL persistence layer.',
-                        '> **High-Throughput Pooling** — Optimized database connection management.',
-                        '> **Titan v7.5.0 Core** — Refined telemetry and high-fidelity aesthetics.',
-                        '> **Prefix Protocol** — Message-based interface now active (Default: `-`).',
-                        '> **ATX Speculation** — Advanced stock market analysis tools.'
+                        '> **OpenRouter Matrix** — Converted `aiService` payload structure to stream directly to open-source models.',
+                        '> **Free Model Synergy** — Models unlocked explicitly as `Tencent HY3`, `MiniMax m2.5`, and `Gemma 4 26B`.',
+                        '> **Automated Fallback** — Replaced GPT-4o fallback arrays with pure OpenRouter Free Tier endpoints.'
                     ].join('\n')
                 },
                 {
                     name: '🗑️ DECOMMISSIONED SYSTEMS',
                     value: [
-                        '> **Local SQLite Storage** — Purged for enhanced reliability.',
-                        '> **Legacy Status Page** — Replaced by high-fidelity Webhook telemetry.',
-                        '> **Transient Memory** — Data no longer resets during deployment cycles.'
+                        '> **Google Gemini SDK** — Completely wiped the native SDK in favor of OpenRouter REST fetches.',
+                        '> **Legacy Array Parsing** — Phased out `db.get` attempts on `user_profiles` logic arrays.'
                     ].join('\n')
                 },
                 {
                     name: '🔧 SYSTEM OPTIMIZATIONS',
                     value: [
-                        '• **Command Indexing** — Fixed visibility issues for `/economy harvest`.',
-                        '• **Intelligence Rank** — Stabilized Postgres subqueries for global rankings.',
-                        '• **Interaction Engine** — Resolved timeout anomalies during high-load periods.',
-                        '• **iOS Compatibility** — Fixed Safari-specific user-selection rendering.'
+                        '• **Sync Recalibration** — Addressed PROTOCOL ERROR regarding neural arrays in `/ai model`.',
+                        '• **PostgreSQL Mapping** — Resolved core NoSQL object crashes inside TS profile generation.',
+                        '• **Presence Engine** — Realtime sync of Discord Status to system `$VERSION` arrays.'
                     ].join('\n')
                 },
                 {
                     name: '🚀 FUTURE TELEMETRY',
                     value: [
-                        '• **AI Sentinel** — Neural-network powered threat detection (Internal Testing).',
+                        '• **AI Sentinel Vision** — Imgur/Native Discord attachment image scanning routines.',
                         '• **Cross-Sector Rankings** — Global intelligence and wealth leaderboards.',
                         '• **Advanced Automation** — Enhanced server protection protocols.'
                     ].join('\n')
@@ -204,7 +200,7 @@ export class StatusService {
             .setTimestamp();
 
         await webhook.send({ 
-            username: 'ASTRA TITAN STATUS', 
+            username: 'ASTRA QUANTUM STATUS', 
             avatarURL: 'https://cdn-icons-png.flaticon.com/512/3655/3655611.png',
             embeds: [embed] 
         }).catch(err => logger.error(`Status Webhook Error: ${err}`));
@@ -234,7 +230,7 @@ export class StatusService {
                 { name: '🌐 Total Sectors',   value: `\`${client.guilds.cache.size}\``,                      inline: true  },
                 { name: '💻 Load Average',    value: `\`${os.loadavg()[0].toFixed(2)}\``,                    inline: true  },
             )
-            .setFooter({ text: `Astra Health Monitor • TITAN CORE` })
+            .setFooter({ text: `Astra Health Monitor • QUANTUM CORE` })
             .setTimestamp();
 
         await webhook.send({ 

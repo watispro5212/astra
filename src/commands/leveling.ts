@@ -3,7 +3,7 @@ import { Command } from '../types';
 import { db } from '../core/database';
 import { config } from '../core/config';
 
-const VER = 'v7.5.0';
+const VER = 'v8.0.1';
 
 // XP required to reach level N+1
 function xpForLevel(level: number): number {
@@ -95,7 +95,7 @@ const command: Command = {
                     { name: '🔢 Total XP',      value: `\`${cumXp.toLocaleString()} XP\``,       inline: true },
                     { name: '📊 Matrix Progression', value: `\`[${bar}]\`\n\`${xp.toLocaleString()} / ${needed.toLocaleString()} XP\``, inline: false },
                 )
-                .setFooter({ text: `Astra Intelligence Matrix • v7.5.0` })
+                .setFooter({ text: `Astra Intelligence Matrix • v8.0.1` })
                 .setTimestamp();
 
             return interaction.editReply({ embeds: [embed] });

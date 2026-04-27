@@ -27,13 +27,13 @@ export class AIService {
     public static async generateResponse(userId: string, prompt: string, retryCount = 0): Promise<string> {
         const key = this.getCurrentKey();
         if (!key) {
-            return "❌ **NEURAL LINK FAILURE**: No OpenRouter keys detected in the Titan core configuration. Please contact the sector administrator.";
+            return "❌ **NEURAL LINK FAILURE**: No OpenRouter keys detected in the Quantum core configuration. Please contact the sector administrator.";
         }
 
         // Fetch user settings
         const settings = await db.fetchOne('SELECT selected_model, system_prompt FROM user_ai_settings WHERE user_id = $1', [userId]);
         const modelId = settings?.selected_model || 'tencent/hy3-preview:free';
-        const systemPrompt = settings?.system_prompt || `You are Astra, a powerful AI assistant powered by the Titan v${VERSION} protocol. You are helpful, tactical, and concise. You assist users exclusively in DMs.`;
+        const systemPrompt = settings?.system_prompt || `You are Astra, a powerful AI assistant powered by the Quantum v${VERSION} protocol. You are helpful, tactical, and concise. You assist users exclusively in DMs.`;
 
         try {
             const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
