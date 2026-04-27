@@ -12,7 +12,7 @@ import { db } from '../core/database';
 const command: Command = {
     data: new SlashCommandBuilder()
         .setName('welcome')
-        .setDescription('👋 Configure welcome and farewell messages for your sector.')
+        .setDescription('👋 Setup welcome and goodbye messages for your server.')
         .setDMPermission(false)
         .addSubcommand(sub =>
             sub.setName('set-channel')
@@ -104,7 +104,7 @@ const command: Command = {
 
         } else if (subcommand === 'set-farewell') {
             const channel = interaction.options.getChannel('channel')!;
-            const message = interaction.options.getString('message') ?? '{user} has left the sector.';
+            const message = interaction.options.getString('message') ?? '{user} has left the server.';
             await upsert({ farewell_channel_id: channel.id, farewell_message: message });
             await interaction.editReply({ embeds: [new EmbedBuilder()
                 .setColor(0x2ecc71)
@@ -130,10 +130,10 @@ const command: Command = {
                 .replace('{server}', interaction.guild!.name);
             const embed = new EmbedBuilder()
                 .setColor(0x2ecc71)
-                .setTitle('👋 New Operative Arrived')
+                .setTitle('👋 New Member Joined')
                 .setDescription(text)
                 .setThumbnail(interaction.user.displayAvatarURL())
-                .setFooter({ text: 'Astra Welcome System • v7.0.0' })
+                .setFooter({ text: 'Astra Welcome System' })
                 .setTimestamp();
             await (channel as any).send({ embeds: [embed] });
             await interaction.editReply({ content: '✅ Test welcome message sent!' });
@@ -150,7 +150,7 @@ const command: Command = {
                     { name: 'Welcome Message', value: cfg?.message ?? '*Default*', inline: false },
                     { name: 'Farewell Message', value: cfg?.farewell_message ?? '*Default*', inline: false }
                 )
-                .setFooter({ text: 'Astra Welcome System • v7.0.0' })
+                .setFooter({ text: 'Astra Welcome System' })
                 .setTimestamp()] });
         }
     }

@@ -13,7 +13,7 @@ import { db } from '../core/database';
 const command: Command = {
     data: new SlashCommandBuilder()
         .setName('ticket')
-        .setDescription('🎫 Astra Support Ticket System.')
+        .setDescription('🎫 Open a support ticket to talk to staff.')
         .setDMPermission(false)
         .addSubcommand(sub =>
             sub.setName('create')
@@ -88,7 +88,7 @@ const command: Command = {
                 .setTitle('🎫 Support Ticket Opened')
                 .setDescription(`Hello <@${interaction.user.id}>! A staff member will assist you shortly.\n\n**Issue:** ${reason}`)
                 .addFields({ name: 'Available Commands', value: '`/ticket close` — Close this ticket\n`/ticket add <user>` — Add a user\n`/ticket remove <user>` — Remove a user' })
-                .setFooter({ text: 'Astra Support System • v7.0.0' })
+                .setFooter({ text: 'Astra Support' })
                 .setTimestamp();
 
             await channel.send({ content: `<@${interaction.user.id}>`, embeds: [embed] });

@@ -17,32 +17,32 @@ import os from 'os';
 const command: Command = {
     data: new SlashCommandBuilder()
         .setName('system')
-        .setDescription('⚙️ Core system operations and diagnostics.')
+        .setDescription('⚙️ Bot settings and info.')
         .setDMPermission(false)
         .addSubcommand(sub =>
             sub.setName('sync')
-               .setDescription('🔄 Force a complete synchronization of all tactical slash commands (Owner Only).')
+               .setDescription('🔄 Update bot commands across all servers (Owner Only).')
         )
         .addSubcommand(sub =>
             sub.setName('update')
-               .setDescription('📋 View the latest Astra patch notes and system changes.')
+               .setDescription('📋 See what is new in the latest update.')
         )
         .addSubcommand(sub =>
             sub.setName('status')
-               .setDescription('📡 Live system health, latency, and resource diagnostics.')
+               .setDescription('📡 Check how the bot is running.')
         )
         .addSubcommand(sub =>
             sub.setName('ping')
-               .setDescription('🏓 Analyze network heartbeat and API response times.')
+               .setDescription('🏓 Check the bot speed.')
         )
         .addSubcommand(sub =>
             sub.setName('servers')
-               .setDescription('🌐 View top sectors where Astra is currently deployed (Owner Only).')
+               .setDescription('🌐 See which servers the bot is in (Owner Only).')
         )
         .addSubcommand(sub =>
             sub.setName('alert')
-               .setDescription('⚠️ Broadcast a system-wide emergency transmission (Owner Only).')
-               .addStringOption(opt => opt.setName('message').setDescription('The emergency message to broadcast').setRequired(true))
+               .setDescription('⚠️ Send a message to all servers (Owner Only).')
+               .addStringOption(opt => opt.setName('message').setDescription('The message to send').setRequired(true))
         ),
 
     async execute(interaction: ChatInputCommandInteraction) {
@@ -51,7 +51,7 @@ const command: Command = {
         // ── SYNC ──────────────────────────────────────────────────────────────
         if (subcommand === 'sync') {
             if (interaction.user.id !== config.ownerId) {
-                return interaction.reply({ content: '❌ **ACCESS DENIED**: Owner clearance required for Sector Synchronization.', flags: [MessageFlags.Ephemeral] });
+                return interaction.reply({ content: '❌ **ACCESS DENIED**: You need to be the Bot Owner to do this.', flags: [MessageFlags.Ephemeral] });
             }
 
             let deferred = false;
@@ -65,7 +65,7 @@ const command: Command = {
             try {
                 await (interaction.client as any).syncCommands('clear');
                 const count = await (interaction.client as any).syncCommands(process.env.NODE_ENV === 'production' ? 'global' : 'guild');
-                const successMsg = `✅ **SYNCHRONIZATION SUCCESSFUL**: \`${count}\` tactical assets successfully deployed across the network. All sectors are now running the Quantum v8.0.1 engine.`;
+                const successMsg = `✅ **UPDATE SUCCESSFUL**: \`${count}\` commands updated. The bot is now running on the latest engine.`;
                 
                 if (deferred) {
                     await interaction.editReply({ content: successMsg });
@@ -74,7 +74,7 @@ const command: Command = {
                 }
             } catch (err) {
                 if (deferred) {
-                    await interaction.editReply({ content: `🚨 **SYNCHRONIZATION FAILURE**: ${err}` });
+                    await interaction.editReply({ content: `🚨 **UPDATE FAILED**: ${err}` });
                 }
             }
 
@@ -108,27 +108,27 @@ const command: Command = {
 
             const embed = new EmbedBuilder()
                 .setColor(ping < 150 ? 0x2ecc71 : 0xf1c40f)
-                .setTitle('📡 SYSTEM STATUS — QUANTUM v8.0.1 DIAGNOSTICS')
+                .setTitle(`📡 BOT STATUS`)
                 .setThumbnail(interaction.client.user?.displayAvatarURL() ?? null)
                 .addFields(
                     { name: '⏱️ Uptime',         value: `\`${d}d ${h}h ${m}m\``,                               inline: true },
-                    { name: `${pingLabel} Latency`, value: `\`${ping}ms\``,                                      inline: true },
+                    { name: `${pingLabel} Speed`,   value: `\`${ping}ms\``,                                      inline: true },
                     { name: '⚙️ CPU Load',        value: `\`${os.loadavg()[0].toFixed(2)}%\``,                  inline: true },
-                    { name: '🌐 Sectors',         value: `\`${interaction.client.guilds.cache.size}\``,          inline: true },
-                    { name: '👥 Operatives',      value: `\`${memberCount.toLocaleString()}\``,                  inline: true },
+                    { name: '🌐 Servers',         value: `\`${interaction.client.guilds.cache.size}\``,          inline: true },
+                    { name: '👥 Users',           value: `\`${memberCount.toLocaleString()}\``,                  inline: true },
                     { name: '🔀 Shards',          value: `\`${shardId + 1} / ${shards}\``,                       inline: true },
                     { name: '💾 Heap Memory',     value: `\`${heapUsed.toFixed(0)}MB / ${heapTotal.toFixed(0)}MB\`\n${memBar}`, inline: false },
                     { name: '🔋 Resident Set',    value: `\`${rss.toFixed(0)}MB\``,                              inline: true },
                     { name: '🖥️ Host',            value: `\`${os.hostname()} • ${os.type()}\``,                inline: true },
                 )
-                .setFooter({ text: `Astra Intelligence Division • ${VERSION} • QUANTUM CORE` })
+                .setFooter({ text: `Astra Bot` })
                 .setTimestamp();
 
             return interaction.editReply({ embeds: [embed] });
 
         // ── PING ──────────────────────────────────────────────────────────────
         } else if (subcommand === 'ping') {
-            const sent = await interaction.reply({ content: '📡 **ANALYZING HEARTBEAT...**', fetchReply: true });
+            const sent = await interaction.reply({ content: '📡 **CHECKING SPEED...**', fetchReply: true });
             const rtt  = sent.createdTimestamp - interaction.createdTimestamp;
             const ws   = interaction.client.ws.ping;
 
@@ -137,12 +137,12 @@ const command: Command = {
 
             const embed = new EmbedBuilder()
                 .setColor(ws < 100 ? 0x2ecc71 : ws < 200 ? 0xf1c40f : 0xe74c3c)
-                .setTitle('🏓 HEARTBEAT ANALYSIS')
+                .setTitle('🏓 BOT SPEED')
                 .addFields(
                     { name: '🔌 WebSocket',  value: `${wsLabel}\n\`${ws}ms\``,    inline: true },
-                    { name: '📡 API (RTT)',  value: `${rttLabel}\n\`${rtt}ms\``,  inline: true },
+                    { name: '📡 API Speed',  value: `${rttLabel}\n\`${rtt}ms\``,  inline: true },
                 )
-                .setFooter({ text: `Astra Network Telemetry • ${VERSION}` })
+                .setFooter({ text: `Astra Speed Test` })
                 .setTimestamp();
 
             return interaction.editReply({ content: '', embeds: [embed] });
@@ -150,7 +150,7 @@ const command: Command = {
         // ── SERVERS ───────────────────────────────────────────────────────────
         } else if (subcommand === 'servers') {
             if (interaction.user.id !== config.ownerId) {
-                return interaction.reply({ content: '❌ Access Denied: Owner clearance required.', ephemeral: true });
+                return interaction.reply({ content: '❌ Access Denied: You need to be the Bot Owner.', ephemeral: true });
             }
 
             await interaction.deferReply({ ephemeral: true });
@@ -165,13 +165,13 @@ const command: Command = {
 
             const embed = new EmbedBuilder()
                 .setColor(THEME.PRIMARY)
-                .setTitle('🌐 SECTOR DEPLOYMENT OVERVIEW')
-                .setDescription(guildList || 'No sectors online.')
+                .setTitle('🌐 SERVERS LIST')
+                .setDescription(guildList || 'The bot is not in any servers.')
                 .addFields(
-                    { name: '📊 Total Sectors',    value: `\`${guilds.size}\``,                     inline: true },
-                    { name: '👥 Total Operatives', value: `\`${totalMembers.toLocaleString()}\``,    inline: true },
+                    { name: '📊 Total Servers',    value: `\`${guilds.size}\``,                     inline: true },
+                    { name: '👥 Total Users',      value: `\`${totalMembers.toLocaleString()}\``,    inline: true },
                 )
-                .setFooter({ text: `Showing top 15 by member count • ${VERSION}` })
+                .setFooter({ text: `Top 15 servers by members` })
                 .setTimestamp();
 
             return interaction.editReply({ embeds: [embed] });
@@ -179,7 +179,7 @@ const command: Command = {
         // ── ALERT ─────────────────────────────────────────────────────────────
         } else if (subcommand === 'alert') {
             if (interaction.user.id !== config.ownerId) {
-                return interaction.reply({ content: '❌ Access Denied: Owner clearance required.', ephemeral: true });
+                return interaction.reply({ content: '❌ Access Denied: You need to be the Bot Owner.', ephemeral: true });
             }
 
             const message = interaction.options.getString('message')!;
@@ -188,10 +188,10 @@ const command: Command = {
             let successCount = 0;
             const alertEmbed = new EmbedBuilder()
                 .setColor(0xff0000)
-                .setTitle('⚠️ SYSTEM-WIDE ALERT')
+                .setTitle('⚠️ MESSAGE FROM THE BOT')
                 .setDescription(message)
                 .setThumbnail(interaction.client.user?.displayAvatarURL() ?? null)
-                .setFooter({ text: `Official Transmission from Astra Core • ${VERSION}` })
+                .setFooter({ text: `Official message from Astra` })
                 .setTimestamp();
 
             for (const guild of interaction.client.guilds.cache.values()) {
@@ -214,7 +214,7 @@ const command: Command = {
                 }
             }
 
-            return interaction.editReply({ content: `✅ Alert broadcast complete. Reached **${successCount}** of **${interaction.client.guilds.cache.size}** sectors.` });
+            return interaction.editReply({ content: `✅ Message sent. Reached **${successCount}** of **${interaction.client.guilds.cache.size}** servers.` });
         }
     }
 };

@@ -4,55 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Terms of Service — Astra</title>
-    <meta
-      name="description"
-      content="Terms of Service for Astra v8.0.1 Quantum Enterprise Core."
-    />
+    <meta name="description" content="Terms of Service for Astra bot." />
     <link rel="icon" type="image/png" href="assets/images/astra-logo.png" />
     <link rel="stylesheet" href="assets/css/main.css" />
     <link rel="stylesheet" href="assets/css/components.css" />
-    <style>
-      .legal-card {
-        margin-top: 60px;
-        padding: 60px;
-      }
-      .legal-section {
-        margin-bottom: 48px;
-      }
-      .legal-title {
-        font-family: var(--font-heading);
-        color: var(--color-primary-light);
-        font-size: 1.25rem;
-        margin-bottom: 20px;
-        display: flex;
-        align-items: center;
-        gap: 16px;
-      }
-      .legal-title span {
-        font-size: 0.8rem;
-        opacity: 0.5;
-      }
-      .legal-text {
-        color: var(--color-text-dim);
-        line-height: 1.8;
-        font-size: 1rem;
-      }
-      .legal-text strong {
-        color: #fff;
-      }
-      @media (max-width: 768px) {
-        .legal-card {
-          padding: 30px;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="astra-mesh"></div>
-    <div class="astra-grid"></div>
+</head>
+<body>
+  <div class="astra-mesh"></div>
+  <div class="astra-grid"></div>
 
     <!-- NAVIGATION -->
-    <nav class="nav-quantum" id="navbar">
+    <nav class="nav-astra" id="navbar">
       <div class="nav-container">
         <a href="index.html" class="nav-logo">
           <img
@@ -64,10 +26,10 @@
           ASTRA
         </a>
         <div class="nav-links">
-          <a href="features.html" class="nav-link">Sectors</a>
-          <a href="commands.html" class="nav-link">Protocols</a>
+          <a href="features.html" class="nav-link">Features</a>
+          <a href="commands.html" class="nav-link">Commands</a>
           <a href="docs.html" class="nav-link">Docs</a>
-          <a href="changelog.html" class="nav-link">Mission Logs</a>
+          <a href="changelog.html" class="nav-link">Updates</a>
           <a href="support.html" class="nav-link">Support</a>
         </div>
         <div style="display: flex; gap: 12px; align-items: center">
@@ -76,14 +38,14 @@
             class="btn-astra btn-astra--outline"
             style="padding: 8px 16px; font-size: 0.75rem"
           >
-            Guild Install
+            Add to Server
           </a>
           <a
             href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=1&scope=identify+applications.commands"
             class="btn-astra btn-astra--primary"
             style="padding: 8px 16px; font-size: 0.75rem"
           >
-            User Install
+            Add to Profile
           </a>
         </div>
       </div>
@@ -93,10 +55,7 @@
     <header class="section" style="padding-top: 160px; padding-bottom: 40px">
       <div class="container" style="max-width: 900px">
         <h1 class="h1-quantum text-gradient">TERMS OF SERVICE</h1>
-        <p class="text-dim">
-          The legal protocols governing the use of the Astra v8.0.1 Quantum
-          engine.
-        </p>
+        <p class="text-dim">The simple rules for using the Astra bot.</p>
       </div>
     </header>
 
@@ -104,53 +63,48 @@
     <main class="container" style="max-width: 900px; padding-bottom: 120px">
       <div class="glass-card legal-card animate-reveal">
         <div class="legal-section">
-          <div class="legal-title"><span>01</span> ACCEPTANCE OF PROTOCOLS</div>
+          <div class="legal-title"><span>01</span> ACCEPTANCE OF TERMS</div>
           <p class="legal-text">
-            By authorizing Astra to access your Discord guild, you (the "User"
-            or "Server Owner") agree to be bound by these Terms of Service. If
-            you do not agree to these protocols, you must immediately terminate
-            Astra's shard connection to your guild.
+            By adding Astra to your server, you (the "User" or "Server Owner")
+            agree to these rules. If you do not agree to these rules, you must
+            remove Astra from your server.
           </p>
         </div>
 
         <div class="legal-section">
-          <div class="legal-title"><span>02</span> USAGE CLEARANCE</div>
+          <div class="legal-title"><span>02</span> PROPER USE</div>
           <p class="legal-text">
-            Astra is provided as an enterprise-grade moderation and utility
-            tool. Users are prohibited from utilizing Astra for automated spam,
-            hostile takeovers, or any action that violates the Discord Terms of
-            Service.
+            Astra is provided as a moderation and help tool. Users are not
+            allowed to use Astra for spamming or any action that breaks the
+            Discord Terms of Service.
           </p>
         </div>
 
         <div class="legal-section">
-          <div class="legal-title"><span>03</span> DATA PERSISTENCE</div>
+          <div class="legal-title"><span>03</span> DATA SAFETY</div>
           <p class="legal-text">
-            Astra utilizes a high-concurrency **PostgreSQL architecture** to
-            maintain state. While we strive for 100% data integrity, Astra is
-            not liable for data loss caused by upstream API failures or database
-            anomalies.
+            Astra uses a database to keep track of things like levels and money.
+            While we try our best to keep everything safe, Astra is not
+            responsible for data loss caused by Discord issues or technical
+            glitches.
           </p>
         </div>
 
         <div class="legal-section">
-          <div class="legal-title"><span>04</span> VANGUARD TELEMETRY</div>
+          <div class="legal-title"><span>04</span> ERROR REPORTING</div>
           <p class="legal-text">
-            Our Vanguard Error Reporter transmits diagnostic packets during
-            failures. These include non-sensitive metadata (Server ID, Command
-            Name) to facilitate rapid resolution. Usage of Astra implies consent
-            to this telemetry.
+            If Astra crashes, it might send a report to the developer. This info
+            is only used to fix bugs and make the bot better. By using Astra,
+            you agree to this.
           </p>
         </div>
 
         <div class="legal-section">
-          <div class="legal-title"><span>05</span> NEURAL CONDUCT</div>
+          <div class="legal-title"><span>05</span> AI ASSISTANT RULES</div>
           <p class="legal-text">
-            Operatives are strictly prohibited from utilizing the **AI
-            Sentinel** to generate prohibited content, bypass safety filters, or
-            violate the acceptable use policies of our upstream neural
-            providers. Any attempt to compromise the neural matrix will result
-            in an immediate and permanent revocation of AI access.
+            Users are not allowed to use the **AI Assistant** to generate
+            prohibited content or try to break its safety filters. Breaking
+            these rules will result in losing access to the AI features.
           </p>
         </div>
 
@@ -158,13 +112,13 @@
           class="legal-text"
           style="font-size: 0.8rem; margin-top: 60px; opacity: 0.5"
         >
-          Last Updated: April 26, 2026 • Astra Legal Sector v8.0.1
+          Last Updated: April 26, 2026 • Astra Legal v8.0.1
         </p>
       </div>
     </main>
 
     <!-- FOOTER -->
-    <footer class="footer-quantum">
+    <footer class="footer-astra">
       <div class="container">
         <div class="footer-grid">
           <div>
@@ -177,25 +131,22 @@
               />
               ASTRA
             </div>
-            <p class="footer-brand__desc">
-              Astra v8.0.1 'Quantum' — Engineered for the high-concurrency demands
-              of elite Discord communities worldwide.
-            </p>
+            Astra — Built for Discord servers worldwide.
           </div>
           <div>
-            <h4 class="footer-head">Architecture</h4>
+            <h4 class="footer-head">Features</h4>
             <div class="footer-links">
-              <a href="features.html" class="footer-link">Sectors</a>
-              <a href="commands.html" class="footer-link">Protocols</a>
+              <a href="features.html" class="footer-link">Features</a>
+              <a href="commands.html" class="footer-link">Commands</a>
               <a href="docs.html" class="footer-link">Docs</a>
             </div>
           </div>
           <div>
-            <h4 class="footer-head">Command</h4>
+            <h4 class="footer-head">Help</h4>
             <div class="footer-links">
               <a href="support.html" class="footer-link">Support Hub</a>
-              <a href="faq.html" class="footer-link">Field FAQ</a>
-              <a href="changelog.html" class="footer-link">Mission Logs</a>
+              <a href="faq.html" class="footer-link">FAQ</a>
+              <a href="changelog.html" class="footer-link">Updates</a>
             </div>
           </div>
           <div>
@@ -208,7 +159,6 @@
         </div>
         <div class="footer-bottom">
           <span>&copy; 2026 Astra. All rights reserved.</span>
-          <span>Astra Proprietary License v2.5</span>
         </div>
       </div>
     </footer>
@@ -217,7 +167,7 @@
       window.addEventListener("scroll", () => {
         document
           .getElementById("navbar")
-          .classList.toggle("nav-quantum--scrolled", window.scrollY > 50);
+          .classList.toggle("nav-astra--scrolled", window.scrollY > 50);
       });
 
       const observer = new IntersectionObserver(

@@ -2,6 +2,7 @@ import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, Permiss
 import { Command } from '../types';
 import { db } from '../core/database';
 import { config } from '../core/config';
+import { VERSION, PROTOCOL } from '../core/constants';
 
 const VER = 'v8.0.1';
 
@@ -26,33 +27,33 @@ function xpBar(xp: number, needed: number): string {
 const command: Command = {
     data: new SlashCommandBuilder()
         .setName('leveling')
-        .setDescription('📊 Astra Intelligence Matrix — Progression & Global Rankings.')
+        .setDescription('📊 Check your level and server rankings.')
         .setDMPermission(false)
         .addSubcommand(sub =>
             sub.setName('rank')
-               .setDescription('📈 View your tactical rank and XP progression.')
-               .addUserOption(opt => opt.setName('user').setDescription('Target operative.'))
+               .setDescription('📈 See your level and how much XP you have.')
+               .addUserOption(opt => opt.setName('user').setDescription('The user you want to check.'))
         )
         .addSubcommand(sub =>
             sub.setName('leaderboard')
-               .setDescription('🏆 View the top 15 operatives by intelligence level.')
+               .setDescription('🏆 See the top 15 players on the server.')
         )
         .addSubcommand(sub =>
             sub.setName('setxp')
-               .setDescription('⚙️ Manually set XP for an operative (Admin only).')
-               .addUserOption(opt => opt.setName('user').setDescription('Target operative.').setRequired(true))
+               .setDescription('⚙️ Set a user\'s XP (Admin only).')
+               .addUserOption(opt => opt.setName('user').setDescription('The user to change.').setRequired(true))
                .addIntegerOption(opt => opt.setName('xp').setDescription('XP amount to set.').setRequired(true).setMinValue(0))
         )
         .addSubcommand(sub =>
             sub.setName('setlevel')
-               .setDescription('⚙️ Manually set level for an operative (Admin only).')
-               .addUserOption(opt => opt.setName('user').setDescription('Target operative.').setRequired(true))
+               .setDescription('⚙️ Set a user\'s level (Admin only).')
+               .addUserOption(opt => opt.setName('user').setDescription('The user to change.').setRequired(true))
                .addIntegerOption(opt => opt.setName('level').setDescription('Level to set.').setRequired(true).setMinValue(0))
         )
         .addSubcommand(sub =>
             sub.setName('reset')
-               .setDescription('🗑️ Reset an operative\'s XP and level to zero (Admin only).')
-               .addUserOption(opt => opt.setName('user').setDescription('Target operative.').setRequired(true))
+               .setDescription('🗑️ Reset a user\'s level and XP to zero (Admin only).')
+               .addUserOption(opt => opt.setName('user').setDescription('The user to reset.').setRequired(true))
         ),
 
     async execute(interaction: ChatInputCommandInteraction) {
@@ -63,7 +64,7 @@ const command: Command = {
             await interaction.deferReply();
             const target = interaction.options.getUser('user') || interaction.user;
             
-            // Optimization: Fetch rank and stats in a single tactical sweep
+            // Fetch rank and stats
             const data = await db.fetchOne(`
                 SELECT xp, level, 
                 (SELECT COUNT(*) + 1 FROM users WHERE level > u.level OR (level = u.level AND xp > u.xp)) as position,
@@ -71,7 +72,7 @@ const command: Command = {
                 FROM users u WHERE user_id = ?`, target.id);
 
             if (!data) {
-                return interaction.editReply({ content: '❌ **INTELLIGENCE GAP**: No tactical data found for this operative. Active participation required for matrix registration.' });
+                return interaction.editReply({ content: '❌ **ERROR**: No data found for this user. They need to talk more to get XP!' });
             }
 
             // Ensure BigInt/Strings from Postgres are converted to Numbers
@@ -87,15 +88,15 @@ const command: Command = {
             const embed = new EmbedBuilder()
                 .setColor(0x9b59b6)
                 .setAuthor({ name: target.tag, iconURL: target.displayAvatarURL() })
-                .setTitle('📈 INTELLIGENCE RANK FILE')
+                .setTitle('📈 YOUR RANK')
                 .setThumbnail(target.displayAvatarURL({ size: 256 }))
                 .addFields(
                     { name: '⭐ Level',         value: `\`${level}\``,                           inline: true },
-                    { name: '🏅 Sector Rank',   value: `\`#${position} / ${total}\``,            inline: true },
+                    { name: '🏅 Server Rank',   value: `\`#${position} / ${total}\``,            inline: true },
                     { name: '🔢 Total XP',      value: `\`${cumXp.toLocaleString()} XP\``,       inline: true },
-                    { name: '📊 Matrix Progression', value: `\`[${bar}]\`\n\`${xp.toLocaleString()} / ${needed.toLocaleString()} XP\``, inline: false },
+                    { name: '📊 Progress',      value: `\`[${bar}]\`\n\`${xp.toLocaleString()} / ${needed.toLocaleString()} XP\``, inline: false },
                 )
-                .setFooter({ text: `Astra Intelligence Matrix • v8.0.1` })
+                .setFooter({ text: `Astra Levels` })
                 .setTimestamp();
 
             return interaction.editReply({ embeds: [embed] });
@@ -106,7 +107,7 @@ const command: Command = {
             const top = await db.fetchAll('SELECT user_id, xp, level FROM users ORDER BY level DESC, xp DESC LIMIT 15');
 
             if (!top || top.length === 0) {
-                return interaction.editReply({ content: '❌ No intelligence data available yet.' });
+                return interaction.editReply({ content: '❌ No leveling data available yet.' });
             }
 
             const medals = ['👑', '🥈', '🥉'];
@@ -126,15 +127,15 @@ const command: Command = {
 
             return interaction.editReply({ embeds: [new EmbedBuilder()
                 .setColor(0x9b59b6)
-                .setTitle('🏆 INTELLIGENCE LEADERBOARD — TOP 15')
+                .setTitle('🏆 LEADERBOARD — TOP 15')
                 .setDescription(lines.join('\n'))
-                .setFooter({ text: `Astra Intelligence Matrix • ${VER}` })
+                .setFooter({ text: `Astra Levels` })
                 .setTimestamp()] });
 
         // ── SETXP ─────────────────────────────────────────────────────────────
         } else if (sub === 'setxp') {
             if (!interaction.memberPermissions?.has(PermissionFlagsBits.Administrator)) {
-                return interaction.reply({ content: '❌ Administrator clearance required.', ephemeral: true });
+                return interaction.reply({ content: '❌ You need to be an Admin to do this.', ephemeral: true });
             }
             const target = interaction.options.getUser('user')!;
             const xp     = interaction.options.getInteger('xp')!;
@@ -146,14 +147,14 @@ const command: Command = {
 
             return interaction.reply({ embeds: [new EmbedBuilder()
                 .setColor(0x2ecc71)
-                .setTitle('⚙️ XP OVERRIDE')
+                .setTitle('⚙️ XP UPDATED')
                 .setDescription(`Set **${target.username}**'s XP to \`${xp.toLocaleString()}\`.`)
-                .setFooter({ text: `Astra Admin Tools • ${VER}` })] });
+                .setFooter({ text: `Bot Settings` })] });
 
         // ── SETLEVEL ──────────────────────────────────────────────────────────
         } else if (sub === 'setlevel') {
             if (!interaction.memberPermissions?.has(PermissionFlagsBits.Administrator)) {
-                return interaction.reply({ content: '❌ Administrator clearance required.', ephemeral: true });
+                return interaction.reply({ content: '❌ You need to be an Admin to do this.', ephemeral: true });
             }
             const target = interaction.options.getUser('user')!;
             const level  = interaction.options.getInteger('level')!;
@@ -165,14 +166,14 @@ const command: Command = {
 
             return interaction.reply({ embeds: [new EmbedBuilder()
                 .setColor(0x2ecc71)
-                .setTitle('⚙️ LEVEL OVERRIDE')
+                .setTitle('⚙️ LEVEL UPDATED')
                 .setDescription(`Set **${target.username}**'s level to \`${level}\` (XP reset to 0).`)
-                .setFooter({ text: `Astra Admin Tools • ${VER}` })] });
+                .setFooter({ text: `Bot Settings` })] });
 
         // ── RESET ─────────────────────────────────────────────────────────────
         } else if (sub === 'reset') {
             if (!interaction.memberPermissions?.has(PermissionFlagsBits.Administrator)) {
-                return interaction.reply({ content: '❌ Administrator clearance required.', ephemeral: true });
+                return interaction.reply({ content: '❌ You need to be an Admin to do this.', ephemeral: true });
             }
 
             if (interaction.user.id === config.ownerId || interaction.memberPermissions.has(PermissionFlagsBits.Administrator)) {
@@ -184,9 +185,9 @@ const command: Command = {
 
                 return interaction.reply({ embeds: [new EmbedBuilder()
                     .setColor(0xe74c3c)
-                    .setTitle('🗑️ INTELLIGENCE RESET')
+                    .setTitle('🗑️ LEVEL RESET')
                     .setDescription(`Reset **${target.username}**'s XP and level to zero.`)
-                    .setFooter({ text: `Astra Admin Tools • ${VER}` })] });
+                    .setFooter({ text: `Bot Settings` })] });
             }
         }
     }

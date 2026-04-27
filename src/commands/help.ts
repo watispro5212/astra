@@ -5,40 +5,40 @@ import { THEME, VERSION } from '../core/constants';
 const command: Command = {
     data: new SlashCommandBuilder()
         .setName('help')
-        .setDescription('🔍 Access the interactive V8 command registry.'),
+        .setDescription('🔍 Access the interactive command list.'),
 
     async execute(interaction: ChatInputCommandInteraction) {
         await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
         const embed = new EmbedBuilder()
             .setColor(THEME.PRIMARY)
-            .setTitle('📡 ASTRA V8 INTERACTIVE SECRECY')
-            .setDescription('Select a Sector below to view its specific active commands. This secure terminal will power down after 60 seconds of inactivity.')
+            .setTitle('📡 ASTRA HELP CENTER')
+            .setDescription('Select a category below to see its commands. This menu will expire in 60 seconds.')
             .setThumbnail(interaction.client.user?.displayAvatarURL()!)
-            .setFooter({ text: `Astra Quantum Engine • v${VERSION}` });
+            .setFooter({ text: `Astra Help` });
 
         const selectMenu = new StringSelectMenuBuilder()
             .setCustomId('help_category_select')
-            .setPlaceholder('Select a Tactical Sector...')
+            .setPlaceholder('Select a category...')
             .addOptions(
                 new StringSelectMenuOptionBuilder()
                     .setLabel('Core & Admin')
-                    .setDescription('System setup and critical architecture')
+                    .setDescription('Server setup and basic settings')
                     .setEmoji('⚙️')
                     .setValue('core'),
                 new StringSelectMenuOptionBuilder()
-                    .setLabel('Industrial Economy')
-                    .setDescription('Credits, mining, syndicates, and shop')
+                    .setLabel('Economy')
+                    .setDescription('Money, games, and shop')
                     .setEmoji('💎')
                     .setValue('eco'),
                 new StringSelectMenuOptionBuilder()
-                    .setLabel('Network Moderation')
-                    .setDescription('Bans, warnings, sweeps, filtering')
+                    .setLabel('Moderation')
+                    .setDescription('Bans, warnings, and cleaning')
                     .setEmoji('🛡️')
                     .setValue('mod'),
                 new StringSelectMenuOptionBuilder()
-                    .setLabel('Utility & Fun')
-                    .setDescription('Tickets, giveaways, user stats')
+                    .setLabel('Utility')
+                    .setDescription('Tickets, giveaways, and levels')
                     .setEmoji('🛠️')
                     .setValue('util')
             );
@@ -54,35 +54,35 @@ const command: Command = {
             const newEmbed = new EmbedBuilder().setColor(THEME.ACCENT).setTitle('📡 ASTRA CORE').setThumbnail(interaction.client.user?.displayAvatarURL()!);
 
             if (val === 'core') {
-                newEmbed.setTitle('⚙️ Core & Admin Protocol');
+                newEmbed.setTitle('⚙️ Core & Admin');
                 newEmbed.addFields(
-                    { name: '`/setup`', value: 'Initialize the guild structure.' },
-                    { name: '`/system`', value: 'Control backend modules and logging.' },
-                    { name: '`/dev`', value: 'High-level deployment commands.' },
-                    { name: '`/ai`', value: 'Configure the Neural Sentinel Model.' }
+                    { name: '`/setup`', value: 'Set up the server structure.' },
+                    { name: '`/system`', value: 'Check bot settings and logs.' },
+                    { name: '`/dev`', value: 'Developer-only commands.' },
+                    { name: '`/ai`', value: 'Change AI settings.' }
                 );
             } else if (val === 'eco') {
-                newEmbed.setTitle('💎 Industrial Economy Protocol');
+                newEmbed.setTitle('💎 Economy');
                 newEmbed.addFields(
-                    { name: '`/economy`', value: 'Work, mine, rob, daily, slots, and stats.' },
-                    { name: '`/syndicate`', value: 'Found a syndicate and pool your resources.' },
-                    { name: '`/shop`', value: 'Purchase upgrades and boosts.' },
-                    { name: '`/stockmarket`', value: 'Invest in dynamic universal stocks.' }
+                    { name: '`/economy`', value: 'Work, mine, rob, daily, and games.' },
+                    { name: '`/syndicate`', value: 'Start a group and share money.' },
+                    { name: '`/shop`', value: 'Buy items and boosts.' },
+                    { name: '`/stockmarket`', value: 'Invest your money in stocks.' }
                 );
             } else if (val === 'mod') {
-                newEmbed.setTitle('🛡️ Network Moderation Protocol');
+                newEmbed.setTitle('🛡️ Moderation');
                 newEmbed.addFields(
-                    { name: '`/moderation warn`', value: 'Warn a rogue operative.' },
+                    { name: '`/moderation warn`', value: 'Warn a member.' },
                     { name: '`/moderation lock`', value: 'Lock down a channel.' },
-                    { name: '`/moderation sweep`', value: 'Purge messages instantly.' }
+                    { name: '`/moderation sweep`', value: 'Clean up messages.' }
                 );
             } else if (val === 'util') {
-                newEmbed.setTitle('🛠️ Utility & Fun Protocol');
+                newEmbed.setTitle('🛠️ Utility');
                 newEmbed.addFields(
-                    { name: '`/info`', value: 'View sector diagnostics and stats.' },
-                    { name: '`/ticket`', value: 'Deploy private support panels.' },
-                    { name: '`/giveaway`', value: 'Host secure airdrops and giveaways.' },
-                    { name: '`/leveling`', value: 'Check your progression rank.' }
+                    { name: '`/info`', value: 'View bot information and stats.' },
+                    { name: '`/ticket`', value: 'Open a help ticket.' },
+                    { name: '`/giveaway`', value: 'Host a giveaway.' },
+                    { name: '`/leveling`', value: 'Check your level and rank.' }
                 );
             }
 

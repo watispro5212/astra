@@ -6,10 +6,10 @@ const TARGET_GUILD_ID = '1494909279159980192';
 export default {
     data: new SlashCommandBuilder()
         .setName('setup_server')
-        .setDescription('🏗️ APEX RECONSTRUCTION: Massive infrastructure deployment with metadata.')
+        .setDescription('🏗️ Setup: Automatically create all channels and roles.')
         .setDMPermission(false)
         .addBooleanOption(opt => 
-            opt.setName('nuclear')
+            opt.setName('reset')
                .setDescription('⚠️ DANGER: Delete ALL channels AND roles before rebuilding?')
                .setRequired(true))
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
@@ -17,7 +17,7 @@ export default {
     async execute(interaction: ChatInputCommandInteraction) {
         if (interaction.guildId !== TARGET_GUILD_ID) {
             await interaction.reply({ 
-                content: '❌ **TRANSMISSION DENIED**: This protocol is restricted to the Astra Prime Sector.', 
+                content: '❌ This command can only be used in the main server.', 
                 flags: [MessageFlags.Ephemeral]
             });
             return;
@@ -25,27 +25,27 @@ export default {
 
         await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
-        const isNuclear = interaction.options.getBoolean('nuclear');
+        const isReset = interaction.options.getBoolean('reset');
         const guild = interaction.guild!;
 
         const startEmbed = new EmbedBuilder()
-            .setTitle('🏗️ Apex Reconstruction Initiated')
-            .setDescription(isNuclear 
-                ? '⚠️ **NUCLEAR PROTOCOL ACTIVE**: Purging all channels and roles for Apex deployment...' 
-                : '🔄 **SYNC PROTOCOL ACTIVE**: Expanding sector architecture to Apex standards...')
-            .setColor(isNuclear ? 0xe74c3c : 0x3498db)
-            .setFooter({ text: 'Astra Architect v7.0.0 Nova' })
+            .setTitle('🏗️ Setting up server...')
+            .setDescription(isReset 
+                ? '⚠️ **RESET MODE**: Deleting all channels and roles to start fresh...' 
+                : '🔄 **UPDATE MODE**: Creating missing channels and roles...')
+            .setColor(isReset ? 0xe74c3c : 0x3498db)
+            .setFooter({ text: 'Astra Setup Tool' })
             .setTimestamp();
 
         await interaction.editReply({ embeds: [startEmbed] });
 
-        if (isNuclear) {
+        if (isReset) {
             try {
                 // 1. Purge Channels
                 const channels = await guild.channels.fetch();
                 for (const channel of channels.values()) {
                     if (channel && channel.id !== interaction.channelId) {
-                        await channel.delete('Apex Reconstruction').catch(() => null);
+                        await channel.delete('Server Setup').catch(() => null);
                     }
                 }
 
@@ -53,29 +53,27 @@ export default {
                 const roles = await guild.roles.fetch();
                 for (const role of roles.values()) {
                     if (role.name !== "@everyone" && role.managed === false && role.editable) {
-                        await role.delete('Apex Reconstruction').catch(() => null);
+                        await role.delete('Server Setup').catch(() => null);
                     }
                 }
             } catch (err) {
-                logger.error(`Nuclear purge failed: ${err}`);
+                logger.error(`Reset failed: ${err}`);
             }
         }
 
-        // 1. APEX ROLE HIERARCHY
+        // 1. SERVER ROLE HIERARCHY
         const rolesToCreate = [
-            { name: "🌟 SUPREME", color: "#f1c40f", permissions: [PermissionFlagsBits.Administrator] },
-            { name: "🛡️ ADMINISTRATOR", color: "#c0392b", permissions: [PermissionFlagsBits.Administrator] },
-            { name: "💠 ELITE", color: "#3498db", permissions: [PermissionFlagsBits.ManageMessages, PermissionFlagsBits.MuteMembers, PermissionFlagsBits.DeafenMembers] },
+            { name: "💠 HEAD MOD", color: "#3498db", permissions: [PermissionFlagsBits.ManageMessages, PermissionFlagsBits.MuteMembers, PermissionFlagsBits.DeafenMembers] },
             { name: "👮 MODERATOR", color: "#2980b9", permissions: [PermissionFlagsBits.ManageMessages, PermissionFlagsBits.KickMembers, PermissionFlagsBits.BanMembers, PermissionFlagsBits.ViewAuditLog, PermissionFlagsBits.ModerateMembers] },
             { name: "🔦 TRIAL MOD", color: "#3498db", permissions: [PermissionFlagsBits.ManageMessages, PermissionFlagsBits.ViewAuditLog] },
-            { name: "🛡️ ENFORCER", color: "#e67e22", permissions: [PermissionFlagsBits.KickMembers, PermissionFlagsBits.BanMembers, PermissionFlagsBits.ManageMessages, PermissionFlagsBits.ModerateMembers] },
+            { name: "🛡️ HELPER", color: "#e67e22", permissions: [PermissionFlagsBits.KickMembers, PermissionFlagsBits.BanMembers, PermissionFlagsBits.ManageMessages, PermissionFlagsBits.ModerateMembers] },
             { name: "🧪 RESEARCHER", color: "#9b59b6", permissions: [PermissionFlagsBits.AttachFiles, PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.AddReactions] },
             { name: "🎖️ VETERAN", color: "#f1c40f", permissions: [PermissionFlagsBits.UseExternalEmojis, PermissionFlagsBits.PrioritySpeaker] },
             { name: "🎨 CREATIVE", color: "#e91e63", permissions: [PermissionFlagsBits.AttachFiles, PermissionFlagsBits.AddReactions] },
-            { name: "📣 HERALD", color: "#1abc9c", permissions: [PermissionFlagsBits.MentionEveryone] },
+            { name: "📣 ANNOUNCER", color: "#1abc9c", permissions: [PermissionFlagsBits.MentionEveryone] },
             { name: "💎 BOOSTER", color: "#f47fff", permissions: [PermissionFlagsBits.UseExternalEmojis, PermissionFlagsBits.ChangeNickname] },
             { name: "✨ PIONEER", color: "#3498db", permissions: [PermissionFlagsBits.SendMessages] },
-            { name: "🤖 OPERATIVE", color: "#1abc9c", permissions: [PermissionFlagsBits.ManageWebhooks] },
+            { name: "🤖 BOT", color: "#1abc9c", permissions: [PermissionFlagsBits.ManageWebhooks] },
             { name: "👥 CITIZEN", color: "#95a5a6", permissions: [PermissionFlagsBits.SendMessages, PermissionFlagsBits.ReadMessageHistory, PermissionFlagsBits.AddReactions] },
             // Leveling Milestone Roles
             { name: "🏆 LVL 200", color: "#ffd700", permissions: [] },
@@ -96,147 +94,146 @@ export default {
                 name: r.name,
                 color: r.color as any,
                 permissions: r.permissions as any,
-                reason: 'Apex Reconstruction Hierarchy Deployment'
+                reason: 'Server setup process'
             });
             createdRoles.set(r.name, role);
         }
 
-        const enforcerRole = createdRoles.get("🛡️ ENFORCER");
+        const enforcerRole = createdRoles.get("🛡️ HELPER");
         const veteranRole = createdRoles.get("🎖️ VETERAN");
         const boosterRole = createdRoles.get("💎 BOOSTER");
 
-        // 2. APEX SECTOR BLUEPRINTS
         const blueprint = [
             {
-                name: "📡 INFORMATION SECTOR",
+                name: "📢 INFORMATION",
                 permissions: [
                     { id: guild.id, allow: [PermissionFlagsBits.ViewChannel], deny: [PermissionFlagsBits.SendMessages] },
                     { id: enforcerRole?.id, allow: [PermissionFlagsBits.SendMessages] }
                 ],
                 channels: [
-                    { name: "📜-rules", type: ChannelType.GuildText, topic: "Official guidelines and server regulations." },
-                    { name: "📢-announcements", type: ChannelType.GuildText, topic: "Major updates and community news." },
-                    { name: "👋-welcome", type: ChannelType.GuildText, topic: "New member arrival logs." },
-                    { name: "📜-role-information", type: ChannelType.GuildText, topic: "Detailed diagnostic of the server hierarchy." },
-                    { name: "❓-faq", type: ChannelType.GuildText, topic: "Common questions and information." },
-                    { name: "🤝-partners", type: ChannelType.GuildText, topic: "Affiliated servers and communities." }
+                    { name: "📜-rules", type: ChannelType.GuildText, topic: "Server rules." },
+                    { name: "📢-announcements", type: ChannelType.GuildText, topic: "Important updates." },
+                    { name: "👋-welcome", type: ChannelType.GuildText, topic: "New member logs." },
+                    { name: "📜-role-info", type: ChannelType.GuildText, topic: "List of server roles." },
+                    { name: "❓-faq", type: ChannelType.GuildText, topic: "Common questions." },
+                    { name: "🤝-partners", type: ChannelType.GuildText, topic: "Partnered servers." }
                 ]
             },
             {
-                name: "🏆 INTELLIGENCE SECTOR",
+                name: "🏆 LEVELS & RANKS",
                 permissions: [
                     { id: guild.id, allow: [PermissionFlagsBits.ViewChannel], deny: [PermissionFlagsBits.SendMessages] }
                 ],
                 channels: [
-                    { name: "📈-rank-analysis", type: ChannelType.GuildText, topic: "Real-time level-up transmissions." },
-                    { name: "🏆-leaderboard", type: ChannelType.GuildText, topic: "Top-tier operative rankings." },
-                    { name: "🔮-milestones", type: ChannelType.GuildText, topic: "Sector-wide achievement logs." }
+                    { name: "📈-rank-ups", type: ChannelType.GuildText, topic: "Level up messages." },
+                    { name: "🏆-leaderboard", type: ChannelType.GuildText, topic: "Top members." },
+                    { name: "🔮-milestones", type: ChannelType.GuildText, topic: "Major achievements." }
                 ]
             },
             {
-                name: "💬 CITIZEN SECTOR",
+                name: "💬 CHAT CATEGORY",
                 permissions: [
                     { id: guild.id, allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages], deny: [] }
                 ],
                 channels: [
-                    { name: "💬-general", type: ChannelType.GuildText, topic: "Main communication channel for members." },
-                    { name: "🤖-commands", type: ChannelType.GuildText, topic: "Channel for bot commands and interactions." },
-                    { name: "📸-media", type: ChannelType.GuildText, topic: "Sharing images and videos." },
-                    { name: "🎮-gaming", type: ChannelType.GuildText, topic: "Gaming discussion and coordination." },
-                    { name: "💻-tech", type: ChannelType.GuildText, topic: "Technology and development talk." },
-                    { name: "🎨-art-showcase", type: ChannelType.GuildText, topic: "Showcase your creative work." },
-                    { name: "🎶-music-chat", type: ChannelType.GuildText, topic: "Music sharing and discussion." }
+                    { name: "💬-general", type: ChannelType.GuildText, topic: "Main chat." },
+                    { name: "🤖-commands", type: ChannelType.GuildText, topic: "Bot commands." },
+                    { name: "📸-media", type: ChannelType.GuildText, topic: "Photos and videos." },
+                    { name: "🎮-gaming", type: ChannelType.GuildText, topic: "Gaming chat." },
+                    { name: "💻-tech", type: ChannelType.GuildText, topic: "Tech talk." },
+                    { name: "🎨-art", type: ChannelType.GuildText, topic: "Show off your art." },
+                    { name: "🎶-music-chat", type: ChannelType.GuildText, topic: "Talk about music." }
                 ]
             },
             {
-                name: "💎 ELITE SECTOR",
+                name: "💎 VIP CATEGORY",
                 permissions: [
                     { id: guild.id, deny: [PermissionFlagsBits.ViewChannel] },
                     { id: veteranRole?.id, allow: [PermissionFlagsBits.ViewChannel] },
                     { id: boosterRole?.id, allow: [PermissionFlagsBits.ViewChannel] }
                 ],
                 channels: [
-                    { name: "💎-elite-lounge", type: ChannelType.GuildText, topic: "Exclusive chat for Veterans and Boosters." },
-                    { name: "🔊 Elite Frequency", type: ChannelType.GuildVoice }
+                    { name: "💎-vip-lounge", type: ChannelType.GuildText, topic: "Exclusive chat for Veterans and Boosters." },
+                    { name: "🔊 VIP Voice", type: ChannelType.GuildVoice }
                 ]
             },
             {
-                name: "🛡️ SECURITY SECTOR",
+                name: "🛡️ STAFF CATEGORY",
                 permissions: [
                     { id: guild.id, deny: [PermissionFlagsBits.ViewChannel] },
                     { id: enforcerRole?.id, allow: [PermissionFlagsBits.ViewChannel] }
                 ],
                 channels: [
-                    { name: "🛠️-staff-hub", type: ChannelType.GuildText, topic: "Staff coordination and internal chat." },
-                    { name: "🚨-admin-lounge", type: ChannelType.GuildText, topic: "Private area for administrators." },
-                    { name: "⚖️-evidence", type: ChannelType.GuildText, topic: "Moderation logs and evidence storage." },
-                    { name: "📡-bot-logs", type: ChannelType.GuildText, topic: "Bot logs and system activity." },
-                    { name: "🕵️-audit-trails", type: ChannelType.GuildText, topic: "Administrative record keeping." }
+                    { name: "🛠️-staff-chat", type: ChannelType.GuildText, topic: "Staff only." },
+                    { name: "🚨-admin-chat", type: ChannelType.GuildText, topic: "Admins only." },
+                    { name: "⚖️-logs", type: ChannelType.GuildText, topic: "Logs and evidence." },
+                    { name: "📡-bot-logs", type: ChannelType.GuildText, topic: "Bot logs." },
+                    { name: "🕵️-audit-log", type: ChannelType.GuildText, topic: "Server history." }
                 ]
             },
             {
-                name: "📊 LOGISTICS SECTOR",
+                name: "📊 SUPPORT CATEGORY",
                 permissions: [
                     { id: guild.id, allow: [PermissionFlagsBits.ViewChannel], deny: [PermissionFlagsBits.SendMessages] }
                 ],
                 channels: [
-                    { name: "🎫-ticket-hub", type: ChannelType.GuildText, topic: "Open a support ticket here." },
-                    { name: "🛰️-system-status", type: ChannelType.GuildText, topic: "Astra system health and status." },
-                    { name: "💡-suggestions", type: ChannelType.GuildText, allowCitizen: true, topic: "Submit server suggestions." },
-                    { name: "🐛-bug-reports", type: ChannelType.GuildText, allowCitizen: true, topic: "Report bugs and system issues." }
+                    { name: "🎫-tickets", type: ChannelType.GuildText, topic: "Open a support ticket." },
+                    { name: "🛰️-status", type: ChannelType.GuildText, topic: "Bot status." },
+                    { name: "💡-suggestions", type: ChannelType.GuildText, allowCitizen: true, topic: "Submit suggestions." },
+                    { name: "🐛-bugs", type: ChannelType.GuildText, allowCitizen: true, topic: "Report bugs." }
                 ]
             },
             {
-                name: "🏦 ECONOMY SECTOR",
+                name: "🏦 MONEY CATEGORY",
                 permissions: [
                     { id: guild.id, allow: [PermissionFlagsBits.ViewChannel], deny: [PermissionFlagsBits.SendMessages] }
                 ],
                 channels: [
-                    { name: "🛒-marketplace", type: ChannelType.GuildText, topic: "Trade credits for exclusive roles and perks." },
-                    { name: "💰-daily-claims", type: ChannelType.GuildText, topic: "Claim your daily tactical allowance." },
-                    { name: "📈-stock-market", type: ChannelType.GuildText, topic: "Simulated sector trade and economy logs." }
+                    { name: "🛒-shop", type: ChannelType.GuildText, topic: "Buy items and perks." },
+                    { name: "💰-daily", type: ChannelType.GuildText, topic: "Claim daily money." },
+                    { name: "📈-stocks", type: ChannelType.GuildText, topic: "Stock market updates." }
                 ]
             },
             {
-                name: "📂 ARCHIVE SECTOR",
+                name: "📂 ARCHIVE CATEGORY",
                 permissions: [
                     { id: guild.id, deny: [PermissionFlagsBits.ViewChannel] },
                     { id: enforcerRole?.id, allow: [PermissionFlagsBits.ViewChannel] }
                 ],
                 channels: [
-                    { name: "📁-case-files", type: ChannelType.GuildText, topic: "Closed moderation cases and archives." },
-                    { name: "📜-legacy-logs", type: ChannelType.GuildText, topic: "Old system logs and data history." }
+                    { name: "📁-old-cases", type: ChannelType.GuildText, topic: "Closed tickets." },
+                    { name: "📜-history", type: ChannelType.GuildText, topic: "Old logs." }
                 ]
             },
             {
-                name: "🔊 VOICE SECTOR",
+                name: "🔊 VOICE CATEGORY",
                 permissions: [
                     { id: guild.id, allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.Connect], deny: [] }
                 ],
                 channels: [
-                    { name: "🔊 Public Freq", type: ChannelType.GuildVoice },
-                    { name: "🎮 Gaming Comms", type: ChannelType.GuildVoice },
-                    { name: "🎵 Music Studio", type: ChannelType.GuildVoice },
-                    { name: "🤫 Private Freq", type: ChannelType.GuildVoice },
-                    { name: "🥃 Staff Lounge", type: ChannelType.GuildVoice, isStaff: true }
+                    { name: "🔊 Public Voice", type: ChannelType.GuildVoice },
+                    { name: "🎮 Gaming Voice", type: ChannelType.GuildVoice },
+                    { name: "🎵 Music Room", type: ChannelType.GuildVoice },
+                    { name: "🤫 Private Voice", type: ChannelType.GuildVoice },
+                    { name: "🥃 Staff Voice", type: ChannelType.GuildVoice, isStaff: true }
                 ]
             }
         ];
 
-        for (const sector of blueprint) {
-            const overwrites: OverwriteResolvable[] = (sector.permissions as any[]).map(p => ({
+        for (const section of blueprint) {
+            const overwrites: OverwriteResolvable[] = (section.permissions as any[]).map(p => ({
                 id: p.id,
                 allow: p.allow || [],
                 deny: p.deny || []
             }));
             
             const category = await guild.channels.create({
-                name: sector.name,
+                name: section.name,
                 type: ChannelType.GuildCategory,
                 permissionOverwrites: overwrites
             });
 
-            for (const c of sector.channels) {
+            for (const c of section.channels) {
                 const chanOverwrites: OverwriteResolvable[] = [...overwrites];
                 if ((c as any).allowCitizen) {
                     chanOverwrites.push({ id: guild.id, allow: [PermissionFlagsBits.SendMessages] });
@@ -257,66 +254,66 @@ export default {
         }
 
         const successEmbed = new EmbedBuilder()
-            .setTitle('✅ Apex Reconstruction Complete')
-            .setDescription(`The Astra Prime APEX architecture has been deployed. Infrastructure and Role Hierarchy have been synchronized.`)
+            .setTitle('✅ Server Setup Complete')
+            .setDescription(`The server has been set up! All channels and roles are ready to go.`)
             .setColor(0x2ecc71)
             .setThumbnail(interaction.client.user?.displayAvatarURL()!)
-            .setFooter({ text: 'Astra Architect v7.0.0 Apex' })
+            .setFooter({ text: 'Astra Setup Tool' })
             .setTimestamp();
 
         await interaction.editReply({ embeds: [successEmbed] });
 
         // 3. ROLE INFORMATION PAYLOAD
-        const infoChannel = guild.channels.cache.find(c => c.name === "📜-role-information" && c.type === ChannelType.GuildText) as TextChannel;
+        const infoChannel = guild.channels.cache.find(c => (c.name === "📜-role-info" || c.name === "📜-role-information") && c.type === ChannelType.GuildText) as TextChannel;
         if (infoChannel) {
             const roleEmbed = new EmbedBuilder()
-                .setTitle('📜 ASTRA HIERARCHY REGISTRY')
-                .setDescription('Below is a surgical diagnostic of the Astra Apex Hierarchy and its respective clearance levels.')
+                .setTitle('📜 SERVER ROLES')
+                .setDescription('Here is a list of all the roles and what they are for.')
                 .setColor(0x3498db)
                 .addFields(
-                    { name: '🌟 SUPREME', value: 'Highest administrative authority. Absolute sector control.', inline: true },
-                    { name: '🛡️ ADMINISTRATOR', value: 'Strategic management and infrastructure oversight.', inline: true },
-                    { name: '💠 ELITE', value: 'High-clearance moderation and community enforcement.', inline: true },
-                    { name: '👮 MODERATOR', value: 'Standard tactical security and conflict resolution.', inline: true },
-                    { name: '🔦 TRIAL MOD', value: 'Observational security training tier.', inline: true },
-                    { name: '🛡️ ENFORCER', value: 'Entry-level security and message frequency maintenance.', inline: true },
-                    { name: '🧪 RESEARCHER', value: 'Technical contributors and development partners.', inline: true },
-                    { name: '🎖️ VETERAN', value: 'Long-term citizens with priority communication clearance.', inline: true },
-                    { name: '🎨 CREATIVE', value: 'Citizens recognized for exceptional artistic output.', inline: true },
-                    { name: '📣 HERALD', value: 'Official spokespersons and announcement distributors.', inline: true },
-                    { name: '💎 BOOSTER', value: 'Direct fiscal supporters of the Astra infrastructure.', inline: true },
-                    { name: '✨ PIONEER', value: 'Early-stage operatives from the founding era.', inline: true },
-                    { name: '🤖 OPERATIVE', value: 'Verified external automated systems.', inline: true },
-                    { name: '👥 CITIZEN', value: 'Standard operative with basic communication clearance.', inline: true }
+                    { name: '🌟 OWNER', value: 'Server owner and top boss.', inline: true },
+                    { name: '🛡️ ADMIN', value: 'Admins who help run the server.', inline: true },
+                    { name: '💠 HEAD MOD', value: 'Top-tier moderators.', inline: true },
+                    { name: '👮 MODERATOR', value: 'Standard moderators.', inline: true },
+                    { name: '🔦 TRIAL MOD', value: 'New moderators in training.', inline: true },
+                    { name: '🛡️ HELPER', value: 'Entry-level help.', inline: true },
+                    { name: '🧪 RESEARCHER', value: 'Special helpers and devs.', inline: true },
+                    { name: '🎖️ VETERAN', value: 'Long-time members.', inline: true },
+                    { name: '🎨 CREATIVE', value: 'Members recognized for their art.', inline: true },
+                    { name: '📣 ANNOUNCER', value: 'Official announcers.', inline: true },
+                    { name: '💎 BOOSTER', value: 'People who boosted the server.', inline: true },
+                    { name: '✨ PIONEER', value: 'Founding members.', inline: true },
+                    { name: '🤖 BOT', value: 'Server bots.', inline: true },
+                    { name: '👥 CITIZEN', value: 'Standard server members.', inline: true }
                 )
                 .addFields({ 
-                    name: '🏆 INTELLIGENCE MILESTONES', 
-                    value: '• `👑 LVL 200`: Apex Sovereign\n• `🛰️ LVL 150`: Sector Commander\n• `🏆 LVL 100`: Apex Master\n• `🥇 LVL 75`: Tactical Specialist\n• `🥇 LVL 50`: Elite Veteran\n• `🥈 LVL 25`: Senior Operative\n• `🥈 LVL 15`: Senior Recruit\n• `🥉 LVL 10`: Standard Operative\n• `🎖️ LVL 5`: Junior Operative\n• `🎖️ LVL 1`: Initial Operative' 
+                    name: '🏆 LEVEL REWARDS', 
+                    value: '• `👑 LVL 200`: King of the server\n• `🎖️ LVL 150`: Grand Master\n• `🏆 LVL 100`: Expert Member\n• `🥇 LVL 75`: Pro Member\n• `🥇 LVL 50`: Veteran Member\n• `🥈 LVL 25`: Senior Member\n• `🥈 LVL 15`: Advanced Member\n• `🥉 LVL 10`: Standard Member\n• `🎖️ LVL 5`: Junior Member\n• `🎖️ LVL 1`: New Member' 
                 })
-                .setFooter({ text: 'Astra Intelligence Registry v7.0.0' })
+                .setFooter({ text: 'Astra Server Roles' })
                 .setTimestamp();
 
             await infoChannel.send({ embeds: [roleEmbed] });
         }
 
-        // 4. ARCHITECT\'S BRIEFING (OWNER DM)
+        // 4. BRIEFING (OWNER DM)
         const owner = await interaction.client.users.fetch('1320058519642177668').catch(() => null);
         if (owner) {
             const briefingEmbed = new EmbedBuilder()
-                .setTitle('🛰️ ARCHITECT\'S BRIEFING: Bot Integration Suggestions')
-                .setDescription('Reconstruction complete. To further enhance your sector, consider integrating these specialized systems:')
+                .setTitle('🛰️ SETUP COMPLETE: Recommendations')
+                .setDescription('The server is set up. You might want to add these other bots to help out:')
                 .setColor(0xf1c40f)
                 .addFields(
-                    { name: '⚔️ Dyno / MEE6', value: 'Secondary moderation redundancy and automated custom commands.' },
-                    { name: '🎵 Jockie Music / FredBoat', value: 'High-fidelity audio streaming for the Voice Sectors.' },
-                    { name: '📊 Statbot', value: 'Deep-dive server analytics and historical engagement tracking.' },
-                    { name: '🎮 Mudae / Dank Memer', value: 'Engagement boosters and secondary economy layers.' },
-                    { name: '🛡️ Wick Bot', value: 'Advanced anti-nuke and raid protection for high-risk environments.' }
+                    { name: '⚔️ Dyno / MEE6', value: 'Good for extra commands and custom stuff.' },
+                    { name: '🎵 Jockie Music / FredBoat', value: 'Great for playing music in voice channels.' },
+                    { name: '📊 Statbot', value: 'To track how active your server is.' },
+                    { name: '🎮 Mudae / Dank Memer', value: 'Fun games for your members.' },
+                    { name: '🛡️ Wick Bot', value: 'Extra protection against raids and nukes.' }
                 )
-                .setFooter({ text: 'Astra Tactical Intelligence' })
+                .setFooter({ text: 'Astra Recommendations' })
                 .setTimestamp();
 
-            await owner.send({ embeds: [briefingEmbed] }).catch(() => logger.warn('Failed to transmit Architect\'s Briefing to owner.'));
+            await owner.send({ embeds: [briefingEmbed] }).catch(() => logger.warn('Failed to send briefing to owner.'));
         }
     }
 };

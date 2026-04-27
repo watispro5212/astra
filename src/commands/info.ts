@@ -13,30 +13,30 @@ import { THEME, VERSION, PROTOCOL } from '../core/constants';
 const command: Command = {
     data: new SlashCommandBuilder()
         .setName('info')
-        .setDescription('📊 Access sector intelligence and system diagnostics.')
+        .setDescription('📊 See info about the server and the bot.')
         .setDMPermission(false)
         .addSubcommand(sub =>
             sub.setName('avatar')
-                .setDescription('🛰️ Extract high-fidelity avatar data of an operative.')
-                .addUserOption(opt => opt.setName('target').setDescription('The target to analyze.'))
+                .setDescription('🖼️ Get someone\'s profile picture.')
+                .addUserOption(opt => opt.setName('target').setDescription('The person to look at.'))
         )
         .addSubcommand(sub =>
             sub.setName('stats')
-                .setDescription('📡 System performance and network diagnostics.')
+                .setDescription('📈 See how the bot is doing.')
         )
         .addSubcommand(sub =>
             sub.setName('user')
-                .setDescription('👤 Detailed intelligence report on a server member.')
-                .addUserOption(opt => opt.setName('target').setDescription('The member to analyze.'))
+                .setDescription('👤 Get info about a member.')
+                .addUserOption(opt => opt.setName('target').setDescription('The member to check.'))
         )
         .addSubcommand(sub =>
             sub.setName('server')
-                .setDescription('🏰 Sector configuration and population statistics.')
+                .setDescription('🏰 See details about this server.')
         )
         .addSubcommand(sub =>
             sub.setName('role')
-                .setDescription('🎖️ Detailed breakdown of a role\'s configuration.')
-                .addRoleOption(opt => opt.setName('role').setDescription('The role to analyze.').setRequired(true))
+                .setDescription('🎖️ See details about a role.')
+                .addRoleOption(opt => opt.setName('role').setDescription('The role to check.').setRequired(true))
         ),
 
     async execute(interaction: ChatInputCommandInteraction) {
@@ -50,10 +50,10 @@ const command: Command = {
 
             const embed = new EmbedBuilder()
                 .setColor(THEME.PRIMARY)
-                .setTitle(`🖼️ AVATAR MATRIX: ${user.username.toUpperCase()}`)
+                .setTitle(`🖼️ PROFILE PICTURE: ${user.username.toUpperCase()}`)
                 .setImage(avatarUrl)
-                .setDescription(`[🔗 Download High-Res](${avatarUrl})`)
-                .setFooter({ text: `Astra Intelligence Agency • ${VERSION} ${PROTOCOL}` })
+                .setDescription(`[🔗 Download](${avatarUrl})`)
+                .setFooter({ text: `Astra Bot` })
                 .setTimestamp();
 
             await interaction.editReply({ embeds: [embed] });
@@ -75,22 +75,22 @@ const command: Command = {
             const shardId     = interaction.client.shard?.ids[0] ?? 0;
             const totalShards = interaction.client.shard?.count ?? 1;
 
-            const networkTelemetry = `\`\`\`ansi\n\u001b[1;36mShard   :\u001b[0m ${shardId + 1}/${totalShards}\n\u001b[1;35mPing    :\u001b[0m ${interaction.client.ws.ping}ms\n\u001b[1;32mGuilds  :\u001b[0m ${interaction.client.guilds.cache.size}\`\`\``;
-            const coreTelemetry = `\`\`\`ansi\n\u001b[1;36mRAM     :\u001b[0m ${memUsage.toFixed(1)}MB / ${(totalMem).toFixed(0)}MB\n\u001b[1;35mCPU     :\u001b[0m ${os.loadavg()[0].toFixed(2)} avg\n\u001b[1;32mNode    :\u001b[0m ${process.version}\`\`\``;
-            const versionTelemetry = `\`\`\`ansi\n\u001b[1;36mAstra   :\u001b[0m ${VERSION} ${PROTOCOL}\n\u001b[1;35mdjs     :\u001b[0m v${djsVersion}\n\u001b[1;32mHost    :\u001b[0m ${os.hostname()}\`\`\``;
+            const connectionInfo = `\`\`\`ansi\n\u001b[1;36mShard   :\u001b[0m ${shardId + 1}/${totalShards}\n\u001b[1;35mPing    :\u001b[0m ${interaction.client.ws.ping}ms\n\u001b[1;32mServers :\u001b[0m ${interaction.client.guilds.cache.size}\`\`\``;
+            const systemInfo = `\`\`\`ansi\n\u001b[1;36mRAM     :\u001b[0m ${memUsage.toFixed(1)}MB / ${(totalMem).toFixed(0)}MB\n\u001b[1;35mCPU     :\u001b[0m ${os.loadavg()[0].toFixed(2)} avg\n\u001b[1;32mNode    :\u001b[0m ${process.version}\`\`\``;
+            const versionInfo = `\`\`\`ansi\n\u001b[1;36mBot     :\u001b[0m ${VERSION}\n\u001b[1;35mdjs     :\u001b[0m v${djsVersion}\n\u001b[1;32mHost    :\u001b[0m ${os.hostname()}\`\`\``;
 
             const embed = new EmbedBuilder()
                 .setColor(THEME.PRIMARY)
-                .setTitle('📡 QUANTUM SYSTEM DIAGNOSTICS')
+                .setTitle('📈 BOT STATUS')
                 .setThumbnail(interaction.client.user?.displayAvatarURL()!)
                 .addFields(
-                    { name: '🛰️ Network Telemetry', value: networkTelemetry, inline: true },
-                    { name: '💻 Computational Core', value: coreTelemetry, inline: true },
-                    { name: '⏱️ Operational Uptime', value: `\`\`\`ansi\n\u001b[1;32m${days}d ${hours}h ${minutes}m ${seconds}s\u001b[0m\`\`\``, inline: true },
-                    { name: '📊 Memory Allocation', value: `\`\`\`ansi\n\u001b[1;36m[${memBar}] ${memPct}%\u001b[0m\`\`\``, inline: false },
-                    { name: '🤖 Protocol Versioning', value: versionTelemetry, inline: false },
+                    { name: '🌐 Connection', value: connectionInfo, inline: true },
+                    { name: '💻 System', value: systemInfo, inline: true },
+                    { name: '⏱️ Uptime', value: `\`\`\`ansi\n\u001b[1;32m${days}d ${hours}h ${minutes}m ${seconds}s\u001b[0m\`\`\``, inline: true },
+                    { name: '📊 Memory Usage', value: `\`\`\`ansi\n\u001b[1;36m[${memBar}] ${memPct}%\u001b[0m\`\`\``, inline: false },
+                    { name: '🤖 Version', value: versionInfo, inline: false },
                 )
-                .setFooter({ text: `Astra Quantum Engine • All sectors nominal` })
+                .setFooter({ text: `Bot is online.` })
                 .setTimestamp();
 
             await interaction.editReply({ embeds: [embed] });
@@ -102,13 +102,13 @@ const command: Command = {
 
             const embed = new EmbedBuilder()
                 .setColor(THEME.PRIMARY)
-                .setTitle(`👤 INTELLIGENCE FILE: ${user.username.toUpperCase()}`)
+                .setTitle(`👤 USER INFO: ${user.username.toUpperCase()}`)
                 .setThumbnail(user.displayAvatarURL({ size: 512 }))
                 .addFields(
                     { name: '🆔 User ID',      value: `\`${user.id}\``,                                      inline: true },
-                    { name: '🤖 Bot Account',  value: `\`${user.bot ? 'Yes' : 'No'}\``,                      inline: true },
-                    { name: '📅 Account Age',  value: `<t:${Math.floor(user.createdTimestamp / 1000)}:R>`,   inline: true },
-                    { name: '🎖️ Top Role',    value: member?.roles.highest.name || '—',                     inline: true },
+                    { name: '🤖 Bot',          value: `\`${user.bot ? 'Yes' : 'No'}\``,                      inline: true },
+                    { name: '📅 Joined Discord', value: `<t:${Math.floor(user.createdTimestamp / 1000)}:R>`,   inline: true },
+                    { name: '🎖️ Highest Role', value: member?.roles.highest.name || '—',                     inline: true },
                     { name: '🚦 Status',       value: `\`${member?.presence?.status ?? 'offline'}\``,         inline: true },
                     { name: '🏷️ Nickname',     value: member?.nickname ? `\`${member.nickname}\`` : '`None`', inline: true },
                 );
@@ -121,12 +121,12 @@ const command: Command = {
                     .join(' ') || '`No roles`';
 
                 embed.addFields(
-                    { name: '📥 Sector Admission', value: `<t:${Math.floor(member.joinedTimestamp! / 1000)}:D> (<t:${Math.floor(member.joinedTimestamp! / 1000)}:R>)`, inline: false },
-                    { name: `📜 Clearance Roles [${member.roles.cache.size - 1}]`, value: roles.length > 1024 ? roles.substring(0, 1020) + '…' : roles, inline: false },
+                    { name: '📥 Joined Server', value: `<t:${Math.floor(member.joinedTimestamp! / 1000)}:D> (<t:${Math.floor(member.joinedTimestamp! / 1000)}:R>)`, inline: false },
+                    { name: `📜 Roles [${member.roles.cache.size - 1}]`, value: roles.length > 1024 ? roles.substring(0, 1020) + '…' : roles, inline: false },
                 );
             }
 
-            embed.setFooter({ text: `Astra Intelligence Agency • ${VERSION}` }).setTimestamp();
+            embed.setFooter({ text: `Astra Bot` }).setTimestamp();
             await interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'server') {
@@ -140,18 +140,18 @@ const command: Command = {
 
             const embed = new EmbedBuilder()
                 .setColor(THEME.PRIMARY)
-                .setTitle(`🏰 SECTOR PROFILE: ${guild.name.toUpperCase()}`)
+                .setTitle(`🏰 SERVER INFO: ${guild.name.toUpperCase()}`)
                 .setThumbnail(guild.iconURL({ size: 512 }))
                 .setImage(guild.bannerURL({ size: 1024 }) ?? null)
                 .addFields(
-                    { name: '🆔 Sector ID',     value: `\`${guild.id}\``,                                         inline: true },
-                    { name: '👑 Commander',      value: `${owner.user}`,                                           inline: true },
-                    { name: '📅 Commissioned',   value: `<t:${Math.floor(guild.createdTimestamp / 1000)}:D>`,      inline: true },
-                    { name: '👥 Personnel',      value: `\`\`\`Total : ${guild.memberCount}\nHumans: ${guild.memberCount - bots}\nBots  : ${bots}\`\`\``, inline: true },
-                    { name: '📐 Infrastructure', value: `\`\`\`Text : ${textChs}\nVoice: ${voiceChs}\nCat  : ${catChs}\`\`\``, inline: true },
-                    { name: '✨ Sector Status',  value: `\`\`\`Boosts: ${guild.premiumSubscriptionCount || 0}\nTier  : ${guild.premiumTier}\nVerify: ${guild.verificationLevel}\`\`\``, inline: true },
+                    { name: '🆔 Server ID',     value: `\`${guild.id}\``,                                         inline: true },
+                    { name: '👑 Owner',         value: `${owner.user}`,                                           inline: true },
+                    { name: '📅 Created',       value: `<t:${Math.floor(guild.createdTimestamp / 1000)}:D>`,      inline: true },
+                    { name: '👥 Members',       value: `\`\`\`Total : ${guild.memberCount}\nHumans: ${guild.memberCount - bots}\nBots  : ${bots}\`\`\``, inline: true },
+                    { name: '📐 Channels',      value: `\`\`\`Text : ${textChs}\nVoice: ${voiceChs}\nCategories: ${catChs}\`\`\``, inline: true },
+                    { name: '✨ Server Level',   value: `\`\`\`Boosts: ${guild.premiumSubscriptionCount || 0}\nLevel : ${guild.premiumTier}\nVerify: ${guild.verificationLevel}\`\`\``, inline: true },
                 )
-                .setFooter({ text: `Astra Sector Diagnostics • ${VERSION}` })
+                .setFooter({ text: `Astra Server Info` })
                 .setTimestamp();
 
             await interaction.editReply({ embeds: [embed] });
@@ -174,19 +174,19 @@ const command: Command = {
 
             const embed = new EmbedBuilder()
                 .setColor(role.color || 0x7f8c8d)
-                .setTitle(`🎖️ CLEARANCE PROFILE: ${role.name.toUpperCase()}`)
+                .setTitle(`🎖️ ROLE INFO: ${role.name.toUpperCase()}`)
                 .addFields(
                     { name: '🆔 Role ID',       value: `\`${role.id}\``,                                          inline: true },
-                    { name: '🎨 Tactical Color', value: `\`${role.hexColor}\``,                                    inline: true },
-                    { name: '📌 Hierarchy',      value: `\`#${role.position}\``,                                   inline: true },
-                    { name: '👥 Assigned',       value: `\`${memberCount}\``,                                      inline: true },
+                    { name: '🎨 Color',         value: `\`${role.hexColor}\``,                                    inline: true },
+                    { name: '📌 Position',      value: `\`#${role.position}\``,                                   inline: true },
+                    { name: '👥 Members',       value: `\`${memberCount}\``,                                      inline: true },
                     { name: '🔔 Mentionable',    value: `\`${role.mentionable ? 'Yes' : 'No'}\``,                  inline: true },
                     { name: '📌 Hoisted',        value: `\`${role.hoist ? 'Yes' : 'No'}\``,                        inline: true },
-                    { name: '📅 Established',    value: `<t:${Math.floor(role.createdTimestamp / 1000)}:D>`,        inline: true },
-                    { name: '🤖 Automated',      value: `\`${role.managed ? 'Yes (Bot)' : 'No'}\``,               inline: true },
-                    { name: '🔑 Key Permissions', value: `\`\`\`${perms}\`\`\``,                                   inline: false },
+                    { name: '📅 Created',       value: `<t:${Math.floor(role.createdTimestamp / 1000)}:D>`,        inline: true },
+                    { name: '🤖 Bot Role',      value: `\`${role.managed ? 'Yes' : 'No'}\``,                    inline: true },
+                    { name: '🔑 Permissions',   value: `\`\`\`${perms}\`\`\``,                                   inline: false },
                 )
-                .setFooter({ text: `Astra Intelligence Agency • ${VERSION}` })
+                .setFooter({ text: `Astra Bot` })
                 .setTimestamp();
 
             await interaction.editReply({ embeds: [embed] });

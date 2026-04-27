@@ -13,4 +13,4 @@ export const THEME = {
     INFO: 0x4361EE       // Electric Blue
 };
 export const VERSION = 'v8.0.1';
-export const PROTOCOL = 'Quantum';
+export const PROTOCOL = 'Main';

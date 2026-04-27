@@ -4,119 +4,60 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Documentation — Astra</title>
-  <meta name="description" content="Technical documentation and deployment guides for Astra v8.0.1 Quantum.">
+  <meta name="description" content="Help guides and documentation for using Astra bot.">
   <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
-  <style>
-    .docs-layout {
-      display: grid;
-      grid-template-columns: 300px 1fr;
-      gap: 40px;
-      margin-top: 60px;
-    }
-    .docs-sidebar {
-      position: sticky;
-      top: 120px;
-      height: fit-content;
-    }
-    .docs-nav-group { margin-bottom: 32px; }
-    .docs-nav-title {
-      font-family: var(--font-heading);
-      font-size: 0.75rem;
-      color: var(--color-primary);
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 16px;
-    }
-    .docs-nav-link {
-      display: block;
-      color: var(--color-text-dim);
-      font-size: 0.9rem;
-      padding: 8px 0;
-      transition: var(--transition-base);
-    }
-    .docs-nav-link:hover, .docs-nav-link.active {
-      color: #fff;
-      transform: translateX(4px);
-    }
-    .docs-section { margin-bottom: 80px; }
-    .docs-section h2 {
-      font-family: var(--font-heading);
-      font-size: 1.75rem;
-      color: #fff;
-      margin-bottom: 24px;
-    }
-    .docs-text {
-      color: var(--color-text-dim);
-      line-height: 1.8;
-      margin-bottom: 24px;
-    }
-    .docs-code-block {
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid var(--glass-border);
-      border-radius: 12px;
-      padding: 24px;
-      font-family: var(--font-mono);
-      font-size: 0.9rem;
-      color: var(--color-primary-light);
-      margin-bottom: 32px;
-    }
-    @media (max-width: 992px) {
-      .docs-layout { grid-template-columns: 1fr; }
-      .docs-sidebar { display: none; }
-    }
-  </style>
 </head>
 <body>
   <div class="astra-mesh"></div>
   <div class="astra-grid"></div>
 
   <!-- NAVIGATION -->
-  <nav class="nav-quantum" id="navbar">
+  <nav class="nav-astra" id="navbar">
     <div class="nav-container">
       <a href="index.html" class="nav-logo">
         <img src="assets/images/astra-logo.png" alt="Astra Logo" width="32" height="32">
         ASTRA
       </a>
       <div class="nav-links">
-        <a href="features.html" class="nav-link">Sectors</a>
-        <a href="commands.html" class="nav-link">Protocols</a>
+        <a href="features.html" class="nav-link">Features</a>
+        <a href="commands.html" class="nav-link">Commands</a>
         <a href="docs.html" class="nav-link">Docs</a>
-        <a href="changelog.html" class="nav-link">Mission Logs</a>
+        <a href="changelog.html" class="nav-link">Updates</a>
         <a href="support.html" class="nav-link">Support</a>
       </div>
     <div class="nav-actions">
       <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands" class="btn-astra btn-astra--outline" class="btn-small">
-        Guild Install
+        Add to Server
       </a>
       <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=1&scope=identify+applications.commands" class="btn-astra btn-astra--primary" class="btn-small">
-        User Install
+        Add to Profile
       </a>
     </div>
     </div>
   </nav>
 
   <!-- HEADER -->
-  <header class="section" class="page-header">
+  <header class="section">
     <div class="container">
-      <h1 class="h1-quantum text-gradient">KNOWLEDGE ARCHIVE</h1>
-      <p class="text-dim" class="max-w-700">Technical documentation for deploying and configuring the Astra v8.0.1 Quantum engine.</p>
+      <h1 class="h1-quantum text-gradient">HELP CENTER</h1>
+      <p class="text-dim max-w-700">Guides and documentation for setting up and using the Astra bot.</p>
     </div>
   </header>
 
-  <main class="container" class="page-main">
+  <main class="container">
     <div class="docs-layout">
       <aside class="docs-sidebar">
         <div class="docs-nav-group">
-          <div class="docs-nav-title">Deployment</div>
+          <div class="docs-nav-title">Setup</div>
           <a href="#quick-start" class="docs-nav-link active">Quick Start</a>
-          <a href="#inviting" class="docs-nav-link">Inviting Astra</a>
-          <a href="#user-install" class="docs-nav-link">User Installation</a>
+          <a href="#inviting" class="docs-nav-link">Adding Astra</a>
+          <a href="#user-install" class="docs-nav-link">Profile Installation</a>
         </div>
         <div class="docs-nav-group">
-          <div class="docs-nav-title">Intelligence</div>
-          <a href="#ai-sentinel" class="docs-nav-link">AI Sentinel</a>
+          <div class="docs-nav-title">AI Features</div>
+          <a href="#ai-sentinel" class="docs-nav-link">AI Assistant</a>
         </div>
         <div class="docs-nav-group">
           <div class="docs-nav-title">Configuration</div>
@@ -127,40 +68,40 @@
 
       <div class="docs-content">
         <div class="card card--astra" id="quick-start">
-          <h2 class="doc-heading">🚀 Mission Briefing</h2>
+          <h2 class="doc-heading">🚀 Welcome</h2>
           <p>
-            Welcome to the <strong>Astra Intelligence Matrix</strong>. This guide will help you configure your tactical operations and deploy neural assets.
+            Welcome to the <strong>Astra Help Center</strong>. This guide will help you setup your bot and use its AI features.
           </p>
         </div>
 
         <div class="card card--astra" id="user-install">
-          <h2 class="doc-heading">🛰️ User-Installed App Protocol</h2>
+          <h2 class="doc-heading">🛰️ Profile Apps</h2>
           <p>
-            Astra now supports <strong>User-Installation</strong>, allowing you to deploy the bot's intelligence to your personal Discord account.
+            Astra now supports <strong>Profile Installation</strong>, allowing you to use the bot's features on your personal Discord account.
           </p>
           <ul class="list-clean">
-            <li class="mb-2">🔹 <strong>Global Accessibility:</strong> Use Astra commands in any server, DM, or Group DM.</li>
-            <li class="mb-2">🔹 <strong>DM AI Sentinel:</strong> Direct message Astra to interact with the Neural Sentinel.</li>
-            <li class="mb-2">🔹 <strong>Privacy First:</strong> Your interactions are private and locked to your neural signature.</li>
+            <li class="mb-2">🔹 <strong>Use Anywhere:</strong> Use Astra commands in any server, DM, or Group DM.</li>
+            <li class="mb-2">🔹 <strong>AI in DMs:</strong> Message Astra directly to talk to the AI assistant.</li>
+            <li class="mb-2">🔹 <strong>Privacy First:</strong> Your interactions are private and locked to your account.</li>
           </ul>
           <div class="doc-box">
-            <h4 class="mb-2">Installation Steps:</h4>
-            <ol style="padding-left: 1.2rem;">
-              <li>Click the <strong>"Establish Link"</strong> or <strong>"Deploy Astra"</strong> button.</li>
-              <li>Select <strong>"Try it Now"</strong> (User Install) on the Discord authorization page.</li>
-              <li>Authorize the <code>identify</code> and <code>applications.commands</code> scopes.</li>
+            <h4 class="mb-2">How to install:</h4>
+            <ol class="pl-12">
+              <li>Click the <strong>"Add to Profile"</strong> or <strong>"Add to Server"</strong> button.</li>
+              <li>Select <strong>"Try it Now"</strong> (User Install) on the Discord page.</li>
+              <li>Authorize the bot to see your profile and use commands.</li>
             </ol>
           </div>
         </div>
         <div class="docs-nav-group">
-          <div class="docs-nav-title">Sectors</div>
+          <div class="docs-nav-title">Features</div>
           <a href="#moderation" class="docs-nav-link">Moderation Setup</a>
-          <a href="#economy" class="docs-nav-link">Industrial Hub</a>
-          <a href="#ai-sentinel" class="docs-nav-link">Neural Sentinel</a>
+          <a href="#economy" class="docs-nav-link">Economy Hub</a>
+          <a href="#ai-sentinel" class="docs-nav-link">AI Assistant</a>
         </div>
         <div class="docs-nav-group">
           <div class="docs-nav-title">Legal</div>
-          <a href="#proprietary" class="docs-nav-link">Proprietary Notice</a>
+          <a href="#proprietary" class="docs-nav-link">License Info</a>
         </div>
       </aside>
 
@@ -168,85 +109,85 @@
         <section id="quick-start" class="docs-section animate-reveal">
           <div class="glass-card">
             <h2>Quick Start</h2>
-            <p class="docs-text">Deploying Astra to your sector is a streamlined process. Once the bot is present, use the following diagnostic commands to verify system integrity.</p>
+            <p class="docs-text">Adding Astra to your server is easy. Once the bot is there, use these commands to see if it is working.</p>
             <div class="docs-code-block">
-              /system status — View core engine diagnostics<br>
-              /info stats — Global sector telemetry
+              /system status — Check if the bot is online<br>
+              /info stats — See server stats
             </div>
-            <p class="docs-text">The **Quantum Engine** will automatically synchronize its tactical assets upon arrival. If commands do not appear, follow the synchronization protocol below.</p>
+            <p class="docs-text">Astra will automatically setup its commands when it joins. If commands don't show up, follow the sync steps below.</p>
           </div>
         </section>
 
         <section id="ai-sentinel" class="docs-section animate-reveal">
           <div class="glass-card">
-            <h2>Neural Sentinel</h2>
-            <p class="docs-text">The **AI Sentinel** is a high-availability neural processing module that operates exclusively within secure **Direct Message (DM)** sectors. It features a **Triple-Key Redundant Array** with automated **Spectral Cycling** failover.</p>
+            <h2>AI Assistant</h2>
+            <p class="docs-text">The **AI Assistant** is a smart chat bot that works in your **Direct Messages (DMs)**. It uses a reliable system to make sure it's always ready to help.</p>
             
-            <h3>API Key Acquisition</h3>
-            <p class="docs-text">To maintain operational integrity, Astra requires valid Google Gemini API keys. If your current nodes are reporting <code>EXHAUSTED</code> or <code>QUOTA_EXCEEDED</code>, follow these steps:</p>
+            <h3>Getting an AI Key</h3>
+            <p class="docs-text">To work correctly, Astra needs a Google Gemini API key. If your keys aren't working or you run out of uses, follow these steps:</p>
             <div class="docs-code-block">
-              1. Navigate to <a href="https://aistudio.google.com/" target="_blank" class="text-link">Google AI Studio</a><br>
-              2. Generate a new API Key (Gemini 1.5 Flash recommended)<br>
-              3. Update the keys in your <code>.env</code> configuration
+              1. Go to <a href="https://aistudio.google.com/" target="_blank" rel="noopener" class="text-link">Google AI Studio</a><br>
+              2. Create a new API Key (Gemini 1.5 Flash is best)<br>
+              3. Update the keys in your setup
             </div>
             
-            <h3>Tactical Commands</h3>
+            <h3>AI Commands</h3>
             <div class="docs-code-block">
-              /ai model — Switch between speed and analysis modes<br>
-              /ai status — Diagnostic report for all neural nodes<br>
-              /ai reset — Clear current conversational context
+              /ai model — Pick between fast or smart modes<br>
+              /ai status — Check if the AI is working<br>
+              /ai reset — Clear the current chat
             </div>
-            <p class="docs-text">Operatives can recalibrate the Sentinel's neural matrix (change models) using the <code>/ai model</code> command. Available models include Quantum Flash (Speed) and Quantum Pro (Deep Analysis).</p>
+            <p class="docs-text">Users can change how the AI talks (pick models) using the <code>/ai model</code> command. You can pick between Flash (Fast) and Pro (Smart).</p>
           </div>
         </section>
 
         <section id="prefix-protocol" class="docs-section animate-reveal">
           <div class="glass-card">
-            <h2>Prefix Interface</h2>
-            <p class="docs-text">While Astra utilizes Slash Commands for primary protocols, a traditional **Prefix Interface** is active for rapid tactical input. The default operational prefix is <code>-</code>.</p>
+            <h2>Bot Prefix</h2>
+            <p class="docs-text">While Astra mostly uses Slash Commands, you can also use a **Prefix** for quick shortcuts. The default prefix is <code>-</code>.</p>
             <div class="docs-code-block">
               Default Prefix: -<br>
               Usage: -[command] [options]
             </div>
-            <p class="docs-text">You can configure the sector-specific prefix using the <code>/config prefix</code> command (Administrator clearance required).</p>
+            <p class="docs-text">You can change the server prefix using the <code>/config prefix</code> command (must be an Admin).</p>
           </div>
         </section>
 
         <section id="sync-protocol" class="docs-section animate-reveal">
           <div class="glass-card">
-            <h2>Command Synchronization</h2>
-            <p class="docs-text">Due to Discord's global caching, some protocols (like <code>/economy harvest</code>) may experience indexing delays. If a command is missing from your terminal:</p>
+            <h2>Refreshing Commands</h2>
+            <p class="docs-text">Sometimes Discord is slow to show new commands. If a command is missing from your list:</p>
             <div class="docs-code-block">
               1. Type /system sync<br>
-              2. Wait for "Synchronization Successful"<br>
-              3. Restart your Discord terminal (Client)
+              2. Wait for it to finish<br>
+              3. Restart your Discord app
             </div>
-            <p class="docs-text">This forces a nuclear purge of the sector's command cache and re-deploys the latest **Quantum v8.0.1** assets.</p>
+            <p class="docs-text">This refreshes the server's command list and adds any missing features.</p>
           </div>
         </section>
 
         <section id="infrastructure" class="docs-section animate-reveal">
           <div class="glass-card">
-            <h2>Cloud Infrastructure</h2>
-            <p class="docs-text">Astra has migrated from legacy SQLite to **Supabase Cloud (PostgreSQL)**. This ensures permanent data persistence even across rapid deployment cycles.</p>
+            <h2>Database & Storage</h2>
+            <p class="docs-text">Astra uses cloud storage to keep your data safe. This means your levels and money are always saved and never lost.</p>
             <div class="docs-code-block">
-              • High-Throughput Pooling active<br>
-              • Automated Redundancy enabled<br>
-              • Permanent Asset Persistence active
+              • High speed database<br>
+              • Data is always backed up<br>
+              • Always saved
             </div>
           </div>
         </section>
 
         <section id="economy" class="docs-section animate-reveal">
           <div class="glass-card">
-            <h2>Industrial Finance</h2>
-            <p class="docs-text">Astra's fiscal ecosystem is divided into three primary sectors: Extraction, Industry, and Speculation.</p>
+            <h2>Economy & Money</h2>
+            <p class="docs-text">Astra's economy has three main parts: Mining, Shops, and Stocks.</p>
             <div class="docs-code-block">
-              /economy mine — High-risk resource extraction<br>
-              /economy harvest — Passive industrial yield collection<br>
-              /stockmarket market — Live speculation feed
+              /economy mine — Mine for money (risk included!)<br>
+              /economy harvest — Collect your daily earnings<br>
+              /stockmarket market — See live stock prices
             </div>
-            <p class="docs-text">Operatives should utilize <code>/economy harvest</code> to secure yields from their industrial infrastructure. Yields are calculated based on your total operational capacity. Note: If <code>/economy harvest</code> is not visible, use <code>/system sync</code>.</p>
+            <p class="docs-text">Use <code>/economy harvest</code> to get money from your server activity. If you don't see the command, try using <code>/system sync</code>.</p>
           </div>
         </section>
       </div>
@@ -254,7 +195,7 @@
   </main>
 
   <!-- FOOTER -->
-  <footer class="footer-quantum">
+  <footer class="footer-astra">
     <div class="container">
       <div class="footer-grid">
         <div>
@@ -263,23 +204,23 @@
             ASTRA
           </div>
           <p class="footer-brand__desc">
-            Astra v8.0.1 'Quantum' — Engineered for the high-concurrency demands of elite Discord communities worldwide.
+            Astra — Built for Discord servers worldwide.
           </p>
         </div>
         <div>
-          <h4 class="footer-head">Architecture</h4>
+          <h4 class="footer-head">Features</h4>
           <div class="footer-links">
-            <a href="features.html" class="footer-link">Sectors</a>
-            <a href="commands.html" class="footer-link">Protocols</a>
+            <a href="features.html" class="footer-link">Features</a>
+            <a href="commands.html" class="footer-link">Commands</a>
             <a href="docs.html" class="footer-link">Docs</a>
           </div>
         </div>
         <div>
-          <h4 class="footer-head">Command</h4>
+          <h4 class="footer-head">Help</h4>
           <div class="footer-links">
             <a href="support.html" class="footer-link">Support Hub</a>
-            <a href="faq.html" class="footer-link">Field FAQ</a>
-            <a href="changelog.html" class="footer-link">Mission Logs</a>
+            <a href="faq.html" class="footer-link">FAQ</a>
+            <a href="changelog.html" class="footer-link">Updates</a>
           </div>
         </div>
         <div>
@@ -292,14 +233,13 @@
       </div>
       <div class="footer-bottom">
         <span>&copy; 2026 Astra. All rights reserved.</span>
-        <span>Astra Proprietary License v2.5</span>
       </div>
     </div>
   </footer>
 
   <script>
     window.addEventListener('scroll', () => {
-      document.getElementById('navbar').classList.toggle('nav-quantum--scrolled', window.scrollY > 50);
+      document.getElementById('navbar').classList.toggle('nav-astra--scrolled', window.scrollY > 50);
     });
 
     const observer = new IntersectionObserver((entries) => {

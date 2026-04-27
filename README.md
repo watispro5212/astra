@@ -1,6 +1,6 @@
-# 🛰️ Astra Tactical Bot (v8.0.1 'Quantum')
+# 🛰️ Astra Bot
 
-Astra is an enterprise-grade Discord moderation, community engagement, and utility bot, rebuilt in high-performance TypeScript. The v8.0.1 **'Quantum'** update is a proprietary release featuring a massive high-fidelity web overhaul, Glassmorphism 2.0 components, and the new Industrial Hub (Tactical Shop) integration.
+Astra is a powerful and easy-to-use Discord bot for moderation, fun, and useful tools. It features a beautiful website and a full leveling and economy system for your server.
 
 **Official Website**: [https://watispro5212.github.io/astra/](https://watispro5212.github.io/astra/)
 
@@ -19,14 +19,14 @@ Astra is an enterprise-grade Discord moderation, community engagement, and utili
 
 ---
 
-## 💎 v8.0.1 'Quantum' Features
-- **🎨 Quantum Design Language**: Total web overhaul with high-fidelity glassmorphism and neural grid effects.
-- **🏬 Industrial Hub**: Integrated tactical shop display with automated role granting and inventory sync.
-- **📊 Global Leveling**: Re-engineered XP tracking with tactical rank progression (`/rank`).
-- **💰 Dynamic Economy**: High-stakes credit system with market liquidation and rob protocols (`/economy`).
-- **🛡️ Hardened Moderation**: Enterprise-grade ban/kick systems with multi-layered AutoMod protection.
-- **📡 Nova Telemetry**: Live system diagnostics, memory monitoring, and WebSocket health checks (`/system status`).
-- **🎫 Support Desk**: Integrated private ticket threads for technical assistance.
+## ✨ Features
+- **🎨 Modern Design**: Beautiful website with a clean, glass-like design.
+- **🏬 Server Shop**: A shop where members can buy roles and items using their money.
+- **📊 Leveling System**: A fun ranking system where members earn XP by chatting.
+- **💰 Economy System**: A full money system with games and trading.
+- **🛡️ Moderation Tools**: Easy-to-use tools to keep your server safe, like banning and kicking.
+- **📡 Bot Status**: Check the bot's health, speed, and status anytime.
+- **🎫 Support Tickets**: Private help channels for your members to contact staff.
 
 ---
 
@@ -35,8 +35,8 @@ Astra is an enterprise-grade Discord moderation, community engagement, and utili
 ### 1. Bot Hosting (Railway)
 Astra is optimized for **Railway**. Simply link your repository and add your environment variables (`DISCORD_TOKEN`, `CLIENT_ID`, etc.). The bot will automatically handle global command synchronization on startup.
 
-### 2. Website Hosting (Render)
-The Astra dashboard is designed for **Render Static Sites**. It includes full Safari compatibility and a live tactical terminal dashboard.
+### 2. Website Hosting
+The Astra website is easy to host on services like GitHub Pages or Render.
 
 ---
 
@@ -48,7 +48,7 @@ The Astra dashboard is designed for **Render Static Sites**. It includes full Sa
 
 ---
 
-## ⚖️ Legal & Security
-- **Proprietary Status**: Astra is **NOT open source**. This software is private property of the author. Redistribution, selling, or re-hosting without permission is strictly prohibited.
-- **Privacy**: We store minimal user data (User ID, XP, Balance) strictly for feature functionality.
-- **Security**: Hardened against SQL injection and permission escalation.
+## ⚖️ License & Privacy
+- **License**: Astra is private software. You may not redistribute or sell it without permission.
+- **Privacy**: We store very little user data (User ID, XP, Balance) just to make the bot features work.
+- **Security**: Built with security in mind to keep your server safe.

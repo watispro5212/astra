@@ -12,7 +12,7 @@ import { db } from '../core/database';
 const command: Command = {
     data: new SlashCommandBuilder()
         .setName('giveaway')
-        .setDescription('🎉 Host and manage community giveaways.')
+        .setDescription('🎉 Start and manage giveaways for your server.')
         .setDMPermission(false)
         .addSubcommand(sub =>
             sub.setName('start')
@@ -46,7 +46,7 @@ const command: Command = {
                 .setColor(0xf1c40f)
                 .setTitle('🎉 GIVEAWAY')
                 .setDescription(`**Prize:** ${prize}\n\nReact with 🎉 to enter!\n\n**Winners:** ${winners}\n**Ends:** <t:${Math.floor(endsAt.getTime() / 1000)}:R>`)
-                .setFooter({ text: `Hosted by ${interaction.user.tag} • Astra Giveaway Engine v7.0.0` })
+                .setFooter({ text: `Hosted by ${interaction.user.tag} • Astra Giveaway` })
                 .setTimestamp(endsAt);
 
             const channel = interaction.channel as TextChannel;
@@ -69,7 +69,7 @@ const command: Command = {
                 messageId, interaction.guildId
             );
             if (!giveaway) {
-                await interaction.editReply({ content: '❌ Giveaway not found in this sector.' });
+                await interaction.editReply({ content: '❌ Giveaway not found in this server.' });
                 return;
             }
 
@@ -106,7 +106,7 @@ const command: Command = {
                     .setColor(0x2ecc71)
                     .setTitle(subcommand === 'reroll' ? '🔄 Giveaway Rerolled' : '🎉 Giveaway Ended')
                     .setDescription(`**Prize:** ${giveaway.prize}\n**Winner(s):** ${mentions}\n\nCongratulations!`)
-                    .setFooter({ text: 'Astra Giveaway Engine • v7.0.0' })
+                    .setFooter({ text: 'Astra Giveaway' })
                     .setTimestamp();
 
                 await channel.send({ content: mentions, embeds: [resultEmbed] });

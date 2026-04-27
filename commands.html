@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Protocols — Astra</title>
-  <meta name="description" content="Astra v8.0.1 Quantum — complete command registry and tactical protocols.">
+  <title>Commands — Astra</title>
+  <meta name="description" content="Astra — See all our commands and how to use them.">
   <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
@@ -116,25 +116,25 @@
   <div class="astra-grid"></div>
 
   <!-- NAVIGATION -->
-  <nav class="nav-quantum" id="navbar">
+  <nav class="nav-astra" id="navbar">
     <div class="nav-container">
       <a href="index.html" class="nav-logo">
         <img src="assets/images/astra-logo.png" alt="Astra Logo" width="32" height="32">
         ASTRA
       </a>
       <div class="nav-links">
-        <a href="features.html" class="nav-link">Sectors</a>
-        <a href="commands.html" class="nav-link">Protocols</a>
+        <a href="features.html" class="nav-link">Features</a>
+        <a href="commands.html" class="nav-link">Commands</a>
         <a href="docs.html" class="nav-link">Docs</a>
-        <a href="changelog.html" class="nav-link">Mission Logs</a>
+        <a href="changelog.html" class="nav-link">Updates</a>
         <a href="support.html" class="nav-link">Support</a>
       </div>
     <div class="nav-actions">
       <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands" class="btn-astra btn-astra--outline" class="btn-small">
-        Guild Install
+        Add to Server
       </a>
       <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=1&scope=identify+applications.commands" class="btn-astra btn-astra--primary" class="btn-small">
-        User Install
+        Add to Profile
       </a>
     </div>
     </div>
@@ -143,8 +143,8 @@
   <!-- HEADER -->
   <header class="section" class="page-header">
     <div class="container">
-      <h1 class="h1-quantum text-gradient">TACTICAL PROTOCOLS</h1>
-      <p class="text-dim" class="max-w-700">The complete Astra v8.0.1 Quantum command registry — every slash command, its permission tier, and operational parameters.</p>
+      <h1 class="h1-astra text-gradient">BOT COMMANDS</h1>
+      <p class="text-dim" class="max-w-700">See all of Astra's commands, who can use them, and what they do.</p>
     </div>
   </header>
 
@@ -152,33 +152,33 @@
     <div class="filter-bar animate-reveal">
       <button class="filter-btn active" data-filter="all">All</button>
       <button class="filter-btn" data-filter="moderation">Moderation</button>
-      <button class="filter-btn" data-filter="leveling">Intelligence</button>
-      <button class="filter-btn" data-filter="economy">Fiscal</button>
-      <button class="filter-btn" data-filter="ticket">Logistics</button>
+      <button class="filter-btn" data-filter="leveling">Leveling</button>
+      <button class="filter-btn" data-filter="economy">Money</button>
+      <button class="filter-btn" data-filter="ticket">Tickets</button>
       <button class="filter-btn" data-filter="giveaway">Giveaways</button>
-      <button class="filter-btn" data-filter="welcome">Onboarding</button>
+      <button class="filter-btn" data-filter="welcome">Welcome</button>
       <button class="filter-btn" data-filter="utility">Utility</button>
       <button class="filter-btn" data-filter="system">System</button>
     </div>
 
     <!-- MODERATION -->
-    <div class="sector-label animate-reveal" data-sector="moderation">🛡️ Moderation Sector</div>
+    <div class="sector-label animate-reveal" data-sector="moderation">🛡️ Moderation Commands</div>
     
     <div class="command-row animate-reveal" data-sector="moderation">
       <div class="command-info">
         <div class="command-name">/mod warn</div>
-        <div class="command-desc">Issue a formal warning — logged as a case and DM'd to the target operative.</div>
+        <div class="command-desc">Warn a user — the warning is saved and sent to the user in a DM.</div>
       </div>
       <div class="command-meta">
         <span class="command-badge badge-staff">Staff</span>
-        <span class="command-badge badge-new">Quantum</span>
+        <span class="command-badge badge-new">New</span>
       </div>
     </div>
 
     <div class="command-row animate-reveal" data-sector="moderation">
       <div class="command-info">
         <div class="command-name">/mod ban</div>
-        <div class="command-desc">Permanently blacklist a member. Supports message history purging.</div>
+        <div class="command-desc">Ban a member from your server. You can also delete their recent messages.</div>
       </div>
       <div class="command-meta"><span class="command-badge badge-staff">Staff</span></div>
     </div>
@@ -186,85 +186,85 @@
     <div class="command-row animate-reveal" data-sector="moderation">
       <div class="command-info">
         <div class="command-name">/mod purge</div>
-        <div class="command-desc">Bulk-delete 1–100 messages. Automatically skips 14-day-old payloads.</div>
+        <div class="command-desc">Delete lots of messages at once (up to 100).</div>
       </div>
       <div class="command-meta"><span class="command-badge badge-staff">Staff</span></div>
     </div>
 
-    <!-- FISCAL -->
-    <div class="sector-label animate-reveal" data-sector="economy">💰 Fiscal Sector (Economy)</div>
+    <!-- MONEY -->
+    <div class="sector-label animate-reveal" data-sector="economy">💰 Money Commands</div>
 
     <div class="command-row animate-reveal" data-sector="economy">
       <div class="command-info">
         <div class="command-name">/economy daily</div>
-        <div class="command-desc">Claim your daily credit ration of 2,500 credits. Resets every 24 hours.</div>
+        <div class="command-desc">Get your daily money (2,500). Come back every 24 hours for more!</div>
       </div>
       <div class="command-meta">
-        <span class="command-badge badge-dm">DM Compatible</span>
-        <span class="command-badge badge-public">Public</span>
+        <span class="command-badge badge-dm">DM Ready</span>
+        <span class="command-badge badge-public">Everyone</span>
       </div>
     </div>
 
     <div class="command-row animate-reveal" data-sector="economy">
       <div class="command-info">
         <div class="command-name">/shop buy</div>
-        <div class="command-desc">Purchase tactical assets from the Industrial Hub. Roles granted instantly.</div>
+        <div class="command-desc">Buy items and roles from the server shop.</div>
       </div>
       <div class="command-meta">
-        <span class="command-badge badge-public">Public</span>
-        <span class="command-badge badge-new">Quantum</span>
+        <span class="command-badge badge-public">Everyone</span>
+        <span class="command-badge badge-new">New</span>
       </div>
     </div>
 
-    <!-- NEURAL -->
-    <div class="sector-label animate-reveal" data-sector="ai">🤖 Neural Intelligence Sector</div>
+    <!-- AI -->
+    <div class="sector-label animate-reveal" data-sector="ai">🤖 AI Assistant Commands</div>
 
     <div class="command-row animate-reveal" data-sector="ai">
       <div class="command-info">
         <div class="command-name">/ai model</div>
-        <div class="command-desc">Recalibrate the AI Sentinel's neural matrix. Choose between Quantum Flash or Quantum Pro.</div>
+        <div class="command-desc">Choose which AI you want to talk to.</div>
       </div>
       <div class="command-meta">
-        <span class="command-badge badge-dm">DM Compatible</span>
-        <span class="command-badge badge-public">Public</span>
-        <span class="command-badge badge-new">Quantum</span>
+        <span class="command-badge badge-dm">DM Ready</span>
+        <span class="command-badge badge-public">Everyone</span>
+        <span class="command-badge badge-new">New</span>
       </div>
     </div>
 
     <div class="command-row animate-reveal" data-sector="ai">
       <div class="command-info">
         <div class="command-name">/ai status</div>
-        <div class="command-desc">Diagnostic report for all neural nodes — check credit availability and node health.</div>
+        <div class="command-desc">Check if the AI systems are working correctly.</div>
       </div>
       <div class="command-meta">
-        <span class="command-badge badge-dm">DM Compatible</span>
-        <span class="command-badge badge-public">Public</span>
+        <span class="command-badge badge-dm">DM Ready</span>
+        <span class="command-badge badge-public">Everyone</span>
       </div>
     </div>
 
     <div class="command-row animate-reveal" data-sector="ai">
       <div class="command-info">
         <div class="command-name">/ai info</div>
-        <div class="command-desc">Retrieve technical specifications for available neural intelligence models.</div>
+        <div class="command-desc">See information about the different AI models.</div>
       </div>
-      <div class="command-meta"><span class="command-badge badge-public">Public</span></div>
+      <div class="command-meta"><span class="command-badge badge-public">Everyone</span></div>
     </div>
 
     <!-- SYSTEM -->
-    <div class="sector-label animate-reveal" data-sector="system">⚙️ System Sector</div>
+    <div class="sector-label animate-reveal" data-sector="system">⚙️ System Commands</div>
 
     <div class="command-row animate-reveal" data-sector="system">
       <div class="command-info">
         <div class="command-name">/info stats</div>
-        <div class="command-desc">Live system diagnostics — uptime, memory usage, latency, and guild metrics.</div>
+        <div class="command-desc">See how the bot is running — uptime, speed, and more.</div>
       </div>
-      <div class="command-meta"><span class="command-badge badge-public">Public</span></div>
+      <div class="command-meta"><span class="command-badge badge-public">Everyone</span></div>
     </div>
 
     <div class="command-row animate-reveal" data-sector="system">
       <div class="command-info">
         <div class="command-name">/setup_server</div>
-        <div class="command-desc">Full Apex hierarchy reconstruction. Purges and rebuilds the entire sector.</div>
+        <div class="command-desc">Automatically setup your server with channels and roles.</div>
       </div>
       <div class="command-meta"><span class="command-badge badge-admin">Admin</span></div>
     </div>
@@ -272,7 +272,7 @@
   </main>
 
   <!-- FOOTER -->
-  <footer class="footer-quantum">
+  <footer class="footer-astra">
     <div class="container">
       <div class="footer-grid">
         <div>
@@ -281,23 +281,23 @@
             ASTRA
           </div>
           <p class="footer-brand__desc">
-            Astra v8.0.1 'Quantum' — Engineered for the high-concurrency demands of elite Discord communities worldwide.
+            Astra — Built for Discord servers worldwide.
           </p>
         </div>
         <div>
-          <h4 class="footer-head">Architecture</h4>
+          <h4 class="footer-head">Features</h4>
           <div class="footer-links">
-            <a href="features.html" class="footer-link">Sectors</a>
-            <a href="commands.html" class="footer-link">Protocols</a>
+            <a href="features.html" class="footer-link">Features</a>
+            <a href="commands.html" class="footer-link">Commands</a>
             <a href="docs.html" class="footer-link">Docs</a>
           </div>
         </div>
         <div>
-          <h4 class="footer-head">Command</h4>
+          <h4 class="footer-head">Help</h4>
           <div class="footer-links">
             <a href="support.html" class="footer-link">Support Hub</a>
-            <a href="faq.html" class="footer-link">Field FAQ</a>
-            <a href="changelog.html" class="footer-link">Mission Logs</a>
+            <a href="faq.html" class="footer-link">FAQ</a>
+            <a href="changelog.html" class="footer-link">Updates</a>
           </div>
         </div>
         <div>
@@ -310,14 +310,13 @@
       </div>
       <div class="footer-bottom">
         <span>&copy; 2026 Astra. All rights reserved.</span>
-        <span>Astra Proprietary License v2.5</span>
       </div>
     </div>
   </footer>
 
   <script>
     window.addEventListener('scroll', () => {
-      document.getElementById('navbar').classList.toggle('nav-quantum--scrolled', window.scrollY > 50);
+      document.getElementById('navbar').classList.toggle('nav-astra--scrolled', window.scrollY > 50);
     });
 
     const observer = new IntersectionObserver((entries) => {

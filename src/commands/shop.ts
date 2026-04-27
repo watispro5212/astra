@@ -22,66 +22,66 @@ function groupBy<T>(arr: T[], key: (item: T) => string): Record<string, T[]> {
 }
 
 const TYPE_LABELS: Record<string, string> = {
-    passive:    '📊 Passive Income',
-    consumable: '🎁 Consumable',
-    role:       '🎭 Role Reward',
+    passive:    '📊 Money Maker',
+    consumable: '🎁 Item',
+    role:       '🎭 Role',
 };
 
 const command: Command = {
     data: new SlashCommandBuilder()
         .setName('shop')
-        .setDescription('🛒 Access the Apex Marketplace.')
+        .setDescription('🛒 Open the bot shop.')
         .setDMPermission(false)
         .addSubcommand(sub =>
             sub.setName('view')
-               .setDescription('Browse all available items in the marketplace.')
+               .setDescription('See what you can buy in the shop.')
         )
         .addSubcommand(sub =>
             sub.setName('buy')
-               .setDescription('Purchase an item from the marketplace.')
+               .setDescription('Buy an item from the shop.')
                .addIntegerOption(opt => opt.setName('id').setDescription('Target item ID.').setRequired(true))
         )
         .addSubcommand(sub =>
             sub.setName('sell')
-               .setDescription(`Sell back an owned item for ${SELL_REFUND_RATE * 100}% of its purchase price.`)
+               .setDescription(`Sell an item you have for ${SELL_REFUND_RATE * 100}% of its price.`)
                .addIntegerOption(opt => opt.setName('id').setDescription('Item ID from your inventory.').setRequired(true))
         )
         .addSubcommand(sub =>
             sub.setName('inventory')
-               .setDescription('View your owned assets and passive income stats.')
+               .setDescription('See your items and how much money they make.')
         )
         .addSubcommandGroup(group =>
             group.setName('admin')
-                 .setDescription('🛡️ Administrative inventory management.')
+                 .setDescription('🛡️ Shop management (Admins only).')
                  .addSubcommand(sub =>
                     sub.setName('add')
-                       .setDescription('Add a new item to the marketplace.')
+                       .setDescription('Add a new item to the shop.')
                        .addStringOption(opt => opt.setName('name').setDescription('Item name.').setRequired(true))
                        .addIntegerOption(opt => opt.setName('price').setDescription('Credit cost.').setRequired(true).setMinValue(1))
                        .addStringOption(opt => opt.setName('item-type').setDescription('Item category.').addChoices(
-                           { name: '📊 Passive Income', value: 'passive' },
-                           { name: '🎁 Consumable',     value: 'consumable' },
-                           { name: '🎭 Role Reward',    value: 'role' }
+                           { name: '📊 Money Maker', value: 'passive' },
+                           { name: '🎁 Item',        value: 'consumable' },
+                           { name: '🎭 Role',        value: 'role' }
                        ))
                        .addRoleOption(opt => opt.setName('role').setDescription('Role to grant (role items only).'))
                        .addStringOption(opt => opt.setName('emoji').setDescription('Display emoji for the item (e.g. 🛸).'))
-                       .addIntegerOption(opt => opt.setName('production-rate').setDescription('Passive income per hour (passive items only).').setMinValue(0))
+                       .addIntegerOption(opt => opt.setName('production-rate').setDescription('Money per hour (money makers only).').setMinValue(0))
                        .addStringOption(opt => opt.setName('description').setDescription('Item description.'))
                        .addIntegerOption(opt => opt.setName('stock').setDescription('Stock quantity (-1 = unlimited).'))
                  )
                  .addSubcommand(sub =>
                     sub.setName('remove')
-                       .setDescription('Decommission an item from the marketplace.')
+                       .setDescription('Remove an item from the shop.')
                        .addIntegerOption(opt => opt.setName('id').setDescription('Target item ID.').setRequired(true))
                  )
                  .addSubcommand(sub =>
                     sub.setName('edit')
-                       .setDescription('Edit an existing marketplace item.')
+                       .setDescription('Edit an item in the shop.')
                        .addIntegerOption(opt => opt.setName('id').setDescription('Item ID to edit.').setRequired(true))
                        .addIntegerOption(opt => opt.setName('price').setDescription('New price.').setMinValue(1))
                        .addIntegerOption(opt => opt.setName('stock').setDescription('New stock quantity (-1 = unlimited).'))
                        .addStringOption(opt => opt.setName('description').setDescription('New description.'))
-                       .addIntegerOption(opt => opt.setName('production-rate').setDescription('New passive income rate per hour.').setMinValue(0))
+                       .addIntegerOption(opt => opt.setName('production-rate').setDescription('New money per hour rate.').setMinValue(0))
                        .addStringOption(opt => opt.setName('emoji').setDescription('New display emoji.'))
                  )
         ),
@@ -94,7 +94,7 @@ const command: Command = {
         // ── ADMIN ─────────────────────────────────────────────────────────────
         if (group === 'admin') {
             if (!interaction.memberPermissions?.has(PermissionFlagsBits.Administrator)) {
-                return interaction.reply({ content: '❌ **CLEARANCE DENIED**: Administrator authority required.', ephemeral: true });
+                return interaction.reply({ content: '❌ **ACCESS DENIED**: You need to be an Admin.', ephemeral: true });
             }
 
             if (subcommand === 'add') {
@@ -112,7 +112,7 @@ const command: Command = {
                     guildId, name, price, type, role?.id || null, emoji, rate, desc, stock
                 );
 
-                return interaction.reply({ content: `✅ Successfully added **${name}** to the marketplace.`, flags: [MessageFlags.Ephemeral] });
+                return interaction.reply({ content: `✅ Successfully added **${name}** to the shop.`, flags: [MessageFlags.Ephemeral] });
             }
 
             if (subcommand === 'remove') {
@@ -121,7 +121,7 @@ const command: Command = {
                 if (!item) return interaction.reply({ content: '❌ Item not found.', ephemeral: true });
 
                 await db.execute('DELETE FROM shop_items WHERE id = ? AND guild_id = ?', id, guildId);
-                return interaction.reply({ content: `✅ Item **${item.name}** (ID: \`${id}\`) has been decommissioned.`, flags: [MessageFlags.Ephemeral] });
+                return interaction.reply({ content: `✅ Item **${item.name}** (ID: \`${id}\`) has been removed.`, flags: [MessageFlags.Ephemeral] });
             }
 
             if (subcommand === 'edit') {
@@ -146,11 +146,11 @@ const command: Command = {
                         .setTitle('✏️ ITEM UPDATED')
                         .setDescription(`${newEmoji} **${item.name}** (ID: \`${id}\`) has been updated.`)
                         .addFields(
-                            { name: '💰 Price',  value: `\`${newPrice.toLocaleString()} cr\``,          inline: true },
+                            { name: '💰 Price',  value: `\`${newPrice.toLocaleString()} money\``,          inline: true },
                             { name: '📦 Stock',  value: `\`${newStock === -1 ? '∞' : newStock}\``,       inline: true },
-                            { name: '📊 Yield',  value: `\`${newRate > 0 ? `${newRate} cr/hr` : 'None'}\``, inline: true }
+                            { name: '📊 Money Rate',  value: `\`${newRate > 0 ? `${newRate} money/hr` : 'None'}\``, inline: true }
                         )
-                        .setFooter({ text: 'Astra Commerce Division v8.0.1 Quantum' })],
+                        .setFooter({ text: `Astra Shop` })],
                     flags: [MessageFlags.Ephemeral]
                 });
             }
@@ -167,13 +167,13 @@ const command: Command = {
             );
 
             const embed = new EmbedBuilder()
-                .setTitle(`🛒 APEX MARKETPLACE — ${interaction.guild!.name}`)
+                .setTitle(`🛒 BOT SHOP — ${interaction.guild!.name}`)
                 .setColor(0xf1c40f)
-                .setFooter({ text: `${items.length} item(s) available • Astra Commerce Division v8.0.1 Quantum` })
+                .setFooter({ text: `${items.length} item(s) available • Astra Shop` })
                 .setTimestamp();
 
             if (items.length === 0) {
-                embed.setDescription('The warehouse is empty. An administrator can add items with `/shop admin add`.');
+                embed.setDescription('The shop is empty. An admin can add items with `/shop admin add`.');
             } else {
                 const grouped = groupBy(items, i => i.item_type ?? 'consumable');
                 const sections: string[] = [];
@@ -182,8 +182,8 @@ const command: Command = {
                     const header = `**${TYPE_LABELS[type] ?? '📦 Items'}**`;
                     const lines = group.map(i => {
                         const stockStr = i.stock === -1 ? '∞' : `${i.stock}`;
-                        const yieldStr = i.production_rate > 0 ? ` · 📊 \`${i.production_rate} cr/hr\`` : '';
-                        return `> ${i.emoji ?? '📦'} **[${i.id}] ${i.name}** — \`${i.price.toLocaleString()} cr\` · Stock: \`${stockStr}\`${yieldStr}\n> *${i.description}*`;
+                        const yieldStr = i.production_rate > 0 ? ` · 📊 \`${i.production_rate} money/hr\`` : '';
+                        return `> ${i.emoji ?? '📦'} **[${i.id}] ${i.name}** — \`${i.price.toLocaleString()} money\` · Stock: \`${stockStr}\`${yieldStr}\n> *${i.description}*`;
                     });
                     sections.push(`${header}\n${lines.join('\n')}`);
                 }
@@ -199,15 +199,15 @@ const command: Command = {
 
             const item = await db.fetchOne('SELECT * FROM shop_items WHERE id = ? AND guild_id = ?', id, guildId);
 
-            if (!item) return interaction.editReply({ content: '❌ **INVALID TARGET**: Item ID not found in current sector marketplace.' });
-            if (item.stock === 0) return interaction.editReply({ content: '❌ **OUT OF STOCK**: This item is no longer available.' });
+            if (!item) return interaction.editReply({ content: '❌ **ERROR**: Item not found in this shop.' });
+            if (item.stock === 0) return interaction.editReply({ content: '❌ **OUT OF STOCK**: This item is all gone.' });
 
             const userData = await db.fetchOne('SELECT balance FROM users WHERE user_id = ?', interaction.user.id);
             const balance = userData?.balance ?? 0;
 
             if (balance < item.price) {
                 return interaction.editReply({
-                    content: `❌ **INSUFFICIENT CREDITS**: You need \`${item.price.toLocaleString()} cr\`. Your balance: \`${balance.toLocaleString()} cr\``
+                    content: `❌ **NOT ENOUGH MONEY**: You need \`${item.price.toLocaleString()} money\`. You have: \`${balance.toLocaleString()} money\``
                 });
             }
 
@@ -220,7 +220,7 @@ const command: Command = {
                     const pending = Math.floor(hoursElapsed * totalRate);
                     if (pending > 0) {
                         await db.execute('UPDATE users SET balance = balance + ? WHERE user_id = ?', pending, interaction.user.id);
-                        logger.info(`Shop: Auto-harvested ${pending} cr for ${interaction.user.id} before item purchase catchup.`);
+                        logger.info(`Shop: Auto-harvested ${pending} money for ${interaction.user.id} before item purchase catchup.`);
                     }
                 }
             }
@@ -251,7 +251,7 @@ const command: Command = {
                     if (member.roles.cache.has(role.id)) {
                         // Refund if they already had the role
                         await db.execute('UPDATE users SET balance = balance + ? WHERE user_id = ?', item.price, interaction.user.id);
-                        return interaction.editReply({ content: `❌ **AUTHORITY CONFLICT**: You already possess the **${role.name}** clearance. Credits refunded.` });
+                        return interaction.editReply({ content: `❌ **ALREADY OWNED**: You already have the **${role.name}** role. Money refunded.` });
                     }
                     await member.roles.add(role).catch(err => {
                         logger.error(`Failed to grant role ${item.role_id} to ${interaction.user.id}: ${err}`);
@@ -264,13 +264,13 @@ const command: Command = {
             return interaction.editReply({
                 embeds: [new EmbedBuilder()
                     .setColor(0x2ecc71)
-                    .setTitle('✅ ACQUISITION CONFIRMED')
-                    .setDescription(`${item.emoji ?? '📦'} You purchased **${item.name}**.${item.production_rate > 0 ? `\n\n📊 This asset generates \`${item.production_rate} cr/hr\`. Use \`/economy harvest\` to collect.` : ''}`)
+                    .setTitle('✅ BUY SUCCESSFUL')
+                    .setDescription(`${item.emoji ?? '📦'} You bought **${item.name}**.${item.production_rate > 0 ? `\n\n📊 This item makes \`${item.production_rate} cr/hr\`. Use \`/economy harvest\` to collect.` : ''}`)
                     .addFields(
-                        { name: '💸 Spent',         value: `\`-${item.price.toLocaleString()} cr\``, inline: true },
-                        { name: '💳 New Balance',    value: `\`${(after?.balance ?? 0).toLocaleString()} cr\``, inline: true }
+                        { name: '💸 Spent',         value: `\`-${item.price.toLocaleString()} money\``, inline: true },
+                        { name: '💳 New Balance',    value: `\`${(after?.balance ?? 0).toLocaleString()} money\``, inline: true }
                     )
-                    .setFooter({ text: 'Astra Commerce Division v8.0.1 Quantum' })]
+                    .setFooter({ text: `Astra Shop` })]
             });
 
         // ── SELL ──────────────────────────────────────────────────────────────
@@ -317,13 +317,13 @@ const command: Command = {
             return interaction.editReply({
                 embeds: [new EmbedBuilder()
                     .setColor(0x3498db)
-                    .setTitle('💱 ASSET SOLD')
-                    .setDescription(`${invEntry.emoji ?? '📦'} **${invEntry.name}** has been liquidated at **${SELL_REFUND_RATE * 100}%** market value.`)
+                    .setTitle('💱 ITEM SOLD')
+                    .setDescription(`${invEntry.emoji ?? '📦'} **${invEntry.name}** has been sold for **${SELL_REFUND_RATE * 100}%** of its price.`)
                     .addFields(
-                        { name: '💰 Refund',      value: `\`+${refund.toLocaleString()} cr\``, inline: true },
-                        { name: '💳 New Balance', value: `\`${(after?.balance ?? 0).toLocaleString()} cr\``, inline: true }
+                        { name: '💰 Refund',      value: `\`+${refund.toLocaleString()} money\``, inline: true },
+                        { name: '💳 New Balance', value: `\`${(after?.balance ?? 0).toLocaleString()} money\``, inline: true }
                     )
-                    .setFooter({ text: 'Sell price is 50% of purchase price. • Astra Commerce Division v8.0.1 Quantum' })]
+                    .setFooter({ text: `Sell price is half of what you paid. • Astra Shop` })]
             });
 
         // ── INVENTORY ─────────────────────────────────────────────────────────
@@ -338,7 +338,7 @@ const command: Command = {
             `, interaction.user.id);
 
             if (!inventory || inventory.length === 0) {
-                return interaction.editReply({ content: '❌ Your inventory is empty. Visit `/shop view` to browse available assets.' });
+                return interaction.editReply({ content: '❌ Your inventory is empty. Visit `/shop view` to see what you can buy.' });
             }
 
             const grouped = groupBy(inventory, i => i.item_type ?? 'consumable');
@@ -352,7 +352,7 @@ const command: Command = {
                         const pending = Math.floor(
                             ((Date.now() - new Date(inv.last_harvest).getTime()) / 3600000) * inv.production_rate * (inv.quantity || 1)
                         );
-                        extra = ` · 📊 \`${inv.production_rate} cr/hr\` · Pending: \`${pending.toLocaleString()} cr\``;
+                        extra = ` · 📊 \`${inv.production_rate} money/hr\` · Pending: \`${pending.toLocaleString()} money\``;
                     }
                     return `> ${inv.emoji ?? '📦'} **${inv.name}** ×${inv.quantity}${extra}`;
                 });
@@ -362,9 +362,9 @@ const command: Command = {
             return interaction.editReply({
                 embeds: [new EmbedBuilder()
                     .setColor(0x3498db)
-                    .setTitle(`📦 ASSET INVENTORY — ${interaction.user.username}`)
+                    .setTitle(`📦 YOUR ITEMS — ${interaction.user.username}`)
                     .setDescription(sections.join('\n\n'))
-                    .setFooter({ text: 'Use /economy harvest to collect passive income • /shop sell to liquidate assets' })
+                    .setFooter({ text: 'Use /economy harvest to collect money • /shop sell to sell items' })
                     .setTimestamp()]
             });
         }

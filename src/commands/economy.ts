@@ -13,14 +13,14 @@ const SLOTS_COST   = 50;
 const GAMBLE_MIN   = 100;
 
 const WORK_RESPONSES = [
-    '🛰️ You successfully calibrated a deep-space satellite array.',
-    '🕵️ You intercepted and decrypted a black-market data stream.',
-    '🛡️ You coordinated a tactical perimeter defense for the outer sector.',
-    '🧪 You synthesized a new batch of stabilization compounds in the lab.',
-    '🔧 You performed emergency maintenance on the core propulsion systems.',
-    '📊 You completed a comprehensive logistics audit for the Apex warehouse.',
-    '🚀 You piloted a resupply drone through the debris field successfully.',
-    '🔬 You cracked an alien cipher and recovered classified data.',
+    '🛰️ You fixed a satellite.',
+    '🕵️ You found some lost data.',
+    '🛡️ You helped guard the server.',
+    '🧪 You made some medicine in the lab.',
+    '🔧 You fixed the engines.',
+    '📊 You finished some paperwork.',
+    '🚀 You flew a delivery drone.',
+    '🔬 You solved a puzzle and got some info.',
 ];
 
 const SLOT_REELS = ['🔫', '💎', '⚡', '🪙', '🛸', '💀'];
@@ -47,37 +47,37 @@ function formatCooldown(ms: number): string {
 const command: Command = {
     data: new SlashCommandBuilder()
         .setName('economy')
-        .setDescription('💰 Astra Fiscal & Extraction Systems.')
+        .setDescription('💰 Bot money and mining system.')
         .setDMPermission(true)
         .addSubcommand(sub =>
             sub.setName('daily')
-               .setDescription('Claim your daily credit allocation.')
+               .setDescription('Get your daily money.')
         )
         .addSubcommand(sub =>
             sub.setName('work')
-               .setDescription('Complete an assignment for tactical credit generation.')
+               .setDescription('Work for some money.')
         )
         .addSubcommand(sub =>
             sub.setName('mine')
-               .setDescription('⛏️ High-risk tactical extraction protocol.')
+               .setDescription('⛏️ Go mining (Risky!).')
         )
         .addSubcommand(sub =>
             sub.setName('harvest')
-               .setDescription('🌾 Collect passive income from your yield-bearing assets.')
+               .setDescription('🌾 Collect money from your items.')
         )
         .addSubcommand(sub =>
             sub.setName('rob')
-               .setDescription('🦹 Attempt to steal credits from another operative.')
-               .addUserOption(opt => opt.setName('user').setDescription('Target operative.').setRequired(true))
+               .setDescription('🦹 Try to steal money from someone.')
+               .addUserOption(opt => opt.setName('user').setDescription('The person to rob.').setRequired(true))
         )
         .addSubcommand(sub =>
             sub.setName('gamble')
-               .setDescription('🎰 Wager credits — 45% chance to win 1.8× your bet.')
-               .addIntegerOption(opt => opt.setName('amount').setDescription(`Amount of credits to wager (min ${GAMBLE_MIN}).`).setRequired(true).setMinValue(GAMBLE_MIN))
+               .setDescription('🎰 Bet some money — 45% chance to win big!')
+               .addIntegerOption(opt => opt.setName('amount').setDescription(`How much money to bet (min ${GAMBLE_MIN}).`).setRequired(true).setMinValue(GAMBLE_MIN))
         )
         .addSubcommand(sub =>
             sub.setName('slots')
-               .setDescription(`🎰 Spin the slot machine (costs ${SLOTS_COST} credits per spin).`)
+               .setDescription(`🎰 Spin the slot machine (costs ${SLOTS_COST} money per spin).`)
         )
         .addSubcommand(sub =>
             sub.setName('coinflip')
@@ -90,32 +90,32 @@ const command: Command = {
         )
         .addSubcommand(sub =>
             sub.setName('balance')
-               .setDescription('View your current fiscal status.')
-               .addUserOption(opt => opt.setName('user').setDescription('Target operative.'))
+               .setDescription('Check how much money you have.')
+               .addUserOption(opt => opt.setName('user').setDescription('The person to check.'))
         )
         .addSubcommand(sub =>
             sub.setName('pay')
-               .setDescription('Transfer credits to another operative.')
-               .addUserOption(opt => opt.setName('user').setDescription('Target recipient.').setRequired(true))
-               .addIntegerOption(opt => opt.setName('amount').setDescription('Credit amount.').setRequired(true).setMinValue(1))
+               .setDescription('Send money to someone.')
+               .addUserOption(opt => opt.setName('user').setDescription('The person to pay.').setRequired(true))
+               .addIntegerOption(opt => opt.setName('amount').setDescription('How much to send.').setRequired(true).setMinValue(1))
         )
         .addSubcommand(sub =>
             sub.setName('leaderboard')
-               .setDescription('View the top wealth rankings.')
+               .setDescription('See who is the richest.')
         )
         .addSubcommand(sub =>
             sub.setName('stats')
-               .setDescription('📊 View your fiscal statistics and performance report.')
-               .addUserOption(opt => opt.setName('user').setDescription('Target operative.'))
+               .setDescription('📊 See your money stats.')
+               .addUserOption(opt => opt.setName('user').setDescription('The person to check.'))
         )
         .addSubcommand(sub =>
             sub.setName('bank')
-               .setDescription('🏦 Access your secure fiscal vault.')
+               .setDescription('🏦 Put your money in the bank or take it out.')
                .addStringOption(opt => opt.setName('action').setDescription('Deposit or withdraw.').setRequired(true).addChoices(
                    { name: 'Deposit', value: 'deposit' },
                    { name: 'Withdraw', value: 'withdraw' }
                ))
-               .addIntegerOption(opt => opt.setName('amount').setDescription('Credit amount.').setRequired(true).setMinValue(1))
+               .addIntegerOption(opt => opt.setName('amount').setDescription('How much money.').setRequired(true).setMinValue(1))
         ),
 
     async execute(interaction: ChatInputCommandInteraction) {
@@ -131,9 +131,9 @@ const command: Command = {
                 const timeLeft = 86400000 - (now - parseInt(user.last_daily));
                 const embed = new EmbedBuilder()
                     .setColor(THEME.DANGER)
-                    .setTitle('🚨 ALLOCATION DENIED')
-                    .setDescription(`Your next credit ration is available in **${formatCooldown(timeLeft)}**.`)
-                    .setFooter({ text: `Astra Fiscal Protocol • ${VERSION}` });
+                    .setTitle('🚨 WAIT A BIT')
+                    .setDescription(`You can get more money in **${formatCooldown(timeLeft)}**.`)
+                    .setFooter({ text: `Astra Money` });
                 return interaction.editReply({ embeds: [embed] });
             }
 
@@ -156,14 +156,14 @@ const command: Command = {
 
             const embed = new EmbedBuilder()
                 .setColor(THEME.SUCCESS)
-                .setTitle('💰 DAILY CREDITS ALLOCATED')
-                .setDescription(`You have claimed your daily allocation. Consistent activity has maintained a **${streak} day streak**.`)
+                .setTitle('💰 DAILY MONEY RECEIVED')
+                .setDescription(`You got your daily money. You have a **${streak} day streak**!`)
                 .addFields(
-                    { name: '📈 Base Amount', value: `\`${DAILY_AMOUNT.toLocaleString()} cr\``, inline: true },
-                    { name: '🔥 Streak Bonus', value: `\`+${streakBonus.toLocaleString()} cr\``, inline: true },
-                    { name: '💳 New Balance', value: `\`${(after?.balance ?? totalDaily).toLocaleString()} cr\``, inline: true }
+                    { name: '📈 Amount', value: `\`${DAILY_AMOUNT.toLocaleString()} money\``, inline: true },
+                    { name: '🔥 Streak Bonus', value: `\`+${streakBonus.toLocaleString()} money\``, inline: true },
+                    { name: '💳 New Balance', value: `\`${(after?.balance ?? totalDaily).toLocaleString()} money\``, inline: true }
                 )
-                .setFooter({ text: `Astra Fiscal Protocol • ${PROTOCOL}` });
+                .setFooter({ text: `Astra Money` });
             return interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'work') {
@@ -175,9 +175,9 @@ const command: Command = {
                 const timeLeft = WORK_COOLDOWN_MS - (now - parseInt(user.last_work));
                 const embed = new EmbedBuilder()
                     .setColor(THEME.DANGER)
-                    .setTitle('🚨 ASSIGNMENT UNAVAILABLE')
-                    .setDescription(`Next deployment in **${formatCooldown(timeLeft)}**.\nRest is required between tactical assignments.`)
-                    .setFooter({ text: `Astra Work Protocol • ${VERSION}` });
+                    .setTitle('🚨 NOT READY YET')
+                    .setDescription(`You can work again in **${formatCooldown(timeLeft)}**.\nTake a break!`)
+                    .setFooter({ text: `Astra Work` });
                 return interaction.editReply({ embeds: [embed] });
             }
 
@@ -192,13 +192,13 @@ const command: Command = {
 
             const embed = new EmbedBuilder()
                 .setColor(THEME.PRIMARY)
-                .setTitle('🔧 ASSIGNMENT COMPLETE')
+                .setTitle('🔧 WORK DONE')
                 .setDescription(`*${task}*`)
                 .addFields(
-                    { name: '💰 Credits Earned', value: `\`+${earned.toLocaleString()} cr\``, inline: true },
-                    { name: '💳 New Balance', value: `\`${(after?.balance ?? earned).toLocaleString()} cr\``, inline: true }
+                    { name: '💰 Money Earned', value: `\`+${earned.toLocaleString()} money\``, inline: true },
+                    { name: '💳 New Balance', value: `\`${(after?.balance ?? earned).toLocaleString()} money\``, inline: true }
                 )
-                .setFooter({ text: 'Deployment successful.' });
+                .setFooter({ text: 'Good job!' });
             return interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'mine') {
@@ -210,9 +210,9 @@ const command: Command = {
                 const timeLeft = MINE_COOLDOWN_MS - (now - parseInt(user.last_mine));
                 const embed = new EmbedBuilder()
                     .setColor(THEME.DANGER)
-                    .setTitle('🚨 EXTRACTION UNAVAILABLE')
-                    .setDescription(`Coolant systems active. Ready in **${formatCooldown(timeLeft)}**.`)
-                    .setFooter({ text: `Astra Mining Protocol • ${VERSION}` });
+                    .setTitle('🚨 MINING NOT READY')
+                    .setDescription(`The tools are cooling down. Ready in **${formatCooldown(timeLeft)}**.`)
+                    .setFooter({ text: `Astra Mining` });
                 return interaction.editReply({ embeds: [embed] });
             }
 
@@ -229,16 +229,16 @@ const command: Command = {
             const after = await db.fetchOne('SELECT balance FROM users WHERE user_id = ?', userId);
 
             const embed = new EmbedBuilder()
-                .setTitle(success ? '⛏️ EXTRACTION SUCCESS' : '🚨 EXTRACTION FAILURE')
+                .setTitle(success ? '⛏️ MINING SUCCESS' : '🚨 MINING FAILED')
                 .setColor(success ? THEME.SUCCESS : THEME.DANGER)
                 .setDescription(success
-                    ? `Tactical extraction complete. Sub-sector core yielded a rich vein.`
-                    : `Extraction probe malfunctioned. Infrastructure repairs incurred a cost.`)
+                    ? `You found a lot of crystals while mining!`
+                    : `Your tools broke while mining. It cost money to fix them.`)
                 .addFields(
-                    { name: success ? '💰 Yield' : '🔧 Repair Cost', value: `\`${success ? '+' : ''}${yieldAmount.toLocaleString()} cr\``, inline: true },
-                    { name: '💳 New Balance', value: `\`${(after?.balance ?? 0).toLocaleString()} cr\``, inline: true }
+                    { name: success ? '💰 Found' : '🔧 Repair Cost', value: `\`${success ? '+' : ''}${yieldAmount.toLocaleString()} money\``, inline: true },
+                    { name: '💳 New Balance', value: `\`${(after?.balance ?? 0).toLocaleString()} money\``, inline: true }
                 )
-                .setFooter({ text: `Astra Mining Protocol • ${PROTOCOL}` });
+                .setFooter({ text: `Astra Mining` });
             return interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'harvest') {
@@ -251,7 +251,7 @@ const command: Command = {
             `, userId);
 
             if (!inventory || inventory.length === 0) {
-                return interaction.editReply({ content: '❌ You own no yield-bearing assets. Visit `/shop view` to acquire passive income items.' });
+                return interaction.editReply({ content: '❌ You don\'t own anything that makes money. Go to the `/shop view` to buy some items!' });
             }
 
             let totalHarvest = 0;
@@ -265,7 +265,7 @@ const command: Command = {
 
                 if (pendingCredits > 0) {
                     totalHarvest += pendingCredits;
-                    lines.push(`${inv.emoji ?? '📦'} **${inv.name}** ×${inv.quantity} — \`+${pendingCredits.toLocaleString()} cr\``);
+                    lines.push(`${inv.emoji ?? '📦'} **${inv.name}** ×${inv.quantity} — \`+${pendingCredits.toLocaleString()} money\``);
                     
                     // Fixed fractional loss
                     const exactMsGained = (pendingCredits / totalRate) * 3600000;
@@ -276,7 +276,7 @@ const command: Command = {
             }
 
             if (totalHarvest === 0) {
-                return interaction.editReply({ content: '⏳ Your assets have not generated enough credits to harvest yet.' });
+                return interaction.editReply({ content: '⏳ Your items haven\'t made any money yet. Check back later!' });
             }
 
             await db.execute(
@@ -287,20 +287,20 @@ const command: Command = {
 
             const embed = new EmbedBuilder()
                 .setColor(THEME.SUCCESS)
-                .setTitle('🌾 PASSIVE INCOME HARVESTED')
+                .setTitle('🌾 MONEY COLLECTED')
                 .setDescription(lines.join('\n'))
                 .addFields(
-                    { name: '💰 Total Collected', value: `\`+${totalHarvest.toLocaleString()} cr\``, inline: true },
-                    { name: '💳 New Balance', value: `\`${(after?.balance ?? 0).toLocaleString()} cr\``, inline: true }
+                    { name: '💰 Total Collected', value: `\`+${totalHarvest.toLocaleString()} money\``, inline: true },
+                    { name: '💳 New Balance', value: `\`${(after?.balance ?? 0).toLocaleString()} money\``, inline: true }
                 )
-                .setFooter({ text: `Industrial Yield Engine • ${VERSION}` });
+                .setFooter({ text: `Astra Money` });
             return interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'rob') {
             await interaction.deferReply();
             const target = interaction.options.getUser('user')!;
-            if (target.id === userId) return interaction.editReply({ content: '❌ Self-robbery prohibited.' });
-            if (target.bot) return interaction.editReply({ content: '❌ Cannot rob automated systems.' });
+            if (target.id === userId) return interaction.editReply({ content: '❌ You can\'t rob yourself!' });
+            if (target.bot) return interaction.editReply({ content: '❌ You can\'t rob a bot!' });
 
             const robberData = await db.fetchOne('SELECT balance, last_rob FROM users WHERE user_id = ?', userId);
             const now = Date.now();
@@ -309,9 +309,9 @@ const command: Command = {
                 const timeLeft = ROB_COOLDOWN_MS - (now - parseInt(robberData.last_rob));
                 const embed = new EmbedBuilder()
                     .setColor(THEME.DANGER)
-                    .setTitle('🚨 OPERATION DENIED')
-                    .setDescription(`Intelligence tracking active. Lay low for **${formatCooldown(timeLeft)}**.`)
-                    .setFooter({ text: `Astra Covert Ops • ${VERSION}` });
+                    .setTitle('🚨 CAN\'T ROB YET')
+                    .setDescription(`The police are watching. Wait **${formatCooldown(timeLeft)}**.`)
+                    .setFooter({ text: `Astra Robbing` });
                 return interaction.editReply({ embeds: [embed] });
             }
 
@@ -319,7 +319,7 @@ const command: Command = {
             const targetBalance = targetData?.balance ?? 0;
 
             if (targetBalance < 200) {
-                return interaction.editReply({ content: `❌ **${target.username}** has insufficient funds to warrant a heist.` });
+                return interaction.editReply({ content: `❌ **${target.username}** doesn't have enough money to rob.` });
             }
 
             const success = Math.random() < 0.40;
@@ -336,13 +336,13 @@ const command: Command = {
 
                 const embed = new EmbedBuilder()
                     .setColor(THEME.SECONDARY)
-                    .setTitle('🦹 HEIST SUCCESSFUL')
-                    .setDescription(`You successfully breached **${target.username}**'s security.`)
+                    .setTitle('🦹 ROBBED!')
+                    .setDescription(`You successfully stole from **${target.username}**.`)
                     .addFields(
-                        { name: '💰 Stolen', value: `\`+${stolen.toLocaleString()} cr\``, inline: true },
-                        { name: '💳 Balance', value: `\`${(after?.balance ?? 0).toLocaleString()} cr\``, inline: true }
+                        { name: '💰 Stolen', value: `\`+${stolen.toLocaleString()} money\``, inline: true },
+                        { name: '💳 Balance', value: `\`${(after?.balance ?? 0).toLocaleString()} money\``, inline: true }
                     )
-                    .setFooter({ text: 'Astra Black Division' });
+                    .setFooter({ text: 'Astra Robbing' });
                 return interaction.editReply({ embeds: [embed] });
             } else {
                 const robberBalance = robberData?.balance ?? 0;
@@ -352,13 +352,13 @@ const command: Command = {
 
                 const embed = new EmbedBuilder()
                     .setColor(THEME.DANGER)
-                    .setTitle('🚨 HEIST FAILED')
-                    .setDescription(`You were caught and fined.`)
+                    .setTitle('🚨 ROBBERY FAILED')
+                    .setDescription(`You were caught and had to pay a fine.`)
                     .addFields(
-                        { name: '🔧 Fine', value: `\`-${fine.toLocaleString()} cr\``, inline: true },
-                        { name: '💳 Balance', value: `\`${(after?.balance ?? 0).toLocaleString()} cr\``, inline: true }
+                        { name: '🔧 Fine', value: `\`-${fine.toLocaleString()} money\``, inline: true },
+                        { name: '💳 Balance', value: `\`${(after?.balance ?? 0).toLocaleString()} money\``, inline: true }
                     )
-                    .setFooter({ text: 'Lockout protocol applied.' });
+                    .setFooter({ text: 'Don\'t get caught next time!' });
                 return interaction.editReply({ embeds: [embed] });
             }
 
@@ -368,7 +368,7 @@ const command: Command = {
             const userData = await db.fetchOne('SELECT balance FROM users WHERE user_id = ?', userId);
             const balance = userData?.balance ?? 0;
 
-            if (balance < amount) return interaction.editReply({ content: `❌ Insufficient credits.` });
+            if (balance < amount) return interaction.editReply({ content: `❌ You don't have enough money.` });
 
             const win = Math.random() < 0.45;
             const delta = win ? Math.floor(amount * 1.8) - amount : -amount;
@@ -380,13 +380,13 @@ const command: Command = {
                 .setColor(win ? THEME.SUCCESS : THEME.DANGER)
                 .setTitle(win ? '🎰 GAMBLE: WIN' : '🎰 GAMBLE: LOSS')
                 .setDescription(win
-                    ? `The odds favoured you. Your wager returned **${(amount + delta).toLocaleString()} cr**.`
-                    : `The house always wins. Your wager was lost.`)
+                    ? `You got lucky! Your bet returned **${(amount + delta).toLocaleString()} money**.`
+                    : `Bad luck, the house won this time. Your bet was lost.`)
                 .addFields(
-                    { name: win ? '💰 Gain' : '💸 Loss', value: `\`${win ? '+' : ''}${delta.toLocaleString()} cr\``, inline: true },
-                    { name: '💳 Balance', value: `\`${(after?.balance ?? 0).toLocaleString()} cr\``, inline: true }
+                    { name: win ? '💰 Gain' : '💸 Loss', value: `\`${win ? '+' : ''}${delta.toLocaleString()} money\``, inline: true },
+                    { name: '💳 Balance', value: `\`${(after?.balance ?? 0).toLocaleString()} money\``, inline: true }
                 )
-                .setFooter({ text: `Fiscal Risk Division • ${PROTOCOL}` });
+                .setFooter({ text: `Astra Gambling` });
             return interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'slots') {
@@ -394,7 +394,7 @@ const command: Command = {
             const userData = await db.fetchOne('SELECT balance FROM users WHERE user_id = ?', userId);
             const balance = userData?.balance ?? 0;
 
-            if (balance < SLOTS_COST) return interaction.editReply({ content: `❌ Slots cost **${SLOTS_COST} cr**.` });
+            if (balance < SLOTS_COST) return interaction.editReply({ content: `❌ Slots cost **${SLOTS_COST} money**.` });
 
             await db.execute('UPDATE users SET balance = balance - ? WHERE user_id = ?', SLOTS_COST, userId);
 
@@ -423,10 +423,10 @@ const command: Command = {
                 .setTitle('🎰 SLOT MACHINE')
                 .setDescription(`\`[ ${a}  ${b}  ${c} ]\`\n\n${resultText}`)
                 .addFields(
-                    { name: net >= 0 ? '💰 Net Gain' : '💸 Net Loss', value: `\`${net >= 0 ? '+' : ''}${net.toLocaleString()} cr\``, inline: true },
-                    { name: '💳 Balance', value: `\`${(after?.balance ?? 0).toLocaleString()} cr\``, inline: true }
+                    { name: net >= 0 ? '💰 Net Gain' : '💸 Net Loss', value: `\`${net >= 0 ? '+' : ''}${net.toLocaleString()} money\``, inline: true },
+                    { name: '💳 Balance', value: `\`${(after?.balance ?? 0).toLocaleString()} money\``, inline: true }
                 )
-                .setFooter({ text: `Astra Casino • ${VERSION}` });
+                .setFooter({ text: `Astra Casino` });
             return interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'coinflip') {
@@ -436,7 +436,7 @@ const command: Command = {
             const userData = await db.fetchOne('SELECT balance FROM users WHERE user_id = ?', userId);
             const balance = userData?.balance ?? 0;
 
-            if (balance < amount) return interaction.editReply({ content: `❌ Insufficient credits.` });
+            if (balance < amount) return interaction.editReply({ content: `❌ You don't have enough money.` });
 
             const result = Math.random() < 0.5 ? 'heads' : 'tails';
             const win = result === choice;
@@ -451,10 +451,10 @@ const command: Command = {
                 .setTitle(`🪙 COINFLIP: ${win ? 'WIN' : 'LOSS'}`)
                 .setDescription(`The coin landed on ${coin}.\nYou called **${choice.toUpperCase()}**.`)
                 .addFields(
-                    { name: win ? '💰 Gained' : '💸 Lost', value: `\`${win ? '+' : '-'}${amount.toLocaleString()} cr\``, inline: true },
-                    { name: '💳 New Balance', value: `\`${(after?.balance ?? 0).toLocaleString()} cr\``, inline: true }
+                    { name: win ? '💰 Gained' : '💸 Lost', value: `\`${win ? '+' : '-'}${amount.toLocaleString()} money\``, inline: true },
+                    { name: '💳 New Balance', value: `\`${(after?.balance ?? 0).toLocaleString()} money\``, inline: true }
                 )
-                .setFooter({ text: `Fair 50/50 • ${PROTOCOL}` });
+                .setFooter({ text: `Fair 50/50` });
             return interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'balance') {
@@ -466,13 +466,13 @@ const command: Command = {
 
             const embed = new EmbedBuilder()
                 .setColor(THEME.PRIMARY)
-                .setAuthor({ name: `${target.username}'s Fiscal Report`, iconURL: target.displayAvatarURL() })
+                .setAuthor({ name: `${target.username}'s Money Report`, iconURL: target.displayAvatarURL() })
                 .addFields(
-                    { name: '💰 Liquid Credits', value: `\`${liquid.toLocaleString()} cr\``, inline: true },
-                    { name: '🏦 Vault Balance',  value: `\`${vault.toLocaleString()} cr\``,  inline: true },
-                    { name: '💼 Total Assets',   value: `\`${(liquid + vault).toLocaleString()} cr\``, inline: true }
+                    { name: '💰 Cash', value: `\`${liquid.toLocaleString()} money\``, inline: true },
+                    { name: '🏦 Bank Balance',  value: `\`${vault.toLocaleString()} money\``,  inline: true },
+                    { name: '💼 Total Money',   value: `\`${(liquid + vault).toLocaleString()} money\``, inline: true }
                 )
-                .setFooter({ text: `Astra Fiscal Intelligence • ${VERSION}` });
+                .setFooter({ text: `Astra Money Info` });
             return interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'pay') {
@@ -480,38 +480,38 @@ const command: Command = {
             const target = interaction.options.getUser('user')!;
             const amount = interaction.options.getInteger('amount')!;
 
-            if (target.id === userId) return interaction.editReply({ content: '❌ Self-transfers prohibited.' });
-            if (target.bot) return interaction.editReply({ content: '❌ Bots cannot hold assets.' });
+            if (target.id === userId) return interaction.editReply({ content: '❌ You can\'t pay yourself!' });
+            if (target.bot) return interaction.editReply({ content: '❌ Bots don\'t use money!' });
 
             const senderData = await db.fetchOne('SELECT balance FROM users WHERE user_id = ?', userId);
-            if (!senderData || senderData.balance < amount) return interaction.editReply({ content: `❌ Insufficient funds.` });
+            if (!senderData || senderData.balance < amount) return interaction.editReply({ content: `❌ You don't have enough money.` });
 
             await db.execute('UPDATE users SET balance = balance - ? WHERE user_id = ?', amount, userId);
             await db.execute('INSERT INTO users (user_id, balance) VALUES (?, ?) ON CONFLICT(user_id) DO UPDATE SET balance = balance + ?', target.id, amount, amount);
             
             const embed = new EmbedBuilder()
                 .setColor(THEME.SUCCESS)
-                .setTitle('💸 TRANSACTION CONFIRMED')
-                .setDescription(`Transferred **${amount.toLocaleString()} cr** to **${target.username}**.`)
-                .setFooter({ text: `Secure Tactical Ledger • ${VERSION}` });
+                .setTitle('💸 MONEY SENT')
+                .setDescription(`You sent **${amount.toLocaleString()} money** to **${target.username}**.`)
+                .setFooter({ text: `Transaction confirmed` });
             return interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'leaderboard') {
             await interaction.deferReply();
             const top = await db.fetchAll('SELECT user_id, balance, bank_balance FROM users ORDER BY (balance + COALESCE(bank_balance, 0)) DESC LIMIT 10');
-            if (!top || top.length === 0) return interaction.editReply({ content: '❌ No fiscal data found.' });
+            if (!top || top.length === 0) return interaction.editReply({ content: '❌ No money data found.' });
 
             const medals = ['👑', '🥈', '🥉'];
             const lines = top.map((u, i) => {
                 const net = ((u.balance || 0) + (u.bank_balance || 0)).toLocaleString();
-                return `${medals[i] ?? `**${i + 1}.**`} <@${u.user_id}> — \`${net} cr\``;
+                return `${medals[i] ?? `**${i + 1}.**`} <@${u.user_id}> — \`${net} money\``;
             });
 
             const embed = new EmbedBuilder()
                 .setColor(THEME.WARNING)
-                .setTitle('🏆 GLOBAL FISCAL LEADERBOARD')
+                .setTitle('🏆 RICHEST MEMBERS')
                 .setDescription(lines.join('\n'))
-                .setFooter({ text: `Quantum v8.0.1 • Ranked by Net Worth` });
+                .setFooter({ text: `Astra Bot` });
             return interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'stats') {
@@ -523,14 +523,14 @@ const command: Command = {
             const embed = new EmbedBuilder()
                 .setColor(THEME.SECONDARY)
                 .setAuthor({ name: target.username, iconURL: target.displayAvatarURL() })
-                .setTitle('📊 OPERATIVE FISCAL REPORT')
+                .setTitle('📊 MONEY STATS')
                 .addFields(
-                    { name: '💰 Net Worth',      value: `\`${netWorth.toLocaleString()} cr\``,   inline: true },
-                    { name: '📈 Total Earned',   value: `\`${(data?.total_earned ?? 0).toLocaleString()} cr\``, inline: true },
+                    { name: '💰 Total Money',    value: `\`${netWorth.toLocaleString()} money\``,   inline: true },
+                    { name: '📈 Total Earned',   value: `\`${(data?.total_earned ?? 0).toLocaleString()} money\``, inline: true },
                     { name: '🔥 Daily Streak',   value: `\`${data?.daily_streak ?? 0} days\``,   inline: true },
                     { name: '⭐ Level',           value: `\`${data?.level ?? 0}\``,              inline: true },
                 )
-                .setFooter({ text: `Astra Intelligence Agency • ${VERSION}` });
+                .setFooter({ text: `Astra Bot` });
             return interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'bank') {
@@ -542,22 +542,22 @@ const command: Command = {
             const vault  = data?.bank_balance ?? 0;
 
             if (action === 'deposit') {
-                if (liquid < amount) return interaction.editReply({ content: `❌ Insufficient liquid funds.` });
+                if (liquid < amount) return interaction.editReply({ content: `❌ You don't have enough money on you.` });
                 await db.execute('UPDATE users SET balance = balance - ?, bank_balance = COALESCE(bank_balance, 0) + ? WHERE user_id = ?', amount, amount, userId);
                 const embed = new EmbedBuilder()
                     .setColor(THEME.SUCCESS)
-                    .setTitle('🏦 VAULT DEPOSIT CONFIRMED')
-                    .setDescription(`Secured **${amount.toLocaleString()} cr** in your vault.`)
-                    .setFooter({ text: 'Vault credits are safe from robberies.' });
+                    .setTitle('🏦 MONEY DEPOSITED')
+                    .setDescription(`Put **${amount.toLocaleString()} money** in the bank.`)
+                    .setFooter({ text: 'Money in the bank is safe from stealing.' });
                 return interaction.editReply({ embeds: [embed] });
             } else {
-                if (vault < amount) return interaction.editReply({ content: `❌ Insufficient vault funds.` });
+                if (vault < amount) return interaction.editReply({ content: `❌ You don't have enough money in the bank.` });
                 await db.execute('UPDATE users SET balance = balance + ?, bank_balance = bank_balance - ? WHERE user_id = ?', amount, amount, userId);
                 const embed = new EmbedBuilder()
                     .setColor(THEME.PRIMARY)
-                    .setTitle('🏦 VAULT WITHDRAWAL CONFIRMED')
-                    .setDescription(`Withdrawn **${amount.toLocaleString()} cr** to liquid balance.`)
-                    .setFooter({ text: `Secure Fiscal Vault • ${VERSION}` });
+                    .setTitle('🏦 MONEY WITHDRAWN')
+                    .setDescription(`Took **${amount.toLocaleString()} money** out of the bank.`)
+                    .setFooter({ text: `Astra Bank` });
                 return interaction.editReply({ embeds: [embed] });
             }
         }

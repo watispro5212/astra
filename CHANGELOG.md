@@ -5,164 +5,161 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [8.0.1] — April 27, 2026
 
-### 🧠 Free Neural AI & DB Fixes
+### 🧠 AI & Database Fixes
 
-- **OpenRouter Free Models** — Transitioned default AI models to Free OpenRouter endpoints: Tencent HY3, MiniMax m2.5, Gemma 4 26B.
-- **SQL Data Maps** — Fixed a core syntax crash in the profile systems attempting to load database arrays incorrectly.
-- **Sync Errors Fixed** — Addressed PROTOCOL ERROR regarding neural model preference arrays syncing.
+- **Free AI Models** — Switched to free AI models so everyone can use the bot for free.
+- **Database Fixes** — Fixed a crash when loading user profiles.
+- **Save Fixes** — Fixed errors where AI settings wouldn't save correctly.
 
 ---
 
 ## [8.0.0] — April 27, 2026
 
-### 🪐 Quantum Protocol Deployment
+### 🪐 Big Design Update
 
-A massive aesthetic and structural overhaul. Transitioned the entire Astra ecosystem to the **Quantum** design language, featuring high-fidelity glassmorphism, neural grid effects, and an integrated industrial commerce portal.
+A massive update to how Astra looks and works. We've updated the website and bot with a new, clean design and an integrated shop.
 
-#### 🎨 Web Portal v2.0 (Quantum)
+#### 🎨 New Website Design
 
-- **UI Engine 2.0** — Complete rewrite of the Astra web portal with premium design tokens.
-- **Glassmorphism 2.0** — Implemented multi-layered blur effects and neon-accented borders across all sub-pages.
-- **Industrial Hub Integration** — The web portal now directly showcases shop inventory with tactical mockups.
-- **Responsive Telemetry** — Added live system status indicators to the Support Hub.
-- **Archival Timeline** — Overhauled Mission Logs with a sleek vertical timeline layout.
+- **New Look** — Complete rewrite of the Astra website with a modern design.
+- **Clean Design** — Implemented a beautiful, blurred glass look across all pages.
+- **Shop Integration** — The website now shows all the items you can buy in the server shop.
+- **Bot Status** — Added a live status bar to show if the bot is online.
+- **Update Timeline** — New layout for the updates page to make it easier to read.
 
-#### 🏬 Commerce Protocol
+#### 🏬 Shop System
 
-- **Shop Synchronization** — The web display is now 1:1 with the `shopService.ts` kernel.
-- **Role Integration** — Shop items can now be configured to grant specific server roles upon acquisition.
-- **Tactical Inventory** — Added Energy Drinks, Tactical Badges, and Armor to the core marketplace.
+- **Automatic Updates** — The website shop now updates automatically when items change.
+- **Role Rewards** — You can now buy roles in the shop.
+- **New Items** — Added new items like Energy Drinks and Badges to the shop.
 
-#### 🛡️ Moderation & Utility
+#### 🛡️ Moderation & Help
 
-- **Case Persistence** — Hardened the PostgreSQL case logging for high-concurrency moderation.
-- **Command Registry v2** — Updated all tactical protocols with new permission tiers and descriptions.
+- **Better Logging** — Improved how the bot saves moderation logs.
+- **Better Descriptions** — Updated all command descriptions to be easier to understand.
 
 ---
 
 ## [7.2.0] — April 26, 2026
 
-### ⚡ Omega Protocol
+### ⚡ Economy Update
 
-The most significant economy and status intelligence update to date. Full fiscal overhaul, intelligent status broadcasting, and system diagnostics.
+A huge update to the money and status systems. New games, rewards, and better bot monitoring.
 
-#### 💰 Economy Overhaul (Sector 09)
+#### 💰 New Economy Features
 
-- **`/economy harvest`** — Collect passive credits accumulated from owned assets.
-- **`/economy rob`** — 40% chance heist with 2-hour cooldown and penalty on failure.
-- **`/economy gamble`** — Risk-adjusted wager with 45% win rate and 1.8× return.
-- **`/economy slots`** — 3-reel slot machine with triple-jackpot rewards.
-- **`/economy coinflip`** — Provably fair 50/50 double-or-nothing.
-- All economy commands now display **balance after action**.
+- **`/economy harvest`** — Collect money from your items.
+- **`/economy rob`** — Try to steal money from other users.
+- **`/economy gamble`** — Bet your money to win more.
+- **`/economy slots`** — Play the slot machine.
+- **`/economy coinflip`** — Flip a coin to double your money.
+- All economy commands now show your **new balance** after you use them.
 
-#### 🛒 Shop Marketplace (Sector 10)
+#### 🛒 Server Shop
 
-- Items categorized by **type** (Passive Income, Consumable, Role Reward) with custom emoji.
-- **`/shop sell`** — Liquidate owned assets at 50% market value.
-- **`/shop admin edit`** — In-place modification of any shop item.
-- All purchases correctly tracked in `user_inventory` (bug fix).
+- Items are now sorted by type (Roles, Items, etc.) with icons.
+- **`/shop sell`** — Sell your items back for half the price.
+- **`/shop admin edit`** — Staff can now edit shop items easily.
+- Fixed a bug where items wouldn't show up in your inventory after buying.
 
-#### 📡 Status Intelligence (Sector 11)
+#### 📡 Bot Monitoring
 
-- Dedicated **status webhook** fires on: boot, heartbeat (30min), health-check (60min), errors, guild join/leave.
-- **`/system status`** — Live diagnostics with memory bar, CPU load, shard info.
-- **`/system ping`** — WebSocket + API round-trip latency with color-coded health labels.
-- **`/system servers`** — Sector deployment overview (Owner Only).
-- **`/system update`** — Fully updated patch notes for Omega Protocol.
+- Added a system to notify the developer of errors automatically.
+- **`/system status`** — Check how the bot is running (CPU, RAM, etc.).
+- **`/system ping`** — Check how fast the bot is responding.
+- **`/system servers`** — See how many servers Astra is in.
+- **`/system update`** — View the latest update notes.
 
 #### 🐛 Bug Fixes
 
-- Mine could push balance below zero — fixed with `MAX(0, balance + ?)`.
-- Shop inventory SQL crash on `si.item_id` — corrected to `si.id`.
-- Stray syntax errors in `info.ts` and `utility.ts` — removed.
-- `Command.execute` return-type mismatch — widened to `Promise<any>`.
+- Fixed a bug where you could have a negative money balance.
+- Fixed a crash in the shop inventory system.
+- Fixed several small errors in utility commands.
 
 ---
 
 ## [7.0.0] — April 22, 2026
 
-### 🏢 Enterprise Core Deployment
+### 🏢 Performance Update
 
-The "Enterprise" update synchronizes the entire Astra ecosystem to v7.0.0, finalizing the transition to a high-concurrency PostgreSQL architecture and deploying the new Support Ticketing sector.
+A big update to make the bot faster and more reliable, plus new support tickets.
 
-#### 🎫 Support Ticketing (Sector 07)
+#### 🎫 Support Tickets
 
-- **High-Fidelity Persistence**: Deployed a robust ticketing system with database-backed session state and staff coordination logs.
-- **Type-Safe Protocols**: Resolved critical TypeScript build failures in the ticketing logic, ensuring 100% deployment reliability in Docker environments.
+- **Reliable Help**: New ticketing system that saves your chat history.
+- **Better Performance**: Fixed crashes when many people use tickets at once.
 
-#### 📡 Infrastructure & Sync
+#### 📡 Reliability
 
-- **Ecosystem v7**: Unified the versioning standard across the `package.json`, bot kernel, and the Quantum Web Portal.
-- **Vanguard Reporter**: Hardened the global error interceptor to transmit real-time diagnostic packets during system anomalies.
-- **Scale Optimization**: Finalized the asynchronous database manager for enterprise-grade scalability.
+- **Universal Updates**: Updated the bot and website to the same version.
+- **Error Tracking**: Improved how we find and fix bugs.
+- **Faster Database**: Moved to a faster database system for better speed.
 
 ---
 
 ## [6.3.1] — April 22, 2026
 
-### ☢️ Apex Reconstruction II
+### ☢️ Design Fixes
 
-The "Quantum" experience has been refined for maximum server purity and high-fidelity aesthetics.
+Refined the new design and fixed several small issues.
 
-#### 🏗️ Nuclear Protocol Expansion
+#### 🏗️ Better Server Setup
 
-- **Hierarchy Purge**: The `/setup_server` command now purges all legacy roles alongside channels when the **Nuclear** option is enabled.
-- **Apex Branding**: Fully synchronized official **Astra Logo** and **Banner** across the bot and web portal.
-- **Restored UI**: Fixed a layout failure in the home page and hardened image asset loading.
+- **Deep Reset**: The `/setup_server` command now clears everything when resetting.
+- **New Branding**: Updated the Astra logo and banner everywhere.
+- **UI Fixes**: Fixed several layout issues on the homepage.
 
 ---
 
 ## [6.3.0] — April 22, 2026
 
-### 🛰️ The Quantum Update
+### 🛰️ Leveling & Economy Update
 
-A major expansion bringing community engagement and fiscal systems back into the Astra ecosystem, now optimized for high-performance TypeScript.
+Added leveling and money systems to Astra.
 
-#### 📊 Astra Intelligence (Leveling)
+#### 📊 Leveling System
 
-- **XP Acquisition**: Integrated a global experience system. Users earn 15-25 XP per message.
-- **Level Progression**: Automated level-up logic with non-intrusive high-fidelity notifications.
-- **Tactical Ranks**: Added `/rank` for real-time progression analysis of any operative.
-- **Anti-Spam**: Implemented a 60-second activity cooldown per user to ensure fair growth.
+- **Earn XP**: Members earn XP just by chatting in your server.
+- **Level Up**: Members level up automatically as they chat.
+- **Check Rank**: Use `/rank` to see your current level and progress.
+- **Fair Play**: Added a cooldown so people can't spam to level up.
 
-#### 💰 Astra Fiscal (Economy)
+#### 💰 Economy System
 
-- **Credit Ledger**: Global balance tracking for all users across the Astra network.
-- **Daily Allocations**: Claim 500 credits every 24 hours via `/economy daily`.
-- **Peer-to-Peer Transfers**: Securely transfer capital to other members with `/economy pay`.
-- **Balance Audits**: View current fiscal status with `/economy balance`.
+- **Money Tracking**: Keep track of everyone's money in the server.
+- **Daily Rewards**: Get free money every day with `/economy daily`.
+- **Pay Others**: Send money to your friends with `/economy pay`.
+- **Check Balance**: See how much money you have with `/economy balance`.
 
 #### 📡 System Improvements
 
-- **Presence Engine**: Added a rotating status rotator cycling through shard health and server counts.
-- **Safari Compatibility**: Full CSS vendor-prefix audit for glassmorphism components.
-- **TypeScript Core**: Resolved interaction return-type mismatches and expanded database schema.
+- **Status Rotation**: The bot now shows how many servers it is in.
+- **Better Browsing**: Improved how the website looks on iPhones and Macs.
 
 ---
 
 ## [6.2.0] — April 22, 2026
 
-### 🚀 Scale & Horizon
+### 🚀 Speed & Reliability Update
 
-Foundation for the future. Transitioning Astra's core identity from a single-instance bot to an enterprise-grade distributed network.
+Moved Astra to a faster database to handle more users and servers.
 
-- **PostgreSQL Integration**: Migrated core database engine to PostgreSQL for high-concurrency operations.
-- **Async Connection Pooling**: Integrated `databases` library with `asyncpg` for multi-shard access.
-- **Enterprise Schema**: Overhauled table definitions with `BIGINT` and `SERIAL` types.
-- **Live Terminal**: Integrated a real-time diagnostics dashboard into the website.
+- **Faster Database**: Switched to PostgreSQL for better performance.
+- **Better Connections**: Improved how the bot connects to the database.
+- **Live Monitoring**: Added a live dashboard to the website.
 
 ---
 
 ## [6.1.0] — April 22, 2026
 
-### 🛡️ The TypeScript Migration
+### 🛡️ Code Cleanup
 
-A massive philosophy shift towards simplicity, utility, and native Discord features.
+Rebuilt the bot to be simpler, faster, and 100% free.
 
-- **TypeScript Rewrite**: Rebuilt the entire bot engine in high-performance TypeScript.
-- **Clean & Simple**: Removed legacy bloat in favor of a straight-forward, native Discord experience.
-- **Patreon Removal**: Fully eradicated all gated features; Astra is now 100% free.
-- **Auto-Sharding**: Upgraded the core to utilize native Discord sharding for infinite scalability.
+- **New Code**: Rebuilt the bot using modern programming tools.
+- **Simple & Fast**: Removed unused features to make the bot faster.
+- **100% Free**: Removed all paid features so everyone gets everything.
+- **Better Scaling**: Upgraded the bot to handle millions of servers.
 
 ---
 

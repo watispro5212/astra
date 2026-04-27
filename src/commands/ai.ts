@@ -7,14 +7,14 @@ import { config } from '../core/config';
 const command: Command = {
     data: new SlashCommandBuilder()
         .setName('ai')
-        .setDescription('🤖 Neural Sentinel Configuration.')
+        .setDescription('🤖 AI Settings: Choose your AI model.')
         .setDMPermission(true)
         .addSubcommand(sub => 
             sub.setName('model')
-               .setDescription('🛰️ Select your preferred AI intelligence model.')
+               .setDescription('🤖 Choose which AI you want to talk to.')
                .addStringOption(opt => 
                    opt.setName('choice')
-                      .setDescription('The neural model to interface with.')
+                      .setDescription('The AI model to use.')
                       .setRequired(true)
                       .addChoices(
                           ...AI_MODELS.map(m => ({ name: m.name, value: m.id }))
@@ -23,11 +23,11 @@ const command: Command = {
         )
         .addSubcommand(sub =>
             sub.setName('info')
-               .setDescription('📊 View details about available neural models.')
+               .setDescription('📊 See info about the different AI models.')
         )
         .addSubcommand(sub =>
             sub.setName('status')
-               .setDescription('📡 Perform an integrity check on the Neural Link Array.')
+               .setDescription('📡 Check if the AI is working.')
         ),
 
     async execute(interaction: ChatInputCommandInteraction) {
@@ -40,18 +40,18 @@ const command: Command = {
             const model = AI_MODELS.find(m => m.id === modelId);
 
             if (!success) {
-                return interaction.reply({ content: '❌ **PROTOCOL ERROR**: Failed to update neural model preference.', ephemeral: true });
+                return interaction.reply({ content: '❌ **Error**: Failed to update your AI model choice.', ephemeral: true });
             }
 
             const embed = new EmbedBuilder()
                 .setColor(THEME.SUCCESS)
-                .setTitle('📡 NEURAL MODEL RECALIBRATED')
-                .setDescription(`Your AI Sentinel has been successfully synchronized with the **${model?.name}** matrix.`)
+                .setTitle('🤖 AI MODEL UPDATED')
+                .setDescription(`Your AI is now using **${model?.name}**.`)
                 .addFields(
                     { name: '🧠 Model ID', value: `\`${modelId}\``, inline: true },
-                    { name: '⚡ Capabilities', value: model?.description || 'N/A', inline: true }
+                    { name: '⚡ What it does', value: model?.description || 'N/A', inline: true }
                 )
-                .setFooter({ text: `Astra Neural Systems • ${VERSION}` })
+                .setFooter({ text: `Astra AI Settings` })
                 .setTimestamp();
 
             await interaction.reply({ embeds: [embed], flags: [MessageFlags.Ephemeral] });
@@ -59,8 +59,8 @@ const command: Command = {
         } else if (subcommand === 'info') {
             const embed = new EmbedBuilder()
                 .setColor(THEME.PRIMARY)
-                .setTitle('🤖 ASTRA NEURAL SENTINEL | MODELS')
-                .setDescription('The Astra AI Sentinel supports multiple Quantum-class models for DM interaction.')
+                .setTitle('🤖 ASTRA AI MODELS')
+                .setDescription('Astra supports multiple AI models for you to talk to.')
                 .setThumbnail('https://cdn-icons-png.flaticon.com/512/3655/3655611.png');
 
             for (const model of AI_MODELS) {
@@ -71,7 +71,7 @@ const command: Command = {
                 });
             }
 
-            embed.setFooter({ text: `Astra Neural Systems • v${VERSION}` }).setTimestamp();
+            embed.setFooter({ text: `Astra AI Settings` }).setTimestamp();
             await interaction.reply({ embeds: [embed], flags: [MessageFlags.Ephemeral] });
 
         } else if (subcommand === 'status') {
@@ -81,14 +81,14 @@ const command: Command = {
             
             const embed = new EmbedBuilder()
                 .setColor(THEME.PRIMARY)
-                .setTitle('📡 NEURAL LINK ARRAY | STATUS')
-                .setDescription(`Current operational status of the **v${VERSION}** neural nodes.`)
+                .setTitle('📡 AI SYSTEM STATUS')
+                .setDescription(`Current status of our AI systems.`)
                 .setTimestamp();
 
             for (const res of results) {
                 const icon = res.status === 'ACTIVE' ? '✅' : res.status === 'QUOTA' ? '⚠️' : '❌';
                 embed.addFields({
-                    name: `${icon} Node ${res.index}`,
+                    name: `${icon} System ${res.index}`,
                     value: `**Status**: ${res.status}\n**Key**: \`${config.aiApiKeys[res.index].substring(0, 8)}...***\n**Report**: \`${res.message.substring(0, 100)}\``,
                     inline: false
                 });

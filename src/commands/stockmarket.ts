@@ -19,15 +19,15 @@ function generateSparkline(history: number[]): string {
 const command: Command = {
     data: new SlashCommandBuilder()
         .setName('stockmarket')
-        .setDescription('📈 Access the Astra Tactical Exchange (ATX).')
+        .setDescription('📈 Open the bot stock market.')
         .setDMPermission(true)
         .addSubcommand(sub => 
             sub.setName('market')
-               .setDescription('🛰️ View current market prices and global trends.')
+               .setDescription('🛰️ See current stock prices and trends.')
         )
         .addSubcommand(sub => 
             sub.setName('buy')
-               .setDescription('💸 Purchase shares in a listed sector.')
+               .setDescription('💸 Buy shares in a company.')
                .addStringOption(opt => 
                    opt.setName('symbol')
                       .setDescription('The stock symbol (e.g., AST, TITN)')
@@ -36,24 +36,24 @@ const command: Command = {
                           ...STOCKS.map(s => ({ name: `${s.symbol} - ${s.name}`, value: s.symbol }))
                       )
                )
-               .addIntegerOption(opt => opt.setName('shares').setDescription('Number of shares to acquire.').setRequired(true).setMinValue(1))
+               .addIntegerOption(opt => opt.setName('shares').setDescription('Number of shares to buy.').setRequired(true).setMinValue(1))
         )
         .addSubcommand(sub => 
             sub.setName('sell')
-               .setDescription('💰 Liquidate shares for sector credits.')
+               .setDescription('💰 Sell your shares for money.')
                .addStringOption(opt => 
                    opt.setName('symbol')
-                      .setDescription('The stock symbol to liquidate')
+                      .setDescription('The stock symbol to sell')
                       .setRequired(true)
                       .addChoices(
                           ...STOCKS.map(s => ({ name: `${s.symbol} - ${s.name}`, value: s.symbol }))
                       )
                )
-               .addIntegerOption(opt => opt.setName('shares').setDescription('Number of shares to liquidate.').setRequired(true).setMinValue(1))
+               .addIntegerOption(opt => opt.setName('shares').setDescription('Number of shares to sell.').setRequired(true).setMinValue(1))
         )
         .addSubcommand(sub => 
             sub.setName('portfolio')
-               .setDescription('📂 Analyze your current holdings and net worth.')
+               .setDescription('📂 See your stocks and how much they are worth.')
         ),
 
     async execute(interaction: ChatInputCommandInteraction) {
@@ -64,9 +64,9 @@ const command: Command = {
             await interaction.deferReply();
             
             const embed = new EmbedBuilder()
-                .setTitle('🛰️ ASTRA TACTICAL EXCHANGE | GLOBAL FEED')
+                .setTitle('🛰️ STOCK MARKET — GLOBAL PRICES')
                 .setColor(QUANTUM_CYAN)
-                .setDescription('Real-time telemetry from the high-volatility speculation grid.')
+                .setDescription('Check the latest prices and see what is trending.')
                 .setThumbnail('https://cdn-icons-png.flaticon.com/512/2620/2620582.png');
 
             for (const stock of STOCKS) {
@@ -84,7 +84,7 @@ const command: Command = {
                 });
             }
 
-            embed.setFooter({ text: `Quantum Financial Engine • ${PROTOCOL} • Live Telemetry` }).setTimestamp();
+            embed.setFooter({ text: `Astra Stock Market • ${VERSION} ${PROTOCOL}` }).setTimestamp();
             await interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'buy') {
@@ -98,7 +98,7 @@ const command: Command = {
             if (!user || user.balance < cost) {
                 const deficit = cost - (user?.balance || 0);
                 return interaction.editReply({ 
-                    content: `❌ **LIQUIDITY ERROR**: Acquisition failed. You require an additional **${deficit.toLocaleString()} cr** to finalize this trade.` 
+                    content: `❌ **NOT ENOUGH MONEY**: You need **${deficit.toLocaleString()} cr** more to buy these shares.` 
                 });
             }
 
@@ -113,15 +113,15 @@ const command: Command = {
             );
 
             const embed = new EmbedBuilder()
-                .setTitle('✅ ACQUISITION CONFIRMED')
+                .setTitle('✅ BUY SUCCESSFUL')
                 .setColor(THEME.SUCCESS)
-                .setDescription(`The Astra Exchange has confirmed your acquisition of **${shares}** shares in **${symbol}**.`)
+                .setDescription(`You successfully bought **${shares}** shares of **${symbol}**.`)
                 .addFields(
-                    { name: '📦 Volume', value: `\`${shares.toLocaleString()} units\``, inline: true },
-                    { name: '💰 Unit Price', value: `\`${price.toLocaleString()} cr\``, inline: true },
-                    { name: '💳 Total Debit', value: `\`${cost.toLocaleString()} cr\``, inline: true }
+                    { name: '📦 Shares', value: `\`${shares.toLocaleString()}\``, inline: true },
+                    { name: '💰 Price Each', value: `\`${price.toLocaleString()} cr\``, inline: true },
+                    { name: '💳 Total Cost', value: `\`${cost.toLocaleString()} cr\``, inline: true }
                 )
-                .setFooter({ text: 'Astra Tactical Ledger • Transaction Finalized' })
+                .setFooter({ text: `Astra Stock Market • ${VERSION} ${PROTOCOL}` })
                 .setTimestamp();
 
             await interaction.editReply({ embeds: [embed] });
@@ -136,7 +136,7 @@ const command: Command = {
             const holdings = await db.fetchOne('SELECT shares, invested_amount FROM user_stocks WHERE user_id = ? AND stock_symbol = ?', userId, symbol);
             if (!holdings || holdings.shares < shares) {
                 return interaction.editReply({ 
-                    content: `❌ **HOLDING ERROR**: Liquidate failed. Current portfolio volume for \`${symbol}\` is insufficient.` 
+                    content: `❌ **NOT ENOUGH SHARES**: You don't have enough shares of \`${symbol}\` to sell.` 
                 });
             }
 
@@ -149,15 +149,15 @@ const command: Command = {
             await db.execute('UPDATE user_stocks SET shares = shares - ?, invested_amount = MAX(0, invested_amount - ?) WHERE user_id = ? AND stock_symbol = ?', shares, shares * avgCostPerShare, userId, symbol);
 
             const embed = new EmbedBuilder()
-                .setTitle('✅ LIQUIDATION CONFIRMED')
+                .setTitle('✅ SELL SUCCESSFUL')
                 .setColor(profit >= 0 ? THEME.SUCCESS : THEME.DANGER)
-                .setDescription(`Assets successfully liquidated on the Astra Tactical Exchange.`)
+                .setDescription(`You successfully sold your shares on the market.`)
                 .addFields(
-                    { name: '📦 Volume', value: `\`${shares.toLocaleString()} units\``, inline: true },
+                    { name: '📦 Shares', value: `\`${shares.toLocaleString()}\``, inline: true },
                     { name: '💰 Sale Price', value: `\`${price.toLocaleString()} cr\``, inline: true },
-                    { name: '📈 Yield', value: `\`${profit >= 0 ? '+' : ''}${profit.toLocaleString()} cr (${profitPct.toFixed(2)}%)\``, inline: true }
+                    { name: '📈 Profit/Loss', value: `\`${profit >= 0 ? '+' : ''}${profit.toLocaleString()} cr (${profitPct.toFixed(2)}%)\``, inline: true }
                 )
-                .setFooter({ text: 'Astra Tactical Ledger • Market Order Executed' })
+                .setFooter({ text: `Astra Stock Market • ${VERSION} ${PROTOCOL}` })
                 .setTimestamp();
 
             await interaction.editReply({ embeds: [embed] });
@@ -171,12 +171,12 @@ const command: Command = {
             let totalInvested = 0;
             
             const embed = new EmbedBuilder()
-                .setTitle(`📊 PORTFOLIO ANALYSIS | ${interaction.user.username.toUpperCase()}`)
+                .setTitle(`📊 MY STOCKS — ${interaction.user.username.toUpperCase()}`)
                 .setColor(QUANTUM_CYAN)
                 .setThumbnail(interaction.user.displayAvatarURL());
 
             if (holdings.length === 0) {
-                embed.setDescription('No active holdings detected in the Astra Tactical Exchange.');
+                embed.setDescription('You do not own any stocks yet.');
             } else {
                 for (const h of holdings) {
                     const currentPrice = StockMarketService.getPrice(h.stock_symbol);
@@ -188,8 +188,8 @@ const command: Command = {
                     totalInvested += h.invested_amount;
 
                     embed.addFields({
-                        name: `${h.stock_symbol} Holdings`,
-                        value: `\`\`\`yaml\nShares : ${h.shares.toLocaleString()}\nValue  : ${currentVal.toLocaleString()} cr\nYield  : ${profit >= 0 ? '+' : ''}${profit.toLocaleString()} (${profitPct.toFixed(1)}%)\`\`\``,
+                        name: `${h.stock_symbol} Stocks`,
+                        value: `\`\`\`yaml\nShares : ${h.shares.toLocaleString()}\nValue  : ${currentVal.toLocaleString()} cr\nProfit : ${profit >= 0 ? '+' : ''}${profit.toLocaleString()} (${profitPct.toFixed(1)}%)\`\`\``,
                         inline: true
                     });
                 }
@@ -200,13 +200,13 @@ const command: Command = {
             const totalProfit = totalVal - totalInvested;
 
             embed.addFields(
-                { name: '💰 Liquid Credits', value: `\`${liquid.toLocaleString()} cr\``, inline: true },
-                { name: '💎 Portfolio Value', value: `\`${totalVal.toLocaleString()} cr\``, inline: true },
-                { name: '📈 Total Growth', value: `\`${totalProfit >= 0 ? '+' : ''}${totalProfit.toLocaleString()} cr\``, inline: true },
-                { name: '🚀 EST. NET WORTH', value: `\`${netWorth.toLocaleString()} cr\``, inline: false }
+                { name: '💰 Cash', value: `\`${liquid.toLocaleString()} cr\``, inline: true },
+                { name: '💎 Total Stock Value', value: `\`${totalVal.toLocaleString()} cr\``, inline: true },
+                { name: '📈 Overall Growth', value: `\`${totalProfit >= 0 ? '+' : ''}${totalProfit.toLocaleString()} cr\``, inline: true },
+                { name: '🚀 TOTAL NET WORTH', value: `\`${netWorth.toLocaleString()} cr\``, inline: false }
             );
 
-            embed.setFooter({ text: `Astra Financial Intelligence • ${VERSION}` }).setTimestamp();
+            embed.setFooter({ text: `Astra Stock Market • ${VERSION} ${PROTOCOL}` }).setTimestamp();
             await interaction.editReply({ embeds: [embed] });
         }
     }

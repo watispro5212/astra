@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FAQ — Astra</title>
-  <meta name="description" content="Frequently asked questions about Astra v8.0.1 'Quantum'.">
+  <meta name="description" content="Frequently asked questions about Astra.">
   <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
@@ -93,25 +93,25 @@
   <div class="astra-grid"></div>
 
   <!-- NAVIGATION -->
-  <nav class="nav-quantum" id="navbar">
+  <nav class="nav-astra" id="navbar">
     <div class="nav-container">
       <a href="index.html" class="nav-logo">
         <img src="assets/images/astra-logo.png" alt="Astra Logo" width="32" height="32">
         ASTRA
       </a>
       <div class="nav-links">
-        <a href="features.html" class="nav-link">Sectors</a>
-        <a href="commands.html" class="nav-link">Protocols</a>
+        <a href="features.html" class="nav-link">Features</a>
+        <a href="commands.html" class="nav-link">Commands</a>
         <a href="docs.html" class="nav-link">Docs</a>
-        <a href="changelog.html" class="nav-link">Mission Logs</a>
+        <a href="changelog.html" class="nav-link">Updates</a>
         <a href="support.html" class="nav-link">Support</a>
       </div>
     <div class="nav-actions">
       <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands" class="btn-astra btn-astra--outline" class="btn-small">
-        Guild Install
+        Add to Server
       </a>
       <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=1&scope=identify+applications.commands" class="btn-astra btn-astra--primary" class="btn-small">
-        User Install
+        Add to Profile
       </a>
     </div>
     </div>
@@ -120,8 +120,8 @@
   <!-- HEADER -->
   <header class="section" class="page-header-lg">
     <div class="container">
-      <h1 class="h1-quantum text-gradient">ARCHIVAL FAQ</h1>
-      <p class="text-dim" class="max-w-600">Instant intelligence for common questions about the Astra Quantum v8.0.1 engine.</p>
+      <h1 class="h1-astra text-gradient">FREQUENTLY ASKED QUESTIONS</h1>
+      <p class="text-dim" class="max-w-600">Quick answers to common questions about the Astra bot.</p>
     </div>
   </header>
 
@@ -129,15 +129,15 @@
   <main class="container" class="page-main">
     
     <div class="faq-group animate-reveal">
-      <div class="faq-group-title">General Deployment</div>
+      <div class="faq-group-title">General Info</div>
       
       <div class="faq-item">
         <div class="faq-question">
-          <h3>What is Astra Quantum v8.0.1?</h3>
+          <h3>What is Astra?</h3>
           <span class="faq-icon">↓</span>
         </div>
         <div class="faq-answer">
-          Astra is an enterprise-grade Discord bot with 12 tactical sectors covering moderation, leveling, economy, support tickets, giveaways, welcome systems, and industrial commerce. v8.0.1 'Quantum' is the latest high-fidelity build, optimized for performance and security.
+          Astra is a powerful Discord bot with many features like moderation, leveling, economy, support tickets, giveaways, and welcome systems. It's built to be simple to use while keeping your server safe and fun.
         </div>
       </div>
 
@@ -147,37 +147,37 @@
           <span class="faq-icon">↓</span>
         </div>
         <div class="faq-answer">
-          Yes. All features in Quantum v8.0.1 are available to every server at no cost. Note: Astra is proprietary software licensed under the APL v2.5. Self-hosting is not supported to ensure centralized security and reliability.
+          Yes. All features of Astra are available to every server at no cost. We don't support self-hosting to make sure every server has the most secure and reliable version of the bot.
         </div>
       </div>
     </div>
 
     <div class="faq-group animate-reveal">
-      <div class="faq-group-title">Moderation Protocols</div>
+      <div class="faq-group-title">Moderation</div>
       
       <div class="faq-item">
         <div class="faq-question">
-          <h3>How do I issue a tactical warning?</h3>
+          <h3>How do I warn a user?</h3>
           <span class="faq-icon">↓</span>
         </div>
         <div class="faq-answer">
-          Execute <code>/mod warn @user [reason]</code>. The warning is logged in the neural database and the target operative is notified via private transmission. You can review an operative's full history with <code>/mod history @user</code>.
+          Use the command <code>/mod warn @user [reason]</code>. The warning is saved in our database and the user is sent a DM to let them know. You can see a user's warnings with <code>/mod history @user</code>.
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-question">
-          <h3>What is the Apex Nuclear Protocol?</h3>
+          <h3>What does the server setup command do?</h3>
           <span class="faq-icon">↓</span>
         </div>
         <div class="faq-answer">
-          The <code>/setup_server</code> nuclear mode completely purges all channels and roles, rebuilding a professional server hierarchy from scratch. This is an irreversible command intended only for initial server deployment.
+          The <code>/setup_server</code> command deletes all current channels and roles and rebuilds a professional server setup from scratch. **Warning:** This cannot be undone, so only use it if you want to start fresh!
         </div>
       </div>
     </div>
 
     <div class="faq-group animate-reveal">
-      <div class="faq-group-title">Cloud Infrastructure</div>
+      <div class="faq-group-title">Database & Saving</div>
       
       <div class="faq-item">
         <div class="faq-question">
@@ -185,21 +185,21 @@
           <span class="faq-icon">↓</span>
         </div>
         <div class="faq-answer">
-          Legacy versions of Astra utilized local SQLite storage, which was purged during deployment cycles. **Quantum v8.0.1** has migrated to **Supabase Cloud (PostgreSQL)**, ensuring your intelligence and financial assets are stored permanently in a redundant, high-performance database.
+          Older versions of Astra used a different way to save data that sometimes got lost. Astra now uses a cloud database to make sure your levels and money are saved forever and are always accessible.
         </div>
       </div>
     </div>
 
     <div class="faq-group animate-reveal">
-      <div class="faq-group-title">Neural Intelligence</div>
+      <div class="faq-group-title">AI Assistant</div>
       
       <div class="faq-item">
         <div class="faq-question">
-          <h3>How do I access the AI Sentinel?</h3>
+          <h3>How do I talk to the AI?</h3>
           <span class="faq-icon">↓</span>
         </div>
         <div class="faq-answer">
-          The Sentinel operates exclusively in **Secure Direct Messages (DMs)**. Simply send a private transmission to Astra and the neural matrix will engage automatically. Note: This feature is isolated from public server channels for maximum operative privacy.
+          The AI works in **Direct Messages (DMs)**. Just send a private message to Astra and the AI will reply to you. This is kept private so no one else can see your conversation.
         </div>
       </div>
 
@@ -209,18 +209,18 @@
           <span class="faq-icon">↓</span>
         </div>
         <div class="faq-answer">
-          Yes. Use the <code>/ai model</code> command to recalibrate the Sentinel. You can choose between **Quantum Flash** (optimized for speed/efficiency) or **Quantum Pro** (optimized for complex reasoning and deep analysis).
+          Yes. Use the <code>/ai model</code> command to change which AI you use. You can choose between **Flash** (faster) or **Pro** (smarter for complex questions).
         </div>
       </div>
     </div>
 
       <div class="faq-item">
         <div class="faq-question">
-          <h3>Why are some protocols (like /economy harvest) missing?</h3>
+          <h3>Why are some commands missing?</h3>
           <span class="faq-icon">↓</span>
         </div>
         <div class="faq-answer">
-          Due to Discord's global command caching, some protocols may experience indexing delays. If a command does not appear in your terminal, an administrator must execute the <code>/system sync</code> protocol to force a sector-wide re-indexing of tactical assets.
+          Sometimes Discord takes a little while to show new commands. If you don't see a command, an admin can use <code>/system sync</code> to refresh them for the whole server.
         </div>
       </div>
 
@@ -230,7 +230,7 @@
           <span class="faq-icon">↓</span>
         </div>
         <div class="faq-answer">
-          Astra supports dual-mode interaction. The default prefix for message-based commands is <code>-</code>. Administrators can change this at any time by executing the <code>/prefix set</code> command.
+          Astra uses slash commands by default, but you can also use <code>-</code> as a prefix for message commands. Admins can change this with <code>/prefix set</code>.
         </div>
       </div>
     </div>
@@ -238,7 +238,7 @@
   </main>
 
   <!-- FOOTER -->
-  <footer class="footer-quantum">
+  <footer class="footer-astra">
     <div class="container">
       <div class="footer-grid">
         <div>
@@ -247,23 +247,23 @@
             ASTRA
           </div>
           <p class="footer-brand__desc">
-            Astra v8.0.1 'Quantum' — Engineered for the high-concurrency demands of elite Discord communities worldwide.
+            Astra — Built for Discord servers worldwide.
           </p>
         </div>
         <div>
-          <h4 class="footer-head">Architecture</h4>
+          <h4 class="footer-head">Features</h4>
           <div class="footer-links">
-            <a href="features.html" class="footer-link">Sectors</a>
-            <a href="commands.html" class="footer-link">Protocols</a>
+            <a href="features.html" class="footer-link">Features</a>
+            <a href="commands.html" class="footer-link">Commands</a>
             <a href="docs.html" class="footer-link">Docs</a>
           </div>
         </div>
         <div>
-          <h4 class="footer-head">Command</h4>
+          <h4 class="footer-head">Help</h4>
           <div class="footer-links">
             <a href="support.html" class="footer-link">Support Hub</a>
-            <a href="faq.html" class="footer-link">Field FAQ</a>
-            <a href="changelog.html" class="footer-link">Mission Logs</a>
+            <a href="faq.html" class="footer-link">FAQ</a>
+            <a href="changelog.html" class="footer-link">Updates</a>
           </div>
         </div>
         <div>
@@ -276,14 +276,13 @@
       </div>
       <div class="footer-bottom">
         <span>&copy; 2026 Astra. All rights reserved.</span>
-        <span>Astra Proprietary License v2.5</span>
       </div>
     </div>
   </footer>
 
   <script>
     window.addEventListener('scroll', () => {
-      document.getElementById('navbar').classList.toggle('nav-quantum--scrolled', window.scrollY > 50);
+      document.getElementById('navbar').classList.toggle('nav-astra--scrolled', window.scrollY > 50);
     });
 
     const observer = new IntersectionObserver((entries) => {

@@ -1,6 +1,6 @@
 /* ============================================
    ASTRA DESIGN SYSTEM — main.css
-   Engineered for High-Fidelity Tactical Interfaces
+   A clean, modern design for the Astra Bot
    ============================================ */
 
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap");
@@ -115,7 +115,7 @@ body {
 }
 
 /* --- TYPOGRAPHY UTILS --- */
-.h1-titan {
+.h1-astra {
   font-family: var(--font-heading);
   font-size: clamp(2.5rem, 8vw, 5rem);
   font-weight: 900;
@@ -124,7 +124,7 @@ body {
   text-transform: uppercase;
 }
 
-.h2-titan {
+.h2-quantum {
   font-family: var(--font-heading);
   font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 800;
@@ -299,10 +299,58 @@ body {
   .section {
     padding: 60px 0;
   }
-  .h1-titan {
+  .h1-quantum {
     font-size: 3rem;
   }
-  .h2-titan {
+  .h2-quantum {
     font-size: 2.2rem;
   }
 }
+
+/* --- UTILITY CLASSES --- */
+.pt-hero { padding-top: 180px; }
+.pb-hero { padding-bottom: 120px; }
+.relative-top { position: relative; z-index: 10; }
+.text-lead { font-size: 1.2rem; max-width: 700px; margin-inline: auto; }
+.flex-center { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+.bg-alt { background: var(--color-bg-alt); }
+.align-center { align-items: center; }
+.text-right { text-align: right; }
+.img-fluid { max-width: 100%; height: auto; }
+.cta-box { 
+  padding: 80px 40px; 
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%); 
+}
+.text-secondary { color: var(--color-secondary); }
+.text-accent { color: var(--color-accent); }
+.text-success { color: var(--color-success); }
+.mb-xl { margin-bottom: 48px; }
+.mt-sm { margin-top: 8px; }
+.mb-2xl { margin-bottom: 64px; }
+.mb-md { margin-bottom: 24px; }
+.btn-small { padding: 8px 16px; font-size: 0.8rem; }
+.max-700 { max-width: 700px; }
+.mx-auto { margin-inline: auto; }
+.z-10 { z-index: 10; }
+.relative { position: relative; }
+.text-center { text-align: center; }
+.fs-3rem { font-size: 3rem; }
+.mb-24 { margin-bottom: 24px; }
+.mb-16 { margin-bottom: 16px; }
+.w-full { width: 100%; }
+.font-heading { font-family: var(--font-heading); }
+.flex-align-center { display: flex; align-items: center; gap: 12px; }
+.max-w-600 { max-width: 600px; }
+.p-0 { padding: 0; }
+.fs-085 { font-size: 0.85rem; }
+.mb-12 { margin-bottom: 12px; }
+.bg-success-glow { background: var(--color-success-glow); }
+.log-badge--patch { background: rgba(6, 214, 160, 0.2); color: #06d6a0; }
+.pl-12 { padding-left: 1.2rem; }
+.pt-160 { padding-top: 160px; }
+.pb-40 { padding-bottom: 40px; }
+.pb-120 { padding-bottom: 120px; }
+.max-w-900 { max-width: 900px; }
+.d-block { display: block; }
+.opacity-05 { opacity: 0.5; }
+.mt-60 { margin-top: 60px; }

@@ -13,44 +13,44 @@ import { THEME, VERSION, PROTOCOL } from '../core/constants';
 const command: Command = {
     data: new SlashCommandBuilder()
         .setName('mod')
-        .setDescription('🛡️ Tactical Moderation Suite.')
+        .setDescription('🛡️ Admin tools to keep the server safe.')
         .setDMPermission(false)
         .addSubcommand(sub =>
             sub.setName('kick')
-                .setDescription('Eject a member from the sector.')
-                .addUserOption(opt => opt.setName('member').setDescription('The member to eject.').setRequired(true))
-                .addStringOption(opt => opt.setName('reason').setDescription('Reason for ejection.'))
+                .setDescription('Kick someone out.')
+                .addUserOption(opt => opt.setName('member').setDescription('The person to kick.').setRequired(true))
+                .addStringOption(opt => opt.setName('reason').setDescription('Why are they being kicked?'))
         )
         .addSubcommand(sub =>
             sub.setName('ban')
-                .setDescription('Permanently blacklist a member from the sector.')
-                .addUserOption(opt => opt.setName('member').setDescription('The member to blacklist.').setRequired(true))
-                .addStringOption(opt => opt.setName('reason').setDescription('Reason for blacklisting.'))
-                .addIntegerOption(opt => opt.setName('delete_messages').setDescription('Days of messages to delete (0–7).').setMinValue(0).setMaxValue(7))
+                .setDescription('Ban someone forever.')
+                .addUserOption(opt => opt.setName('member').setDescription('The person to ban.').setRequired(true))
+                .addStringOption(opt => opt.setName('reason').setDescription('Why are they being banned?'))
+                .addIntegerOption(opt => opt.setName('delete_messages').setDescription('How many days of messages to delete (0–7).').setMinValue(0).setMaxValue(7))
         )
         .addSubcommand(sub =>
             sub.setName('unban')
-                .setDescription('Remove a blacklist entry for a user by ID.')
-                .addStringOption(opt => opt.setName('user_id').setDescription('The Discord ID of the user to unban.').setRequired(true))
-                .addStringOption(opt => opt.setName('reason').setDescription('Reason for removal.'))
+                .setDescription('Unban someone.')
+                .addStringOption(opt => opt.setName('user_id').setDescription('The ID of the user to unban.').setRequired(true))
+                .addStringOption(opt => opt.setName('reason').setDescription('Why are they being unbanned?'))
         )
         .addSubcommand(sub =>
             sub.setName('timeout')
-                .setDescription('Temporary temporal suspension.')
-                .addUserOption(opt => opt.setName('member').setDescription('The member to suspend.').setRequired(true))
-                .addIntegerOption(opt => opt.setName('duration').setDescription('Duration in minutes.').setRequired(true).setMinValue(1).setMaxValue(40320))
-                .addStringOption(opt => opt.setName('reason').setDescription('Reason for suspension.'))
+                .setDescription('Time someone out.')
+                .addUserOption(opt => opt.setName('member').setDescription('The person to time out.').setRequired(true))
+                .addIntegerOption(opt => opt.setName('duration').setDescription('How many minutes?').setRequired(true).setMinValue(1).setMaxValue(40320))
+                .addStringOption(opt => opt.setName('reason').setDescription('Why are they being timed out?'))
         )
         .addSubcommand(sub =>
             sub.setName('warn')
-                .setDescription('Issue a formal warning to a member.')
-                .addUserOption(opt => opt.setName('member').setDescription('The member to warn.').setRequired(true))
-                .addStringOption(opt => opt.setName('reason').setDescription('Reason for the warning.').setRequired(true))
+                .setDescription('Warn someone.')
+                .addUserOption(opt => opt.setName('member').setDescription('The person to warn.').setRequired(true))
+                .addStringOption(opt => opt.setName('reason').setDescription('Why are they being warned?').setRequired(true))
         )
         .addSubcommand(sub =>
             sub.setName('purge')
-                .setDescription('Bulk delete messages from the current channel.')
-                .addIntegerOption(opt => opt.setName('count').setDescription('Number of messages to delete (1–100).').setRequired(true).setMinValue(1).setMaxValue(100))
+                .setDescription('Clear some messages.')
+                .addIntegerOption(opt => opt.setName('count').setDescription('How many messages to delete (1–100).').setRequired(true).setMinValue(1).setMaxValue(100))
         )
         .addSubcommand(sub =>
             sub.setName('case')
@@ -59,8 +59,8 @@ const command: Command = {
         )
         .addSubcommand(sub =>
             sub.setName('history')
-                .setDescription('View the full moderation history for a user.')
-                .addUserOption(opt => opt.setName('member').setDescription('The target operative.').setRequired(true))
+                .setDescription('See someone\'s mod history.')
+                .addUserOption(opt => opt.setName('member').setDescription('The person to check.').setRequired(true))
         )
         .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
 
@@ -74,14 +74,14 @@ const command: Command = {
             const reason = interaction.options.getString('reason') || 'No reason provided';
 
             if (!(member instanceof GuildMember)) {
-                return interaction.editReply({ content: '❌ Target not found in current sector.' });
+                return interaction.editReply({ content: '❌ I can\'t find that person here.' });
             }
             if (!member.kickable) {
-                return interaction.editReply({ content: '❌ Insufficient Authority: Target is protected by system hierarchy.' });
+                return interaction.editReply({ content: '❌ I can\'t do that. They have a higher role than me.' });
             }
             const self = guild.members.me!;
             if (member.roles.highest.position >= self.roles.highest.position) {
-                return interaction.editReply({ content: '❌ Permission Error: Target rank exceeds or matches Astra authority.' });
+                return interaction.editReply({ content: '❌ I can\'t do that. Their role is higher or the same as mine.' });
             }
 
             await member.kick(reason);
@@ -89,15 +89,15 @@ const command: Command = {
 
             const embed = new EmbedBuilder()
                 .setColor(THEME.WARNING)
-                .setTitle('⚖️ EJECTION EXECUTED')
-                .setDescription(`The target operative has been ejected from the sector.`)
+                .setTitle('⚖️ KICKED')
+                .setDescription(`That person has been kicked from the server.`)
                 .addFields(
-                    { name: '👤 Operative', value: `${member.user.tag}`, inline: true },
+                    { name: '👤 User', value: `${member.user.tag}`, inline: true },
                     { name: '🆔 Case', value: `#${caseId}`, inline: true },
                     { name: '📜 Reason', value: reason, inline: false }
                 )
                 .setThumbnail(member.user.displayAvatarURL())
-                .setFooter({ text: `${PROTOCOL} Enforcement • Case #${caseId}` })
+                .setFooter({ text: `Case #${caseId}` })
                 .setTimestamp();
 
             await interaction.editReply({ embeds: [embed] });
@@ -113,7 +113,7 @@ const command: Command = {
                 if (member) {
                     const self = guild.members.me!;
                     if (member.roles.highest.position >= self.roles.highest.position) {
-                        return interaction.editReply({ content: '❌ Permission Error: Target rank exceeds or matches Astra authority.' });
+                        return interaction.editReply({ content: '❌ I can\'t do that. Their role is higher or the same as mine.' });
                     }
                 }
                 await guild.members.ban(user, { reason, deleteMessageSeconds: deleteDays * 86400 });
@@ -121,20 +121,20 @@ const command: Command = {
 
                 const embed = new EmbedBuilder()
                     .setColor(THEME.DANGER)
-                    .setTitle('🚨 BLACKLIST APPLIED')
-                    .setDescription(`The target operative has been permanently blacklisted.`)
+                    .setTitle('🚨 BANNED')
+                    .setDescription(`That person has been banned forever.`)
                     .addFields(
-                        { name: '👤 Operative', value: `${user.tag}`, inline: true },
+                        { name: '👤 User', value: `${user.tag}`, inline: true },
                         { name: '🆔 Case', value: `#${caseId}`, inline: true },
                         { name: '📜 Reason', value: reason, inline: false }
                     )
                     .setThumbnail(user.displayAvatarURL())
-                    .setFooter({ text: `${PROTOCOL} Enforcement • Critical Violation` })
+                    .setFooter({ text: `Banned` })
                     .setTimestamp();
 
                 await interaction.editReply({ embeds: [embed] });
             } catch (err) {
-                await interaction.editReply({ content: `❌ Blacklist Failed: ${err}` });
+                await interaction.editReply({ content: `❌ Ban Failed: ${err}` });
             }
 
         } else if (subcommand === 'unban') {
@@ -152,14 +152,14 @@ const command: Command = {
 
                 const embed = new EmbedBuilder()
                     .setColor(THEME.SUCCESS)
-                    .setTitle('✅ BLACKLIST REVOKED')
-                    .setDescription(`Sector access has been restored for the user.`)
+                    .setTitle('✅ UNBANNED')
+                    .setDescription(`That person can now join the server again.`)
                     .addFields(
                         { name: '🆔 User ID', value: `\`${userId}\``, inline: true },
                         { name: '🆔 Case', value: `#${caseId}`, inline: true },
                         { name: '📜 Reason', value: reason, inline: false }
                     )
-                    .setFooter({ text: `${PROTOCOL} Enforcement • Restriction Lifted` })
+                    .setFooter({ text: `Unbanned` })
                     .setTimestamp();
 
                 await interaction.editReply({ embeds: [embed] });
@@ -174,10 +174,10 @@ const command: Command = {
             const reason = interaction.options.getString('reason') || 'No reason provided';
 
             if (!(member instanceof GuildMember)) {
-                return interaction.editReply({ content: '❌ Target not found in current sector.' });
+                return interaction.editReply({ content: '❌ I can\'t find that person here.' });
             }
             if (!member.moderatable) {
-                return interaction.editReply({ content: '❌ Insufficient Authority: Target is protected by system hierarchy.' });
+                return interaction.editReply({ content: '❌ I can\'t do that. They have a higher role than me.' });
             }
             try {
                 await member.timeout(duration * 60000, reason);
@@ -185,21 +185,21 @@ const command: Command = {
 
                 const embed = new EmbedBuilder()
                     .setColor(THEME.WARNING)
-                    .setTitle('⏳ TEMPORAL SUSPENSION')
-                    .setDescription(`The operative has been temporarily suspended from all activities.`)
+                    .setTitle('⏳ TIMED OUT')
+                    .setDescription(`That person has been timed out and can't talk right now.`)
                     .addFields(
-                        { name: '👤 Operative', value: `${member.user.tag}`, inline: true },
+                        { name: '👤 User', value: `${member.user.tag}`, inline: true },
                         { name: '🆔 Case', value: `#${caseId}`, inline: true },
                         { name: '⏲️ Duration', value: `${duration} minutes`, inline: true },
                         { name: '📜 Reason', value: reason, inline: false }
                     )
                     .setThumbnail(member.user.displayAvatarURL())
-                    .setFooter({ text: `${PROTOCOL} Enforcement • Stability Protocol` })
+                    .setFooter({ text: `Timed Out` })
                     .setTimestamp();
 
                 await interaction.editReply({ embeds: [embed] });
             } catch (err) {
-                await interaction.editReply({ content: `❌ Suspension Failed: ${err}` });
+                await interaction.editReply({ content: `❌ Timeout Failed: ${err}` });
             }
 
         } else if (subcommand === 'warn') {
@@ -208,7 +208,7 @@ const command: Command = {
             const reason = interaction.options.getString('reason')!;
 
             if (!(member instanceof GuildMember)) {
-                return interaction.editReply({ content: '❌ Target not found in current sector.' });
+                return interaction.editReply({ content: '❌ I can\'t find that person here.' });
             }
             if (member.user.bot) {
                 return interaction.editReply({ content: '❌ Bots cannot be warned.' });
@@ -219,25 +219,25 @@ const command: Command = {
             try {
                 await member.user.send({ embeds: [new EmbedBuilder()
                     .setColor(THEME.WARNING)
-                    .setTitle('⚠️ FORMAL WARNING ISSUED')
-                    .setDescription(`You have received a formal warning in **${guild.name}**.\nFurther violations may result in suspension or blacklist.`)
+                    .setTitle('⚠️ WARNING')
+                    .setDescription(`You have been warned in **${guild.name}**.\nIf you keep breaking rules, you might be timed out or banned.`)
                     .addFields(
                         { name: '🆔 Case', value: `#${caseId}`, inline: true },
                         { name: '📜 Reason', value: reason, inline: false }
                     )
-                    .setFooter({ text: `Astra Moderation System • ${VERSION}` })
+                    .setFooter({ text: `Astra Bot` })
                     .setTimestamp()] });
             } catch (_) { /* DMs closed */ }
 
             const embed = new EmbedBuilder()
                 .setColor(THEME.WARNING)
-                .setTitle('⚠️ WARNING ISSUED')
+                .setTitle('⚠️ WARNING')
                 .addFields(
-                    { name: '👤 Operative', value: `${member.user.tag}`, inline: true },
+                    { name: '👤 User', value: `${member.user.tag}`, inline: true },
                     { name: '🆔 Case', value: `#${caseId}`, inline: true },
                     { name: '📜 Reason', value: reason, inline: false }
                 )
-                .setFooter({ text: `${PROTOCOL} Enforcement • Protocol Logged` })
+                .setFooter({ text: `Warned` })
                 .setTimestamp();
 
             await interaction.editReply({ embeds: [embed] });
@@ -254,13 +254,13 @@ const command: Command = {
                 const deleted = await (channel as any).bulkDelete(count, true);
                 const embed = new EmbedBuilder()
                     .setColor(THEME.SUCCESS)
-                    .setTitle('🧹 SECTOR SANITIZATION')
-                    .setDescription(`Successfully purged **${deleted.size}** tactical logs from the local channel.`)
-                    .setFooter({ text: `${PROTOCOL} Maintenance • ${VERSION}` })
+                    .setTitle('🧹 MESSAGES CLEARED')
+                    .setDescription(`Successfully cleared **${deleted.size}** messages from this channel.`)
+                    .setFooter({ text: `Astra Bot` })
                     .setTimestamp();
                 await interaction.editReply({ embeds: [embed] });
             } catch (err) {
-                await interaction.editReply({ content: `❌ Sanitization Failed: ${err}` });
+                await interaction.editReply({ content: `❌ Purge Failed: ${err}` });
             }
 
         } else if (subcommand === 'case') {
@@ -268,12 +268,12 @@ const command: Command = {
             const caseData = await ModerationService.getCase(guild.id, caseNumber);
 
             if (!caseData) {
-                return interaction.reply({ content: `❌ Case #${caseNumber} not found in this sector.`, ephemeral: true });
+                return interaction.reply({ content: `❌ Case #${caseNumber} not found here.`, ephemeral: true });
             }
 
             const embed = new EmbedBuilder()
                 .setColor(THEME.PRIMARY)
-                .setTitle(`📁 CASE LOG: #${caseNumber}`)
+                .setTitle(`📁 CASE #${caseNumber}`)
                 .addFields(
                     { name: '🔹 Type', value: `\`${caseData.type.toUpperCase()}\``, inline: true },
                     { name: '🔸 Status', value: `\`${caseData.case_status || 'active'}\``, inline: true },
@@ -283,7 +283,7 @@ const command: Command = {
                     { name: '📜 Reason', value: caseData.reason || 'No reason provided', inline: false },
                     { name: '📅 Timestamp', value: `<t:${Math.floor(new Date(caseData.timestamp).getTime() / 1000)}:F>`, inline: false }
                 )
-                .setFooter({ text: `Astra Moderation Core • ${VERSION}` });
+                .setFooter({ text: `Astra Bot` });
 
             await interaction.reply({ embeds: [embed] });
 
@@ -293,7 +293,7 @@ const command: Command = {
             const cases = await ModerationService.getUserHistory(guild.id, user.id);
 
             if (!cases || cases.length === 0) {
-                return interaction.editReply({ content: `✅ No moderation history found for **${user.tag}** in this sector.` });
+                return interaction.editReply({ content: `✅ No mod history found for **${user.tag}** here.` });
             }
 
             const typeColors: Record<string, string> = { kick: '🟠', ban: '🔴', unban: '🟢', timeout: '🟡', warn: '🟡' };
@@ -303,10 +303,10 @@ const command: Command = {
 
             const embed = new EmbedBuilder()
                 .setColor(THEME.PRIMARY)
-                .setTitle(`📋 ENFORCEMENT HISTORY: ${user.tag}`)
+                .setTitle(`📋 MOD HISTORY: ${user.tag}`)
                 .setThumbnail(user.displayAvatarURL())
                 .setDescription(lines)
-                .setFooter({ text: `${cases.length} total case(s) logged in sector database.` })
+                .setFooter({ text: `${cases.length} total case(s) found in the database.` })
                 .setTimestamp();
 
             await interaction.editReply({ embeds: [embed] });
