@@ -13,6 +13,7 @@ import {
 import { config } from './core/config';
 import logger from './core/logger';
 import { db } from './core/database';
+import { VERSION, PROTOCOL } from './core/constants';
 import { Command } from './types';
 import { ErrorReporter } from './core/error_reporter';
 import { StatusService } from './services/statusService';
@@ -131,7 +132,7 @@ export class AstraClient extends Client {
 
             // Rotating Status Engine
             const statuses = [
-                () => ({ name: `Titan v7.5.0 | /system update`, type: 0 }),
+                () => ({ name: `${PROTOCOL} ${VERSION} | /system update`, type: 0 }),
                 () => ({ name: `${c.guilds.cache.size} Sectors`, type: 3 }),
                 () => ({ name: `${c.users.cache.size} Members`, type: 2 }),
                 () => ({ name: `Tactical Excellence`, type: 1 })
@@ -150,7 +151,7 @@ export class AstraClient extends Client {
             const { GiveawayService } = require('./services/giveawayService');
             GiveawayService.startChecker(this);
 
-            this.user?.setActivity('Titan v7.5.0 | /system update', { type: ActivityType.Watching });
+            this.user?.setActivity(`${PROTOCOL} ${VERSION} | /system update`, { type: ActivityType.Watching });
 
             // Sentinel Status Pulse
             await StatusService.checkVersionUpdate(c);

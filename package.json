@@ -1,6 +1,6 @@
 {
   "name": "astra-bot",
-  "version": "8.0.0",
+  "version": "8.0.1",
   "description": "Enterprise-grade Discord moderation, utility, economy, leveling, ticketing, and giveaway bot.",
   "main": "dist/index.js",
   "scripts": {

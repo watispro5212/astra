@@ -3,7 +3,17 @@
 All notable changes to Astra are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [7.5.0] — April 26, 2026
+## [8.0.1] — April 27, 2026
+
+### 🧠 Free Neural AI & DB Fixes
+
+- **OpenRouter Free Models** — Transitioned default AI models to Free OpenRouter endpoints: Tencent HY3, MiniMax m2.5, Gemma 4 26B.
+- **SQL Data Maps** — Fixed a core syntax crash in the profile systems attempting to load database arrays incorrectly.
+- **Sync Errors Fixed** — Addressed PROTOCOL ERROR regarding neural model preference arrays syncing.
+
+---
+
+## [8.0.0] — April 27, 2026
 
 ### 🪐 Titan Protocol Deployment
 

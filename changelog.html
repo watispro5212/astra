@@ -1,274 +1,420 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mission Logs — Astra</title>
-  <meta name="description" content="Astra v7.5.0 'Titan' deployment history and mission logs.">
-  <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
-  <link rel="stylesheet" href="assets/css/main.css">
-  <link rel="stylesheet" href="assets/css/components.css">
-  <style>
-    .log-timeline {
-      position: relative;
-      padding-left: 40px;
-      margin-top: 40px;
-    }
-    .log-timeline::before {
-      content: '';
-      position: absolute;
-      left: 0; top: 0; bottom: 0;
-      width: 2px;
-      background: var(--glass-border);
-    }
-    .log-entry {
-      position: relative;
-      margin-bottom: 60px;
-    }
-    .log-entry::before {
-      content: '';
-      position: absolute;
-      left: -45px; top: 8px;
-      width: 12px; height: 12px;
-      border-radius: 50%;
-      background: var(--color-bg);
-      border: 2px solid var(--color-primary);
-      box-shadow: 0 0 10px var(--color-primary-glow);
-      z-index: 2;
-    }
-    .log-entry.major::before {
-      background: var(--color-primary);
-      width: 16px; height: 16px;
-      left: -47px;
-    }
-    .log-version {
-      font-family: var(--font-heading);
-      font-size: 1.5rem;
-      margin-bottom: 8px;
-    }
-    .log-date {
-      font-size: 0.8rem;
-      color: var(--color-text-muted);
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 24px;
-    }
-    .log-badge {
-      display: inline-block;
-      padding: 4px 12px;
-      background: var(--grad-titan);
-      border-radius: 100px;
-      font-size: 0.7rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 16px;
-    }
-    .log-content h4 {
-      font-family: var(--font-heading);
-      font-size: 0.85rem;
-      color: var(--color-primary);
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      margin: 24px 0 12px;
-    }
-    .log-list {
-      list-style: none;
-      padding: 0;
-    }
-    .log-list li {
-      position: relative;
-      padding-left: 20px;
-      margin-bottom: 10px;
-      font-size: 0.95rem;
-      color: var(--color-text-dim);
-    }
-    .log-list li::before {
-      content: '→';
-      position: absolute;
-      left: 0;
-      color: var(--color-primary);
-      font-weight: 700;
-    }
-  </style>
-</head>
-<body>
-  <div class="astra-mesh"></div>
-  <div class="astra-grid"></div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mission Logs — Astra</title>
+    <meta
+      name="description"
+      content="Astra v7.5.0 'Titan' deployment history and mission logs."
+    />
+    <link rel="icon" type="image/png" href="assets/images/astra-logo.png" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <link rel="stylesheet" href="assets/css/components.css" />
+    <style>
+      .log-timeline {
+        position: relative;
+        padding-left: 40px;
+        margin-top: 40px;
+      }
+      .log-timeline::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: var(--glass-border);
+      }
+      .log-entry {
+        position: relative;
+        margin-bottom: 60px;
+      }
+      .log-entry::before {
+        content: "";
+        position: absolute;
+        left: -45px;
+        top: 8px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--color-bg);
+        border: 2px solid var(--color-primary);
+        box-shadow: 0 0 10px var(--color-primary-glow);
+        z-index: 2;
+      }
+      .log-entry.major::before {
+        background: var(--color-primary);
+        width: 16px;
+        height: 16px;
+        left: -47px;
+      }
+      .log-version {
+        font-family: var(--font-heading);
+        font-size: 1.5rem;
+        margin-bottom: 8px;
+      }
+      .log-date {
+        font-size: 0.8rem;
+        color: var(--color-text-muted);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 24px;
+      }
+      .log-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        background: var(--grad-titan);
+        border-radius: 100px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 16px;
+      }
+      .log-content h4 {
+        font-family: var(--font-heading);
+        font-size: 0.85rem;
+        color: var(--color-primary);
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin: 24px 0 12px;
+      }
+      .log-list {
+        list-style: none;
+        padding: 0;
+      }
+      .log-list li {
+        position: relative;
+        padding-left: 20px;
+        margin-bottom: 10px;
+        font-size: 0.95rem;
+        color: var(--color-text-dim);
+      }
+      .log-list li::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: var(--color-primary);
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="astra-mesh"></div>
+    <div class="astra-grid"></div>
 
-  <!-- NAVIGATION -->
-  <nav class="nav-titan" id="navbar">
-    <div class="nav-container">
-      <a href="index.html" class="nav-logo">
-        <img src="assets/images/astra-logo.png" alt="Astra Logo" width="32" height="32">
-        ASTRA
-      </a>
-      <div class="nav-links">
-        <a href="features.html" class="nav-link">Sectors</a>
-        <a href="commands.html" class="nav-link">Protocols</a>
-        <a href="docs.html" class="nav-link">Docs</a>
-        <a href="changelog.html" class="nav-link">Mission Logs</a>
-        <a href="support.html" class="nav-link">Support</a>
-      </div>
-    <div class="nav-actions">
-      <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands" class="btn-astra btn-astra--outline" class="btn-small">
-        Guild Install
-      </a>
-      <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=1&scope=identify+applications.commands" class="btn-astra btn-astra--primary" class="btn-small">
-        User Install
-      </a>
-    </div>
-    </div>
-  </nav>
-
-  <!-- HEADER -->
-  <header class="section" class="page-header-lg">
-    <div class="container">
-      <h1 class="h1-titan text-gradient">MISSION LOGS</h1>
-      <p class="text-dim" class="max-w-600">The complete archival history of the Astra deployment — every upgrade, fix, and tactical advancement documented.</p>
-    </div>
-  </header>
-
-  <!-- CONTENT -->
-  <main class="container" class="page-main">
-    <div class="log-timeline">
-      
-      <!-- v7.5.0 TITAN -->
-      <div class="log-entry major animate-reveal">
-        <div class="glass-card" class="glass-card-blue">
-          <span class="log-badge">Titan v7.5.0</span>
-          <h2 class="log-version">Operation: Cloud Ascension</h2>
-          <div class="log-date">APRIL 26, 2026</div>
-          
-          <div class="log-content">
-            <h4>Cloud & Infrastructure</h4>
-            <ul class="log-list">
-              <li><strong>Supabase Migration</strong> — Deployed enterprise-grade PostgreSQL persistence layer, ending legacy data reset cycles.</li>
-              <li><strong>High-Throughput Pooling</strong> — Optimized database connection management for global sector concurrency.</li>
-              <li><strong>Nuclear Sync Protocol</strong> — New `/system sync` protocol for purging legacy command echoes and forced re-indexing.</li>
-            </ul>
-            <h4>ATX Speculation</h4>
-            <ul class="log-list">
-              <li><strong>Visual Charts</strong> — Implemented high-fidelity ASCII sparklines for market volatility tracking.</li>
-              <li><strong>Portfolio Diagnostics</strong> — Advanced net worth analysis with precise profit/loss tracking and yield reporting.</li>
-              <li><strong>Trend Telemetry</strong> — Real-time bullish/bearish indicators with deterministic volatility simulation.</li>
-            </ul>
-            <h4>Neural Intelligence</h4>
-            <ul class="log-list">
-              <li><strong>AI Sentinel</strong> — Deployed a high-concurrency neural assistant exclusively for secure DM interactions.</li>
-              <li><strong>Spectral Cycling</strong> — Automated rotation of redundant triple-key API array to mitigate rate-limiting.</li>
-              <li><strong>Model Selection</strong> — New `/ai model` command for real-time recalibration of neural matrices (Flash vs Pro).</li>
-            </ul>
-            <h4>Optimization Matrix</h4>
-            <ul class="log-list">
-              <li><strong>Mem-Sweep Protocol</strong> — Implementation of aggressive cache limits (Messages/Members) to stabilize critical shards.</li>
-              <li><strong>Shard-Aware Yields</strong> — Background industrial processing restricted to Shard 0 to prevent data race conditions.</li>
-              <li><strong>Transpile-Only Mode</strong> — Optimized runtime execution environment, reducing memory footprint across all shards.</li>
-            </ul>
-            <h4>Stability & Polish</h4>
-            <ul class="log-list">
-              <li><strong>Prefix Protocol</strong> — Message-based command interface enabled for rapid terminal interaction (Default: `-`).</li>
-              <li><strong>BigInt Sanitization</strong> — Resolved Postgres-specific stringification errors in Global Rankings.</li>
-              <li><strong>Safari Interaction Patch</strong> — Global fix for `-webkit-user-select` anomalies on mobile terminals.</li>
-            </ul>
-          </div>
+    <!-- NAVIGATION -->
+    <nav class="nav-titan" id="navbar">
+      <div class="nav-container">
+        <a href="index.html" class="nav-logo">
+          <img
+            src="assets/images/astra-logo.png"
+            alt="Astra Logo"
+            width="32"
+            height="32"
+          />
+          ASTRA
+        </a>
+        <div class="nav-links">
+          <a href="features.html" class="nav-link">Sectors</a>
+          <a href="commands.html" class="nav-link">Protocols</a>
+          <a href="docs.html" class="nav-link">Docs</a>
+          <a href="changelog.html" class="nav-link">Mission Logs</a>
+          <a href="support.html" class="nav-link">Support</a>
+        </div>
+        <div class="nav-actions">
+          <a
+            href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands"
+            class="btn-astra btn-astra--outline"
+            class="btn-small"
+          >
+            Guild Install
+          </a>
+          <a
+            href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=1&scope=identify+applications.commands"
+            class="btn-astra btn-astra--primary"
+            class="btn-small"
+          >
+            User Install
+          </a>
         </div>
       </div>
+    </nav>
 
-      <!-- v7.3.0 OMEGA -->
-      <div class="log-entry major animate-reveal">
-        <div class="glass-card">
-          <span class="log-badge" class="bg-grad-cyber">Omega v7.3.0</span>
-          <h2 class="log-version">Omega Protocol</h2>
-          <div class="log-date">APRIL 26, 2026</div>
-          <div class="log-content">
-            <h4>Tactical Overhaul</h4>
-            <ul class="log-list">
-              <li><strong>Proprietary Transition</strong> — Officially moved to a Closed Source development model under APL v2.5.</li>
-              <li><strong>Marketplace Expansion</strong> — Role Rewards now fully functional within the shop ecosystem.</li>
-              <li><strong>Auto-Seeding Engine</strong> — Automated inventory deployment for new sectors.</li>
-            </ul>
+    <!-- HEADER -->
+    <header class="section" class="page-header-lg">
+      <div class="container">
+        <h1 class="h1-titan text-gradient">MISSION LOGS</h1>
+        <p class="text-dim" class="max-w-600">
+          The complete archival history of the Astra deployment — every upgrade,
+          fix, and tactical advancement documented.
+        </p>
+      </div>
+    </header>
+
+    <!-- CONTENT -->
+    <main class="container" class="page-main">
+      <div class="log-timeline">
+        <!-- v8.0.1 MINOR -->
+        <div class="log-entry minor animate-reveal">
+          <div class="glass-card">
+            <span
+              class="log-badge"
+              style="background: rgba(6, 214, 160, 0.2); color: #06d6a0"
+              >Patch v8.0.1</span
+            >
+            <h2 class="log-version">OpenRouter Core Transition</h2>
+            <div class="log-date">APRIL 27, 2026</div>
+            <div class="log-content">
+              <ul class="log-list">
+                <li>
+                  <strong>Neural AI Overhaul:</strong> Converted the entire
+                  AIService to operate across OpenRouter APIs natively instead
+                  of legacy Gemini endpoints.
+                </li>
+                <li>
+                  <strong>Free-Tier Synchronization:</strong> Default models
+                  explicitly set to `tencent/hy3-preview:free`,
+                  `minimax/minimax-m2.5:free`, and
+                  `google/gemma-4-26b-a4b-it:free`.
+                </li>
+                <li>
+                  <strong>Data Matrix Mapping:</strong> Corrected `db.get`
+                  legacy database mapping inside `profile.ts` preventing crashes
+                  via native standard PostgreSQL logic.
+                </li>
+                <li>
+                  <strong>Slash Command Sync:</strong> Fixed `PROTOCOL ERROR` by
+                  automatically recalibrating model arrays for the `/ai model`
+                  UI options.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- v8.0.0 TITAN (Previously v7.5.0 but bumped for continuity) -->
+        <div class="log-entry major animate-reveal">
+          <div class="glass-card" class="glass-card-blue">
+            <span class="log-badge">Titan v7.5.0</span>
+            <h2 class="log-version">Operation: Cloud Ascension</h2>
+            <div class="log-date">APRIL 26, 2026</div>
+
+            <div class="log-content">
+              <h4>Cloud & Infrastructure</h4>
+              <ul class="log-list">
+                <li>
+                  <strong>Supabase Migration</strong> — Deployed
+                  enterprise-grade PostgreSQL persistence layer, ending legacy
+                  data reset cycles.
+                </li>
+                <li>
+                  <strong>High-Throughput Pooling</strong> — Optimized database
+                  connection management for global sector concurrency.
+                </li>
+                <li>
+                  <strong>Nuclear Sync Protocol</strong> — New `/system sync`
+                  protocol for purging legacy command echoes and forced
+                  re-indexing.
+                </li>
+              </ul>
+              <h4>ATX Speculation</h4>
+              <ul class="log-list">
+                <li>
+                  <strong>Visual Charts</strong> — Implemented high-fidelity
+                  ASCII sparklines for market volatility tracking.
+                </li>
+                <li>
+                  <strong>Portfolio Diagnostics</strong> — Advanced net worth
+                  analysis with precise profit/loss tracking and yield
+                  reporting.
+                </li>
+                <li>
+                  <strong>Trend Telemetry</strong> — Real-time bullish/bearish
+                  indicators with deterministic volatility simulation.
+                </li>
+              </ul>
+              <h4>Neural Intelligence</h4>
+              <ul class="log-list">
+                <li>
+                  <strong>AI Sentinel</strong> — Deployed a high-concurrency
+                  neural assistant exclusively for secure DM interactions.
+                </li>
+                <li>
+                  <strong>Spectral Cycling</strong> — Automated rotation of
+                  redundant triple-key API array to mitigate rate-limiting.
+                </li>
+                <li>
+                  <strong>Model Selection</strong> — New `/ai model` command for
+                  real-time recalibration of neural matrices (Flash vs Pro).
+                </li>
+              </ul>
+              <h4>Optimization Matrix</h4>
+              <ul class="log-list">
+                <li>
+                  <strong>Mem-Sweep Protocol</strong> — Implementation of
+                  aggressive cache limits (Messages/Members) to stabilize
+                  critical shards.
+                </li>
+                <li>
+                  <strong>Shard-Aware Yields</strong> — Background industrial
+                  processing restricted to Shard 0 to prevent data race
+                  conditions.
+                </li>
+                <li>
+                  <strong>Transpile-Only Mode</strong> — Optimized runtime
+                  execution environment, reducing memory footprint across all
+                  shards.
+                </li>
+              </ul>
+              <h4>Stability & Polish</h4>
+              <ul class="log-list">
+                <li>
+                  <strong>Prefix Protocol</strong> — Message-based command
+                  interface enabled for rapid terminal interaction (Default:
+                  `-`).
+                </li>
+                <li>
+                  <strong>BigInt Sanitization</strong> — Resolved
+                  Postgres-specific stringification errors in Global Rankings.
+                </li>
+                <li>
+                  <strong>Safari Interaction Patch</strong> — Global fix for
+                  `-webkit-user-select` anomalies on mobile terminals.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- v7.3.0 OMEGA -->
+        <div class="log-entry major animate-reveal">
+          <div class="glass-card">
+            <span class="log-badge" class="bg-grad-cyber">Omega v7.3.0</span>
+            <h2 class="log-version">Omega Protocol</h2>
+            <div class="log-date">APRIL 26, 2026</div>
+            <div class="log-content">
+              <h4>Tactical Overhaul</h4>
+              <ul class="log-list">
+                <li>
+                  <strong>Proprietary Transition</strong> — Officially moved to
+                  a Closed Source development model under APL v2.5.
+                </li>
+                <li>
+                  <strong>Marketplace Expansion</strong> — Role Rewards now
+                  fully functional within the shop ecosystem.
+                </li>
+                <li>
+                  <strong>Auto-Seeding Engine</strong> — Automated inventory
+                  deployment for new sectors.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- v7.0.0 NOVA -->
+        <div class="log-entry major animate-reveal">
+          <div class="glass-card">
+            <span class="log-badge" class="bg-secondary">Nova v7.0.0</span>
+            <h2 class="log-version">Nova Initialization</h2>
+            <div class="log-date">APRIL 22, 2026</div>
+            <div class="log-content">
+              <h4>New Features</h4>
+              <ul class="log-list">
+                <li>
+                  Deployed full <strong>Ticket System</strong> with private
+                  channel routing.
+                </li>
+                <li>
+                  Launched <strong>Giveaway Engine</strong> with reaction-based
+                  logic.
+                </li>
+                <li>
+                  Introduced <strong>Welcome & Farewell</strong> automation
+                  suite.
+                </li>
+                <li>
+                  Integrated <strong>Vanguard Error Reporter</strong> for
+                  real-time telemetry.
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
+    </main>
 
-      <!-- v7.0.0 NOVA -->
-      <div class="log-entry major animate-reveal">
-        <div class="glass-card">
-          <span class="log-badge" class="bg-secondary">Nova v7.0.0</span>
-          <h2 class="log-version">Nova Initialization</h2>
-          <div class="log-date">APRIL 22, 2026</div>
-          <div class="log-content">
-            <h4>New Features</h4>
-            <ul class="log-list">
-              <li>Deployed full <strong>Ticket System</strong> with private channel routing.</li>
-              <li>Launched <strong>Giveaway Engine</strong> with reaction-based logic.</li>
-              <li>Introduced <strong>Welcome & Farewell</strong> automation suite.</li>
-              <li>Integrated <strong>Vanguard Error Reporter</strong> for real-time telemetry.</li>
-            </ul>
+    <!-- FOOTER -->
+    <footer class="footer-titan">
+      <div class="container">
+        <div class="footer-grid">
+          <div>
+            <div class="footer-brand__logo">
+              <img
+                src="assets/images/astra-logo.png"
+                alt="Astra"
+                width="32"
+                height="32"
+              />
+              ASTRA
+            </div>
+            <p class="footer-brand__desc">
+              Astra v7.5.0 'Titan' — Engineered for the high-concurrency demands
+              of elite Discord communities worldwide.
+            </p>
           </div>
+          <div>
+            <h4 class="footer-head">Architecture</h4>
+            <div class="footer-links">
+              <a href="features.html" class="footer-link">Sectors</a>
+              <a href="commands.html" class="footer-link">Protocols</a>
+              <a href="docs.html" class="footer-link">Docs</a>
+            </div>
+          </div>
+          <div>
+            <h4 class="footer-head">Command</h4>
+            <div class="footer-links">
+              <a href="support.html" class="footer-link">Support Hub</a>
+              <a href="faq.html" class="footer-link">Field FAQ</a>
+              <a href="changelog.html" class="footer-link">Mission Logs</a>
+            </div>
+          </div>
+          <div>
+            <h4 class="footer-head">Legal</h4>
+            <div class="footer-links">
+              <a href="privacy.html" class="footer-link">Privacy Policy</a>
+              <a href="terms.html" class="footer-link">Terms of Service</a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>&copy; 2026 Astra. All rights reserved.</span>
+          <span>Astra Proprietary License v2.5</span>
         </div>
       </div>
+    </footer>
 
-    </div>
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="footer-titan">
-    <div class="container">
-      <div class="footer-grid">
-        <div>
-          <div class="footer-brand__logo">
-            <img src="assets/images/astra-logo.png" alt="Astra" width="32" height="32">
-            ASTRA
-          </div>
-          <p class="footer-brand__desc">
-            Astra v7.5.0 'Titan' — Engineered for the high-concurrency demands of elite Discord communities worldwide.
-          </p>
-        </div>
-        <div>
-          <h4 class="footer-head">Architecture</h4>
-          <div class="footer-links">
-            <a href="features.html" class="footer-link">Sectors</a>
-            <a href="commands.html" class="footer-link">Protocols</a>
-            <a href="docs.html" class="footer-link">Docs</a>
-          </div>
-        </div>
-        <div>
-          <h4 class="footer-head">Command</h4>
-          <div class="footer-links">
-            <a href="support.html" class="footer-link">Support Hub</a>
-            <a href="faq.html" class="footer-link">Field FAQ</a>
-            <a href="changelog.html" class="footer-link">Mission Logs</a>
-          </div>
-        </div>
-        <div>
-          <h4 class="footer-head">Legal</h4>
-          <div class="footer-links">
-            <a href="privacy.html" class="footer-link">Privacy Policy</a>
-            <a href="terms.html" class="footer-link">Terms of Service</a>
-          </div>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <span>&copy; 2026 Astra. All rights reserved.</span>
-        <span>Astra Proprietary License v2.5</span>
-      </div>
-    </div>
-  </footer>
-
-  <script>
-    window.addEventListener('scroll', () => {
-      document.getElementById('navbar').classList.toggle('nav-titan--scrolled', window.scrollY > 50);
-    });
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('visible');
+    <script>
+      window.addEventListener("scroll", () => {
+        document
+          .getElementById("navbar")
+          .classList.toggle("nav-titan--scrolled", window.scrollY > 50);
       });
-    }, { threshold: 0.1 });
 
-    document.querySelectorAll('.animate-reveal').forEach(el => observer.observe(el));
-  </script>
-</body>
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) entry.target.classList.add("visible");
+          });
+        },
+        { threshold: 0.1 },
+      );
+
+      document
+        .querySelectorAll(".animate-reveal")
+        .forEach((el) => observer.observe(el));
+    </script>
+  </body>
 </html>
