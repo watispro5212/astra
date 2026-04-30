@@ -1,6 +1,6 @@
-import { 
-    SlashCommandBuilder, 
-    ChatInputCommandInteraction, 
+import {
+    SlashCommandBuilder,
+    ChatInputCommandInteraction,
     Role,
     EmbedBuilder,
     version as djsVersion,
@@ -13,20 +13,24 @@ import { THEME, VERSION } from '../core/constants';
 const command: Command = {
     data: new SlashCommandBuilder()
         .setName('info')
-        .setDescription('📊 See info about the server and the bot.')
-        .setDMPermission(false)
+        .setDescription('📊 Bot information, server stats, and help.')
+        .setDMPermission(true)
         .addSubcommand(sub =>
-            sub.setName('avatar')
-                .setDescription('🖼️ Get someone\'s profile picture.')
-                .addUserOption(opt => opt.setName('target').setDescription('The person to look at.'))
+            sub.setName('help')
+                .setDescription('📡 See all Astra commands — works in DMs too!')
         )
         .addSubcommand(sub =>
             sub.setName('stats')
                 .setDescription('📈 See how the bot is doing.')
         )
         .addSubcommand(sub =>
+            sub.setName('avatar')
+                .setDescription('🖼️ Get someone\'s profile picture.')
+                .addUserOption(opt => opt.setName('target').setDescription('The person to look at.'))
+        )
+        .addSubcommand(sub =>
             sub.setName('user')
-                .setDescription('👤 Get info about a member.')
+                .setDescription('👤 Get info about a server member.')
                 .addUserOption(opt => opt.setName('target').setDescription('The member to check.'))
         )
         .addSubcommand(sub =>
@@ -41,23 +45,65 @@ const command: Command = {
 
     async execute(interaction: ChatInputCommandInteraction) {
         const subcommand = interaction.options.getSubcommand();
-        const guild = interaction.guild!;
+        const guild = interaction.guild;
 
-        if (subcommand === 'avatar') {
+        // ── HELP ──────────────────────────────────────────────────────────────
+        if (subcommand === 'help') {
             await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
-            const user = interaction.options.getUser('target') || interaction.user;
-            const avatarUrl = user.displayAvatarURL({ size: 2048 });
 
             const embed = new EmbedBuilder()
                 .setColor(THEME.PRIMARY)
-                .setTitle(`🖼️ PROFILE PICTURE: ${user.username.toUpperCase()}`)
-                .setImage(avatarUrl)
-                .setDescription(`[🔗 Download](${avatarUrl})`)
-                .setFooter({ text: `Astra Bot` })
+                .setTitle('📡 ASTRA COMMAND LIST')
+                .setThumbnail(interaction.client.user?.displayAvatarURL()!)
+                .setDescription(`All commands use \`/\`. Most work in **DMs** too!\nType \`/\` in any chat to see the full list.`)
+                .addFields(
+                    {
+                        name: '💰 Economy',
+                        value: '`/economy daily` `work` `mine` `gamble` `slots` `coinflip` `rob` `balance` `pay` `bank` `harvest`',
+                        inline: false
+                    },
+                    {
+                        name: '📈 Leveling',
+                        value: '`/leveling rank` `leaderboard`',
+                        inline: false
+                    },
+                    {
+                        name: '🛡️ Moderation',
+                        value: '`/mod warn` `kick` `ban` `timeout` `purge` `history` `case`',
+                        inline: false
+                    },
+                    {
+                        name: '📊 Stock Market',
+                        value: '`/stockmarket market` `buy` `sell` `portfolio`',
+                        inline: false
+                    },
+                    {
+                        name: '🛒 Shop',
+                        value: '`/shop view` `buy` `inventory`',
+                        inline: false
+                    },
+                    {
+                        name: '🎉 Community',
+                        value: '`/giveaway start` `end` `reroll` — `/ticket create` `close` — `/welcome setup`',
+                        inline: false
+                    },
+                    {
+                        name: '🤖 AI Assistant (DM-native)',
+                        value: '`/ai model` `status` `info` — or just **DM me anything!**',
+                        inline: false
+                    },
+                    {
+                        name: '⚙️ Utility & Info',
+                        value: '`/profile` `help` `/utility remind` `poll` `/system status` `ping`',
+                        inline: false
+                    },
+                )
+                .setFooter({ text: `Astra ${VERSION} • Use / to see all commands` })
                 .setTimestamp();
 
-            await interaction.editReply({ embeds: [embed] });
+            return interaction.editReply({ embeds: [embed] });
 
+        // ── STATS ──────────────────────────────────────────────────────────────
         } else if (subcommand === 'stats') {
             await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
             const uptime = process.uptime();
@@ -69,15 +115,15 @@ const command: Command = {
             const memUsage  = process.memoryUsage().heapUsed / 1024 / 1024;
             const totalMem  = os.totalmem() / 1024 / 1024;
             const memPct    = ((memUsage / totalMem) * 100).toFixed(1);
-            const barFilled = Math.round((memUsage / totalMem) * 10);
+            const barFilled = Math.min(10, Math.max(0, Math.round((memUsage / totalMem) * 10)));
             const memBar    = `${'█'.repeat(barFilled)}${'░'.repeat(10 - barFilled)}`;
 
             const shardId     = interaction.client.shard?.ids[0] ?? 0;
             const totalShards = interaction.client.shard?.count ?? 1;
 
-            const connectionInfo = `\`\`\`ansi\n\u001b[1;36mShard   :\u001b[0m ${shardId + 1}/${totalShards}\n\u001b[1;35mPing    :\u001b[0m ${interaction.client.ws.ping}ms\n\u001b[1;32mServers :\u001b[0m ${interaction.client.guilds.cache.size}\`\`\``;
-            const systemInfo = `\`\`\`ansi\n\u001b[1;36mRAM     :\u001b[0m ${memUsage.toFixed(1)}MB / ${(totalMem).toFixed(0)}MB\n\u001b[1;35mCPU     :\u001b[0m ${os.loadavg()[0].toFixed(2)} avg\n\u001b[1;32mNode    :\u001b[0m ${process.version}\`\`\``;
-            const versionInfo = `\`\`\`ansi\n\u001b[1;36mBot     :\u001b[0m ${VERSION}\n\u001b[1;35mdjs     :\u001b[0m v${djsVersion}\n\u001b[1;32mHost    :\u001b[0m ${os.hostname()}\`\`\``;
+            const connectionInfo = `\`\`\`ansi\n[1;36mShard   :[0m ${shardId + 1}/${totalShards}\n[1;35mPing    :[0m ${interaction.client.ws.ping}ms\n[1;32mServers :[0m ${interaction.client.guilds.cache.size}\`\`\``;
+            const systemInfo    = `\`\`\`ansi\n[1;36mRAM     :[0m ${memUsage.toFixed(1)}MB / ${totalMem.toFixed(0)}MB\n[1;35mCPU     :[0m ${os.loadavg()[0].toFixed(2)} avg\n[1;32mNode    :[0m ${process.version}\`\`\``;
+            const versionInfo   = `\`\`\`ansi\n[1;36mBot     :[0m ${VERSION}\n[1;35mdjs     :[0m v${djsVersion}\n[1;32mHost    :[0m ${os.hostname()}\`\`\``;
 
             const embed = new EmbedBuilder()
                 .setColor(THEME.PRIMARY)
@@ -85,32 +131,52 @@ const command: Command = {
                 .setThumbnail(interaction.client.user?.displayAvatarURL()!)
                 .addFields(
                     { name: '🌐 Connection', value: connectionInfo, inline: true },
-                    { name: '💻 System', value: systemInfo, inline: true },
-                    { name: '⏱️ Uptime', value: `\`\`\`ansi\n\u001b[1;32m${days}d ${hours}h ${minutes}m ${seconds}s\u001b[0m\`\`\``, inline: true },
-                    { name: '📊 Memory Usage', value: `\`\`\`ansi\n\u001b[1;36m[${memBar}] ${memPct}%\u001b[0m\`\`\``, inline: false },
-                    { name: '🤖 Version', value: versionInfo, inline: false },
+                    { name: '💻 System',     value: systemInfo,     inline: true },
+                    { name: '⏱️ Uptime',     value: `\`\`\`ansi\n[1;32m${days}d ${hours}h ${minutes}m ${seconds}s[0m\`\`\``, inline: true },
+                    { name: '📊 Memory',     value: `\`\`\`ansi\n[1;36m[${memBar}] ${memPct}%[0m\`\`\``, inline: false },
+                    { name: '🤖 Version',    value: versionInfo,    inline: false },
                 )
-                .setFooter({ text: `Bot is online.` })
+                .setFooter({ text: `Astra is online.` })
                 .setTimestamp();
 
-            await interaction.editReply({ embeds: [embed] });
+            return interaction.editReply({ embeds: [embed] });
 
+        // ── AVATAR ─────────────────────────────────────────────────────────────
+        } else if (subcommand === 'avatar') {
+            await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
+            const user      = interaction.options.getUser('target') || interaction.user;
+            const avatarUrl = user.displayAvatarURL({ size: 2048 });
+
+            const embed = new EmbedBuilder()
+                .setColor(THEME.PRIMARY)
+                .setTitle(`🖼️ ${user.username.toUpperCase()}'S AVATAR`)
+                .setImage(avatarUrl)
+                .setDescription(`[🔗 Open full size](${avatarUrl})`)
+                .setFooter({ text: `Astra Bot` })
+                .setTimestamp();
+
+            return interaction.editReply({ embeds: [embed] });
+
+        // ── USER ───────────────────────────────────────────────────────────────
         } else if (subcommand === 'user') {
+            if (!guild) {
+                return interaction.reply({ content: '❌ This subcommand only works in a server.', ephemeral: true });
+            }
             await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
             const user   = interaction.options.getUser('target') || interaction.user;
             const member = await guild.members.fetch(user.id).catch(() => null);
 
             const embed = new EmbedBuilder()
                 .setColor(THEME.PRIMARY)
-                .setTitle(`👤 USER INFO: ${user.username.toUpperCase()}`)
+                .setTitle(`👤 USER: ${user.username.toUpperCase()}`)
                 .setThumbnail(user.displayAvatarURL({ size: 512 }))
                 .addFields(
-                    { name: '🆔 User ID',      value: `\`${user.id}\``,                                      inline: true },
-                    { name: '🤖 Bot',          value: `\`${user.bot ? 'Yes' : 'No'}\``,                      inline: true },
-                    { name: '📅 Joined Discord', value: `<t:${Math.floor(user.createdTimestamp / 1000)}:R>`,   inline: true },
-                    { name: '🎖️ Highest Role', value: member?.roles.highest.name || '—',                     inline: true },
-                    { name: '🚦 Status',       value: `\`${member?.presence?.status ?? 'offline'}\``,         inline: true },
-                    { name: '🏷️ Nickname',     value: member?.nickname ? `\`${member.nickname}\`` : '`None`', inline: true },
+                    { name: '🆔 User ID',        value: `\`${user.id}\``,                                   inline: true },
+                    { name: '🤖 Bot',            value: `\`${user.bot ? 'Yes' : 'No'}\``,                   inline: true },
+                    { name: '📅 Joined Discord', value: `<t:${Math.floor(user.createdTimestamp / 1000)}:R>`, inline: true },
+                    { name: '🎖️ Highest Role',   value: member?.roles.highest.name || '—',                  inline: true },
+                    { name: '🚦 Status',          value: `\`${member?.presence?.status ?? 'offline'}\``,     inline: true },
+                    { name: '🏷️ Nickname',        value: member?.nickname ? `\`${member.nickname}\`` : '`None`', inline: true },
                 );
 
             if (member) {
@@ -127,9 +193,13 @@ const command: Command = {
             }
 
             embed.setFooter({ text: `Astra Bot` }).setTimestamp();
-            await interaction.editReply({ embeds: [embed] });
+            return interaction.editReply({ embeds: [embed] });
 
+        // ── SERVER ─────────────────────────────────────────────────────────────
         } else if (subcommand === 'server') {
+            if (!guild) {
+                return interaction.reply({ content: '❌ This subcommand only works in a server.', ephemeral: true });
+            }
             await interaction.deferReply();
             const owner    = await guild.fetchOwner();
             const channels = guild.channels.cache;
@@ -140,33 +210,35 @@ const command: Command = {
 
             const embed = new EmbedBuilder()
                 .setColor(THEME.PRIMARY)
-                .setTitle(`🏰 SERVER INFO: ${guild.name.toUpperCase()}`)
+                .setTitle(`🏰 SERVER: ${guild.name.toUpperCase()}`)
                 .setThumbnail(guild.iconURL({ size: 512 }))
                 .setImage(guild.bannerURL({ size: 1024 }) ?? null)
                 .addFields(
-                    { name: '🆔 Server ID',     value: `\`${guild.id}\``,                                         inline: true },
-                    { name: '👑 Owner',         value: `${owner.user}`,                                           inline: true },
-                    { name: '📅 Created',       value: `<t:${Math.floor(guild.createdTimestamp / 1000)}:D>`,      inline: true },
-                    { name: '👥 Members',       value: `\`\`\`Total : ${guild.memberCount}\nHumans: ${guild.memberCount - bots}\nBots  : ${bots}\`\`\``, inline: true },
-                    { name: '📐 Channels',      value: `\`\`\`Text : ${textChs}\nVoice: ${voiceChs}\nCategories: ${catChs}\`\`\``, inline: true },
-                    { name: '✨ Server Level',   value: `\`\`\`Boosts: ${guild.premiumSubscriptionCount || 0}\nLevel : ${guild.premiumTier}\nVerify: ${guild.verificationLevel}\`\`\``, inline: true },
+                    { name: '🆔 Server ID',   value: `\`${guild.id}\``,                                    inline: true },
+                    { name: '👑 Owner',       value: `${owner.user}`,                                      inline: true },
+                    { name: '📅 Created',     value: `<t:${Math.floor(guild.createdTimestamp / 1000)}:D>`, inline: true },
+                    { name: '👥 Members',     value: `\`\`\`Total : ${guild.memberCount}\nHumans: ${guild.memberCount - bots}\nBots  : ${bots}\`\`\``, inline: true },
+                    { name: '📐 Channels',    value: `\`\`\`Text : ${textChs}\nVoice: ${voiceChs}\nCats : ${catChs}\`\`\``, inline: true },
+                    { name: '✨ Server Level', value: `\`\`\`Boosts: ${guild.premiumSubscriptionCount || 0}\nLevel : ${guild.premiumTier}\nVerify: ${guild.verificationLevel}\`\`\``, inline: true },
                 )
                 .setFooter({ text: `Astra Server Info` })
                 .setTimestamp();
 
-            await interaction.editReply({ embeds: [embed] });
+            return interaction.editReply({ embeds: [embed] });
 
+        // ── ROLE ───────────────────────────────────────────────────────────────
         } else if (subcommand === 'role') {
+            if (!guild) {
+                return interaction.reply({ content: '❌ This subcommand only works in a server.', ephemeral: true });
+            }
             await interaction.deferReply();
             const role = interaction.options.getRole('role') as Role;
             if (!role?.permissions) {
                 return interaction.editReply({ content: '❌ Could not resolve role data.' });
             }
 
-            // Count members with role
             await guild.members.fetch();
             const memberCount = guild.members.cache.filter(m => m.roles.cache.has(role.id)).size;
-
             const perms = role.permissions.toArray()
                 .map(p => p.replace(/([A-Z])/g, ' $1').trim())
                 .slice(0, 10)
@@ -174,22 +246,22 @@ const command: Command = {
 
             const embed = new EmbedBuilder()
                 .setColor(role.color || 0x7f8c8d)
-                .setTitle(`🎖️ ROLE INFO: ${role.name.toUpperCase()}`)
+                .setTitle(`🎖️ ROLE: ${role.name.toUpperCase()}`)
                 .addFields(
-                    { name: '🆔 Role ID',       value: `\`${role.id}\``,                                          inline: true },
-                    { name: '🎨 Color',         value: `\`${role.hexColor}\``,                                    inline: true },
-                    { name: '📌 Position',      value: `\`#${role.position}\``,                                   inline: true },
-                    { name: '👥 Members',       value: `\`${memberCount}\``,                                      inline: true },
-                    { name: '🔔 Mentionable',    value: `\`${role.mentionable ? 'Yes' : 'No'}\``,                  inline: true },
-                    { name: '📌 Hoisted',        value: `\`${role.hoist ? 'Yes' : 'No'}\``,                        inline: true },
-                    { name: '📅 Created',       value: `<t:${Math.floor(role.createdTimestamp / 1000)}:D>`,        inline: true },
-                    { name: '🤖 Bot Role',      value: `\`${role.managed ? 'Yes' : 'No'}\``,                    inline: true },
-                    { name: '🔑 Permissions',   value: `\`\`\`${perms}\`\`\``,                                   inline: false },
+                    { name: '🆔 Role ID',     value: `\`${role.id}\``,                                  inline: true },
+                    { name: '🎨 Color',       value: `\`${role.hexColor}\``,                            inline: true },
+                    { name: '📌 Position',    value: `\`#${role.position}\``,                           inline: true },
+                    { name: '👥 Members',     value: `\`${memberCount}\``,                              inline: true },
+                    { name: '🔔 Mentionable', value: `\`${role.mentionable ? 'Yes' : 'No'}\``,         inline: true },
+                    { name: '📌 Hoisted',     value: `\`${role.hoist ? 'Yes' : 'No'}\``,               inline: true },
+                    { name: '📅 Created',     value: `<t:${Math.floor(role.createdTimestamp / 1000)}:D>`, inline: true },
+                    { name: '🤖 Bot Role',    value: `\`${role.managed ? 'Yes' : 'No'}\``,             inline: true },
+                    { name: '🔑 Permissions', value: `\`\`\`${perms}\`\`\``,                           inline: false },
                 )
                 .setFooter({ text: `Astra Bot` })
                 .setTimestamp();
 
-            await interaction.editReply({ embeds: [embed] });
+            return interaction.editReply({ embeds: [embed] });
         }
     }
 };

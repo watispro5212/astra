@@ -153,8 +153,7 @@ export class AstraClient extends Client {
 
             this.user?.setActivity(`v${VERSION} | /info help`, { type: ActivityType.Watching });
 
-            // Sentinel Status Pulse
-            await StatusService.checkVersionUpdate(c);
+            // Status & heartbeat
             await StatusService.sendSystemOnline(c);
             StatusService.startHeartbeat(this);
             StatusService.startHealthCheck(this);
@@ -168,36 +167,20 @@ export class AstraClient extends Client {
         this.on(Events.MessageCreate, async (message) => {
             if (message.author.bot) return;
 
-            // ── DMs (AI & HELP) ───────────────────────────────────────────
+            // ── DMs — AI CHAT ─────────────────────────────────────────────
             if (!message.guild) {
-                const prefix = '-'; // Default prefix for DMs since /prefix is removed
-
-                // Check for Prefix Commands first
-                if (message.content.startsWith(prefix)) {
-                    const args = message.content.slice(prefix.length).trim().split(/ +/);
-                    const commandName = args.shift()?.toLowerCase();
-
-                    if (commandName === 'ping') {
-                        return await message.reply(`📡 **PONG**: My response time is \`${this.ws.ping}ms\``);
-                    } else if (commandName === 'stats') {
-                        return await message.reply(`📊 **BOT STATS**: Use \`/info stats\` to see how I am doing.`);
-                    } else if (['economy', 'eco', 'bal', 'balance'].includes(commandName || '')) {
-                        return await message.reply(`💰 **MONEY**: Please use \`/economy balance\` to check your bank.`);
-                    } else if (['ai', 'neural', 'sentinel'].includes(commandName || '')) {
-                        return await message.reply(`🤖 **AI CHAT**: I am awake! Just type anything here to talk to me, or use \`/ai settings\` to change how I talk.`);
-                    } else if (['stockmarket', 'stocks', 'market'].includes(commandName || '')) {
-                        return await message.reply(`📈 **STOCKS**: Use \`/stockmarket market\` to see current prices.`);
-                    } else if (commandName === 'help') {
-                        return await message.reply(`🛡️ **ASTRA DM HELP**\n\n**Chat**: Just type a message to chat with my AI.\n**Slash Commands**: Type \`/\` to see all my commands.\n**Shortcuts**: \`-ping\`, \`-stats\`, \`-economy\`, \`-ai\`, \`-stocks\``);
-                    }
-                    // If prefix is used but command not found, we fall through to AI or just return
+                // Send a one-time hint on first message if it looks like a command attempt
+                if (message.content.startsWith('/') || message.content.startsWith('-')) {
+                    return await message.reply(
+                        `👋 **Hey!** Use slash commands (\`/\`) in this DM — type \`/\` to see everything I can do!\n\n` +
+                        `Or just **type a message** to chat with my AI. 🤖`
+                    );
                 }
 
-                // AI SENTINEL
                 try {
                     await message.channel.sendTyping();
                     const response = await AIService.generateResponse(message.author.id, message.content);
-                    
+
                     if (response.length > 2000) {
                         const chunks = response.match(/[\s\S]{1,2000}/g) || [];
                         for (const chunk of chunks) {
@@ -207,7 +190,8 @@ export class AstraClient extends Client {
                         await message.reply(response);
                     }
                 } catch (err) {
-                    logger.error(`AI Assistant DM Failure: ${err}`);
+                    logger.error(`AI DM Error: ${err}`);
+                    await message.reply('⚠️ My AI had a little trouble. Try again in a second!').catch(() => {});
                 }
                 return;
             }
@@ -242,7 +226,7 @@ export class AstraClient extends Client {
                         }
 
                         const nextXpReq    = (newLevel + 1) * 500;
-                        const barFilled    = Math.round((carryXp / nextXpReq) * 10);
+                        const barFilled    = Math.min(10, Math.max(0, Math.round((carryXp / nextXpReq) * 10)));
                         const progressBar  = `${'█'.repeat(barFilled)}${'░'.repeat(10 - barFilled)}`;
 
                         const levelEmbed = new EmbedBuilder()

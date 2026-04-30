@@ -12,7 +12,6 @@ const configSchema = z.object({
     BOT_THEME_COLOR: z.string().transform((val) => parseInt(val.replace('#', ''), 16)).default('3498db'),
     DATABASE_URL: z.string().default('sqlite:///./data/astra.db'),
     STATUS_WEBHOOK_URL: z.string().optional(),
-    UPDATES_WEBHOOK_URL: z.string().optional(),
     AI_API_KEYS: z.string().default(''),
 });
 
@@ -25,7 +24,6 @@ const env = configSchema.parse({
     BOT_THEME_COLOR: process.env.BOT_THEME_COLOR,
     DATABASE_URL: process.env.DATABASE_URL,
     STATUS_WEBHOOK_URL: process.env.STATUS_WEBHOOK_URL,
-    UPDATES_WEBHOOK_URL: process.env.UPDATES_WEBHOOK_URL,
     AI_API_KEYS: process.env.AI_API_KEYS,
 });
 
@@ -38,6 +36,5 @@ export const config = {
     themeColor: env.BOT_THEME_COLOR,
     databaseUrl: env.DATABASE_URL,
     statusWebhookUrl: env.STATUS_WEBHOOK_URL,
-    updatesWebhookUrl: env.UPDATES_WEBHOOK_URL,
     aiApiKeys: env.AI_API_KEYS.split(',').map(k => k.trim()).filter(k => k.length > 0),
 };

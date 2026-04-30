@@ -24,10 +24,6 @@ const command: Command = {
                .setDescription('🔄 Update bot commands across all servers (Owner Only).')
         )
         .addSubcommand(sub =>
-            sub.setName('update')
-               .setDescription('📋 See what is new in the latest update.')
-        )
-        .addSubcommand(sub =>
             sub.setName('status')
                .setDescription('📡 Check how the bot is running.')
         )
@@ -79,10 +75,6 @@ const command: Command = {
             }
 
         // ── UPDATE ────────────────────────────────────────────────────────────
-        } else if (subcommand === 'update') {
-            const embed = StatusService.getUpdateEmbed(interaction.client);
-            return interaction.reply({ embeds: [embed] });
-
         // ── STATUS ────────────────────────────────────────────────────────────
         } else if (subcommand === 'status') {
             await interaction.deferReply();
@@ -98,7 +90,8 @@ const command: Command = {
             const rss        = mem.rss / 1024 / 1024;
             
             const memPct    = Math.round((heapUsed / heapTotal) * 100);
-            const memBar    = `${'█'.repeat(Math.round(memPct / 10))}${'░'.repeat(10 - Math.round(memPct / 10))} ${memPct}%`;
+            const barFill   = Math.min(10, Math.max(0, Math.round(memPct / 10)));
+            const memBar    = `${'█'.repeat(barFill)}${'░'.repeat(10 - barFill)} ${memPct}%`;
 
             const ping      = interaction.client.ws.ping;
             const pingLabel = ping < 100 ? '🟢' : ping < 200 ? '🟡' : '🔴';

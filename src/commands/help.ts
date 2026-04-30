@@ -5,7 +5,8 @@ import { THEME, VERSION } from '../core/constants';
 const command: Command = {
     data: new SlashCommandBuilder()
         .setName('help')
-        .setDescription('🔍 Access the interactive command list.'),
+        .setDescription('🔍 Access the interactive command list.')
+        .setDMPermission(true),
 
     async execute(interaction: ChatInputCommandInteraction) {
         await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });

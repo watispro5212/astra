@@ -1,13 +1,12 @@
 import { WebhookClient, EmbedBuilder } from 'discord.js';
 import { config } from '../core/config';
-import { db } from '../core/database';
 import { THEME, VERSION } from '../core/constants';
 import logger from '../core/logger';
 import os from 'os';
 
-const GREEN   = 0x2ecc71;
-const RED     = 0xe74c3c;
-const YELLOW  = 0xf1c40f;
+const GREEN  = 0x2ecc71;
+const RED    = 0xe74c3c;
+const YELLOW = 0xf1c40f;
 
 function uptimeString(seconds: number): string {
     const d = Math.floor(seconds / 86400);
@@ -18,14 +17,13 @@ function uptimeString(seconds: number): string {
 }
 
 function memBar(used: number, total: number): string {
-    const pct = Math.round((used / total) * 100);
-    const filled = Math.round(pct / 10);
+    const pct    = Math.round((used / Math.max(total, 1)) * 100);
+    const filled = Math.min(10, Math.max(0, Math.round(pct / 10)));
     return `${'█'.repeat(filled)}${'░'.repeat(10 - filled)} ${pct}%`;
 }
 
 export class StatusService {
     private static webhook: WebhookClient | null = null;
-    private static updatesWebhook: WebhookClient | null = null;
 
     private static getWebhook(): WebhookClient | null {
         if (!this.webhook && config.statusWebhookUrl) {
@@ -34,137 +32,63 @@ export class StatusService {
         return this.webhook;
     }
 
-    private static getUpdatesWebhook(): WebhookClient | null {
-        if (!this.updatesWebhook && config.updatesWebhookUrl) {
-            this.updatesWebhook = new WebhookClient({ url: config.updatesWebhookUrl });
-        }
-        return this.updatesWebhook;
-    }
-
-    // ── VERSION TRACKER ──────────────────────────────────────────────────────
-    /**
-     * Checks if the bot has been updated since the last broadcast.
-     * If a new version is detected, it automatically fires the update webhook.
-     */
-    public static async checkVersionUpdate(client: any) {
-        try {
-            const currentVersion = VERSION;
-            
-            // Atomic update: only succeeds if the version in DB is different from current
-            // This prevents race conditions in sharded environments
-            const result = await db.execute(
-                'UPDATE system_meta SET value = ? WHERE key = ? AND value != ?', 
-                currentVersion, 'last_broadcasted_version', currentVersion
-            );
-
-            // If no rows were updated, it might be because the key doesn't exist yet
-            if (result.count === 0) {
-                const meta = await db.fetchOne('SELECT value FROM system_meta WHERE key = ?', 'last_broadcasted_version');
-                if (!meta) {
-                    // First time initialization
-                    await db.execute('INSERT INTO system_meta (key, value) VALUES (?, ?)', 'last_broadcasted_version', currentVersion);
-                    logger.info(`🚀 INITIAL VERSION LOCK: ${currentVersion}. Broadcasting mission update...`);
-                    await this.broadcastUpdate(client);
-                }
-            } else {
-                // Successful update from a previous version
-                logger.info(`🚀 NEW VERSION DETECTED: ${currentVersion}. Broadcasting mission update...`);
-                await this.broadcastUpdate(client);
-            }
-        } catch (err) {
-            logger.error(`Version check failure: ${err}`);
-        }
-    }
-
-    public static async broadcastUpdate(client: any) {
-        const webhook = this.getUpdatesWebhook();
-        if (!webhook) return;
-
-        const embed = this.getUpdateEmbed(client);
-        
-        await webhook.send({ 
-            username: 'ASTRA MISSION CONTROL', 
-            avatarURL: 'https://cdn-icons-png.flaticon.com/512/3655/3655611.png',
-            embeds: [embed] 
-        }).catch(err => logger.error(`Update Webhook Error: ${err}`));
-    }
-
-    public static getUpdateEmbed(client: any): EmbedBuilder {
-        return new EmbedBuilder()
-            .setColor(THEME.PRIMARY)
-            .setTitle(`🪐 ASTRA ${VERSION} — UPDATE`)
-            .setAuthor({ name: 'ASTRA NEWS', iconURL: client.user?.displayAvatarURL() })
-            .setDescription('I have updated how my brain works! I now use a smarter and faster way to talk to you using new AI tools. This means I can answer you even faster than before.')
-            .setThumbnail('https://cdn-icons-png.flaticon.com/512/8654/8654162.png')
-            .addFields(
-                {
-                    name: '✨ NEW BRAIN UPDATES',
-                    value: [
-                        '> **Faster Thinking** — I can now think much faster by using more efficient pathways.',
-                        '> **Free Model Usage** — I can use new, free AI models to help answer your questions.',
-                        '> **Better Backup** — If one brain gets tired, I can quickly switch to another one.'
-                    ].join('\n')
-                },
-                {
-                    name: '🗑️ CLEANED UP STUFF',
-                    value: [
-                        '> **Old Code** — Removed old ways of thinking that were slow.',
-                        '> **Better Storage** — Changed how I remember things to be more reliable.'
-                    ].join('\n')
-                },
-                {
-                    name: '🔧 BEHIND THE SCENES',
-                    value: [
-                        '• **Bug Fixes** — Fixed some errors where my brain would get confused.',
-                        '• **Smoother Experience** — Made everything feel a bit more snappy.',
-                        '• **Status Update** — My status now updates correctly with my version.'
-                    ].join('\n')
-                },
-                {
-                    name: '🚀 WHAT IS NEXT',
-                    value: [
-                        '• **Picture Scanning** — I will soon be able to look at pictures you send!',
-                        '• **Leaderboards** — See who is the richest or smartest in the world.',
-                        '• **Safety Tools** — More ways to keep your server safe and happy.'
-                    ].join('\n')
-                }
-            )
-            .setImage('https://i.imgur.com/8Qx8R1k.png')
-            .setFooter({ text: `Astra Update • ${VERSION}` })
-            .setTimestamp();
-    }
-
     // ── BOOT ─────────────────────────────────────────────────────────────────
     public static async sendSystemOnline(client: any) {
-        const webhook = this.getWebhook();
-        if (!webhook) return;
-
-        const totalMem   = os.totalmem()  / 1024 / 1024;
-        const freeMem    = os.freemem()   / 1024 / 1024;
-        const usedMem    = totalMem - freeMem;
+        const totalMem    = os.totalmem()  / 1024 / 1024;
+        const freeMem     = os.freemem()   / 1024 / 1024;
+        const usedMem     = totalMem - freeMem;
         const memberCount = client.guilds.cache.reduce((a: number, g: any) => a + (g.memberCount || 0), 0);
+        const ping        = client.ws.ping;
+        const pingLabel   = ping < 100 ? '🟢 Excellent' : ping < 200 ? '🟡 Good' : '🔴 Poor';
 
         const embed = new EmbedBuilder()
             .setColor(GREEN)
             .setTitle('🟢 ASTRA IS ONLINE')
-            .setDescription(`I am ready to help! All systems are working perfectly.`)
+            .setDescription(`All systems are running. Astra is ready to help!`)
             .setThumbnail(client.user?.displayAvatarURL() ?? null)
             .addFields(
-                { name: '🛰️ Version',         value: `\`${VERSION}\``,                                     inline: true },
-                { name: '🌐 Servers',          value: `\`${client.guilds.cache.size} servers\``,              inline: true },
-                { name: '👥 Users',            value: `\`${memberCount.toLocaleString()} members\``,         inline: true },
-                { name: '💻 Computer',         value: `\`${os.hostname()}\``,                                inline: true },
-                { name: '🖥️ System',           value: `\`${os.type()} ${os.arch()}\``,                      inline: true },
-                { name: '📡 Connection',       value: `\`${client.ws.ping}ms\``,                             inline: true },
-                { name: '🔋 Memory',           value: `\`${usedMem.toFixed(0)}MB / ${totalMem.toFixed(0)}MB\`\n${memBar(usedMem, totalMem)}`, inline: false },
-                { name: '⚙️ Node.js',          value: `\`${process.version}\``,                              inline: true },
-                { name: '🕐 Boot Time',        value: `<t:${Math.floor(Date.now() / 1000)}:R>`,              inline: true },
+                { name: '🛰️ Version',    value: `\`${VERSION}\``,                                         inline: true },
+                { name: '🌐 Servers',    value: `\`${client.guilds.cache.size}\``,                         inline: true },
+                { name: '👥 Members',    value: `\`${memberCount.toLocaleString()}\``,                     inline: true },
+                { name: `${pingLabel}`,  value: `\`${ping}ms\``,                                           inline: true },
+                { name: '⚙️ Node.js',    value: `\`${process.version}\``,                                  inline: true },
+                { name: '🖥️ Host',       value: `\`${os.hostname()} • ${os.type()} ${os.arch()}\``,       inline: true },
+                { name: '🔋 Memory',     value: `\`${usedMem.toFixed(0)}MB / ${totalMem.toFixed(0)}MB\`\n${memBar(usedMem, totalMem)}`, inline: false },
+                { name: '🕐 Boot Time',  value: `<t:${Math.floor(Date.now() / 1000)}:F>`,                  inline: false },
             )
-            .setFooter({ text: `Astra Support • ${new Date().toUTCString()}` })
+            .setFooter({ text: `Astra ${VERSION} • System Boot` })
             .setTimestamp();
 
-        await webhook.send({ username: 'Astra Status', embeds: [embed] })
-            .catch(err => logger.error(`Status Webhook Error: ${err}`));
+        // Webhook notification
+        const webhook = this.getWebhook();
+        if (webhook) {
+            await webhook.send({ username: 'Astra Status', embeds: [embed] })
+                .catch(err => logger.error(`Status Webhook Error: ${err}`));
+        }
+
+        // DM the owner directly
+        if (config.ownerId) {
+            try {
+                const owner = await client.users.fetch(config.ownerId).catch(() => null);
+                if (owner) {
+                    const dmEmbed = new EmbedBuilder()
+                        .setColor(GREEN)
+                        .setTitle('🟢 Astra Is Online')
+                        .setDescription(`Your bot has started successfully.`)
+                        .addFields(
+                            { name: '🛰️ Version', value: `\`${VERSION}\``,                        inline: true },
+                            { name: '🌐 Servers', value: `\`${client.guilds.cache.size}\``,        inline: true },
+                            { name: '📡 Ping',    value: `\`${ping}ms\``,                          inline: true },
+                            { name: '⏱️ Time',    value: `<t:${Math.floor(Date.now() / 1000)}:T>`, inline: true },
+                        )
+                        .setFooter({ text: 'Astra Boot Notification' })
+                        .setTimestamp();
+                    await owner.send({ embeds: [dmEmbed] }).catch(err => logger.warn(`Owner DM failed: ${err}`));
+                }
+            } catch (err) {
+                logger.warn(`Could not DM owner on boot: ${err}`);
+            }
+        }
     }
 
     // ── HEARTBEAT ─────────────────────────────────────────────────────────────
@@ -177,33 +101,33 @@ export class StatusService {
         const heapUsed   = mem.heapUsed / 1024 / 1024;
         const heapTotal  = mem.heapTotal / 1024 / 1024;
         const rss        = mem.rss / 1024 / 1024;
-        
         const memberCount = client.guilds.cache.reduce((a: number, g: any) => a + (g.memberCount || 0), 0);
-        const ping       = client.ws.ping;
-        const pingColor  = ping < 100 ? GREEN : ping < 200 ? YELLOW : RED;
+        const ping        = client.ws.ping;
+        const pingColor   = ping < 100 ? GREEN : ping < 200 ? YELLOW : RED;
+        const pingLabel   = ping < 100 ? '🟢' : ping < 200 ? '🟡' : '🔴';
 
         const embed = new EmbedBuilder()
             .setColor(pingColor)
-            .setTitle(`💓 I AM ALIVE — ${VERSION}`)
-            .setDescription('Everything is running smoothly. My brain is working just fine.')
-            .setThumbnail('https://cdn-icons-png.flaticon.com/512/8654/8654162.png')
+            .setTitle(`💓 HEARTBEAT — ${VERSION}`)
+            .setDescription('Periodic health check — all systems nominal.')
             .addFields(
-                { name: '⏱️ Uptime',          value: `\`${uptimeString(uptime)}\``,                          inline: true },
-                { name: '📡 Speed',           value: `\`${ping}ms\``,                                        inline: true },
-                { name: '⚙️ Workload',        value: `\`${os.loadavg()[0].toFixed(2)}%\``,                   inline: true },
-                { name: '🌐 Servers',         value: `\`${client.guilds.cache.size}\``,                      inline: true },
-                { name: '👥 Users',           value: `\`${memberCount.toLocaleString()}\``,                   inline: true },
-                { name: '💾 Brain Memory',    value: `\`${heapUsed.toFixed(2)}MB / ${heapTotal.toFixed(2)}MB\``, inline: true },
-                { name: '🔋 Extra Memory',    value: `\`${rss.toFixed(2)}MB\``,                              inline: true },
+                { name: '⏱️ Uptime',       value: `\`${uptimeString(uptime)}\``,                          inline: true },
+                { name: `${pingLabel} Ping`, value: `\`${ping}ms\``,                                       inline: true },
+                { name: '🌐 Servers',       value: `\`${client.guilds.cache.size}\``,                      inline: true },
+                { name: '👥 Members',       value: `\`${memberCount.toLocaleString()}\``,                  inline: true },
+                { name: '💾 Heap',          value: `\`${heapUsed.toFixed(1)}MB / ${heapTotal.toFixed(1)}MB\``, inline: true },
+                { name: '🔋 RSS',           value: `\`${rss.toFixed(1)}MB\``,                              inline: true },
+                { name: '⚙️ CPU',           value: `\`${os.loadavg()[0].toFixed(2)} avg\``,                inline: true },
+                { name: '📅 Checked',       value: `<t:${Math.floor(Date.now() / 1000)}:T>`,               inline: true },
             )
-            .setFooter({ text: `Astra Bot • Live Status Update` })
+            .setFooter({ text: `Astra ${VERSION} • Heartbeat` })
             .setTimestamp();
 
-        await webhook.send({ 
-            username: 'Astra Status', 
+        await webhook.send({
+            username: 'Astra Status',
             avatarURL: 'https://cdn-icons-png.flaticon.com/512/3655/3655611.png',
-            embeds: [embed] 
-        }).catch(err => logger.error(`Status Webhook Error: ${err}`));
+            embeds: [embed]
+        }).catch(err => logger.error(`Heartbeat Webhook Error: ${err}`));
     }
 
     // ── HEALTH CHECK ──────────────────────────────────────────────────────────
@@ -211,33 +135,34 @@ export class StatusService {
         const webhook = this.getWebhook();
         if (!webhook) return;
 
-        const ping       = client.ws.ping;
-        const pingStatus = ping < 100 ? '🟢 Excellent' : ping < 200 ? '🟡 Degraded' : '🔴 Critical';
-        
-        const mem        = process.memoryUsage();
-        const heapUsed   = mem.heapUsed / 1024 / 1024;
-        const rss        = mem.rss / 1024 / 1024;
-        const memStatus  = (heapUsed / (mem.heapTotal / 1024 / 1024)) < 0.8 ? '🟢 Nominal' : '🔴 Critical';
+        const ping        = client.ws.ping;
+        const pingStatus  = ping < 100 ? '🟢 Excellent' : ping < 200 ? '🟡 Good' : '🔴 Poor';
+        const mem         = process.memoryUsage();
+        const heapUsed    = mem.heapUsed / 1024 / 1024;
+        const heapTotal   = mem.heapTotal / 1024 / 1024;
+        const memPct      = ((heapUsed / heapTotal) * 100).toFixed(0);
+        const memStatus   = (heapUsed / heapTotal) < 0.8 ? '🟢 OK' : '🔴 High';
+        const rss         = mem.rss / 1024 / 1024;
 
         const embed = new EmbedBuilder()
             .setColor(ping < 150 ? GREEN : YELLOW)
-            .setTitle('🏥 HOW AM I DOING?')
+            .setTitle('🏥 HEALTH CHECK')
             .addFields(
-                { name: '📡 Connection',      value: `${pingStatus} \`${ping}ms\``,                          inline: true  },
-                { name: '💾 Brain Power',     value: `${memStatus} \`${heapUsed.toFixed(0)}MB\``,            inline: true  },
-                { name: '🔋 Extra Power',     value: `\`${rss.toFixed(0)}MB\``,                              inline: true  },
-                { name: '⏱️ How long awake',  value: `\`${uptimeString(process.uptime())}\``,                inline: true  },
-                { name: '🌐 Total Servers',   value: `\`${client.guilds.cache.size}\``,                      inline: true  },
-                { name: '💻 Busy level',      value: `\`${os.loadavg()[0].toFixed(2)}\``,                    inline: true  },
+                { name: '📡 API Ping',   value: `${pingStatus} \`${ping}ms\``,              inline: true },
+                { name: '💾 Memory',     value: `${memStatus} \`${heapUsed.toFixed(0)}MB / ${heapTotal.toFixed(0)}MB (${memPct}%)\``, inline: true },
+                { name: '🔋 RSS',        value: `\`${rss.toFixed(0)}MB\``,                  inline: true },
+                { name: '⏱️ Uptime',     value: `\`${uptimeString(process.uptime())}\``,     inline: true },
+                { name: '🌐 Servers',    value: `\`${client.guilds.cache.size}\``,           inline: true },
+                { name: '⚙️ CPU',        value: `\`${os.loadavg()[0].toFixed(2)} avg\``,    inline: true },
             )
-            .setFooter({ text: `Astra Health • ${VERSION}` })
+            .setFooter({ text: `Astra ${VERSION} • Health Check` })
             .setTimestamp();
 
-        await webhook.send({ 
-            username: 'ASTRA HEALTH', 
+        await webhook.send({
+            username: 'Astra Health',
             avatarURL: 'https://cdn-icons-png.flaticon.com/512/2913/2913445.png',
-            embeds: [embed] 
-        }).catch(err => logger.error(`Status Webhook Error: ${err}`));
+            embeds: [embed]
+        }).catch(err => logger.error(`Health Webhook Error: ${err}`));
     }
 
     // ── ERROR ─────────────────────────────────────────────────────────────────
@@ -245,7 +170,7 @@ export class StatusService {
         const webhook = this.getWebhook();
         if (!webhook) return;
 
-        const stack = (error?.stack || String(error)).substring(0, 900);
+        const stack  = (error?.stack || String(error)).substring(0, 900);
         const fields: any[] = [
             { name: '⚠️ Error', value: `\`\`\`${error?.message || error}\`\`\`` },
             { name: '📂 Stack', value: `\`\`\`${stack}\`\`\`` },
@@ -257,45 +182,41 @@ export class StatusService {
 
         const embed = new EmbedBuilder()
             .setColor(RED)
-            .setTitle('🚨 SOMETHING WENT WRONG')
-            .setDescription('I have found an error. I have sent the details to my team to fix it.')
+            .setTitle('🚨 ERROR REPORT')
+            .setDescription('A runtime error was caught and reported.')
             .addFields(fields)
-            .setFooter({ text: `Astra Error Reporter • ${VERSION}` })
+            .setFooter({ text: `Astra ${VERSION} • Error Reporter` })
             .setTimestamp();
 
         await webhook.send({ username: 'Astra Errors', embeds: [embed] })
-            .catch(err => logger.error(`Status Webhook Error: ${err}`));
+            .catch(err => logger.error(`Error Webhook failed: ${err}`));
     }
 
-    // ── SERVER COUNT EVENT ────────────────────────────────────────────────────
+    // ── SERVER COUNT ──────────────────────────────────────────────────────────
     public static async sendServerCountUpdate(client: any, joined: boolean, guildName: string) {
         const webhook = this.getWebhook();
         if (!webhook) return;
 
         const embed = new EmbedBuilder()
             .setColor(joined ? GREEN : RED)
-            .setTitle(joined ? '📥 NEW SERVER' : '📤 LEFT A SERVER')
+            .setTitle(joined ? '📥 ADDED TO SERVER' : '📤 REMOVED FROM SERVER')
             .setDescription(joined
-                ? `I have been added to a new server: **${guildName}**`
-                : `I have been removed from a server: **${guildName}**`)
-            .addFields(
-                { name: '🌐 Total Servers', value: `\`${client.guilds.cache.size} servers\``, inline: true }
-            )
-            .setFooter({ text: `Astra Bot • ${VERSION}` })
+                ? `Joined: **${guildName}**`
+                : `Left: **${guildName}**`)
+            .addFields({ name: '🌐 Total Servers', value: `\`${client.guilds.cache.size}\``, inline: true })
+            .setFooter({ text: `Astra ${VERSION}` })
             .setTimestamp();
 
         await webhook.send({ username: 'Astra Status', embeds: [embed] })
-            .catch(err => logger.error(`Status Webhook Error: ${err}`));
+            .catch(err => logger.error(`Server Count Webhook Error: ${err}`));
     }
 
     // ── SCHEDULERS ────────────────────────────────────────────────────────────
     public static startHeartbeat(client: any) {
-        // Heartbeat every 30 minutes
         setInterval(() => { this.sendHeartbeat(client); }, 30 * 60 * 1000);
     }
 
     public static startHealthCheck(client: any) {
-        // Health check every hour
         setInterval(() => { this.sendHealthCheck(client); }, 60 * 60 * 1000);
     }
 }

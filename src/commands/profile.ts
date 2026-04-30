@@ -7,7 +7,7 @@ const command: Command = {
     data: new SlashCommandBuilder()
         .setName('profile')
         .setDescription('👤 View your Quantum Profile Portfolio.')
-        .setDMPermission(false)
+        .setDMPermission(true)
         .addUserOption(opt => opt.setName('target').setDescription('The user to view.')),
 
     async execute(interaction: ChatInputCommandInteraction) {
