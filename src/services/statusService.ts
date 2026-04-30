@@ -83,7 +83,7 @@ export class StatusService {
                         )
                         .setFooter({ text: 'Astra Boot Notification' })
                         .setTimestamp();
-                    await owner.send({ embeds: [dmEmbed] }).catch(err => logger.warn(`Owner DM failed: ${err}`));
+                    await owner.send({ embeds: [dmEmbed] }).catch((err: any) => logger.warn(`Owner DM failed: ${err}`));
                 }
             } catch (err) {
                 logger.warn(`Could not DM owner on boot: ${err}`);

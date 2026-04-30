@@ -43,7 +43,7 @@
   <header class="section">
     <div class="container">
       <h1 class="h1-astra text-gradient">HELP CENTER</h1>
-      <p class="text-dim max-w-700">Guides and documentation for setting up and using the Astra bot.</p>
+      <p class="text-dim max-w-700">Complete guides and documentation for setting up and using the Astra bot — from basic setup to advanced features.</p>
     </div>
   </header>
 
@@ -55,6 +55,7 @@
         <div class="docs-nav-group">
           <div class="docs-nav-title">Setup</div>
           <a href="#quick-start" class="docs-nav-link active">Quick Start</a>
+          <a href="#server-setup" class="docs-nav-link">Server Setup</a>
           <a href="#user-install" class="docs-nav-link">Profile Apps</a>
           <a href="#sync" class="docs-nav-link">Refresh Commands</a>
         </div>
@@ -62,6 +63,10 @@
           <div class="docs-nav-title">Features</div>
           <a href="#ai-assistant" class="docs-nav-link">AI Assistant</a>
           <a href="#economy" class="docs-nav-link">Economy & Money</a>
+          <a href="#moderation" class="docs-nav-link">Moderation</a>
+          <a href="#leveling" class="docs-nav-link">Leveling & XP</a>
+          <a href="#shop" class="docs-nav-link">Server Shop</a>
+          <a href="#stockmarket" class="docs-nav-link">Stock Market</a>
           <a href="#database" class="docs-nav-link">Database</a>
         </div>
         <div class="docs-nav-group">
@@ -82,6 +87,33 @@
               /info stats — See server and bot stats
             </div>
             <p class="docs-text">Astra automatically registers its slash commands when it joins. If commands are missing, use <code>/system sync</code> to force a refresh.</p>
+          </div>
+        </section>
+
+        <section id="server-setup" class="docs-section animate-reveal">
+          <div class="glass-card">
+            <h2>⚙️ Server Setup & Configuration</h2>
+            <p class="docs-text">Configure Astra to work perfectly with your server's needs and moderation style.</p>
+
+            <h3>Essential Permissions</h3>
+            <div class="docs-code-block">
+              • Send Messages — Required for all bot responses<br>
+              • Use Slash Commands — Required for command usage<br>
+              • Embed Links — Required for rich message formatting<br>
+              • Read Message History — Required for some moderation features<br>
+              • Manage Messages — Required for purge and moderation<br>
+              • Manage Roles — Required for role management features
+            </div>
+
+            <h3>Staff Role Setup</h3>
+            <div class="docs-code-block">
+              /server_setup staff_role — Set moderator roles<br>
+              /server_setup admin_role — Set administrator roles<br>
+              /server_setup log_channel — Set where moderation logs go<br>
+              /server_setup welcome_channel — Set welcome messages
+            </div>
+
+            <p class="docs-text">Use <code>/server_setup</code> commands to configure Astra for your server. These settings are per-server and help customize the bot's behavior.</p>
           </div>
         </section>
 
@@ -148,6 +180,110 @@
           </div>
         </section>
 
+        <section id="moderation" class="docs-section animate-reveal">
+          <div class="glass-card">
+            <h2>🛡️ Moderation Tools</h2>
+            <p class="docs-text">Astra provides comprehensive moderation features to help keep your server safe and organized.</p>
+
+            <h3>Basic Moderation</h3>
+            <div class="docs-code-block">
+              /moderation warn — Warn a user with optional reason<br>
+              /moderation kick — Remove a user from the server<br>
+              /moderation ban — Ban a user permanently<br>
+              /moderation unban — Unban a previously banned user<br>
+              /moderation mute — Temporarily mute a user<br>
+              /moderation unmute — Remove a user's mute
+            </div>
+
+            <h3>Advanced Features</h3>
+            <div class="docs-code-block">
+              /moderation purge — Delete multiple messages at once<br>
+              /moderation lockdown — Lock a channel temporarily<br>
+              /moderation slowmode — Set channel slowmode delay<br>
+              /moderation role — Add/remove roles from users
+            </div>
+
+            <p class="docs-text">All moderation actions are logged and can be viewed with <code>/moderation history</code>. The bot requires appropriate permissions to perform these actions.</p>
+          </div>
+        </section>
+
+        <section id="leveling" class="docs-section animate-reveal">
+          <div class="glass-card">
+            <h2>📈 Leveling &amp; XP System</h2>
+            <p class="docs-text">Astra's leveling system rewards active participation with XP and levels that unlock special perks.</p>
+
+            <h3>How XP Works</h3>
+            <ul class="list-clean">
+              <li class="mb-2">🔹 <strong>Earn XP:</strong> Send messages, use commands, and participate in voice channels</li>
+              <li class="mb-2">🔹 <strong>Level Up:</strong> Reach XP thresholds to advance levels</li>
+              <li class="mb-2">🔹 <strong>Global System:</strong> Your level follows you across all servers</li>
+              <li class="mb-2">🔹 <strong>Anti-Abuse:</strong> XP rates are balanced to prevent farming</li>
+            </ul>
+
+            <h3>Leveling Commands</h3>
+            <div class="docs-code-block">
+              /leveling rank — Check your current level and XP<br>
+              /leveling leaderboard — See top users in the server<br>
+              /leveling profile — View detailed profile with stats<br>
+              /leveling rewards — See what you unlock at each level
+            </div>
+
+            <p class="docs-text">Higher levels unlock special roles, increased economy rewards, and exclusive commands. Use <code>/leveling config</code> to customize XP rates (staff only).</p>
+          </div>
+        </section>
+
+        <section id="shop" class="docs-section animate-reveal">
+          <div class="glass-card">
+            <h2>🛒 Server Shop</h2>
+            <p class="docs-text">The server shop lets you spend money on items that provide passive income and special perks.</p>
+
+            <h3>Shop Items</h3>
+            <div class="docs-code-block">
+              • Farms — Generate passive income every 6 hours<br>
+              • Businesses — Higher income but more expensive<br>
+              • Luxury Items — Status symbols and bonuses<br>
+              • Collectibles — Rare items with special effects
+            </div>
+
+            <h3>Shop Commands</h3>
+            <div class="docs-code-block">
+              /shop browse — See all available items<br>
+              /shop buy — Purchase an item<br>
+              /shop inventory — View your owned items<br>
+              /shop sell — Sell an item back (at reduced price)<br>
+              /shop harvest — Collect income from all items
+            </div>
+
+            <p class="docs-text">Items provide ongoing passive income. Use <code>/economy harvest</code> to collect earnings. Shop items persist across servers and provide global benefits.</p>
+          </div>
+        </section>
+
+        <section id="stockmarket" class="docs-section animate-reveal">
+          <div class="glass-card">
+            <h2>📊 Stock Market</h2>
+            <p class="docs-text">Astra's stock market lets you invest virtual money in stocks that fluctuate based on real market data.</p>
+
+            <h3>How It Works</h3>
+            <ul class="list-clean">
+              <li class="mb-2">🔹 <strong>Real Stocks:</strong> Based on actual market prices (delayed)</li>
+              <li class="mb-2">🔹 <strong>Virtual Money:</strong> Use your economy balance to invest</li>
+              <li class="mb-2">🔹 <strong>Live Updates:</strong> Prices update regularly throughout the day</li>
+              <li class="mb-2">🔹 <strong>Portfolio:</strong> Track your investments and profits/losses</li>
+            </ul>
+
+            <h3>Trading Commands</h3>
+            <div class="docs-code-block">
+              /stockmarket market — View current stock prices<br>
+              /stockmarket buy — Purchase shares of a stock<br>
+              /stockmarket sell — Sell your shares<br>
+              /stockmarket portfolio — See your investments<br>
+              /stockmarket history — View price history for a stock
+            </div>
+
+            <p class="docs-text">Stocks are priced in virtual currency matching real market values. This is for entertainment only — not financial advice!</p>
+          </div>
+        </section>
+
         <section id="database" class="docs-section animate-reveal">
           <div class="glass-card">
             <h2>☁️ Database &amp; Storage</h2>
@@ -195,6 +331,7 @@
             <a href="features.html" class="footer-link">Features</a>
             <a href="commands.html" class="footer-link">Commands</a>
             <a href="docs.html" class="footer-link">Docs</a>
+            <a href="staff.html" class="footer-link">Staff</a>
           </div>
         </div>
         <div>
