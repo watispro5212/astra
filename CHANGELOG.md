@@ -3,6 +3,17 @@
 All notable changes to Astra are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [8.1.0] — April 30, 2026
+
+### 🔧 Technical Improvements & Security
+
+- **Security Updates** — Fixed 7 security vulnerabilities in dependencies, including critical sqlite3 updates
+- **TypeScript Fixes** — Resolved compilation errors and improved type safety
+- **Code Quality** — Comprehensive code review and error fixes across all bot modules
+- **Documentation Updates** — Updated README, security policy, and license for current version
+
+---
+
 ## [8.0.1] — April 27, 2026
 
 ### 🧠 AI & Database Fixes
