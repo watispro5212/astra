@@ -237,7 +237,7 @@ export class AstraClient extends Client {
                         const bonus = Math.min(streak * 100, 5000);
                         const total = 2500 + bonus;
                         await db.execute(
-                            'INSERT INTO users (user_id, balance, total_earned, last_daily, daily_streak) VALUES (?, ?, ?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET balance = balance + ?, total_earned = total_earned + ?, last_daily = ?, daily_streak = ?',
+                            'INSERT INTO users (user_id, balance, total_earned, last_daily, daily_streak) VALUES (?, ?, ?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET balance = users.balance + ?, total_earned = users.total_earned + ?, last_daily = ?, daily_streak = ?',
                             message.author.id, total, total, now.toString(), streak, total, total, now.toString(), streak
                         );
                         return await message.reply(`💰 **Daily claimed!** +\`${total.toLocaleString()} money\` (🔥 ${streak}-day streak)`);
@@ -254,7 +254,7 @@ export class AstraClient extends Client {
                         }
                         const earned = Math.floor(Math.random() * 501) + 250;
                         await db.execute(
-                            'INSERT INTO users (user_id, balance, total_earned, last_work) VALUES (?, ?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET balance = balance + ?, total_earned = total_earned + ?, last_work = ?',
+                            'INSERT INTO users (user_id, balance, total_earned, last_work) VALUES (?, ?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET balance = users.balance + ?, total_earned = users.total_earned + ?, last_work = ?',
                             message.author.id, earned, earned, now.toString(), earned, earned, now.toString()
                         );
                         return await message.reply(`🔧 **Work done!** You earned \`+${earned.toLocaleString()} money\`.`);
@@ -275,7 +275,7 @@ export class AstraClient extends Client {
                             ? Math.floor(Math.random() * 2000) + 500
                             : -Math.min(Math.floor(Math.random() * 1000), current);
                         await db.execute(
-                            'INSERT INTO users (user_id, balance, last_mine) VALUES (?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET balance = GREATEST(0, balance + ?), last_mine = ?',
+                            'INSERT INTO users (user_id, balance, last_mine) VALUES (?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET balance = GREATEST(0, users.balance + ?), last_mine = ?',
                             message.author.id, Math.max(0, delta), now.toString(), delta, now.toString()
                         );
                         return await message.reply(success

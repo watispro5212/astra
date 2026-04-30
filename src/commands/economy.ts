@@ -149,7 +149,7 @@ const command: Command = {
             const totalDaily = DAILY_AMOUNT + streakBonus;
 
             await db.execute(
-                'INSERT INTO users (user_id, balance, total_earned, last_daily, daily_streak) VALUES (?, ?, ?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET balance = balance + ?, total_earned = total_earned + ?, last_daily = ?, daily_streak = ?',
+                'INSERT INTO users (user_id, balance, total_earned, last_daily, daily_streak) VALUES (?, ?, ?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET balance = users.balance + ?, total_earned = users.total_earned + ?, last_daily = ?, daily_streak = ?',
                 userId, totalDaily, totalDaily, now.toString(), streak, totalDaily, totalDaily, now.toString(), streak
             );
             const after = await db.fetchOne('SELECT balance FROM users WHERE user_id = ?', userId);
@@ -185,7 +185,7 @@ const command: Command = {
             const task = WORK_RESPONSES[Math.floor(Math.random() * WORK_RESPONSES.length)];
 
             await db.execute(
-                'INSERT INTO users (user_id, balance, total_earned, last_work) VALUES (?, ?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET balance = balance + ?, total_earned = total_earned + ?, last_work = ?',
+                'INSERT INTO users (user_id, balance, total_earned, last_work) VALUES (?, ?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET balance = users.balance + ?, total_earned = users.total_earned + ?, last_work = ?',
                 userId, earned, earned, now.toString(), earned, earned, now.toString()
             );
             const after = await db.fetchOne('SELECT balance FROM users WHERE user_id = ?', userId);
@@ -223,7 +223,7 @@ const command: Command = {
                 : -Math.min(Math.floor(Math.random() * 1000), currentBalance);
 
             await db.execute(
-                'INSERT INTO users (user_id, balance, total_earned, last_mine) VALUES (?, ?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET balance = GREATEST(0, balance + ?), total_earned = total_earned + ?, last_mine = ?',
+                'INSERT INTO users (user_id, balance, total_earned, last_mine) VALUES (?, ?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET balance = GREATEST(0, users.balance + ?), total_earned = users.total_earned + ?, last_mine = ?',
                 userId, Math.max(0, yieldAmount), success ? yieldAmount : 0, now.toString(), yieldAmount, success ? yieldAmount : 0, now.toString()
             );
             const after = await db.fetchOne('SELECT balance FROM users WHERE user_id = ?', userId);
@@ -280,7 +280,7 @@ const command: Command = {
             }
 
             await db.execute(
-                'INSERT INTO users (user_id, balance, total_earned) VALUES (?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET balance = balance + ?, total_earned = total_earned + ?',
+                'INSERT INTO users (user_id, balance, total_earned) VALUES (?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET balance = users.balance + ?, total_earned = users.total_earned + ?',
                 userId, totalHarvest, totalHarvest, totalHarvest, totalHarvest
             );
             const after = await db.fetchOne('SELECT balance FROM users WHERE user_id = ?', userId);
@@ -487,7 +487,7 @@ const command: Command = {
             if (!senderData || senderData.balance < amount) return interaction.editReply({ content: `❌ You don't have enough money.` });
 
             await db.execute('UPDATE users SET balance = balance - ? WHERE user_id = ?', amount, userId);
-            await db.execute('INSERT INTO users (user_id, balance) VALUES (?, ?) ON CONFLICT(user_id) DO UPDATE SET balance = balance + ?', target.id, amount, amount);
+            await db.execute('INSERT INTO users (user_id, balance) VALUES (?, ?) ON CONFLICT(user_id) DO UPDATE SET balance = users.balance + ?', target.id, amount, amount);
             
             const embed = new EmbedBuilder()
                 .setColor(THEME.SUCCESS)

@@ -309,7 +309,7 @@ const command: Command = {
 
             // Credit refund
             await db.execute(
-                'INSERT INTO users (user_id, balance) VALUES (?, ?) ON CONFLICT(user_id) DO UPDATE SET balance = balance + ?',
+                'INSERT INTO users (user_id, balance) VALUES (?, ?) ON CONFLICT(user_id) DO UPDATE SET balance = users.balance + ?',
                 interaction.user.id, refund, refund
             );
             const after = await db.fetchOne('SELECT balance FROM users WHERE user_id = ?', interaction.user.id);
