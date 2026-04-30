@@ -1,13 +1,15 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, PermissionFlagsBits, MessageFlags } from 'discord.js';
 import { Command } from '../types';
 import { db } from '../core/database';
-import { config } from '../core/config';
-// XP required to reach level N+1
+import { THEME } from '../core/constants';
+
+// Must match bot.ts XP formula exactly
+// Level 0→1: 500 XP | Level 5→6: 2375 XP | Level 10→11: 5500 XP
 function xpForLevel(level: number): number {
-    return (level + 1) * 500;
+    return 25 * level * level + 250 * level + 500;
 }
 
-// Calculate total XP across all levels
+// Cumulative XP earned across all completed levels + current progress
 function totalXp(level: number, currentXp: number): number {
     let total = Number(currentXp);
     for (let l = 0; l < level; l++) total += xpForLevel(l);
@@ -15,84 +17,83 @@ function totalXp(level: number, currentXp: number): number {
 }
 
 function xpBar(xp: number, needed: number): string {
-    const pct    = Math.min(Math.floor((Number(xp) / needed) * 100), 100);
-    const filled = Math.round(pct / 10);
+    const pct    = Math.min(Math.floor((Number(xp) / Math.max(needed, 1)) * 100), 100);
+    const filled = Math.min(10, Math.max(0, Math.round(pct / 10)));
     return `${'█'.repeat(filled)}${'░'.repeat(10 - filled)} ${pct}%`;
 }
 
 const command: Command = {
     data: new SlashCommandBuilder()
         .setName('leveling')
-        .setDescription('📊 Check your level and server rankings.')
-        .setDMPermission(false)
+        .setDescription('📊 XP levels and server rankings.')
+        .setDMPermission(true)
         .addSubcommand(sub =>
             sub.setName('rank')
-               .setDescription('📈 See your level and how much XP you have.')
-               .addUserOption(opt => opt.setName('user').setDescription('The user you want to check.'))
+               .setDescription('📈 See your level and XP progress.')
+               .addUserOption(opt => opt.setName('user').setDescription('The user to check.'))
         )
         .addSubcommand(sub =>
             sub.setName('leaderboard')
-               .setDescription('🏆 See the top 15 players on the server.')
+               .setDescription('🏆 Top 15 players by level.')
         )
         .addSubcommand(sub =>
             sub.setName('setxp')
-               .setDescription('⚙️ Set a user\'s XP (Admin only).')
-               .addUserOption(opt => opt.setName('user').setDescription('The user to change.').setRequired(true))
-               .addIntegerOption(opt => opt.setName('xp').setDescription('XP amount to set.').setRequired(true).setMinValue(0))
+               .setDescription('⚙️ Set a user\'s XP. (Admin only)')
+               .addUserOption(opt => opt.setName('user').setDescription('Target user.').setRequired(true))
+               .addIntegerOption(opt => opt.setName('xp').setDescription('XP amount.').setRequired(true).setMinValue(0))
         )
         .addSubcommand(sub =>
             sub.setName('setlevel')
-               .setDescription('⚙️ Set a user\'s level (Admin only).')
-               .addUserOption(opt => opt.setName('user').setDescription('The user to change.').setRequired(true))
+               .setDescription('⚙️ Set a user\'s level. (Admin only)')
+               .addUserOption(opt => opt.setName('user').setDescription('Target user.').setRequired(true))
                .addIntegerOption(opt => opt.setName('level').setDescription('Level to set.').setRequired(true).setMinValue(0))
         )
         .addSubcommand(sub =>
             sub.setName('reset')
-               .setDescription('🗑️ Reset a user\'s level and XP to zero (Admin only).')
-               .addUserOption(opt => opt.setName('user').setDescription('The user to reset.').setRequired(true))
+               .setDescription('🗑️ Reset a user\'s level and XP to zero. (Admin only)')
+               .addUserOption(opt => opt.setName('user').setDescription('Target user.').setRequired(true))
         ),
 
     async execute(interaction: ChatInputCommandInteraction) {
-        const sub = interaction.options.getSubcommand();
+        const sub   = interaction.options.getSubcommand();
+        const guild = interaction.guild;
 
         // ── RANK ──────────────────────────────────────────────────────────────
         if (sub === 'rank') {
             await interaction.deferReply();
             const target = interaction.options.getUser('user') || interaction.user;
-            
-            // Fetch rank and stats
+
             const data = await db.fetchOne(`
-                SELECT xp, level, 
-                (SELECT COUNT(*) + 1 FROM users WHERE level > u.level OR (level = u.level AND xp > u.xp)) as position,
-                (SELECT COUNT(*) FROM users) as total
-                FROM users u WHERE user_id = ?`, target.id);
+                SELECT xp, level,
+                (SELECT COUNT(*) + 1 FROM users WHERE level > u.level OR (level = u.level AND xp > u.xp)) AS position,
+                (SELECT COUNT(*) FROM users) AS total
+                FROM users u WHERE user_id = ?
+            `, target.id);
 
             if (!data) {
-                return interaction.editReply({ content: '❌ **ERROR**: No data found for this user. They need to talk more to get XP!' });
+                return interaction.editReply({ content: '❌ No XP data for that user yet — they need to chat first!' });
             }
 
-            // Ensure BigInt/Strings from Postgres are converted to Numbers
             const level    = Number(data.level);
             const xp       = Number(data.xp);
             const position = Number(data.position);
             const total    = Number(data.total);
-
             const needed   = xpForLevel(level);
             const bar      = xpBar(xp, needed);
             const cumXp    = totalXp(level, xp);
 
             const embed = new EmbedBuilder()
                 .setColor(0x9b59b6)
-                .setAuthor({ name: target.tag, iconURL: target.displayAvatarURL() })
-                .setTitle('📈 YOUR RANK')
+                .setAuthor({ name: target.username, iconURL: target.displayAvatarURL() })
+                .setTitle('📈 RANK CARD')
                 .setThumbnail(target.displayAvatarURL({ size: 256 }))
                 .addFields(
-                    { name: '⭐ Level',         value: `\`${level}\``,                           inline: true },
-                    { name: '🏅 Server Rank',   value: `\`#${position} / ${total}\``,            inline: true },
-                    { name: '🔢 Total XP',      value: `\`${cumXp.toLocaleString()} XP\``,       inline: true },
-                    { name: '📊 Progress',      value: `\`[${bar}]\`\n\`${xp.toLocaleString()} / ${needed.toLocaleString()} XP\``, inline: false },
+                    { name: '⭐ Level',       value: `\`${level}\``,                           inline: true },
+                    { name: '🏅 Global Rank', value: `\`#${position} / ${total}\``,            inline: true },
+                    { name: '🔢 Total XP',    value: `\`${cumXp.toLocaleString()} XP\``,       inline: true },
+                    { name: '📊 Progress',    value: `\`[${bar}]\`\n\`${xp.toLocaleString()} / ${needed.toLocaleString()} XP to Level ${level + 1}\``, inline: false },
                 )
-                .setFooter({ text: `Astra Levels` })
+                .setFooter({ text: `Astra Levels • XP resets per level` })
                 .setTimestamp();
 
             return interaction.editReply({ embeds: [embed] });
@@ -103,12 +104,11 @@ const command: Command = {
             const top = await db.fetchAll('SELECT user_id, xp, level FROM users ORDER BY level DESC, xp DESC LIMIT 15');
 
             if (!top || top.length === 0) {
-                return interaction.editReply({ content: '❌ No leveling data available yet.' });
+                return interaction.editReply({ content: '❌ No leveling data yet — start chatting!' });
             }
 
             const medals = ['👑', '🥈', '🥉'];
-            
-            // Parallel fetch for optimal performance
+
             const lines = await Promise.all(top.map(async (entry, i) => {
                 let username = `User ${entry.user_id}`;
                 try {
@@ -116,23 +116,25 @@ const command: Command = {
                     username = u.username;
                 } catch (_) {}
 
-                const cumXp = totalXp(entry.level, entry.xp);
+                const cumXp  = totalXp(Number(entry.level), Number(entry.xp));
                 const prefix = medals[i] ?? `\`${i + 1}.\``;
                 return `${prefix} **${username}** — Level \`${entry.level}\` · \`${cumXp.toLocaleString()} XP\``;
             }));
 
             return interaction.editReply({ embeds: [new EmbedBuilder()
                 .setColor(0x9b59b6)
-                .setTitle('🏆 LEADERBOARD — TOP 15')
+                .setTitle('🏆 XP LEADERBOARD — TOP 15')
                 .setDescription(lines.join('\n'))
                 .setFooter({ text: `Astra Levels` })
                 .setTimestamp()] });
 
         // ── SETXP ─────────────────────────────────────────────────────────────
         } else if (sub === 'setxp') {
+            if (!guild) return interaction.reply({ content: '❌ This command only works in a server.', ephemeral: true });
             if (!interaction.memberPermissions?.has(PermissionFlagsBits.Administrator)) {
-                return interaction.reply({ content: '❌ You need to be an Admin to do this.', ephemeral: true });
+                return interaction.reply({ content: '❌ You need Administrator to use this.', ephemeral: true });
             }
+
             const target = interaction.options.getUser('user')!;
             const xp     = interaction.options.getInteger('xp')!;
 
@@ -142,16 +144,18 @@ const command: Command = {
             );
 
             return interaction.reply({ embeds: [new EmbedBuilder()
-                .setColor(0x2ecc71)
+                .setColor(THEME.SUCCESS)
                 .setTitle('⚙️ XP UPDATED')
                 .setDescription(`Set **${target.username}**'s XP to \`${xp.toLocaleString()}\`.`)
-                .setFooter({ text: `Bot Settings` })] });
+                .setFooter({ text: `Astra Admin` })], ephemeral: true });
 
         // ── SETLEVEL ──────────────────────────────────────────────────────────
         } else if (sub === 'setlevel') {
+            if (!guild) return interaction.reply({ content: '❌ This command only works in a server.', ephemeral: true });
             if (!interaction.memberPermissions?.has(PermissionFlagsBits.Administrator)) {
-                return interaction.reply({ content: '❌ You need to be an Admin to do this.', ephemeral: true });
+                return interaction.reply({ content: '❌ You need Administrator to use this.', ephemeral: true });
             }
+
             const target = interaction.options.getUser('user')!;
             const level  = interaction.options.getInteger('level')!;
 
@@ -161,30 +165,30 @@ const command: Command = {
             );
 
             return interaction.reply({ embeds: [new EmbedBuilder()
-                .setColor(0x2ecc71)
+                .setColor(THEME.SUCCESS)
                 .setTitle('⚙️ LEVEL UPDATED')
                 .setDescription(`Set **${target.username}**'s level to \`${level}\` (XP reset to 0).`)
-                .setFooter({ text: `Bot Settings` })] });
+                .setFooter({ text: `Astra Admin` })], ephemeral: true });
 
         // ── RESET ─────────────────────────────────────────────────────────────
         } else if (sub === 'reset') {
+            if (!guild) return interaction.reply({ content: '❌ This command only works in a server.', ephemeral: true });
             if (!interaction.memberPermissions?.has(PermissionFlagsBits.Administrator)) {
-                return interaction.reply({ content: '❌ You need to be an Admin to do this.', ephemeral: true });
+                return interaction.reply({ content: '❌ You need Administrator to use this.', ephemeral: true });
             }
 
-            if (interaction.user.id === config.ownerId || interaction.memberPermissions.has(PermissionFlagsBits.Administrator)) {
-                const target = interaction.options.getUser('user')!;
-                await db.execute(
-                    'INSERT INTO users (user_id, xp, level) VALUES (?, 0, 0) ON CONFLICT(user_id) DO UPDATE SET xp = 0, level = 0',
-                    target.id
-                );
+            const target = interaction.options.getUser('user')!;
 
-                return interaction.reply({ embeds: [new EmbedBuilder()
-                    .setColor(0xe74c3c)
-                    .setTitle('🗑️ LEVEL RESET')
-                    .setDescription(`Reset **${target.username}**'s XP and level to zero.`)
-                    .setFooter({ text: `Bot Settings` })] });
-            }
+            await db.execute(
+                'INSERT INTO users (user_id, xp, level) VALUES (?, 0, 0) ON CONFLICT(user_id) DO UPDATE SET xp = 0, level = 0',
+                target.id
+            );
+
+            return interaction.reply({ embeds: [new EmbedBuilder()
+                .setColor(THEME.DANGER)
+                .setTitle('🗑️ LEVEL RESET')
+                .setDescription(`Reset **${target.username}**'s XP and level to zero.`)
+                .setFooter({ text: `Astra Admin` })], ephemeral: true });
         }
     }
 };

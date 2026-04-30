@@ -398,3 +398,36 @@
 .mb-2 { margin-bottom: 0.5rem; }
 .doc-box { background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; margin-top: 1rem; }
 .text-link { color: var(--color-primary-light); }
+
+/* --- INDEX PAGE SPECIFICS --- */
+.grid--2-gap-lg { gap: 64px; }
+
+.feature-list { display: flex; flex-direction: column; gap: 16px; }
+
+.feature-item { display: flex; align-items: center; gap: 16px; }
+
+.feature-item__icon { font-size: 1.5rem; flex-shrink: 0; }
+
+.feature-item__title {
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.feature-item__desc {
+  font-size: 0.88rem;
+  color: var(--color-text-dim);
+}
+
+.code-chip {
+  background: rgba(0, 255, 209, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--color-primary);
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+/* Terminal embed color variants */
+.t-embed--secondary { border-left-color: var(--color-secondary); }
+.t-embed-title--secondary { color: var(--color-secondary); }

@@ -154,15 +154,40 @@
             <h2 class="log-version">Bug Fix &amp; Stability Update</h2>
             <div class="log-date">APRIL 30, 2026</div>
             <div class="log-content">
+              <h4>Critical Bug Fixes</h4>
               <ul class="log-list">
-                <li><strong>Critical Fix:</strong> Fixed a crash that prevented several commands from loading on startup due to a missing <code>PROTOCOL</code> constant.</li>
-                <li><strong>AI Fix:</strong> Fixed the AI system — all database calls were using the wrong parameter style, breaking the <code>/ai model</code> command and usage tracking.</li>
-                <li><strong>Profile Fix:</strong> Fixed <code>/profile</code> showing zero money and XP due to wrong database column names.</li>
-                <li><strong>Database Compat:</strong> Replaced all <code>MAX(0, expr)</code> SQL expressions with <code>GREATEST(0, expr)</code> for proper PostgreSQL support.</li>
-                <li><strong>Giveaway Fix:</strong> Fixed giveaway embed footer showing wrong version (v7.0.0).</li>
-                <li><strong>Code Cleanup:</strong> Removed unused imports and dead hardcoded version constants across multiple command files.</li>
-                <li><strong>Website Fix:</strong> Fixed broken HTML across all pages — invalid duplicate <code>class</code> attributes on nav buttons, broken docs sidebar structure, orphaned FAQ items, and unrendered markdown text.</li>
-                <li><strong>CSS Fix:</strong> Added missing CSS variables (<code>--color-primary-light</code>, <code>--grad-quantum</code>) and removed duplicate utility class definitions.</li>
+                <li><strong>Startup Crash:</strong> Fixed bot failing to load 8 commands due to a missing <code>PROTOCOL</code> constant. Bot would silently skip entire command files.</li>
+                <li><strong>AI System:</strong> Fixed all AI database calls using Postgres-style <code>$1/$2</code> parameters as arrays instead of <code>?</code> varargs — broke <code>/ai model</code> and usage tracking entirely.</li>
+                <li><strong>Profile Command:</strong> Fixed <code>/profile</code> showing 0 money and XP — was querying non-existent columns <code>credits</code> and <code>bank</code> instead of <code>balance</code> and <code>bank_balance</code>.</li>
+                <li><strong>XP Crash:</strong> Fixed <code>RangeError: Invalid count value</code> crash in level-up notifications, <code>/info stats</code>, and <code>/system status</code> — progress bar repeat calls could receive negative numbers.</li>
+                <li><strong>PostgreSQL Compat:</strong> Replaced all <code>MAX(0, expr)</code> in SQL SET clauses with <code>GREATEST(0, expr)</code> — <code>MAX()</code> is an aggregate function and invalid in this context in PostgreSQL.</li>
+                <li><strong>Giveaway Version:</strong> Giveaway footers showed hardcoded <code>v7.0.0</code> — now uses the live <code>VERSION</code> constant.</li>
+              </ul>
+              <h4>Leveling Rework</h4>
+              <ul class="log-list">
+                <li><strong>New XP Formula:</strong> Replaced linear <code>(level+1)×500</code> with quadratic <code>25n²+250n+500</code>. Leveling up 10× too fast is now fixed — level 10 now requires real sustained activity.</li>
+                <li><strong>Slower XP Rate:</strong> Reduced XP per message from 15–25 to 10–20 (avg 15). Cooldown raised from 60s to 90s.</li>
+                <li><strong>Blacklist Enforcement:</strong> Blacklisted users no longer earn XP.</li>
+                <li><strong>Formula Sync:</strong> <code>/leveling rank</code> progress bar now uses the same formula as the XP handler.</li>
+              </ul>
+              <h4>DM Commands — New</h4>
+              <ul class="log-list">
+                <li><strong>Slash Commands in DMs:</strong> Fixed — commands now always sync globally so they appear in DMs. Previously dev-mode guild sync wiped global commands, making DMs slash-command-free.</li>
+                <li><strong>DM Prefix Commands:</strong> Added full <code>-prefix</code> command system in DMs: <code>-balance</code>, <code>-daily</code>, <code>-work</code>, <code>-mine</code>, <code>-gamble</code>, <code>-coinflip</code>, <code>-slots</code>, <code>-rank</code>, <code>-ping</code>, <code>-help</code>.</li>
+                <li><strong>/info help:</strong> New subcommand — bot activity says <code>/info help</code>, now it actually works and shows the full command list.</li>
+              </ul>
+              <h4>AI Improvements</h4>
+              <ul class="log-list">
+                <li><strong>Model Rotation on Rate Limit:</strong> When a model hits a 429 upstream rate limit, the bot now tries every fallback model in order before giving up — instead of just rotating API keys.</li>
+                <li><strong>Clean Error Messages:</strong> Raw OpenRouter JSON error blobs no longer leak to users. All errors show friendly human-readable messages.</li>
+                <li><strong>Startup DM:</strong> Bot now DMs the owner directly when it comes online (in addition to the status webhook).</li>
+              </ul>
+              <h4>Website Overhaul</h4>
+              <ul class="log-list">
+                <li><strong>New Homepage:</strong> Redesigned hero, stats band, 9-cell feature grid, and live terminal demo showing DM commands.</li>
+                <li><strong>Full Commands Page:</strong> Every command now listed with accurate descriptions, permission badges, and DM support indicators.</li>
+                <li><strong>HTML Bug Fixes:</strong> Removed all duplicate <code>class=</code> attributes across all pages, fixed broken docs sidebar, moved orphaned FAQ items into proper containers, fixed unrendered <code>**markdown**</code> bold text.</li>
+                <li><strong>CSS Fixes:</strong> Added missing <code>--color-primary-light</code> and <code>--grad-quantum</code> variables. Removed duplicate utility rules.</li>
               </ul>
             </div>
           </div>
@@ -362,6 +387,7 @@
         </div>
           <div class="footer-bottom">
             <span>&copy; 2026 Astra. All rights reserved.</span>
+            <span>v8.1.0 Quantum</span>
           </div>
       </div>
     </footer>

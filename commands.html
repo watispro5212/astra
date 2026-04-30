@@ -4,110 +4,77 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Commands — Astra</title>
-  <meta name="description" content="Astra — See all our commands and how to use them.">
+  <meta name="description" content="Full list of every Astra Discord bot command — economy, moderation, leveling, AI, and more.">
   <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
   <style>
     .filter-bar {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 48px;
+      display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 48px;
     }
     .filter-btn {
-      padding: 10px 20px;
-      border-radius: 8px;
+      padding: 8px 18px; border-radius: 8px;
       border: 1px solid var(--glass-border);
       background: var(--glass-bg);
       color: var(--color-text-muted);
-      font-size: 0.75rem;
-      font-weight: 700;
-      cursor: pointer;
+      font-size: 0.72rem; font-weight: 700; cursor: pointer;
       transition: var(--transition-base);
       font-family: var(--font-heading);
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
+      text-transform: uppercase; letter-spacing: 1.5px;
     }
-    .filter-btn:hover,
-    .filter-btn.active {
+    .filter-btn:hover, .filter-btn.active {
       border-color: var(--color-primary);
-      background: rgba(59, 130, 246, 0.1);
+      background: rgba(0,255,209,0.08);
       color: #fff;
-      box-shadow: 0 0 15px var(--color-primary-glow);
+      box-shadow: 0 0 12px rgba(0,255,209,0.2);
     }
     .sector-label {
-      font-family: var(--font-heading);
-      font-size: 0.8rem;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--color-primary);
-      margin: 60px 0 24px;
-      display: flex;
-      align-items: center;
-      gap: 20px;
+      font-family: var(--font-heading); font-size: 0.78rem;
+      letter-spacing: 3px; text-transform: uppercase;
+      color: var(--color-primary); margin: 56px 0 20px;
+      display: flex; align-items: center; gap: 20px;
     }
     .sector-label::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--glass-border);
+      content: ''; flex: 1; height: 1px; background: var(--glass-border);
     }
     .command-row {
       background: var(--glass-bg);
       border: 1px solid var(--glass-border);
-      padding: 24px 32px;
-      border-radius: 12px;
-      margin-bottom: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 24px;
+      padding: 20px 28px; border-radius: 12px;
+      margin-bottom: 8px;
+      display: flex; justify-content: space-between;
+      align-items: center; gap: 20px;
       transition: var(--transition-base);
     }
     .command-row:hover {
-      border-color: var(--color-primary-glow);
-      background: rgba(255, 255, 255, 0.02);
-      transform: translateX(8px);
+      border-color: rgba(0,255,209,0.25);
+      background: rgba(255,255,255,0.02);
+      transform: translateX(6px);
     }
     .command-row[data-hidden="true"] { display: none; }
     .command-name {
-      font-family: var(--font-heading);
-      color: var(--color-primary-light);
-      font-weight: 700;
-      font-size: 1rem;
-      margin-bottom: 6px;
+      font-family: var(--font-mono); color: var(--color-primary-light);
+      font-weight: 700; font-size: 0.95rem; margin-bottom: 4px;
     }
-    .command-desc {
-      color: var(--color-text-dim);
-      font-size: 0.9rem;
-      line-height: 1.5;
-    }
+    .command-desc { color: var(--color-text-dim); font-size: 0.88rem; line-height: 1.5; }
     .command-meta {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 8px;
-      flex-shrink: 0;
+      display: flex; flex-direction: column;
+      align-items: flex-end; gap: 6px; flex-shrink: 0;
     }
-    .command-badge {
-      font-size: 0.6rem;
-      padding: 4px 10px;
-      border-radius: 4px;
-      text-transform: uppercase;
-      font-weight: 800;
-      letter-spacing: 1px;
+    .badge {
+      font-size: 0.58rem; padding: 3px 9px; border-radius: 4px;
+      text-transform: uppercase; font-weight: 800; letter-spacing: 1px;
+      white-space: nowrap;
     }
-    .badge-public  { background: rgba(34, 197, 94, 0.1);  border: 1px solid rgba(34, 197, 94, 0.3);  color: #4ade80; }
-    .badge-staff   { background: rgba(234, 179, 8, 0.1);   border: 1px solid rgba(234, 179, 8, 0.3);   color: #fde047; }
-    .badge-admin   { background: rgba(239, 68, 68, 0.1);   border: 1px solid rgba(239, 68, 68, 0.3);   color: #f87171; }
-    .badge-owner   { background: rgba(168, 85, 247, 0.1);  border: 1px solid rgba(168, 85, 247, 0.3);  color: #c084fc; }
-    .badge-dm      { background: rgba(59, 130, 246, 0.1);   border: 1px solid rgba(59, 130, 246, 0.3);   color: var(--color-primary-light); }
-    .badge-new     { background: var(--grad-quantum); border: none; color: #fff; }
-
-    @media (max-width: 768px) {
-      .command-row { flex-direction: column; align-items: flex-start; padding: 20px; }
-      .command-meta { flex-direction: row; align-items: center; width: 100%; justify-content: space-between; }
+    .badge-public  { background: rgba(34,197,94,0.1);  border: 1px solid rgba(34,197,94,0.3);  color: #4ade80; }
+    .badge-staff   { background: rgba(234,179,8,0.1);  border: 1px solid rgba(234,179,8,0.3);  color: #fde047; }
+    .badge-admin   { background: rgba(239,68,68,0.1);  border: 1px solid rgba(239,68,68,0.3);  color: #f87171; }
+    .badge-owner   { background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); color: #c084fc; }
+    .badge-dm      { background: rgba(0,255,209,0.08); border: 1px solid rgba(0,255,209,0.2);  color: var(--color-primary); }
+    .badge-new     { background: var(--grad-quantum);  color: #fff; border: none; }
+    @media (max-width: 640px) {
+      .command-row { flex-direction: column; align-items: flex-start; }
+      .command-meta { flex-direction: row; flex-wrap: wrap; }
     }
   </style>
 </head>
@@ -115,12 +82,10 @@
   <div class="astra-mesh"></div>
   <div class="astra-grid"></div>
 
-  <!-- NAVIGATION -->
   <nav class="nav-astra" id="navbar">
     <div class="nav-container">
       <a href="index.html" class="nav-logo">
-        <img src="assets/images/astra-logo.png" alt="Astra Logo" width="32" height="32">
-        ASTRA
+        <img src="assets/images/astra-logo.png" alt="Astra" width="32" height="32"> ASTRA
       </a>
       <div class="nav-links">
         <a href="features.html" class="nav-link">Features</a>
@@ -129,175 +94,354 @@
         <a href="changelog.html" class="nav-link">Updates</a>
         <a href="support.html" class="nav-link">Support</a>
       </div>
-    <div class="nav-actions">
-      <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands" class="btn-astra btn-astra--outline btn-small">
-        Add to Server
-      </a>
-      <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=1&scope=identify+applications.commands" class="btn-astra btn-astra--primary btn-small">
-        Add to Profile
-      </a>
-    </div>
+      <div class="nav-actions">
+        <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands" class="btn-astra btn-astra--outline btn-small">Add to Server</a>
+        <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=1&scope=identify+applications.commands" class="btn-astra btn-astra--primary btn-small">Add to Profile</a>
+      </div>
     </div>
   </nav>
 
-  <!-- HEADER -->
   <header class="section page-header">
     <div class="container">
       <h1 class="h1-astra text-gradient">BOT COMMANDS</h1>
-      <p class="text-dim max-w-700">See all of Astra's commands, who can use them, and what they do.</p>
+      <p class="text-dim max-w-700">Every Astra command — what it does, who can use it, and whether it works in DMs.</p>
     </div>
   </header>
 
   <main class="container page-main">
     <div class="filter-bar animate-reveal">
-      <button class="filter-btn active" data-filter="all">All</button>
-      <button class="filter-btn" data-filter="moderation">Moderation</button>
-      <button class="filter-btn" data-filter="leveling">Leveling</button>
-      <button class="filter-btn" data-filter="economy">Money</button>
-      <button class="filter-btn" data-filter="ticket">Tickets</button>
-      <button class="filter-btn" data-filter="giveaway">Giveaways</button>
-      <button class="filter-btn" data-filter="welcome">Welcome</button>
-      <button class="filter-btn" data-filter="utility">Utility</button>
-      <button class="filter-btn" data-filter="system">System</button>
+      <button type="button" class="filter-btn active" data-filter="all">All</button>
+      <button type="button" class="filter-btn" data-filter="economy">Economy</button>
+      <button type="button" class="filter-btn" data-filter="leveling">Leveling</button>
+      <button type="button" class="filter-btn" data-filter="moderation">Moderation</button>
+      <button type="button" class="filter-btn" data-filter="ticket">Tickets</button>
+      <button type="button" class="filter-btn" data-filter="giveaway">Giveaways</button>
+      <button type="button" class="filter-btn" data-filter="shop">Shop</button>
+      <button type="button" class="filter-btn" data-filter="stock">Stocks</button>
+      <button type="button" class="filter-btn" data-filter="ai">AI</button>
+      <button type="button" class="filter-btn" data-filter="utility">Utility</button>
+      <button type="button" class="filter-btn" data-filter="system">System</button>
     </div>
 
-    <!-- MODERATION -->
-    <div class="sector-label animate-reveal" data-sector="moderation">🛡️ Moderation Commands</div>
-    
-    <div class="command-row animate-reveal" data-sector="moderation">
-      <div class="command-info">
-        <div class="command-name">/mod warn</div>
-        <div class="command-desc">Warn a user — the warning is saved and sent to the user in a DM.</div>
-      </div>
-      <div class="command-meta">
-        <span class="command-badge badge-staff">Staff</span>
-        <span class="command-badge badge-new">New</span>
-      </div>
-    </div>
-
-    <div class="command-row animate-reveal" data-sector="moderation">
-      <div class="command-info">
-        <div class="command-name">/mod ban</div>
-        <div class="command-desc">Ban a member from your server. You can also delete their recent messages.</div>
-      </div>
-      <div class="command-meta"><span class="command-badge badge-staff">Staff</span></div>
-    </div>
-
-    <div class="command-row animate-reveal" data-sector="moderation">
-      <div class="command-info">
-        <div class="command-name">/mod purge</div>
-        <div class="command-desc">Delete lots of messages at once (up to 100).</div>
-      </div>
-      <div class="command-meta"><span class="command-badge badge-staff">Staff</span></div>
-    </div>
-
-    <!-- MONEY -->
-    <div class="sector-label animate-reveal" data-sector="economy">💰 Money Commands</div>
+    <!-- ── ECONOMY ──────────────────────────────────────────────────── -->
+    <div class="sector-label animate-reveal" data-sector="economy">💰 Economy</div>
 
     <div class="command-row animate-reveal" data-sector="economy">
-      <div class="command-info">
-        <div class="command-name">/economy daily</div>
-        <div class="command-desc">Get your daily money (2,500). Come back every 24 hours for more!</div>
-      </div>
-      <div class="command-meta">
-        <span class="command-badge badge-dm">DM Ready</span>
-        <span class="command-badge badge-public">Everyone</span>
-      </div>
+      <div><div class="command-name">/economy daily</div><div class="command-desc">Claim your daily money reward. Streak bonuses add up to +5,000 extra per day.</div></div>
+      <div class="command-meta"><span class="badge badge-dm">DM Ready</span><span class="badge badge-public">Everyone</span></div>
     </div>
-
     <div class="command-row animate-reveal" data-sector="economy">
-      <div class="command-info">
-        <div class="command-name">/shop buy</div>
-        <div class="command-desc">Buy items and roles from the server shop.</div>
-      </div>
-      <div class="command-meta">
-        <span class="command-badge badge-public">Everyone</span>
-        <span class="command-badge badge-new">New</span>
-      </div>
+      <div><div class="command-name">/economy work</div><div class="command-desc">Do a job for 250–750 money. 1-hour cooldown between uses.</div></div>
+      <div class="command-meta"><span class="badge badge-dm">DM Ready</span><span class="badge badge-public">Everyone</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="economy">
+      <div><div class="command-name">/economy mine</div><div class="command-desc">Mine for crystals — 70% chance to earn 500–2,500, 30% chance to lose money on repairs. 30-min cooldown.</div></div>
+      <div class="command-meta"><span class="badge badge-dm">DM Ready</span><span class="badge badge-public">Everyone</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="economy">
+      <div><div class="command-name">/economy gamble</div><div class="command-desc">Bet any amount for a 45% chance to win 1.8× back. Min 100 money.</div></div>
+      <div class="command-meta"><span class="badge badge-dm">DM Ready</span><span class="badge badge-public">Everyone</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="economy">
+      <div><div class="command-name">/economy slots</div><div class="command-desc">Spin the slot machine for 50 money. Triple 💎 jackpot pays 50×.</div></div>
+      <div class="command-meta"><span class="badge badge-dm">DM Ready</span><span class="badge badge-public">Everyone</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="economy">
+      <div><div class="command-name">/economy coinflip</div><div class="command-desc">Call heads or tails. Win double your bet or lose it all. 50/50 odds.</div></div>
+      <div class="command-meta"><span class="badge badge-dm">DM Ready</span><span class="badge badge-public">Everyone</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="economy">
+      <div><div class="command-name">/economy rob</div><div class="command-desc">Try to steal 10–20% of someone's cash. 40% success rate. 2-hour cooldown. Target needs 200+ money.</div></div>
+      <div class="command-meta"><span class="badge badge-public">Everyone</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="economy">
+      <div><div class="command-name">/economy balance</div><div class="command-desc">Check your cash and bank balance. Can view another user's balance too.</div></div>
+      <div class="command-meta"><span class="badge badge-dm">DM Ready</span><span class="badge badge-public">Everyone</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="economy">
+      <div><div class="command-name">/economy pay</div><div class="command-desc">Send money from your cash to another user. Cannot pay yourself or bots.</div></div>
+      <div class="command-meta"><span class="badge badge-public">Everyone</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="economy">
+      <div><div class="command-name">/economy bank</div><div class="command-desc">Deposit or withdraw money from your bank. Bank balance is safe from robbery.</div></div>
+      <div class="command-meta"><span class="badge badge-dm">DM Ready</span><span class="badge badge-public">Everyone</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="economy">
+      <div><div class="command-name">/economy harvest</div><div class="command-desc">Collect passive income from shop items you own. Income accumulates hourly.</div></div>
+      <div class="command-meta"><span class="badge badge-public">Everyone</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="economy">
+      <div><div class="command-name">/economy stats</div><div class="command-desc">View your full money stats: total earned, daily streak, level, net worth.</div></div>
+      <div class="command-meta"><span class="badge badge-dm">DM Ready</span><span class="badge badge-public">Everyone</span></div>
     </div>
 
-    <!-- AI -->
-    <div class="sector-label animate-reveal" data-sector="ai">🤖 AI Assistant Commands</div>
+    <!-- ── DM PREFIX ECONOMY ─────────────────────────────────────────── -->
+    <div class="sector-label animate-reveal" data-sector="economy">💬 DM Prefix Commands (Economy)</div>
+    <div class="command-row animate-reveal" data-sector="economy">
+      <div><div class="command-name">-balance &nbsp;/&nbsp; -bal</div><div class="command-desc">Check your balance directly in a DM without using slash commands.</div></div>
+      <div class="command-meta"><span class="badge badge-dm">DM Only</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="economy">
+      <div><div class="command-name">-daily &nbsp;·&nbsp; -work &nbsp;·&nbsp; -mine</div><div class="command-desc">Claim daily, do work, or go mining — all available as DM prefix commands.</div></div>
+      <div class="command-meta"><span class="badge badge-dm">DM Only</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="economy">
+      <div><div class="command-name">-gamble &lt;amount&gt; &nbsp;·&nbsp; -coinflip &lt;amount&gt; &lt;h/t&gt; &nbsp;·&nbsp; -slots</div><div class="command-desc">All gambling commands work via DM prefix. Type <strong>-help</strong> in a DM for the full list.</div></div>
+      <div class="command-meta"><span class="badge badge-dm">DM Only</span></div>
+    </div>
 
+    <!-- ── LEVELING ──────────────────────────────────────────────────── -->
+    <div class="sector-label animate-reveal" data-sector="leveling">📈 Leveling</div>
+    <div class="command-row animate-reveal" data-sector="leveling">
+      <div><div class="command-name">/leveling rank</div><div class="command-desc">See your current level, XP progress, and global rank. Works in DMs too.</div></div>
+      <div class="command-meta"><span class="badge badge-dm">DM Ready</span><span class="badge badge-public">Everyone</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="leveling">
+      <div><div class="command-name">/leveling leaderboard</div><div class="command-desc">Top 15 users by level and total XP. Works globally across all servers.</div></div>
+      <div class="command-meta"><span class="badge badge-dm">DM Ready</span><span class="badge badge-public">Everyone</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="leveling">
+      <div><div class="command-name">/leveling setxp</div><div class="command-desc">Set a specific user's XP to any value. Does not affect their level.</div></div>
+      <div class="command-meta"><span class="badge badge-admin">Admin</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="leveling">
+      <div><div class="command-name">/leveling setlevel</div><div class="command-desc">Set a user's level directly (resets their current XP to 0).</div></div>
+      <div class="command-meta"><span class="badge badge-admin">Admin</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="leveling">
+      <div><div class="command-name">/leveling reset</div><div class="command-desc">Wipe a user's level and XP back to zero completely.</div></div>
+      <div class="command-meta"><span class="badge badge-admin">Admin</span></div>
+    </div>
+
+    <!-- ── MODERATION ──────────────────────────────────────────────────── -->
+    <div class="sector-label animate-reveal" data-sector="moderation">🛡️ Moderation</div>
+    <div class="command-row animate-reveal" data-sector="moderation">
+      <div><div class="command-name">/mod warn</div><div class="command-desc">Warn a user. A DM is sent to them with the reason. The case is saved in the database.</div></div>
+      <div class="command-meta"><span class="badge badge-staff">Staff</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="moderation">
+      <div><div class="command-name">/mod kick</div><div class="command-desc">Kick a member from the server. Creates a case entry.</div></div>
+      <div class="command-meta"><span class="badge badge-staff">Staff</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="moderation">
+      <div><div class="command-name">/mod ban</div><div class="command-desc">Permanently ban a user. Optionally delete their recent messages (0–7 days).</div></div>
+      <div class="command-meta"><span class="badge badge-staff">Staff</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="moderation">
+      <div><div class="command-name">/mod unban</div><div class="command-desc">Remove an active ban by user ID. Creates an unban case.</div></div>
+      <div class="command-meta"><span class="badge badge-staff">Staff</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="moderation">
+      <div><div class="command-name">/mod timeout</div><div class="command-desc">Timeout a member for 1 minute to 28 days. They cannot send messages or join voice during timeout.</div></div>
+      <div class="command-meta"><span class="badge badge-staff">Staff</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="moderation">
+      <div><div class="command-name">/mod purge</div><div class="command-desc">Bulk-delete up to 100 messages in the current channel. Only deletes messages under 14 days old.</div></div>
+      <div class="command-meta"><span class="badge badge-staff">Staff</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="moderation">
+      <div><div class="command-name">/mod case</div><div class="command-desc">View the details of a specific moderation case by its number.</div></div>
+      <div class="command-meta"><span class="badge badge-staff">Staff</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="moderation">
+      <div><div class="command-name">/mod history</div><div class="command-desc">See a user's full moderation history — warns, bans, kicks, timeouts. Last 15 shown.</div></div>
+      <div class="command-meta"><span class="badge badge-staff">Staff</span></div>
+    </div>
+
+    <!-- ── TICKETS ──────────────────────────────────────────────────── -->
+    <div class="sector-label animate-reveal" data-sector="ticket">🎫 Support Tickets</div>
+    <div class="command-row animate-reveal" data-sector="ticket">
+      <div><div class="command-name">/ticket create</div><div class="command-desc">Opens a private support channel. Only you and staff can see it.</div></div>
+      <div class="command-meta"><span class="badge badge-public">Everyone</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="ticket">
+      <div><div class="command-name">/ticket close</div><div class="command-desc">Close and delete the current ticket channel.</div></div>
+      <div class="command-meta"><span class="badge badge-staff">Staff</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="ticket">
+      <div><div class="command-name">/ticket add</div><div class="command-desc">Add a user to the current ticket so they can view and reply.</div></div>
+      <div class="command-meta"><span class="badge badge-staff">Staff</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="ticket">
+      <div><div class="command-name">/ticket remove</div><div class="command-desc">Remove a user's access from the current ticket.</div></div>
+      <div class="command-meta"><span class="badge badge-staff">Staff</span></div>
+    </div>
+
+    <!-- ── GIVEAWAYS ──────────────────────────────────────────────────── -->
+    <div class="sector-label animate-reveal" data-sector="giveaway">🎉 Giveaways</div>
+    <div class="command-row animate-reveal" data-sector="giveaway">
+      <div><div class="command-name">/giveaway start</div><div class="command-desc">Start a giveaway with a prize, duration, and number of winners. Users react with 🎉 to enter.</div></div>
+      <div class="command-meta"><span class="badge badge-staff">Staff</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="giveaway">
+      <div><div class="command-name">/giveaway end</div><div class="command-desc">End a giveaway early and immediately pick winners from current entries.</div></div>
+      <div class="command-meta"><span class="badge badge-staff">Staff</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="giveaway">
+      <div><div class="command-name">/giveaway reroll</div><div class="command-desc">Pick new winners for a giveaway that already ended, in case a winner is ineligible.</div></div>
+      <div class="command-meta"><span class="badge badge-staff">Staff</span></div>
+    </div>
+
+    <!-- ── SHOP ──────────────────────────────────────────────────── -->
+    <div class="sector-label animate-reveal" data-sector="shop">🛒 Shop</div>
+    <div class="command-row animate-reveal" data-sector="shop">
+      <div><div class="command-name">/shop view</div><div class="command-desc">Browse all items available in this server's shop.</div></div>
+      <div class="command-meta"><span class="badge badge-public">Everyone</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="shop">
+      <div><div class="command-name">/shop buy</div><div class="command-desc">Purchase an item from the shop using your cash balance.</div></div>
+      <div class="command-meta"><span class="badge badge-public">Everyone</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="shop">
+      <div><div class="command-name">/shop inventory</div><div class="command-desc">View all items you currently own, including passive income items.</div></div>
+      <div class="command-meta"><span class="badge badge-public">Everyone</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="shop">
+      <div><div class="command-name">/shop admin add / remove / edit</div><div class="command-desc">Manage this server's shop items. Set name, price, type (role/passive/consumable), and stock.</div></div>
+      <div class="command-meta"><span class="badge badge-admin">Admin</span></div>
+    </div>
+
+    <!-- ── STOCKS ──────────────────────────────────────────────────── -->
+    <div class="sector-label animate-reveal" data-sector="stock">📊 Stock Market</div>
+    <div class="command-row animate-reveal" data-sector="stock">
+      <div><div class="command-name">/stockmarket market</div><div class="command-desc">View all 5 stocks with current prices, trends, and percentage changes.</div></div>
+      <div class="command-meta"><span class="badge badge-public">Everyone</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="stock">
+      <div><div class="command-name">/stockmarket buy</div><div class="command-desc">Buy shares of a stock using your cash balance.</div></div>
+      <div class="command-meta"><span class="badge badge-public">Everyone</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="stock">
+      <div><div class="command-name">/stockmarket sell</div><div class="command-desc">Sell shares you own. Profit or loss is based on price since you bought.</div></div>
+      <div class="command-meta"><span class="badge badge-public">Everyone</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="stock">
+      <div><div class="command-name">/stockmarket portfolio</div><div class="command-desc">View all your current stock holdings, value, total profit/loss, and net worth.</div></div>
+      <div class="command-meta"><span class="badge badge-public">Everyone</span></div>
+    </div>
+
+    <!-- ── AI ──────────────────────────────────────────────────── -->
+    <div class="sector-label animate-reveal" data-sector="ai">🤖 AI Assistant</div>
     <div class="command-row animate-reveal" data-sector="ai">
-      <div class="command-info">
-        <div class="command-name">/ai model</div>
-        <div class="command-desc">Choose which AI you want to talk to.</div>
-      </div>
-      <div class="command-meta">
-        <span class="command-badge badge-dm">DM Ready</span>
-        <span class="command-badge badge-public">Everyone</span>
-        <span class="command-badge badge-new">New</span>
-      </div>
+      <div><div class="command-name">/ai model</div><div class="command-desc">Choose which AI model you want to use. Options include Smart, Fast, and Expert variants.</div></div>
+      <div class="command-meta"><span class="badge badge-dm">DM Ready</span><span class="badge badge-public">Everyone</span></div>
     </div>
-
     <div class="command-row animate-reveal" data-sector="ai">
-      <div class="command-info">
-        <div class="command-name">/ai status</div>
-        <div class="command-desc">Check if the AI systems are working correctly.</div>
-      </div>
-      <div class="command-meta">
-        <span class="command-badge badge-dm">DM Ready</span>
-        <span class="command-badge badge-public">Everyone</span>
-      </div>
+      <div><div class="command-name">/ai status</div><div class="command-desc">Check if the AI systems are online and which keys are active.</div></div>
+      <div class="command-meta"><span class="badge badge-dm">DM Ready</span><span class="badge badge-public">Everyone</span></div>
     </div>
-
     <div class="command-row animate-reveal" data-sector="ai">
-      <div class="command-info">
-        <div class="command-name">/ai info</div>
-        <div class="command-desc">See information about the different AI models.</div>
-      </div>
-      <div class="command-meta"><span class="command-badge badge-public">Everyone</span></div>
+      <div><div class="command-name">/ai info</div><div class="command-desc">See a description of each available AI model and what it's best at.</div></div>
+      <div class="command-meta"><span class="badge badge-dm">DM Ready</span><span class="badge badge-public">Everyone</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="ai">
+      <div><div class="command-name">DM — just type a message</div><div class="command-desc">Message Astra directly in your DMs to chat with the AI. No command needed — any message gets a response.</div></div>
+      <div class="command-meta"><span class="badge badge-dm">DM Only</span><span class="badge badge-new">AI</span></div>
     </div>
 
-    <!-- SYSTEM -->
-    <div class="sector-label animate-reveal" data-sector="system">⚙️ System Commands</div>
+    <!-- ── UTILITY ──────────────────────────────────────────────────── -->
+    <div class="sector-label animate-reveal" data-sector="utility">🛠️ Utility</div>
+    <div class="command-row animate-reveal" data-sector="utility">
+      <div><div class="command-name">/info help</div><div class="command-desc">See a complete list of all Astra commands organised by category. Works in DMs.</div></div>
+      <div class="command-meta"><span class="badge badge-dm">DM Ready</span><span class="badge badge-public">Everyone</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="utility">
+      <div><div class="command-name">/info stats</div><div class="command-desc">Bot uptime, ping, memory usage, version, and shard info.</div></div>
+      <div class="command-meta"><span class="badge badge-dm">DM Ready</span><span class="badge badge-public">Everyone</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="utility">
+      <div><div class="command-name">/info avatar</div><div class="command-desc">Get a full-size version of any user's profile picture.</div></div>
+      <div class="command-meta"><span class="badge badge-dm">DM Ready</span><span class="badge badge-public">Everyone</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="utility">
+      <div><div class="command-name">/info user</div><div class="command-desc">Get detailed info about a server member — join date, roles, status, and more.</div></div>
+      <div class="command-meta"><span class="badge badge-public">Everyone</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="utility">
+      <div><div class="command-name">/info server</div><div class="command-desc">View the server's member count, channel breakdown, boost level, and creation date.</div></div>
+      <div class="command-meta"><span class="badge badge-public">Everyone</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="utility">
+      <div><div class="command-name">/utility remind</div><div class="command-desc">Set a reminder. Astra will ping you after the time you choose.</div></div>
+      <div class="command-meta"><span class="badge badge-public">Everyone</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="utility">
+      <div><div class="command-name">/utility poll</div><div class="command-desc">Create a poll in the current channel with up to 4 custom options.</div></div>
+      <div class="command-meta"><span class="badge badge-public">Everyone</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="utility">
+      <div><div class="command-name">/profile</div><div class="command-desc">View your identity card: level, XP, net worth, and syndicate. Works in DMs.</div></div>
+      <div class="command-meta"><span class="badge badge-dm">DM Ready</span><span class="badge badge-public">Everyone</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="utility">
+      <div><div class="command-name">/welcome setup</div><div class="command-desc">Configure a welcome message channel, custom text, and optional auto-role for new members.</div></div>
+      <div class="command-meta"><span class="badge badge-admin">Admin</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="utility">
+      <div><div class="command-name">/setup_server</div><div class="command-desc">Auto-creates a full set of channels and roles for a fresh server. <strong>Warning: irreversible.</strong></div></div>
+      <div class="command-meta"><span class="badge badge-admin">Admin</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="utility">
+      <div><div class="command-name">/invite</div><div class="command-desc">Get the invite links to add Astra to a server or your profile.</div></div>
+      <div class="command-meta"><span class="badge badge-dm">DM Ready</span><span class="badge badge-public">Everyone</span></div>
+    </div>
 
+    <!-- ── SYSTEM ──────────────────────────────────────────────────── -->
+    <div class="sector-label animate-reveal" data-sector="system">⚙️ System</div>
     <div class="command-row animate-reveal" data-sector="system">
-      <div class="command-info">
-        <div class="command-name">/info stats</div>
-        <div class="command-desc">See how the bot is running — uptime, speed, and more.</div>
-      </div>
-      <div class="command-meta"><span class="command-badge badge-public">Everyone</span></div>
+      <div><div class="command-name">/system status</div><div class="command-desc">View live bot status: uptime, ping, memory, shard info, and server count.</div></div>
+      <div class="command-meta"><span class="badge badge-public">Everyone</span></div>
     </div>
-
     <div class="command-row animate-reveal" data-sector="system">
-      <div class="command-info">
-        <div class="command-name">/setup_server</div>
-        <div class="command-desc">Automatically setup your server with channels and roles.</div>
-      </div>
-      <div class="command-meta"><span class="command-badge badge-admin">Admin</span></div>
+      <div><div class="command-name">/system ping</div><div class="command-desc">Check WebSocket and API response time in real time.</div></div>
+      <div class="command-meta"><span class="badge badge-public">Everyone</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="system">
+      <div><div class="command-name">/system sync</div><div class="command-desc">Re-register all slash commands globally. Use if commands are missing after an update.</div></div>
+      <div class="command-meta"><span class="badge badge-owner">Owner Only</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="system">
+      <div><div class="command-name">/system servers</div><div class="command-desc">List all servers Astra is in, sorted by member count.</div></div>
+      <div class="command-meta"><span class="badge badge-owner">Owner Only</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="system">
+      <div><div class="command-name">/system alert</div><div class="command-desc">Broadcast an important message to a channel in every server Astra is in.</div></div>
+      <div class="command-meta"><span class="badge badge-owner">Owner Only</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="system">
+      <div><div class="command-name">/leaderboard server / global / wealth</div><div class="command-desc">Top 10 by XP/level in this server, globally, or by total money.</div></div>
+      <div class="command-meta"><span class="badge badge-public">Everyone</span></div>
+    </div>
+    <div class="command-row animate-reveal" data-sector="system">
+      <div><div class="command-name">/dev</div><div class="command-desc">Developer-only tools: force sync, check internals, run diagnostics.</div></div>
+      <div class="command-meta"><span class="badge badge-owner">Owner Only</span></div>
     </div>
 
   </main>
 
-  <!-- FOOTER -->
   <footer class="footer-astra">
     <div class="container">
       <div class="footer-grid">
         <div>
           <div class="footer-brand__logo">
-            <img src="assets/images/astra-logo.png" alt="Astra" width="32" height="32">
-            ASTRA
+            <img src="assets/images/astra-logo.png" alt="Astra" width="32" height="32"> ASTRA
           </div>
-          <p class="footer-brand__desc">
-            Astra — Built for Discord servers worldwide.
-          </p>
+          <p class="footer-brand__desc">Free Discord bot — moderation, economy, leveling, AI and more.</p>
         </div>
         <div>
-          <h4 class="footer-head">Features</h4>
+          <h4 class="footer-head">Product</h4>
           <div class="footer-links">
             <a href="features.html" class="footer-link">Features</a>
             <a href="commands.html" class="footer-link">Commands</a>
             <a href="docs.html" class="footer-link">Docs</a>
+            <a href="changelog.html" class="footer-link">Updates</a>
           </div>
         </div>
         <div>
           <h4 class="footer-head">Help</h4>
           <div class="footer-links">
-            <a href="support.html" class="footer-link">Support Hub</a>
+            <a href="support.html" class="footer-link">Support</a>
             <a href="faq.html" class="footer-link">FAQ</a>
-            <a href="changelog.html" class="footer-link">Updates</a>
           </div>
         </div>
         <div>
@@ -310,6 +454,7 @@
       </div>
       <div class="footer-bottom">
         <span>&copy; 2026 Astra. All rights reserved.</span>
+        <span>v8.1.0 Quantum</span>
       </div>
     </div>
   </footer>
@@ -318,27 +463,23 @@
     window.addEventListener('scroll', () => {
       document.getElementById('navbar').classList.toggle('nav-astra--scrolled', window.scrollY > 50);
     });
+    const obs = new IntersectionObserver(e => {
+      e.forEach(x => { if (x.isIntersecting) x.target.classList.add('visible'); });
+    }, { threshold: 0.05 });
+    document.querySelectorAll('.animate-reveal').forEach(el => obs.observe(el));
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('visible');
-      });
-    }, { threshold: 0.1 });
+    // Filter logic
+    const btns  = document.querySelectorAll('.filter-btn');
+    const rows  = document.querySelectorAll('.command-row');
+    const lbls  = document.querySelectorAll('.sector-label');
 
-    document.querySelectorAll('.animate-reveal').forEach(el => observer.observe(el));
-
-    // Filter Logic
-    const buttons = document.querySelectorAll('.filter-btn');
-    const rows = document.querySelectorAll('.command-row');
-    const labels = document.querySelectorAll('.sector-label');
-
-    buttons.forEach(btn => {
+    btns.forEach(btn => {
       btn.addEventListener('click', () => {
-        buttons.forEach(b => b.classList.remove('active'));
+        btns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        const filter = btn.dataset.filter;
-        rows.forEach(row => { row.dataset.hidden = (filter === 'all' || row.dataset.sector === filter) ? 'false' : 'true'; });
-        labels.forEach(lbl => { lbl.style.display = (filter === 'all' || lbl.dataset.sector === filter) ? '' : 'none'; });
+        const f = btn.dataset.filter;
+        rows.forEach(r => { r.dataset.hidden = (f === 'all' || r.dataset.sector === f) ? 'false' : 'true'; });
+        lbls.forEach(l => { l.style.display  = (f === 'all' || l.dataset.sector === f) ? '' : 'none'; });
       });
     });
   </script>

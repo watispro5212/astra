@@ -1,118 +1,150 @@
 import { config } from '../core/config';
 import logger from '../core/logger';
 import { db } from '../core/database';
-import { VERSION } from '../core/constants';
 
 export const AI_MODELS = [
-    { id: 'tencent/hy3-preview:free', name: 'Astra Smart (Free)', description: 'Good for general questions and help.' },
-    { id: 'minimax/minimax-m2.5:free', name: 'Astra Fast (Free)', description: 'Very fast at thinking and answering.' },
-    { id: 'google/gemma-4-26b-a4b-it:free', name: 'Astra Expert (Free)', description: 'Best for complex problems and logic.' }
+    { id: 'tencent/hy3-preview:free',        name: 'Astra Smart',  description: 'Great for general questions and help.' },
+    { id: 'minimax/minimax-m2.5:free',        name: 'Astra Fast',   description: 'Very fast — best for quick answers.' },
+    { id: 'google/gemma-4-26b-a4b-it:free',   name: 'Astra Expert', description: 'Best for complex problems and logic.' },
 ];
+
+// Fallback model rotation when the user's chosen model is rate-limited upstream
+const FALLBACK_ORDER = [
+    'tencent/hy3-preview:free',
+    'minimax/minimax-m2.5:free',
+    'google/gemma-4-26b-a4b-it:free',
+    'meta-llama/llama-3.2-3b-instruct:free',
+    'microsoft/phi-3-mini-128k-instruct:free',
+    'qwen/qwen-2-7b-instruct:free',
+];
+
+const SYSTEM_PROMPT = `You are Astra, a friendly and helpful AI assistant built into a Discord bot. You are warm, concise, and easy to talk to. Keep responses under 1800 characters unless the user specifically asks for a long explanation. You help with questions, advice, fun conversations, and general knowledge. You work in Discord DMs.`;
 
 export class AIService {
     private static currentKeyIndex = 0;
-    private static keys = config.aiApiKeys;
+    private static readonly keys = config.aiApiKeys;
 
-    private static getNextKey(): string | null {
-        if (this.keys.length === 0) return null;
-        this.currentKeyIndex = (this.currentKeyIndex + 1) % this.keys.length;
-        return this.keys[this.currentKeyIndex];
+    private static nextKey(): void {
+        if (this.keys.length > 1) {
+            this.currentKeyIndex = (this.currentKeyIndex + 1) % this.keys.length;
+        }
     }
 
-    private static getCurrentKey(): string | null {
-        if (this.keys.length === 0) return null;
-        return this.keys[this.currentKeyIndex];
+    private static get key(): string | null {
+        return this.keys.length > 0 ? this.keys[this.currentKeyIndex] : null;
     }
 
-    public static async generateResponse(userId: string, prompt: string, retryCount = 0): Promise<string> {
-        const key = this.getCurrentKey();
-        if (!key) {
-            return "❌ **BRAIN DISCONNECTED**: I can't find my keys to talk to the AI brain. Please tell the server owner.";
+    public static async generateResponse(
+        userId: string,
+        prompt: string,
+        _retryCount = 0,
+        _modelOverride?: string
+    ): Promise<string> {
+        const apiKey = this.key;
+        if (!apiKey) {
+            return '❌ **No AI key configured.** Ask the server owner to set up the AI system.';
         }
 
-        // Fetch user settings
-        const settings = await db.fetchOne('SELECT selected_model, system_prompt FROM user_ai_settings WHERE user_id = ?', userId);
-        const modelId = settings?.selected_model || 'tencent/hy3-preview:free';
-        const systemPrompt = settings?.system_prompt || `You are Astra, a helpful and friendly AI assistant. You are simple to talk to and you love helping people. You only talk to users in their DMs.`;
+        const settings  = await db.fetchOne('SELECT selected_model, system_prompt FROM user_ai_settings WHERE user_id = ?', userId);
+        const userModel = _modelOverride ?? settings?.selected_model ?? 'tencent/hy3-preview:free';
+        const sysPrompt = settings?.system_prompt || SYSTEM_PROMPT;
 
+        let responseText: string;
         try {
-            const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-                method: "POST",
+            const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                method: 'POST',
                 headers: {
-                    "Authorization": `Bearer ${key}`,
-                    "Content-Type": "application/json"
+                    'Authorization': `Bearer ${apiKey}`,
+                    'Content-Type': 'application/json',
+                    'HTTP-Referer': 'https://astra-bot.app',
+                    'X-Title': 'Astra Discord Bot',
                 },
                 body: JSON.stringify({
-                    model: modelId,
+                    model: userModel,
                     messages: [
-                        { role: "system", content: systemPrompt },
-                        { role: "user", content: prompt }
-                    ]
-                })
+                        { role: 'system',  content: sysPrompt },
+                        { role: 'user',    content: prompt.substring(0, 4000) },
+                    ],
+                }),
             });
 
-            if (!response.ok) {
-                const text = await response.text();
-                throw new Error(`OpenRouter Error: ${text}`);
+            const data: any = await res.json();
+
+            // Handle API-level errors cleanly (don't throw raw JSON at user)
+            if (!res.ok || data?.error) {
+                const errCode    = data?.error?.code ?? res.status;
+                const errMessage = data?.error?.message ?? '';
+
+                // Upstream model rate-limit — rotate to next model in fallback list
+                if (errCode === 429 || errMessage.includes('rate-limit') || errMessage.includes('rate limit')) {
+                    const fallbackIndex = FALLBACK_ORDER.indexOf(userModel);
+                    const nextModel     = FALLBACK_ORDER[fallbackIndex + 1];
+
+                    if (nextModel && _retryCount < FALLBACK_ORDER.length - 1) {
+                        logger.warn(`AI: model ${userModel} rate-limited upstream, trying ${nextModel}`);
+                        return this.generateResponse(userId, prompt, _retryCount + 1, nextModel);
+                    }
+
+                    // All models exhausted — rotate API key and try from the top
+                    if (this.keys.length > 1 && _retryCount < this.keys.length + FALLBACK_ORDER.length) {
+                        logger.warn(`AI: rotating API key (index ${this.currentKeyIndex})`);
+                        this.nextKey();
+                        return this.generateResponse(userId, prompt, _retryCount + 1);
+                    }
+
+                    return '⏳ **All AI models are busy right now.** This happens when free-tier limits fill up. Try again in a minute!';
+                }
+
+                // Auth error
+                if (errCode === 401 || errCode === 403) {
+                    logger.error(`AI: auth error on key ${this.currentKeyIndex}`);
+                    this.nextKey();
+                    return '🔑 **AI key issue detected.** The bot owner needs to check the OpenRouter API key.';
+                }
+
+                // Generic API error — log detail, return friendly message
+                logger.error(`AI error [${errCode}]: ${errMessage.substring(0, 200)}`);
+                return `⚠️ **The AI ran into an issue.** Try again in a moment. (Error ${errCode})`;
             }
 
-            const data: any = await response.json();
-            const reply = data.choices && data.choices[0] && data.choices[0].message.content ? data.choices[0].message.content : 'I forgot what I was going to say.';
+            responseText = data?.choices?.[0]?.message?.content?.trim() ?? '';
+            if (!responseText) return "🤔 I wasn't sure what to say — try asking again!";
 
-            // Update usage stats
-            await db.execute(
-                'INSERT INTO user_ai_settings (user_id, usage_count, last_used) VALUES (?, 1, ?) ON CONFLICT(user_id) DO UPDATE SET usage_count = user_ai_settings.usage_count + 1, last_used = ?',
-                userId, new Date().toISOString(), new Date().toISOString()
-            );
-
-            return reply;
-
-        } catch (error: any) {
-            const errorMessage = error?.message || String(error);
-            
-            // Check for rate limit or quota errors
-            if ((errorMessage.includes('429') || errorMessage.includes('quota')) && retryCount < this.keys.length) {
-                logger.warn(`🚀 Astra Brain: Key ${this.currentKeyIndex} is tired. Trying another one...`);
-                this.getNextKey();
-                return this.generateResponse(userId, prompt, retryCount + 1);
-            }
-
-            logger.error(`🚨 Astra AI Error: ${errorMessage}`);
-            return `⚠️ **I GOT CONFUSED**: My AI brain had a little trouble. \n\`\`\`${errorMessage}\`\`\``;
+        } catch (err: any) {
+            logger.error(`AI fetch error: ${err?.message ?? err}`);
+            return '⚠️ **Connection issue.** I had trouble reaching the AI. Try again in a second!';
         }
+
+        // Log usage (fire-and-forget — don't block the response)
+        db.execute(
+            'INSERT INTO user_ai_settings (user_id, usage_count, last_used) VALUES (?, 1, ?) ON CONFLICT(user_id) DO UPDATE SET usage_count = user_ai_settings.usage_count + 1, last_used = ?',
+            userId, new Date().toISOString(), new Date().toISOString()
+        ).catch(() => {});
+
+        return responseText;
     }
 
     public static async setUserModel(userId: string, modelId: string): Promise<boolean> {
         if (!AI_MODELS.find(m => m.id === modelId)) return false;
-        
         await db.execute(
             'INSERT INTO user_ai_settings (user_id, selected_model) VALUES (?, ?) ON CONFLICT(user_id) DO UPDATE SET selected_model = ?',
             userId, modelId, modelId
         );
         return true;
     }
+
     public static async checkKeys(): Promise<{ index: number; status: 'ACTIVE' | 'ERROR' | 'QUOTA'; message: string }[]> {
-        const checkPromises = this.keys.map(async (key, i) => {
+        return Promise.all(this.keys.map(async (k, i) => {
             try {
-                const response = await fetch("https://openrouter.ai/api/v1/models", {
-                    method: "GET",
-                    headers: { "Authorization": `Bearer ${key}` }
+                const res = await fetch('https://openrouter.ai/api/v1/models', {
+                    headers: { 'Authorization': `Bearer ${k}` },
                 });
-                
-                if (response.ok) {
-                    return { index: i, status: 'ACTIVE' as const, message: 'Brain is connected and happy.' };
-                } else if (response.status === 429) {
-                    return { index: i, status: 'QUOTA' as const, message: 'Brain is tired (too many requests).' };
-                } else {
-                    return { index: i, status: 'ERROR' as const, message: `Status ${response.status}` };
-                }
-            } catch (error: any) {
-                const msg = error?.message || String(error);
-                const status = (msg.includes('429') || msg.includes('quota')) ? 'QUOTA' : 'ERROR';
-                return { index: i, status: status as any, message: msg };
+                if (res.ok)              return { index: i, status: 'ACTIVE' as const, message: 'Connected.' };
+                if (res.status === 429)  return { index: i, status: 'QUOTA'  as const, message: 'Rate limited.' };
+                return { index: i, status: 'ERROR' as const, message: `HTTP ${res.status}` };
+            } catch (e: any) {
+                return { index: i, status: 'ERROR' as const, message: e?.message ?? String(e) };
             }
-        });
-        
-        return Promise.all(checkPromises);
+        }));
     }
 }
