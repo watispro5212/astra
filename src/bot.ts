@@ -271,6 +271,7 @@ export class AstraClient extends Client {
                     }
                 }
             }
+
         });
 
         this.on(Events.GuildCreate, async (guild) => {
