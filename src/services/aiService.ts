@@ -31,7 +31,7 @@ export class AIService {
         }
 
         // Fetch user settings
-        const settings = await db.fetchOne('SELECT selected_model, system_prompt FROM user_ai_settings WHERE user_id = $1', [userId]);
+        const settings = await db.fetchOne('SELECT selected_model, system_prompt FROM user_ai_settings WHERE user_id = ?', userId);
         const modelId = settings?.selected_model || 'tencent/hy3-preview:free';
         const systemPrompt = settings?.system_prompt || `You are Astra, a helpful and friendly AI assistant. You are simple to talk to and you love helping people. You only talk to users in their DMs.`;
 
@@ -61,8 +61,8 @@ export class AIService {
 
             // Update usage stats
             await db.execute(
-                'INSERT INTO user_ai_settings (user_id, usage_count, last_used) VALUES ($1, 1, $2) ON CONFLICT(user_id) DO UPDATE SET usage_count = user_ai_settings.usage_count + 1, last_used = $3',
-                [userId, new Date().toISOString(), new Date().toISOString()]
+                'INSERT INTO user_ai_settings (user_id, usage_count, last_used) VALUES (?, 1, ?) ON CONFLICT(user_id) DO UPDATE SET usage_count = user_ai_settings.usage_count + 1, last_used = ?',
+                userId, new Date().toISOString(), new Date().toISOString()
             );
 
             return reply;
@@ -86,8 +86,8 @@ export class AIService {
         if (!AI_MODELS.find(m => m.id === modelId)) return false;
         
         await db.execute(
-            'INSERT INTO user_ai_settings (user_id, selected_model) VALUES ($1, $2) ON CONFLICT(user_id) DO UPDATE SET selected_model = $3',
-            [userId, modelId, modelId]
+            'INSERT INTO user_ai_settings (user_id, selected_model) VALUES (?, ?) ON CONFLICT(user_id) DO UPDATE SET selected_model = ?',
+            userId, modelId, modelId
         );
         return true;
     }

@@ -11,4 +11,5 @@ export const THEME = {
     DANGER: 0xFF0054,    // Astra Red
     INFO: 0x4361EE       // Astra Blue
 };
-export const VERSION = 'v8.0.1';
+export const VERSION  = 'v8.1.0';
+export const PROTOCOL = 'Quantum';
