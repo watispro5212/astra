@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Documentation — Astra</title>
-  <meta name="description" content="Help guides and documentation for using Astra bot.">
+  <meta name="description" content="Help guides and documentation for setting up and using the Astra bot.">
   <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
@@ -27,14 +27,14 @@
         <a href="changelog.html" class="nav-link">Updates</a>
         <a href="support.html" class="nav-link">Support</a>
       </div>
-    <div class="nav-actions">
-      <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands" class="btn-astra btn-astra--outline" class="btn-small">
-        Add to Server
-      </a>
-      <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=1&scope=identify+applications.commands" class="btn-astra btn-astra--primary" class="btn-small">
-        Add to Profile
-      </a>
-    </div>
+      <div class="nav-actions">
+        <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands" class="btn-astra btn-astra--outline btn-small">
+          Add to Server
+        </a>
+        <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=1&scope=identify+applications.commands" class="btn-astra btn-astra--primary btn-small">
+          Add to Profile
+        </a>
+      </div>
     </div>
   </nav>
 
@@ -48,148 +48,129 @@
 
   <main class="container">
     <div class="docs-layout">
+
+      <!-- SIDEBAR -->
       <aside class="docs-sidebar">
         <div class="docs-nav-group">
           <div class="docs-nav-title">Setup</div>
           <a href="#quick-start" class="docs-nav-link active">Quick Start</a>
-          <a href="#inviting" class="docs-nav-link">Adding Astra</a>
-          <a href="#user-install" class="docs-nav-link">Profile Installation</a>
-        </div>
-        <div class="docs-nav-group">
-          <div class="docs-nav-title">AI Features</div>
-          <a href="#ai-sentinel" class="docs-nav-link">AI Assistant</a>
-        </div>
-        <div class="docs-nav-group">
-          <div class="docs-nav-title">Configuration</div>
-          <a href="#economy" class="docs-nav-link">Economy Settings</a>
-          <a href="#levels" class="docs-nav-link">Leveling Config</a>
-        </div>
-      </aside>
-
-      <div class="docs-content">
-        <div class="card card--astra" id="quick-start">
-          <h2 class="doc-heading">🚀 Welcome</h2>
-          <p>
-            Welcome to the <strong>Astra Help Center</strong>. This guide will help you setup your bot and use its AI features.
-          </p>
-        </div>
-
-        <div class="card card--astra" id="user-install">
-          <h2 class="doc-heading">🛰️ Profile Apps</h2>
-          <p>
-            Astra now supports <strong>Profile Installation</strong>, allowing you to use the bot's features on your personal Discord account.
-          </p>
-          <ul class="list-clean">
-            <li class="mb-2">🔹 <strong>Use Anywhere:</strong> Use Astra commands in any server, DM, or Group DM.</li>
-            <li class="mb-2">🔹 <strong>AI in DMs:</strong> Message Astra directly to talk to the AI assistant.</li>
-            <li class="mb-2">🔹 <strong>Privacy First:</strong> Your interactions are private and locked to your account.</li>
-          </ul>
-          <div class="doc-box">
-            <h4 class="mb-2">How to install:</h4>
-            <ol class="pl-12">
-              <li>Click the <strong>"Add to Profile"</strong> or <strong>"Add to Server"</strong> button.</li>
-              <li>Select <strong>"Try it Now"</strong> (User Install) on the Discord page.</li>
-              <li>Authorize the bot to see your profile and use commands.</li>
-            </ol>
-          </div>
+          <a href="#user-install" class="docs-nav-link">Profile Apps</a>
+          <a href="#sync" class="docs-nav-link">Refresh Commands</a>
         </div>
         <div class="docs-nav-group">
           <div class="docs-nav-title">Features</div>
-          <a href="#moderation" class="docs-nav-link">Moderation Setup</a>
-          <a href="#economy" class="docs-nav-link">Economy Hub</a>
-          <a href="#ai-sentinel" class="docs-nav-link">AI Assistant</a>
+          <a href="#ai-assistant" class="docs-nav-link">AI Assistant</a>
+          <a href="#economy" class="docs-nav-link">Economy & Money</a>
+          <a href="#database" class="docs-nav-link">Database</a>
         </div>
         <div class="docs-nav-group">
-          <div class="docs-nav-title">Legal</div>
-          <a href="#proprietary" class="docs-nav-link">License Info</a>
+          <div class="docs-nav-title">Reference</div>
+          <a href="#prefix" class="docs-nav-link">Bot Prefix</a>
         </div>
       </aside>
 
+      <!-- CONTENT -->
       <div class="docs-content">
+
         <section id="quick-start" class="docs-section animate-reveal">
           <div class="glass-card">
-            <h2>Quick Start</h2>
-            <p class="docs-text">Adding Astra to your server is easy. Once the bot is there, use these commands to see if it is working.</p>
+            <h2>🚀 Quick Start</h2>
+            <p class="docs-text">Adding Astra to your server is easy. Once the bot is in your server, use these commands to check that everything is working.</p>
             <div class="docs-code-block">
               /system status — Check if the bot is online<br>
-              /info stats — See server stats
+              /info stats — See server and bot stats
             </div>
-            <p class="docs-text">Astra will automatically setup its commands when it joins. If commands don't show up, follow the sync steps below.</p>
+            <p class="docs-text">Astra automatically registers its slash commands when it joins. If commands are missing, use <code>/system sync</code> to force a refresh.</p>
           </div>
         </section>
 
-        <section id="ai-sentinel" class="docs-section animate-reveal">
+        <section id="user-install" class="docs-section animate-reveal">
           <div class="glass-card">
-            <h2>AI Assistant</h2>
-            <p class="docs-text">The **AI Assistant** is a smart chat bot that works in your **Direct Messages (DMs)**. It uses a reliable system to make sure it's always ready to help.</p>
-            
-            <h3>Getting an AI Key</h3>
-            <p class="docs-text">To work correctly, Astra needs a Google Gemini API key. If your keys aren't working or you run out of uses, follow these steps:</p>
-            <div class="docs-code-block">
-              1. Go to <a href="https://aistudio.google.com/" target="_blank" rel="noopener" class="text-link">Google AI Studio</a><br>
-              2. Create a new API Key (Gemini 1.5 Flash is best)<br>
-              3. Update the keys in your setup
+            <h2>🛰️ Profile Apps</h2>
+            <p class="docs-text">Astra supports <strong>Profile Installation</strong>, letting you use the bot's features from your personal Discord account — no server required.</p>
+            <ul class="list-clean">
+              <li class="mb-2">🔹 <strong>Use Anywhere:</strong> Use Astra commands in any server, DM, or Group DM.</li>
+              <li class="mb-2">🔹 <strong>AI in DMs:</strong> Message Astra directly to talk to the built-in AI.</li>
+              <li class="mb-2">🔹 <strong>Privacy First:</strong> Your interactions are private and locked to your account.</li>
+            </ul>
+            <div class="doc-box">
+              <h4 class="mb-2">How to install:</h4>
+              <ol class="pl-12">
+                <li>Click the <strong>"Add to Profile"</strong> button on this website.</li>
+                <li>Select <strong>"Try it Now"</strong> (User Install) on the Discord authorization page.</li>
+                <li>Authorize the bot to access your profile.</li>
+              </ol>
             </div>
-            
-            <h3>AI Commands</h3>
-            <div class="docs-code-block">
-              /ai model — Pick between fast or smart modes<br>
-              /ai status — Check if the AI is working<br>
-              /ai reset — Clear the current chat
-            </div>
-            <p class="docs-text">Users can change how the AI talks (pick models) using the <code>/ai model</code> command. You can pick between Flash (Fast) and Pro (Smart).</p>
           </div>
         </section>
 
-        <section id="prefix-protocol" class="docs-section animate-reveal">
+        <section id="sync" class="docs-section animate-reveal">
           <div class="glass-card">
-            <h2>Bot Prefix</h2>
-            <p class="docs-text">While Astra mostly uses Slash Commands, you can also use a **Prefix** for quick shortcuts. The default prefix is <code>-</code>.</p>
-            <div class="docs-code-block">
-              Default Prefix: -<br>
-              Usage: -[command] [options]
-            </div>
-            <p class="docs-text">You can change the server prefix using the <code>/config prefix</code> command (must be an Admin).</p>
-          </div>
-        </section>
-
-        <section id="sync-protocol" class="docs-section animate-reveal">
-          <div class="glass-card">
-            <h2>Refreshing Commands</h2>
-            <p class="docs-text">Sometimes Discord is slow to show new commands. If a command is missing from your list:</p>
+            <h2>🔄 Refreshing Commands</h2>
+            <p class="docs-text">Sometimes Discord is slow to show new slash commands. If a command is missing from your list:</p>
             <div class="docs-code-block">
               1. Type /system sync<br>
-              2. Wait for it to finish<br>
-              3. Restart your Discord app
+              2. Wait a few seconds for it to finish<br>
+              3. Restart your Discord app if needed
             </div>
-            <p class="docs-text">This refreshes the server's command list and adds any missing features.</p>
+            <p class="docs-text">This forces the server's command list to update and adds any missing features.</p>
           </div>
         </section>
 
-        <section id="infrastructure" class="docs-section animate-reveal">
+        <section id="ai-assistant" class="docs-section animate-reveal">
           <div class="glass-card">
-            <h2>Database & Storage</h2>
-            <p class="docs-text">Astra uses cloud storage to keep your data safe. This means your levels and money are always saved and never lost.</p>
+            <h2>🤖 AI Assistant</h2>
+            <p class="docs-text">The <strong>AI Assistant</strong> works in your <strong>Direct Messages (DMs)</strong>. Just send a private message to Astra and the AI will reply instantly. Your conversation stays private.</p>
+
+            <h3>AI Commands</h3>
             <div class="docs-code-block">
-              • High speed database<br>
-              • Data is always backed up<br>
-              • Always saved
+              /ai model — Pick your preferred AI model<br>
+              /ai status — Check if the AI is working<br>
+              /ai info — See info about available models
             </div>
+            <p class="docs-text">Astra uses free AI models via OpenRouter. If one model is slow or unavailable, the bot automatically switches to a backup.</p>
           </div>
         </section>
 
         <section id="economy" class="docs-section animate-reveal">
           <div class="glass-card">
-            <h2>Economy & Money</h2>
-            <p class="docs-text">Astra's economy has three main parts: Mining, Shops, and Stocks.</p>
+            <h2>💰 Economy &amp; Money</h2>
+            <p class="docs-text">Astra's economy has three main parts: earning money, the server shop, and the stock market.</p>
             <div class="docs-code-block">
-              /economy mine — Mine for money (risk included!)<br>
-              /economy harvest — Collect your daily earnings<br>
+              /economy daily — Collect your daily money reward<br>
+              /economy work — Work for money (1 hour cooldown)<br>
+              /economy mine — Mine for money (risky!)<br>
+              /economy harvest — Collect passive income from shop items<br>
               /stockmarket market — See live stock prices
             </div>
-            <p class="docs-text">Use <code>/economy harvest</code> to get money from your server activity. If you don't see the command, try using <code>/system sync</code>.</p>
+            <p class="docs-text">The bank keeps your money safe from robbery. Use <code>/economy bank deposit</code> to move money in and <code>/economy bank withdraw</code> to take it out.</p>
           </div>
         </section>
+
+        <section id="database" class="docs-section animate-reveal">
+          <div class="glass-card">
+            <h2>☁️ Database &amp; Storage</h2>
+            <p class="docs-text">Astra uses cloud storage to keep your data safe. Your levels, money, and mod history are always saved — they survive bot restarts and server changes.</p>
+            <div class="docs-code-block">
+              • Supports both PostgreSQL (cloud) and SQLite (local)<br>
+              • Data is never deleted unless you use a reset command<br>
+              • Economy and leveling data are stored per-user globally
+            </div>
+          </div>
+        </section>
+
+        <section id="prefix" class="docs-section animate-reveal">
+          <div class="glass-card">
+            <h2>⚡ Bot Prefix</h2>
+            <p class="docs-text">Astra primarily uses <strong>Slash Commands</strong>, but also supports a message prefix for quick shortcuts. The default prefix is <code>-</code>.</p>
+            <div class="docs-code-block">
+              Default Prefix: -<br>
+              Example: -ping, -stats, -economy
+            </div>
+            <p class="docs-text">Prefix shortcuts only work in DMs. All full-featured commands use Discord's built-in slash command system (<code>/</code>).</p>
+          </div>
+        </section>
+
       </div>
     </div>
   </main>
@@ -249,6 +230,22 @@
     }, { threshold: 0.1 });
 
     document.querySelectorAll('.animate-reveal').forEach(el => observer.observe(el));
+
+    // Highlight active sidebar link on scroll
+    const sections = document.querySelectorAll('.docs-section');
+    const navLinks = document.querySelectorAll('.docs-nav-link');
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(l => l.classList.remove('active'));
+          const active = document.querySelector(`.docs-nav-link[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-30% 0px -60% 0px' });
+
+    sections.forEach(s => sectionObserver.observe(s));
   </script>
 </body>
 </html>

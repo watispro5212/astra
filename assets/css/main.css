@@ -13,6 +13,7 @@
   --color-surface-solid: #090d17;
 
   --color-primary: #00ffd1; /* Neon Cyber Cyan V8 */
+  --color-primary-light: #7fffed; /* Lighter tint of primary */
   --color-primary-rgb: 0, 255, 209;
   --color-primary-glow: rgba(0, 255, 209, 0.5);
 
@@ -40,11 +41,8 @@
   --glass-highlight: rgba(0, 255, 209, 0.1);
 
   /* --- GRADIENTS --- */
-  --grad-astra: linear-gradient(
-    135deg,
-    var(--color-primary),
-    var(--color-secondary)
-  );
+  --grad-astra: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  --grad-quantum: linear-gradient(135deg, var(--color-secondary), var(--color-accent));
   --grad-cyber: linear-gradient(
     90deg,
     var(--color-secondary),
@@ -417,16 +415,9 @@ body {
   align-items: center;
 }
 
-.max-w-900 {
-  max-width: 900px;
-}
-
-.pb-120 {
-  padding-bottom: 120px;
-}
-.pb-40 { padding-bottom: 40px; }
-.pb-120 { padding-bottom: 120px; }
 .max-w-900 { max-width: 900px; }
+.pb-120 { padding-bottom: 120px; }
+.pb-40 { padding-bottom: 40px; }
 .d-block { display: block; }
 .opacity-05 { opacity: 0.5; }
 .mt-60 { margin-top: 60px; }

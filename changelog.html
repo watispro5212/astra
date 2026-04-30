@@ -124,18 +124,10 @@
           <a href="support.html" class="nav-link">Support</a>
         </div>
         <div class="nav-actions">
-          <a
-            href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands"
-            class="btn-astra btn-astra--outline"
-            class="btn-small"
-          >
+          <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands" class="btn-astra btn-astra--outline btn-small">
             Add to Server
           </a>
-          <a
-            href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=1&scope=identify+applications.commands"
-            class="btn-astra btn-astra--primary"
-            class="btn-small"
-          >
+          <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=1&scope=identify+applications.commands" class="btn-astra btn-astra--primary btn-small">
             Add to Profile
           </a>
         </div>
@@ -153,8 +145,29 @@
     </header>
 
     <!-- CONTENT -->
-    <main class="container" class="page-main">
+    <main class="container page-main">
       <div class="log-timeline">
+        <!-- v8.1.0 BUG FIX RELEASE -->
+        <div class="log-entry minor animate-reveal">
+          <div class="glass-card">
+            <span class="log-badge log-badge--patch">Patch v8.1.0</span>
+            <h2 class="log-version">Bug Fix &amp; Stability Update</h2>
+            <div class="log-date">APRIL 30, 2026</div>
+            <div class="log-content">
+              <ul class="log-list">
+                <li><strong>Critical Fix:</strong> Fixed a crash that prevented several commands from loading on startup due to a missing <code>PROTOCOL</code> constant.</li>
+                <li><strong>AI Fix:</strong> Fixed the AI system — all database calls were using the wrong parameter style, breaking the <code>/ai model</code> command and usage tracking.</li>
+                <li><strong>Profile Fix:</strong> Fixed <code>/profile</code> showing zero money and XP due to wrong database column names.</li>
+                <li><strong>Database Compat:</strong> Replaced all <code>MAX(0, expr)</code> SQL expressions with <code>GREATEST(0, expr)</code> for proper PostgreSQL support.</li>
+                <li><strong>Giveaway Fix:</strong> Fixed giveaway embed footer showing wrong version (v7.0.0).</li>
+                <li><strong>Code Cleanup:</strong> Removed unused imports and dead hardcoded version constants across multiple command files.</li>
+                <li><strong>Website Fix:</strong> Fixed broken HTML across all pages — invalid duplicate <code>class</code> attributes on nav buttons, broken docs sidebar structure, orphaned FAQ items, and unrendered markdown text.</li>
+                <li><strong>CSS Fix:</strong> Added missing CSS variables (<code>--color-primary-light</code>, <code>--grad-quantum</code>) and removed duplicate utility class definitions.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
         <!-- v8.0.1 MINOR -->
         <div class="log-entry minor animate-reveal">
           <div class="glass-card">

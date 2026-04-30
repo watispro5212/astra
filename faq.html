@@ -107,10 +107,10 @@
         <a href="support.html" class="nav-link">Support</a>
       </div>
     <div class="nav-actions">
-      <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands" class="btn-astra btn-astra--outline" class="btn-small">
+      <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands" class="btn-astra btn-astra--outline btn-small">
         Add to Server
       </a>
-      <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=1&scope=identify+applications.commands" class="btn-astra btn-astra--primary" class="btn-small">
+      <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=1&scope=identify+applications.commands" class="btn-astra btn-astra--primary btn-small">
         Add to Profile
       </a>
     </div>
@@ -118,15 +118,15 @@
   </nav>
 
   <!-- HEADER -->
-  <header class="section" class="page-header-lg">
+  <header class="section page-header-lg">
     <div class="container">
       <h1 class="h1-astra text-gradient">FREQUENTLY ASKED QUESTIONS</h1>
-      <p class="text-dim" class="max-w-600">Quick answers to common questions about the Astra bot.</p>
+      <p class="text-dim max-w-600">Quick answers to common questions about the Astra bot.</p>
     </div>
   </header>
 
   <!-- CONTENT -->
-  <main class="container" class="page-main">
+  <main class="container page-main">
     
     <div class="faq-group animate-reveal">
       <div class="faq-group-title">General Info</div>
@@ -171,7 +171,7 @@
           <span class="faq-icon">↓</span>
         </div>
         <div class="faq-answer">
-          The <code>/setup_server</code> command deletes all current channels and roles and rebuilds a professional server setup from scratch. **Warning:** This cannot be undone, so only use it if you want to start fresh!
+          The <code>/setup_server</code> command deletes all current channels and roles and rebuilds a professional server setup from scratch. <strong>Warning:</strong> This cannot be undone, so only use it if you want to start fresh!
         </div>
       </div>
     </div>
@@ -199,7 +199,7 @@
           <span class="faq-icon">↓</span>
         </div>
         <div class="faq-answer">
-          The AI works in **Direct Messages (DMs)**. Just send a private message to Astra and the AI will reply to you. This is kept private so no one else can see your conversation.
+          The AI works in <strong>Direct Messages (DMs)</strong>. Just send a private message to Astra and the AI will reply to you. This is kept private so no one else can see your conversation.
         </div>
       </div>
 
@@ -209,10 +209,13 @@
           <span class="faq-icon">↓</span>
         </div>
         <div class="faq-answer">
-          Yes. Use the <code>/ai model</code> command to change which AI you use. You can choose between **Flash** (faster) or **Pro** (smarter for complex questions).
+          Yes. Use the <code>/ai model</code> command to change which AI you use. You can pick between different models depending on whether you want faster or smarter responses.
         </div>
       </div>
     </div>
+
+    <div class="faq-group animate-reveal">
+      <div class="faq-group-title">Commands &amp; Setup</div>
 
       <div class="faq-item">
         <div class="faq-question">
@@ -226,11 +229,11 @@
 
       <div class="faq-item">
         <div class="faq-question">
-          <h3>How do I recalibrate the command prefix?</h3>
+          <h3>How do I change the bot prefix?</h3>
           <span class="faq-icon">↓</span>
         </div>
         <div class="faq-answer">
-          Astra uses slash commands by default, but you can also use <code>-</code> as a prefix for message commands. Admins can change this with <code>/prefix set</code>.
+          Astra uses slash commands by default, but also supports the <code>-</code> prefix for DM shortcuts. All server commands use Discord's slash command system.
         </div>
       </div>
     </div>
