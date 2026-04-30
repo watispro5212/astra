@@ -101,7 +101,7 @@ const command: Command = {
                 embed.addFields({ name: '🏆 MILESTONE REWARDS', value: '*No rewards bound to current matrix.*' });
             }
 
-            embed.setFooter({ text: 'Astra Intelligence Matrix • v7.1.0' })
+            embed.setFooter({ text: `Astra Leveling Config` })
                 .setTimestamp();
 
             await interaction.reply({ embeds: [embed] });

@@ -82,7 +82,7 @@ export class AstraClient extends Client {
             // Login
             await this.login(config.token);
 
-            // Start Background Services (Only on Shard 0 to save memory/prevent duplication)
+            // Background services run only on shard 0 to avoid duplicate processing
             if (!this.shard || this.shard.ids.includes(0)) {
                 PassiveIncomeService.startService();
             }
@@ -157,7 +157,6 @@ export class AstraClient extends Client {
             StatusService.startHeartbeat(this);
             StatusService.startHealthCheck(this);
 
-            // Industrial Yield Engine is already initialized in setup phase
         });
 
         // Leveling System

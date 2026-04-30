@@ -1,185 +1,193 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, MessageFlags } from 'discord.js';
 import { Command } from '../types';
 import { db } from '../core/database';
-import { THEME, VERSION } from '../core/constants';
+import { THEME } from '../core/constants';
+import logger from '../core/logger';
 
 const CREATE_COST = 50000;
 
 const command: Command = {
     data: new SlashCommandBuilder()
         .setName('syndicate')
-        .setDescription('🦹 Create or manage a group.')
+        .setDescription('🦹 Create and manage your group.')
         .setDMPermission(false)
-        .addSubcommand(sub => 
+        .addSubcommand(sub =>
             sub.setName('create')
-               .setDescription(`🏗️ Start a new group. Costs ${CREATE_COST} money.`)
-               .addStringOption(opt => 
-                   opt.setName('name')
-                      .setDescription('The name of your group.')
-                      .setRequired(true)
-               )
+               .setDescription(`Start a new group. Costs ${CREATE_COST.toLocaleString()} money.`)
+               .addStringOption(opt => opt.setName('name').setDescription('Group name.').setRequired(true))
         )
         .addSubcommand(sub =>
             sub.setName('info')
-               .setDescription('📊 See your group stats.')
-        )
-        .addSubcommand(sub =>
-            sub.setName('leave')
-               .setDescription('🚪 Leave your current group.')
+               .setDescription('See your group stats and members.')
         )
         .addSubcommand(sub =>
             sub.setName('deposit')
-               .setDescription('💎 Put money into the group bank.')
-               .addIntegerOption(opt =>
-                   opt.setName('amount')
-                      .setDescription('How much money to put in.')
-                      .setRequired(true)
-               )
+               .setDescription('Put money into the group bank.')
+               .addIntegerOption(opt => opt.setName('amount').setDescription('Amount to deposit.').setRequired(true).setMinValue(1))
+        )
+        .addSubcommand(sub =>
+            sub.setName('kick')
+               .setDescription('Kick a member from your group. (Owner only)')
+               .addUserOption(opt => opt.setName('member').setDescription('The member to remove.').setRequired(true))
+        )
+        .addSubcommand(sub =>
+            sub.setName('disband')
+               .setDescription('Permanently delete your group and refund the bank. (Owner only)')
+        )
+        .addSubcommand(sub =>
+            sub.setName('leave')
+               .setDescription('Leave your current group.')
         ),
 
     async execute(interaction: ChatInputCommandInteraction) {
-        const subcommand = interaction.options.getSubcommand();
+        const sub    = interaction.options.getSubcommand();
         const userId = interaction.user.id;
 
-        if (subcommand === 'create') {
-            const name = interaction.options.getString('name')!;
-
+        // ── CREATE ────────────────────────────────────────────────────────
+        if (sub === 'create') {
             await interaction.deferReply();
+            const name = interaction.options.getString('name')!.trim();
 
-            // Check if user already in a syndicate
-            const existingMember = await db.fetchOne('SELECT * FROM syndicate_members WHERE user_id = ?', userId);
-            if (existingMember) {
-                return interaction.editReply({ content: '❌ You are already in a group. You must leave it before starting a new one.' });
+            if (name.length < 2 || name.length > 32) {
+                return interaction.editReply({ content: '❌ Group name must be 2–32 characters.' });
             }
 
-            // Check if syndicate name exists
-            const existingName = await db.fetchOne('SELECT * FROM syndicates WHERE name = ?', name);
-            if (existingName) {
-                return interaction.editReply({ content: '❌ A group with that name already exists.' });
-            }
+            const alreadyIn = await db.fetchOne('SELECT 1 FROM syndicate_members WHERE user_id = ?', userId);
+            if (alreadyIn) return interaction.editReply({ content: '❌ You are already in a group. Leave it first.' });
 
-            // Check funds - FIXED: user_id instead of id, balance instead of credits
-            let userEco = await db.fetchOne('SELECT balance FROM users WHERE user_id = ?', userId);
-            if (!userEco || (userEco.balance || 0) < CREATE_COST) {
-                const balance = userEco?.balance || 0;
-                return interaction.editReply({ content: `❌ You do not have enough money. Starting a group costs **${CREATE_COST.toLocaleString()}** money. (You have: **${balance.toLocaleString()}**)` });
+            const nameTaken = await db.fetchOne('SELECT 1 FROM syndicates WHERE name = ?', name);
+            if (nameTaken) return interaction.editReply({ content: '❌ A group with that name already exists.' });
+
+            const user = await db.fetchOne('SELECT balance FROM users WHERE user_id = ?', userId);
+            if (!user || user.balance < CREATE_COST) {
+                return interaction.editReply({ content: `❌ You need **${CREATE_COST.toLocaleString()} money** to start a group. You have \`${(user?.balance ?? 0).toLocaleString()}\`.` });
             }
 
             try {
-                // Deduct credits - FIXED: balance instead of credits, user_id instead of id
                 await db.execute('UPDATE users SET balance = balance - ? WHERE user_id = ?', CREATE_COST, userId);
-                
-                // Create Group
-                await db.execute(
-                    'INSERT INTO syndicates (name, owner_id) VALUES (?, ?)', 
-                    name, userId
-                );
-
+                await db.execute('INSERT INTO syndicates (name, owner_id) VALUES (?, ?)', name, userId);
                 const newSyn = await db.fetchOne('SELECT id FROM syndicates WHERE name = ?', name);
+                if (!newSyn) throw new Error('Syndicate creation returned no ID.');
+                await db.execute('INSERT INTO syndicate_members (syndicate_id, user_id, role) VALUES (?, ?, ?)', newSyn.id, userId, 'owner');
 
-                if (!newSyn) throw new Error("Creation failed to return ID.");
-
-                // Add owner to members array
-                await db.execute(
-                    'INSERT INTO syndicate_members (syndicate_id, user_id, role) VALUES (?, ?, ?)',
-                    newSyn.id, userId, 'owner'
-                );
-
-                const embed = new EmbedBuilder()
+                return interaction.editReply({ embeds: [new EmbedBuilder()
                     .setColor(THEME.SUCCESS)
                     .setTitle('🦹 GROUP CREATED')
-                    .setDescription(`You have successfully started the **${name}** group.\nGood luck on your journey!`)
+                    .setDescription(`**${name}** is now active. Recruit members!`)
                     .addFields(
                         { name: '💰 Cost', value: `\`${CREATE_COST.toLocaleString()} money\``, inline: true },
                         { name: '👑 Owner', value: `<@${userId}>`, inline: true }
                     )
-                    .setFooter({ text: `Astra Groups` })
-                    .setTimestamp();
-
-                await interaction.editReply({ embeds: [embed] });
+                    .setFooter({ text: 'Astra Groups' })
+                    .setTimestamp()] });
             } catch (err) {
-                console.error(err);
-                await interaction.editReply({ content: '❌ An error occurred while creating the group.' });
+                logger.error(`Syndicate create error: ${err}`);
+                return interaction.editReply({ content: '❌ Something went wrong. Try again.' });
             }
 
-        } else if (subcommand === 'info') {
+        // ── INFO ──────────────────────────────────────────────────────────
+        } else if (sub === 'info') {
             await interaction.deferReply();
 
-            const memberInfo = await db.fetchOne('SELECT * FROM syndicate_members WHERE user_id = ?', userId);
-            if (!memberInfo) {
-                return interaction.editReply({ content: 'ℹ️ You are not in a group. Start one with `/syndicate create`.' });
-            }
+            const member = await db.fetchOne('SELECT * FROM syndicate_members WHERE user_id = ?', userId);
+            if (!member) return interaction.editReply({ content: '❌ You are not in a group. Use `/syndicate create` to start one.' });
 
-            const synInfo = await db.fetchOne('SELECT * FROM syndicates WHERE id = ?', memberInfo.syndicate_id);
-            if (!synInfo) {
-                return interaction.editReply({ content: '❌ Error: Group data is missing.' });
-            }
+            const syn = await db.fetchOne('SELECT * FROM syndicates WHERE id = ?', member.syndicate_id);
+            if (!syn) return interaction.editReply({ content: '❌ Group data missing.' });
 
-            const totalMembersRow = await db.execute('SELECT COUNT(*) as count FROM syndicate_members WHERE syndicate_id = ?', memberInfo.syndicate_id);
-            const memberCount = totalMembersRow.rows[0]?.count || 0;
-            const ownerUser = interaction.client.users.cache.get(synInfo.owner_id) || await interaction.client.users.fetch(synInfo.owner_id).catch(() => null);
+            // Fixed: use fetchOne for COUNT aggregate
+            const countRow = await db.fetchOne('SELECT COUNT(*) as cnt FROM syndicate_members WHERE syndicate_id = ?', member.syndicate_id);
+            const memberCount = Number(countRow?.cnt ?? 0);
 
-            const embed = new EmbedBuilder()
+            const owner = await interaction.client.users.fetch(syn.owner_id).catch(() => null);
+
+            return interaction.editReply({ embeds: [new EmbedBuilder()
                 .setColor(THEME.PRIMARY)
-                .setTitle(`🦹 GROUP: ${synInfo.name.toUpperCase()}`)
-                .setDescription(`A group of players working together.`)
+                .setTitle(`🦹 ${syn.name.toUpperCase()}`)
                 .addFields(
-                    { name: '👑 Owner', value: ownerUser ? ownerUser.username : 'Unknown', inline: true },
-                    { name: '👥 Members', value: `${memberCount}`, inline: true },
-                    { name: '⭐ Level', value: `${synInfo.level || 1}`, inline: true },
-                    { name: '💎 Group Bank', value: `${(synInfo.bank || 0).toLocaleString()} money`, inline: true },
-                    { name: '🛡️ Your Rank', value: `${memberInfo.role.toUpperCase()}`, inline: true }
+                    { name: '👑 Owner',       value: owner ? owner.username : `\`${syn.owner_id}\``, inline: true },
+                    { name: '👥 Members',     value: `\`${memberCount}\``, inline: true },
+                    { name: '⭐ Level',        value: `\`${syn.level ?? 1}\``, inline: true },
+                    { name: '💰 Group Bank',  value: `\`${(syn.bank ?? 0).toLocaleString()} money\``, inline: true },
+                    { name: '🎖️ Your Role',  value: `\`${member.role.toUpperCase()}\``, inline: true },
                 )
-                .setFooter({ text: `Astra Groups` })
-                .setTimestamp();
+                .setFooter({ text: 'Astra Groups' })
+                .setTimestamp()] });
 
-            await interaction.editReply({ embeds: [embed] });
+        // ── DEPOSIT ───────────────────────────────────────────────────────
+        } else if (sub === 'deposit') {
+            await interaction.deferReply();
+            const amount = interaction.options.getInteger('amount')!;
 
-        } else if (subcommand === 'leave') {
+            const member = await db.fetchOne('SELECT * FROM syndicate_members WHERE user_id = ?', userId);
+            if (!member) return interaction.editReply({ content: '❌ You are not in a group.' });
+
+            const user = await db.fetchOne('SELECT balance FROM users WHERE user_id = ?', userId);
+            if (!user || user.balance < amount) return interaction.editReply({ content: '❌ Not enough money.' });
+
+            try {
+                await db.execute('UPDATE users SET balance = balance - ? WHERE user_id = ?', amount, userId);
+                await db.execute('UPDATE syndicates SET bank = bank + ? WHERE id = ?', amount, member.syndicate_id);
+                return interaction.editReply({ content: `💰 Deposited **${amount.toLocaleString()} money** into the group bank.` });
+            } catch (err) {
+                logger.error(`Syndicate deposit error: ${err}`);
+                return interaction.editReply({ content: '❌ Deposit failed. Try again.' });
+            }
+
+        // ── KICK ──────────────────────────────────────────────────────────
+        } else if (sub === 'kick') {
+            await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
+            const target = interaction.options.getUser('member')!;
+
+            const myMember = await db.fetchOne('SELECT * FROM syndicate_members WHERE user_id = ?', userId);
+            if (!myMember || myMember.role !== 'owner') {
+                return interaction.editReply({ content: '❌ Only the group owner can kick members.' });
+            }
+            if (target.id === userId) return interaction.editReply({ content: '❌ You cannot kick yourself.' });
+
+            const targetMember = await db.fetchOne('SELECT * FROM syndicate_members WHERE user_id = ? AND syndicate_id = ?', target.id, myMember.syndicate_id);
+            if (!targetMember) return interaction.editReply({ content: '❌ That user is not in your group.' });
+
+            await db.execute('DELETE FROM syndicate_members WHERE user_id = ? AND syndicate_id = ?', target.id, myMember.syndicate_id);
+            return interaction.editReply({ content: `✅ **${target.username}** has been removed from the group.` });
+
+        // ── DISBAND ───────────────────────────────────────────────────────
+        } else if (sub === 'disband') {
             await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
-            const memberInfo = await db.fetchOne('SELECT * FROM syndicate_members WHERE user_id = ?', userId);
-            if (!memberInfo) {
-                return interaction.editReply({ content: '❌ You cannot leave a group because you are not in one.' });
+            const myMember = await db.fetchOne('SELECT * FROM syndicate_members WHERE user_id = ?', userId);
+            if (!myMember || myMember.role !== 'owner') {
+                return interaction.editReply({ content: '❌ Only the group owner can disband the group.' });
             }
 
-            if (memberInfo.role === 'owner') {
-                return interaction.editReply({ content: '❌ You are the Owner. You must give ownership to someone else or delete the group.' });
+            const syn = await db.fetchOne('SELECT * FROM syndicates WHERE id = ?', myMember.syndicate_id);
+            if (!syn) return interaction.editReply({ content: '❌ Group not found.' });
+
+            // Refund bank balance to owner
+            if (syn.bank > 0) {
+                await db.execute('UPDATE users SET balance = balance + ? WHERE user_id = ?', syn.bank, userId);
+            }
+
+            await db.execute('DELETE FROM syndicate_members WHERE syndicate_id = ?', myMember.syndicate_id);
+            await db.execute('DELETE FROM syndicates WHERE id = ?', myMember.syndicate_id);
+
+            return interaction.editReply({
+                content: `🗑️ **${syn.name}** has been disbanded.${syn.bank > 0 ? ` The group bank (\`${syn.bank.toLocaleString()} money\`) was returned to you.` : ''}`
+            });
+
+        // ── LEAVE ─────────────────────────────────────────────────────────
+        } else if (sub === 'leave') {
+            await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
+
+            const member = await db.fetchOne('SELECT * FROM syndicate_members WHERE user_id = ?', userId);
+            if (!member) return interaction.editReply({ content: '❌ You are not in a group.' });
+
+            if (member.role === 'owner') {
+                return interaction.editReply({ content: '❌ You are the owner. Use `/syndicate disband` to delete the group, or transfer ownership first.' });
             }
 
             await db.execute('DELETE FROM syndicate_members WHERE user_id = ?', userId);
-            await interaction.editReply({ content: '🚪 You have left the group.' });
-
-        } else if (subcommand === 'deposit') {
-            const amount = interaction.options.getInteger('amount')!;
-            
-            if (amount <= 0) {
-                return interaction.reply({ content: '❌ Deposit amount must be greater than zero.', ephemeral: true });
-            }
-
-            await interaction.deferReply();
-
-            const memberInfo = await db.fetchOne('SELECT * FROM syndicate_members WHERE user_id = ?', userId);
-            if (!memberInfo) {
-                return interaction.editReply({ content: '❌ You must be in a group to deposit money.' });
-            }
-
-            let userEco = await db.fetchOne('SELECT balance FROM users WHERE user_id = ?', userId);
-            if (!userEco || (userEco.balance || 0) < amount) {
-                return interaction.editReply({ content: '❌ You do not have enough money.' });
-            }
-
-            try {
-                // Deduct from user - FIXED: balance instead of credits, user_id instead of id
-                await db.execute('UPDATE users SET balance = balance - ? WHERE user_id = ?', amount, userId);
-                // Add to Syndicate
-                await db.execute('UPDATE syndicates SET bank = bank + ? WHERE id = ?', amount, memberInfo.syndicate_id);
-                
-                await interaction.editReply({ content: `💎 Successfully put **${amount.toLocaleString()}** money into the group bank.` });
-            } catch (err) {
-                console.error(err);
-                await interaction.editReply({ content: '❌ Failed to process the deposit. Please try again.' });
-            }
+            return interaction.editReply({ content: '🚪 You have left the group.' });
         }
     }
 };

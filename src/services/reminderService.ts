@@ -24,20 +24,21 @@ export class ReminderService {
             for (const rem of due) {
                 try {
                     const channel = await client.channels.fetch(rem.channel_id) as TextChannel;
-                    if (channel) {
+                    if (channel?.isTextBased()) {
                         const embed = new EmbedBuilder()
                             .setColor(0x3498db)
-                            .setTitle('🔔 Temporal Reminder Triggered')
+                            .setTitle('🔔 Reminder!')
                             .setDescription(rem.message)
-                            .setFooter({ text: 'Astra Temporal System' })
+                            .setFooter({ text: 'Astra Reminders' })
                             .setTimestamp();
-                        
                         await channel.send({ content: `<@${rem.user_id}>`, embeds: [embed] });
                     }
-                } catch (err) {
-                    logger.error(`Failed to send reminder #${rem.id}: ${err}`);
-                } finally {
+                    // Delete only after a successful send (or if channel is gone)
                     await this.deleteReminder(rem.id);
+                } catch (err) {
+                    logger.error(`Reminder #${rem.id} failed: ${err}`);
+                    // Still delete so it doesn't retry forever on a broken channel
+                    await this.deleteReminder(rem.id).catch(() => {});
                 }
             }
         }, 30000); // Check every 30 seconds

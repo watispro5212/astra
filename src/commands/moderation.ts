@@ -4,6 +4,7 @@ import {
     PermissionFlagsBits,
     EmbedBuilder,
     GuildMember,
+    ChannelType,
     MessageFlags
 } from 'discord.js';
 import { ModerationService } from '../services/moderationService';
@@ -13,303 +14,330 @@ import { THEME } from '../core/constants';
 const command: Command = {
     data: new SlashCommandBuilder()
         .setName('mod')
-        .setDescription('🛡️ Admin tools to keep the server safe.')
+        .setDescription('🛡️ Moderation tools.')
         .setDMPermission(false)
+        .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
+        .addSubcommand(sub =>
+            sub.setName('warn')
+               .setDescription('Warn a user.')
+               .addUserOption(opt => opt.setName('member').setDescription('Who to warn.').setRequired(true))
+               .addStringOption(opt => opt.setName('reason').setDescription('Reason.').setRequired(true))
+        )
         .addSubcommand(sub =>
             sub.setName('kick')
-                .setDescription('Kick someone out.')
-                .addUserOption(opt => opt.setName('member').setDescription('The person to kick.').setRequired(true))
-                .addStringOption(opt => opt.setName('reason').setDescription('Why are they being kicked?'))
+               .setDescription('Kick a user.')
+               .addUserOption(opt => opt.setName('member').setDescription('Who to kick.').setRequired(true))
+               .addStringOption(opt => opt.setName('reason').setDescription('Reason.'))
         )
         .addSubcommand(sub =>
             sub.setName('ban')
-                .setDescription('Ban someone forever.')
-                .addUserOption(opt => opt.setName('member').setDescription('The person to ban.').setRequired(true))
-                .addStringOption(opt => opt.setName('reason').setDescription('Why are they being banned?'))
-                .addIntegerOption(opt => opt.setName('delete_messages').setDescription('How many days of messages to delete (0–7).').setMinValue(0).setMaxValue(7))
+               .setDescription('Ban a user.')
+               .addUserOption(opt => opt.setName('member').setDescription('Who to ban.').setRequired(true))
+               .addStringOption(opt => opt.setName('reason').setDescription('Reason.'))
+               .addIntegerOption(opt => opt.setName('delete_days').setDescription('Days of messages to delete (0–7).').setMinValue(0).setMaxValue(7))
         )
         .addSubcommand(sub =>
             sub.setName('unban')
-                .setDescription('Unban someone.')
-                .addStringOption(opt => opt.setName('user_id').setDescription('The ID of the user to unban.').setRequired(true))
-                .addStringOption(opt => opt.setName('reason').setDescription('Why are they being unbanned?'))
+               .setDescription('Unban a user by ID.')
+               .addStringOption(opt => opt.setName('user_id').setDescription('User ID to unban.').setRequired(true))
+               .addStringOption(opt => opt.setName('reason').setDescription('Reason.'))
         )
         .addSubcommand(sub =>
             sub.setName('timeout')
-                .setDescription('Time someone out.')
-                .addUserOption(opt => opt.setName('member').setDescription('The person to time out.').setRequired(true))
-                .addIntegerOption(opt => opt.setName('duration').setDescription('How many minutes?').setRequired(true).setMinValue(1).setMaxValue(40320))
-                .addStringOption(opt => opt.setName('reason').setDescription('Why are they being timed out?'))
-        )
-        .addSubcommand(sub =>
-            sub.setName('warn')
-                .setDescription('Warn someone.')
-                .addUserOption(opt => opt.setName('member').setDescription('The person to warn.').setRequired(true))
-                .addStringOption(opt => opt.setName('reason').setDescription('Why are they being warned?').setRequired(true))
+               .setDescription('Timeout a user.')
+               .addUserOption(opt => opt.setName('member').setDescription('Who to timeout.').setRequired(true))
+               .addIntegerOption(opt => opt.setName('minutes').setDescription('Duration in minutes (1–40320).').setRequired(true).setMinValue(1).setMaxValue(40320))
+               .addStringOption(opt => opt.setName('reason').setDescription('Reason.'))
         )
         .addSubcommand(sub =>
             sub.setName('purge')
-                .setDescription('Clear some messages.')
-                .addIntegerOption(opt => opt.setName('count').setDescription('How many messages to delete (1–100).').setRequired(true).setMinValue(1).setMaxValue(100))
+               .setDescription('Delete messages in bulk.')
+               .addIntegerOption(opt => opt.setName('count').setDescription('Number of messages (1–100).').setRequired(true).setMinValue(1).setMaxValue(100))
         )
         .addSubcommand(sub =>
             sub.setName('case')
-                .setDescription('View a specific moderation case.')
-                .addIntegerOption(opt => opt.setName('number').setDescription('The case number.').setRequired(true))
+               .setDescription('View a specific case.')
+               .addIntegerOption(opt => opt.setName('number').setDescription('Case number.').setRequired(true))
         )
         .addSubcommand(sub =>
             sub.setName('history')
-                .setDescription('See someone\'s mod history.')
-                .addUserOption(opt => opt.setName('member').setDescription('The person to check.').setRequired(true))
+               .setDescription("View a user's mod history.")
+               .addUserOption(opt => opt.setName('member').setDescription('Who to look up.').setRequired(true))
         )
-        .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
+        .addSubcommand(sub =>
+            sub.setName('note')
+               .setDescription('Add a note to an existing case.')
+               .addIntegerOption(opt => opt.setName('case').setDescription('Case number.').setRequired(true))
+               .addStringOption(opt => opt.setName('note').setDescription('Note text.').setRequired(true))
+        )
+        .addSubcommand(sub =>
+            sub.setName('close')
+               .setDescription('Mark a case as closed.')
+               .addIntegerOption(opt => opt.setName('case').setDescription('Case number.').setRequired(true))
+        )
+        .addSubcommandGroup(grp =>
+            grp.setName('config')
+               .setDescription('Server moderation settings.')
+               .addSubcommand(sub =>
+                   sub.setName('log-channel')
+                      .setDescription('Set the channel where moderation actions are logged.')
+                      .addChannelOption(opt => opt.setName('channel').setDescription('Log channel.').addChannelTypes(ChannelType.GuildText).setRequired(true))
+               )
+        ),
 
     async execute(interaction: ChatInputCommandInteraction) {
-        const subcommand = interaction.options.getSubcommand();
+        const sub   = interaction.options.getSubcommand();
+        const group = interaction.options.getSubcommandGroup(false);
         const guild = interaction.guild!;
 
-        if (subcommand === 'kick') {
-            await interaction.deferReply();
-            const member = interaction.options.getMember('member');
-            const reason = interaction.options.getString('reason') || 'No reason provided';
-
-            if (!(member instanceof GuildMember)) {
-                return interaction.editReply({ content: '❌ I can\'t find that person here.' });
+        // ── CONFIG ────────────────────────────────────────────────────────
+        if (group === 'config') {
+            if (!interaction.memberPermissions?.has(PermissionFlagsBits.Administrator)) {
+                return interaction.reply({ content: '❌ You need Administrator to change settings.', ephemeral: true });
             }
-            if (!member.kickable) {
-                return interaction.editReply({ content: '❌ I can\'t do that. They have a higher role than me.' });
-            }
-            const self = guild.members.me!;
-            if (member.roles.highest.position >= self.roles.highest.position) {
-                return interaction.editReply({ content: '❌ I can\'t do that. Their role is higher or the same as mine.' });
-            }
-
-            await member.kick(reason);
-            const caseId = await ModerationService.createCase(guild.id, member.id, interaction.user.id, 'kick', reason);
-
-            const embed = new EmbedBuilder()
-                .setColor(THEME.WARNING)
-                .setTitle('⚖️ KICKED')
-                .setDescription(`That person has been kicked from the server.`)
-                .addFields(
-                    { name: '👤 User', value: `${member.user.tag}`, inline: true },
-                    { name: '🆔 Case', value: `#${caseId}`, inline: true },
-                    { name: '📜 Reason', value: reason, inline: false }
-                )
-                .setThumbnail(member.user.displayAvatarURL())
-                .setFooter({ text: `Case #${caseId}` })
-                .setTimestamp();
-
-            await interaction.editReply({ embeds: [embed] });
-
-        } else if (subcommand === 'ban') {
-            await interaction.deferReply();
-            const user = interaction.options.getUser('member')!;
-            const reason = interaction.options.getString('reason') || 'No reason provided';
-            const deleteDays = interaction.options.getInteger('delete_messages') || 0;
-
-            try {
-                const member = await guild.members.fetch(user.id).catch(() => null);
-                if (member) {
-                    const self = guild.members.me!;
-                    if (member.roles.highest.position >= self.roles.highest.position) {
-                        return interaction.editReply({ content: '❌ I can\'t do that. Their role is higher or the same as mine.' });
-                    }
-                }
-                await guild.members.ban(user, { reason, deleteMessageSeconds: deleteDays * 86400 });
-                const caseId = await ModerationService.createCase(guild.id, user.id, interaction.user.id, 'ban', reason);
-
-                const embed = new EmbedBuilder()
-                    .setColor(THEME.DANGER)
-                    .setTitle('🚨 BANNED')
-                    .setDescription(`That person has been banned forever.`)
-                    .addFields(
-                        { name: '👤 User', value: `${user.tag}`, inline: true },
-                        { name: '🆔 Case', value: `#${caseId}`, inline: true },
-                        { name: '📜 Reason', value: reason, inline: false }
-                    )
-                    .setThumbnail(user.displayAvatarURL())
-                    .setFooter({ text: `Banned` })
-                    .setTimestamp();
-
-                await interaction.editReply({ embeds: [embed] });
-            } catch (err) {
-                await interaction.editReply({ content: `❌ Ban Failed: ${err}` });
-            }
-
-        } else if (subcommand === 'unban') {
-            await interaction.deferReply();
-            const userId = interaction.options.getString('user_id')!;
-            const reason = interaction.options.getString('reason') || 'No reason provided';
-
-            try {
-                const ban = await guild.bans.fetch(userId).catch(() => null);
-                if (!ban) {
-                    return interaction.editReply({ content: '❌ No active ban found for that user ID.' });
-                }
-                await guild.members.unban(userId, reason);
-                const caseId = await ModerationService.createCase(guild.id, userId, interaction.user.id, 'unban', reason);
-
-                const embed = new EmbedBuilder()
+            if (sub === 'log-channel') {
+                const channel = interaction.options.getChannel('channel')!;
+                await ModerationService.setLogChannel(guild.id, channel.id);
+                return interaction.reply({ embeds: [new EmbedBuilder()
                     .setColor(THEME.SUCCESS)
-                    .setTitle('✅ UNBANNED')
-                    .setDescription(`That person can now join the server again.`)
-                    .addFields(
-                        { name: '🆔 User ID', value: `\`${userId}\``, inline: true },
-                        { name: '🆔 Case', value: `#${caseId}`, inline: true },
-                        { name: '📜 Reason', value: reason, inline: false }
-                    )
-                    .setFooter({ text: `Unbanned` })
-                    .setTimestamp();
-
-                await interaction.editReply({ embeds: [embed] });
-            } catch (err) {
-                await interaction.editReply({ content: `❌ Unban Failed: ${err}` });
+                    .setTitle('✅ LOG CHANNEL SET')
+                    .setDescription(`Moderation actions will now be logged in <#${channel.id}>.`)
+                    .setFooter({ text: 'Astra Moderation' })], flags: [MessageFlags.Ephemeral] });
             }
+        }
 
-        } else if (subcommand === 'timeout') {
-            await interaction.deferReply();
-            const member = interaction.options.getMember('member');
-            const duration = interaction.options.getInteger('duration')!;
-            const reason = interaction.options.getString('reason') || 'No reason provided';
-
-            if (!(member instanceof GuildMember)) {
-                return interaction.editReply({ content: '❌ I can\'t find that person here.' });
-            }
-            if (!member.moderatable) {
-                return interaction.editReply({ content: '❌ I can\'t do that. They have a higher role than me.' });
-            }
-            try {
-                await member.timeout(duration * 60000, reason);
-                const caseId = await ModerationService.createCase(guild.id, member.id, interaction.user.id, 'timeout', reason, `${duration}m`);
-
-                const embed = new EmbedBuilder()
-                    .setColor(THEME.WARNING)
-                    .setTitle('⏳ TIMED OUT')
-                    .setDescription(`That person has been timed out and can't talk right now.`)
-                    .addFields(
-                        { name: '👤 User', value: `${member.user.tag}`, inline: true },
-                        { name: '🆔 Case', value: `#${caseId}`, inline: true },
-                        { name: '⏲️ Duration', value: `${duration} minutes`, inline: true },
-                        { name: '📜 Reason', value: reason, inline: false }
-                    )
-                    .setThumbnail(member.user.displayAvatarURL())
-                    .setFooter({ text: `Timed Out` })
-                    .setTimestamp();
-
-                await interaction.editReply({ embeds: [embed] });
-            } catch (err) {
-                await interaction.editReply({ content: `❌ Timeout Failed: ${err}` });
-            }
-
-        } else if (subcommand === 'warn') {
+        // ── WARN ──────────────────────────────────────────────────────────
+        if (sub === 'warn') {
             await interaction.deferReply();
             const member = interaction.options.getMember('member');
             const reason = interaction.options.getString('reason')!;
 
-            if (!(member instanceof GuildMember)) {
-                return interaction.editReply({ content: '❌ I can\'t find that person here.' });
-            }
-            if (member.user.bot) {
-                return interaction.editReply({ content: '❌ Bots cannot be warned.' });
-            }
+            if (!(member instanceof GuildMember)) return interaction.editReply({ content: '❌ Member not found.' });
+            if (member.user.bot) return interaction.editReply({ content: '❌ Cannot warn bots.' });
 
             const caseId = await ModerationService.createCase(guild.id, member.id, interaction.user.id, 'warn', reason);
 
             try {
                 await member.user.send({ embeds: [new EmbedBuilder()
                     .setColor(THEME.WARNING)
-                    .setTitle('⚠️ WARNING')
-                    .setDescription(`You have been warned in **${guild.name}**.\nIf you keep breaking rules, you might be timed out or banned.`)
+                    .setTitle(`⚠️ Warning in ${guild.name}`)
+                    .setDescription(`You have been warned. Please follow the server rules.`)
                     .addFields(
-                        { name: '🆔 Case', value: `#${caseId}`, inline: true },
-                        { name: '📜 Reason', value: reason, inline: false }
+                        { name: '📜 Reason', value: reason },
+                        { name: '🆔 Case', value: `#${caseId}` }
                     )
-                    .setFooter({ text: `Astra Bot` })
                     .setTimestamp()] });
             } catch (_) { /* DMs closed */ }
 
             const embed = new EmbedBuilder()
                 .setColor(THEME.WARNING)
-                .setTitle('⚠️ WARNING')
+                .setTitle('⚠️ WARNED')
                 .addFields(
                     { name: '👤 User', value: `${member.user.tag}`, inline: true },
                     { name: '🆔 Case', value: `#${caseId}`, inline: true },
-                    { name: '📜 Reason', value: reason, inline: false }
+                    { name: '📜 Reason', value: reason }
                 )
-                .setFooter({ text: `Warned` })
+                .setThumbnail(member.user.displayAvatarURL())
                 .setTimestamp();
 
             await interaction.editReply({ embeds: [embed] });
+            await ModerationService.sendLog(interaction.client, guild.id, embed);
 
-        } else if (subcommand === 'purge') {
+        // ── KICK ──────────────────────────────────────────────────────────
+        } else if (sub === 'kick') {
+            await interaction.deferReply();
+            const member = interaction.options.getMember('member');
+            const reason = interaction.options.getString('reason') ?? 'No reason provided';
+
+            if (!(member instanceof GuildMember)) return interaction.editReply({ content: '❌ Member not found.' });
+            if (!member.kickable) return interaction.editReply({ content: '❌ I cannot kick that member (higher role or missing permissions).' });
+
+            await member.kick(reason);
+            const caseId = await ModerationService.createCase(guild.id, member.id, interaction.user.id, 'kick', reason);
+
+            const embed = new EmbedBuilder()
+                .setColor(THEME.WARNING)
+                .setTitle('👢 KICKED')
+                .addFields(
+                    { name: '👤 User', value: `${member.user.tag}`, inline: true },
+                    { name: '🆔 Case', value: `#${caseId}`, inline: true },
+                    { name: '📜 Reason', value: reason }
+                )
+                .setThumbnail(member.user.displayAvatarURL())
+                .setTimestamp();
+
+            await interaction.editReply({ embeds: [embed] });
+            await ModerationService.sendLog(interaction.client, guild.id, embed);
+
+        // ── BAN ───────────────────────────────────────────────────────────
+        } else if (sub === 'ban') {
+            await interaction.deferReply();
+            const user     = interaction.options.getUser('member')!;
+            const reason   = interaction.options.getString('reason') ?? 'No reason provided';
+            const delDays  = interaction.options.getInteger('delete_days') ?? 0;
+
+            try {
+                const member = await guild.members.fetch(user.id).catch(() => null);
+                if (member && !member.bannable) {
+                    return interaction.editReply({ content: '❌ I cannot ban that member (higher role or missing permissions).' });
+                }
+                await guild.members.ban(user, { reason, deleteMessageSeconds: delDays * 86400 });
+                const caseId = await ModerationService.createCase(guild.id, user.id, interaction.user.id, 'ban', reason);
+
+                const embed = new EmbedBuilder()
+                    .setColor(THEME.DANGER)
+                    .setTitle('🔨 BANNED')
+                    .addFields(
+                        { name: '👤 User', value: `${user.tag}`, inline: true },
+                        { name: '🆔 Case', value: `#${caseId}`, inline: true },
+                        { name: '📜 Reason', value: reason }
+                    )
+                    .setThumbnail(user.displayAvatarURL())
+                    .setTimestamp();
+
+                await interaction.editReply({ embeds: [embed] });
+                await ModerationService.sendLog(interaction.client, guild.id, embed);
+            } catch (err) {
+                await interaction.editReply({ content: `❌ Ban failed: ${err}` });
+            }
+
+        // ── UNBAN ─────────────────────────────────────────────────────────
+        } else if (sub === 'unban') {
+            await interaction.deferReply();
+            const userId = interaction.options.getString('user_id')!;
+            const reason = interaction.options.getString('reason') ?? 'No reason provided';
+
+            const ban = await guild.bans.fetch(userId).catch(() => null);
+            if (!ban) return interaction.editReply({ content: '❌ No active ban found for that ID.' });
+
+            await guild.members.unban(userId, reason);
+            const caseId = await ModerationService.createCase(guild.id, userId, interaction.user.id, 'unban', reason);
+
+            const embed = new EmbedBuilder()
+                .setColor(THEME.SUCCESS)
+                .setTitle('✅ UNBANNED')
+                .addFields(
+                    { name: '🆔 User ID', value: `\`${userId}\``, inline: true },
+                    { name: '🆔 Case', value: `#${caseId}`, inline: true },
+                    { name: '📜 Reason', value: reason }
+                )
+                .setTimestamp();
+
+            await interaction.editReply({ embeds: [embed] });
+            await ModerationService.sendLog(interaction.client, guild.id, embed);
+
+        // ── TIMEOUT ───────────────────────────────────────────────────────
+        } else if (sub === 'timeout') {
+            await interaction.deferReply();
+            const member  = interaction.options.getMember('member');
+            const minutes = interaction.options.getInteger('minutes')!;
+            const reason  = interaction.options.getString('reason') ?? 'No reason provided';
+
+            if (!(member instanceof GuildMember)) return interaction.editReply({ content: '❌ Member not found.' });
+            if (!member.moderatable) return interaction.editReply({ content: '❌ I cannot timeout that member.' });
+
+            await member.timeout(minutes * 60000, reason);
+            const caseId = await ModerationService.createCase(guild.id, member.id, interaction.user.id, 'timeout', reason, `${minutes}m`);
+
+            const embed = new EmbedBuilder()
+                .setColor(THEME.WARNING)
+                .setTitle('⏳ TIMED OUT')
+                .addFields(
+                    { name: '👤 User', value: `${member.user.tag}`, inline: true },
+                    { name: '🆔 Case', value: `#${caseId}`, inline: true },
+                    { name: '⏱️ Duration', value: `${minutes} minute${minutes !== 1 ? 's' : ''}`, inline: true },
+                    { name: '📜 Reason', value: reason }
+                )
+                .setThumbnail(member.user.displayAvatarURL())
+                .setTimestamp();
+
+            await interaction.editReply({ embeds: [embed] });
+            await ModerationService.sendLog(interaction.client, guild.id, embed);
+
+        // ── PURGE ─────────────────────────────────────────────────────────
+        } else if (sub === 'purge') {
             await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
-            const count = interaction.options.getInteger('count')!;
+            const count   = interaction.options.getInteger('count')!;
             const channel = interaction.channel;
 
             if (!channel || !('bulkDelete' in channel)) {
-                return interaction.editReply({ content: '❌ Purge only available in text channels.' });
-            }
-            try {
-                const deleted = await (channel as any).bulkDelete(count, true);
-                const embed = new EmbedBuilder()
-                    .setColor(THEME.SUCCESS)
-                    .setTitle('🧹 MESSAGES CLEARED')
-                    .setDescription(`Successfully cleared **${deleted.size}** messages from this channel.`)
-                    .setFooter({ text: `Astra Bot` })
-                    .setTimestamp();
-                await interaction.editReply({ embeds: [embed] });
-            } catch (err) {
-                await interaction.editReply({ content: `❌ Purge Failed: ${err}` });
+                return interaction.editReply({ content: '❌ Purge only works in text channels.' });
             }
 
-        } else if (subcommand === 'case') {
-            const caseNumber = interaction.options.getInteger('number')!;
-            const caseData = await ModerationService.getCase(guild.id, caseNumber);
+            const deleted = await (channel as any).bulkDelete(count, true).catch((e: any) => {
+                return { size: 0, error: String(e) };
+            });
 
-            if (!caseData) {
-                return interaction.reply({ content: `❌ Case #${caseNumber} not found here.`, ephemeral: true });
-            }
+            return interaction.editReply({ content: `🧹 Deleted **${deleted.size ?? 0}** messages.` });
+
+        // ── CASE ──────────────────────────────────────────────────────────
+        } else if (sub === 'case') {
+            const num  = interaction.options.getInteger('number')!;
+            const data = await ModerationService.getCase(guild.id, num);
+
+            if (!data) return interaction.reply({ content: `❌ Case #${num} not found.`, ephemeral: true });
 
             const embed = new EmbedBuilder()
                 .setColor(THEME.PRIMARY)
-                .setTitle(`📁 CASE #${caseNumber}`)
+                .setTitle(`📁 Case #${num}`)
                 .addFields(
-                    { name: '🔹 Type', value: `\`${caseData.type.toUpperCase()}\``, inline: true },
-                    { name: '🔸 Status', value: `\`${caseData.case_status || 'active'}\``, inline: true },
-                    { name: '👤 Target', value: `<@${caseData.target_id}>`, inline: false },
-                    { name: '🛠️ Moderator', value: `<@${caseData.moderator_id}>`, inline: true },
-                    { name: '⏲️ Duration', value: caseData.duration || 'N/A', inline: true },
-                    { name: '📜 Reason', value: caseData.reason || 'No reason provided', inline: false },
-                    { name: '📅 Timestamp', value: `<t:${Math.floor(new Date(caseData.timestamp).getTime() / 1000)}:F>`, inline: false }
-                )
-                .setFooter({ text: `Astra Bot` });
+                    { name: '🔹 Type',      value: `\`${data.type.toUpperCase()}\``,                  inline: true },
+                    { name: '🔸 Status',    value: `\`${data.case_status ?? 'active'}\``,             inline: true },
+                    { name: '👤 Target',    value: `<@${data.target_id}>`,                             inline: false },
+                    { name: '🛠️ Moderator', value: `<@${data.moderator_id}>`,                         inline: true },
+                    { name: '⏱️ Duration',  value: data.duration ?? 'N/A',                            inline: true },
+                    { name: '📜 Reason',    value: data.reason ?? 'No reason',                        inline: false },
+                    { name: '📅 Date',      value: `<t:${Math.floor(new Date(data.timestamp).getTime() / 1000)}:F>`, inline: false }
+                );
 
-            await interaction.reply({ embeds: [embed] });
+            if (data.note) embed.addFields({ name: '📝 Note', value: data.note });
 
-        } else if (subcommand === 'history') {
-            const user = interaction.options.getUser('member')!;
+            return interaction.reply({ embeds: [embed] });
+
+        // ── HISTORY ───────────────────────────────────────────────────────
+        } else if (sub === 'history') {
+            const user  = interaction.options.getUser('member')!;
             await interaction.deferReply();
             const cases = await ModerationService.getUserHistory(guild.id, user.id);
 
-            if (!cases || cases.length === 0) {
-                return interaction.editReply({ content: `✅ No mod history found for **${user.tag}** here.` });
+            if (!cases?.length) {
+                return interaction.editReply({ content: `✅ No cases found for **${user.username}**.` });
             }
 
-            const typeColors: Record<string, string> = { kick: '🟠', ban: '🔴', unban: '🟢', timeout: '🟡', warn: '🟡' };
+            const typeIcons: Record<string, string> = { kick: '👢', ban: '🔨', unban: '✅', timeout: '⏳', warn: '⚠️' };
             const lines = cases.slice(0, 15).map((c: any) =>
-                `${typeColors[c.type] || '⚪'} **#${c.case_number}** \`${c.type.toUpperCase()}\` — ${c.reason || 'No reason'} (<t:${Math.floor(new Date(c.timestamp).getTime() / 1000)}:R>)`
+                `${typeIcons[c.type] ?? '📋'} **#${c.case_number}** \`${c.type.toUpperCase()}\` — ${c.reason ?? 'No reason'} (<t:${Math.floor(new Date(c.timestamp).getTime() / 1000)}:R>)`
             ).join('\n');
 
-            const embed = new EmbedBuilder()
+            return interaction.editReply({ embeds: [new EmbedBuilder()
                 .setColor(THEME.PRIMARY)
-                .setTitle(`📋 MOD HISTORY: ${user.tag}`)
+                .setTitle(`📋 Mod History: ${user.username}`)
                 .setThumbnail(user.displayAvatarURL())
                 .setDescription(lines)
-                .setFooter({ text: `${cases.length} total case(s) found in the database.` })
-                .setTimestamp();
+                .setFooter({ text: `${cases.length} total case(s)` })
+                .setTimestamp()] });
 
-            await interaction.editReply({ embeds: [embed] });
+        // ── NOTE ──────────────────────────────────────────────────────────
+        } else if (sub === 'note') {
+            const num  = interaction.options.getInteger('case')!;
+            const note = interaction.options.getString('note')!;
+
+            const data = await ModerationService.getCase(guild.id, num);
+            if (!data) return interaction.reply({ content: `❌ Case #${num} not found.`, ephemeral: true });
+
+            await ModerationService.addNote(guild.id, num, note);
+            return interaction.reply({ content: `📝 Note added to Case #${num}.`, ephemeral: true });
+
+        // ── CLOSE ─────────────────────────────────────────────────────────
+        } else if (sub === 'close') {
+            const num  = interaction.options.getInteger('case')!;
+
+            const data = await ModerationService.getCase(guild.id, num);
+            if (!data) return interaction.reply({ content: `❌ Case #${num} not found.`, ephemeral: true });
+            if (data.case_status === 'closed') return interaction.reply({ content: `❌ Case #${num} is already closed.`, ephemeral: true });
+
+            await ModerationService.closeCase(guild.id, num);
+            return interaction.reply({ content: `✅ Case #${num} has been closed.`, ephemeral: true });
         }
     }
 };
