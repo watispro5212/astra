@@ -1,5 +1,6 @@
 import { Client, EmbedBuilder, TextChannel } from 'discord.js';
 import { db } from '../core/database';
+import { VERSION } from '../core/constants';
 import logger from '../core/logger';
 
 export class GiveawayService {
@@ -38,7 +39,7 @@ export class GiveawayService {
                         .setColor(0x2ecc71)
                         .setTitle('🎉 Giveaway Ended')
                         .setDescription(`**Prize:** ${giveaway.prize}\n**Winner(s):** ${mentions}`)
-                        .setFooter({ text: 'Astra Giveaway Engine • v7.0.0' })
+                        .setFooter({ text: `Astra Giveaway Engine • ${VERSION}` })
                         .setTimestamp();
 
                     await channel.send({ content: winnerIds ? mentions : undefined, embeds: [embed] });

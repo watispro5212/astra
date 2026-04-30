@@ -146,7 +146,7 @@ const command: Command = {
             const profitPct = (profit / (shares * avgCostPerShare)) * 100;
 
             await db.execute('UPDATE users SET balance = balance + ? WHERE user_id = ?', value, userId);
-            await db.execute('UPDATE user_stocks SET shares = shares - ?, invested_amount = MAX(0, invested_amount - ?) WHERE user_id = ? AND stock_symbol = ?', shares, shares * avgCostPerShare, userId, symbol);
+            await db.execute('UPDATE user_stocks SET shares = shares - ?, invested_amount = GREATEST(0, invested_amount - ?) WHERE user_id = ? AND stock_symbol = ?', shares, shares * avgCostPerShare, userId, symbol);
 
             const embed = new EmbedBuilder()
                 .setTitle('✅ SELL SUCCESSFUL')

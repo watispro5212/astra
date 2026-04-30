@@ -10,7 +10,7 @@ import { Command } from '../types';
 import { config } from '../core/config';
 import { db } from '../core/database';
 import { StatusService } from '../services/statusService';
-import { THEME, VERSION, PROTOCOL } from '../core/constants';
+import { THEME } from '../core/constants';
 import logger from '../core/logger';
 import os from 'os';
 

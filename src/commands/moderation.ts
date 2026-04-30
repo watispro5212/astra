@@ -8,7 +8,7 @@ import {
 } from 'discord.js';
 import { ModerationService } from '../services/moderationService';
 import { Command } from '../types';
-import { THEME, VERSION, PROTOCOL } from '../core/constants';
+import { THEME } from '../core/constants';
 
 const command: Command = {
     data: new SlashCommandBuilder()

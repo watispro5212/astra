@@ -2,10 +2,6 @@ import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, Permiss
 import { Command } from '../types';
 import { db } from '../core/database';
 import { config } from '../core/config';
-import { VERSION, PROTOCOL } from '../core/constants';
-
-const VER = 'v8.0.1';
-
 // XP required to reach level N+1
 function xpForLevel(level: number): number {
     return (level + 1) * 500;

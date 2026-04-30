@@ -1,7 +1,7 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, MessageFlags } from 'discord.js';
 import { Command } from '../types';
 import { db } from '../core/database';
-import { THEME, VERSION, PROTOCOL } from '../core/constants';
+import { THEME } from '../core/constants';
 
 const WORK_COOLDOWN_MS = 3600000;  // 1 hour
 const MINE_COOLDOWN_MS = 1800000;  // 30 mins
@@ -223,7 +223,7 @@ const command: Command = {
                 : -Math.min(Math.floor(Math.random() * 1000), currentBalance);
 
             await db.execute(
-                'INSERT INTO users (user_id, balance, total_earned, last_mine) VALUES (?, ?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET balance = MAX(0, balance + ?), total_earned = total_earned + ?, last_mine = ?',
+                'INSERT INTO users (user_id, balance, total_earned, last_mine) VALUES (?, ?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET balance = GREATEST(0, balance + ?), total_earned = total_earned + ?, last_mine = ?',
                 userId, Math.max(0, yieldAmount), success ? yieldAmount : 0, now.toString(), yieldAmount, success ? yieldAmount : 0, now.toString()
             );
             const after = await db.fetchOne('SELECT balance FROM users WHERE user_id = ?', userId);
@@ -330,7 +330,7 @@ const command: Command = {
 
             if (success) {
                 const stolen = Math.floor(targetBalance * (Math.random() * 0.20 + 0.10));
-                await db.execute('UPDATE users SET balance = MAX(0, balance - ?) WHERE user_id = ?', stolen, target.id);
+                await db.execute('UPDATE users SET balance = GREATEST(0, balance - ?) WHERE user_id = ?', stolen, target.id);
                 await db.execute('UPDATE users SET balance = balance + ?, total_earned = total_earned + ? WHERE user_id = ?', stolen, stolen, userId);
                 const after = await db.fetchOne('SELECT balance FROM users WHERE user_id = ?', userId);
 
@@ -347,7 +347,7 @@ const command: Command = {
             } else {
                 const robberBalance = robberData?.balance ?? 0;
                 const fine = Math.min(Math.floor(robberBalance * 0.15), robberBalance);
-                if (fine > 0) await db.execute('UPDATE users SET balance = MAX(0, balance - ?) WHERE user_id = ?', fine, userId);
+                if (fine > 0) await db.execute('UPDATE users SET balance = GREATEST(0, balance - ?) WHERE user_id = ?', fine, userId);
                 const after = await db.fetchOne('SELECT balance FROM users WHERE user_id = ?', userId);
 
                 const embed = new EmbedBuilder()
@@ -373,7 +373,7 @@ const command: Command = {
             const win = Math.random() < 0.45;
             const delta = win ? Math.floor(amount * 1.8) - amount : -amount;
 
-            await db.execute('UPDATE users SET balance = MAX(0, balance + ?), total_earned = total_earned + ? WHERE user_id = ?', delta, win ? delta : 0, userId);
+            await db.execute('UPDATE users SET balance = GREATEST(0, balance + ?), total_earned = total_earned + ? WHERE user_id = ?', delta, win ? delta : 0, userId);
             const after = await db.fetchOne('SELECT balance FROM users WHERE user_id = ?', userId);
 
             const embed = new EmbedBuilder()
@@ -442,7 +442,7 @@ const command: Command = {
             const win = result === choice;
             const delta = win ? amount : -amount;
 
-            await db.execute('UPDATE users SET balance = MAX(0, balance + ?), total_earned = total_earned + ? WHERE user_id = ?', delta, win ? amount : 0, userId);
+            await db.execute('UPDATE users SET balance = GREATEST(0, balance + ?), total_earned = total_earned + ? WHERE user_id = ?', delta, win ? amount : 0, userId);
             const after = await db.fetchOne('SELECT balance FROM users WHERE user_id = ?', userId);
             const coin = result === 'heads' ? '🪙 **HEADS**' : '🔘 **TAILS**';
 

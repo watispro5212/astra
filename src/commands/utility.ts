@@ -1,7 +1,7 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, MessageFlags } from 'discord.js';
 import { ReminderService } from '../services/reminderService';
 import { Command } from '../types';
-import { THEME, VERSION, PROTOCOL } from '../core/constants';
+import { THEME } from '../core/constants';
 
 const command: Command = {
     data: new SlashCommandBuilder()
