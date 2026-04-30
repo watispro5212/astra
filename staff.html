@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staff — Astra</title>
+  <meta name="description" content="Staff resources and moderator tools for Astra Discord bot." />
+  <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <style>
+    .staff-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 32px;
+      margin-top: 60px;
+    }
+    .staff-card {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .staff-card span {
+      font-size: 2.2rem;
+    }
+    .staff-title {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      margin-bottom: 0;
+    }
+    .staff-desc {
+      color: var(--color-text-dim);
+      line-height: 1.8;
+      font-size: 0.95rem;
+    }
+    .staff-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 12px;
+    }
+    .staff-list li {
+      position: relative;
+      padding-left: 24px;
+      color: var(--color-text-dim);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+    .staff-list li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: var(--color-primary);
+    }
+    .staff-panel {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 40px;
+    }
+    .staff-panel .glass-card {
+      padding: 32px;
+    }
+    .staff-note {
+      font-size: 0.92rem;
+      color: var(--color-text-dim);
+      line-height: 1.8;
+    }
+    .staff-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--color-primary);
+      padding: 6px 12px;
+      border: 1px solid rgba(0,255,209,0.2);
+      border-radius: 9999px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 800px) {
+      .staff-panel { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="astra-mesh"></div>
+  <div class="astra-grid"></div>
+
+  <nav class="nav-astra" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <img src="assets/images/astra-logo.png" alt="Astra Logo" width="32" height="32"> ASTRA
+      </a>
+      <div class="nav-links">
+        <a href="features.html" class="nav-link">Features</a>
+        <a href="commands.html" class="nav-link">Commands</a>
+        <a href="docs.html" class="nav-link">Docs</a>
+        <a href="changelog.html" class="nav-link">Updates</a>
+        <a href="support.html" class="nav-link">Support</a>
+        <a href="staff.html" class="nav-link">Staff</a>
+      </div>
+      <div class="nav-actions">
+        <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands" class="btn-astra btn-astra--outline btn-small">Add to Server</a>
+        <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=1&scope=identify+applications.commands" class="btn-astra btn-astra--primary btn-small">Add to Profile</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="section">
+    <div class="container">
+      <h1 class="h1-astra text-gradient">Staff Resources</h1>
+      <p class="text-dim max-w-700">Everything a moderator or server manager needs to use Astra safely and effectively.</p>
+    </div>
+  </header>
+
+  <main class="container page-main">
+    <div class="staff-grid">
+      <div class="glass-card animate-reveal staff-card">
+        <span>🛡️</span>
+        <h2 class="staff-title">Moderation commands</h2>
+        <p class="staff-desc">Astra gives your server strong moderation tools for keeping communities safe and welcoming.</p>
+        <ul class="staff-list">
+          <li>/mod warn — log warnings and DM users.</li>
+          <li>/mod kick — remove members cleanly with a recorded case.</li>
+          <li>/mod ban — ban users with optional message deletion.</li>
+          <li>/mod timeout — mute members for a set time.</li>
+          <li>/mod case — review case details quickly.</li>
+        </ul>
+      </div>
+      <div class="glass-card animate-reveal staff-card">
+        <span>🎫</span>
+        <h2 class="staff-title">Ticket & support setup</h2>
+        <p class="staff-desc">Use Astra tickets to give your team private support channels and keep conversations organized.</p>
+        <ul class="staff-list">
+          <li>Set up ticket channels and staff access with /ticket config.</li>
+          <li>Close tickets cleanly with /ticket close.</li>
+          <li>Keep logs secure and only visible to staff.</li>
+          <li>Use staff roles to control who can see ticket requests.</li>
+        </ul>
+      </div>
+      <div class="glass-card animate-reveal staff-card">
+        <span>⚙️</span>
+        <h2 class="staff-title">Role & permissions guide</h2>
+        <p class="staff-desc">Grant the right permissions so Astra can manage staff actions without giving it extra power.</p>
+        <ul class="staff-list">
+          <li>Allow Manage Roles for staff moderation commands.</li>
+          <li>Give Astra Ban Members and Kick Members if you want those tools enabled.</li>
+          <li>Use a dedicated staff role for clean permission separation.</li>
+          <li>Keep staff commands limited to trusted users only.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="staff-panel animate-reveal">
+      <div class="glass-card">
+        <span class="staff-badge">Best practices</span>
+        <p class="staff-note">Astra works best when your staff team has a clear process. Use a single moderator role, keep channel access limited, and always log moderation actions in support or audit channels.</p>
+        <ul class="staff-list">
+          <li>Create a staff-only category for ticket channels and logs.</li>
+          <li>Keep the staff role separate from general admin roles.</li>
+          <li>Use /mod history and /mod case before taking action.</li>
+          <li>Explain moderation actions clearly to your members.</li>
+        </ul>
+      </div>
+      <div class="glass-card">
+        <span class="staff-badge">Need help?</span>
+        <p class="staff-note">If your team needs assistance, our support server is the fastest place to get answers. Join to report issues, ask for guidance, and share feedback directly with the Astra team.</p>
+        <a href="https://discord.gg/astra" class="btn-astra btn-astra--primary">Join Support Server</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer-astra">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand__logo">
+            <img src="assets/images/astra-logo.png" alt="Astra" width="32" height="32">
+            ASTRA
+          </div>
+          <p class="footer-brand__desc">Free Discord bot for moderation, economy, leveling, and AI — built for every server.</p>
+        </div>
+        <div>
+          <h4 class="footer-head">Product</h4>
+          <div class="footer-links">
+            <a href="features.html" class="footer-link">Features</a>
+            <a href="commands.html" class="footer-link">Commands</a>
+            <a href="docs.html" class="footer-link">Docs</a>
+            <a href="staff.html" class="footer-link">Staff</a>
+          </div>
+        </div>
+        <div>
+          <h4 class="footer-head">Help</h4>
+          <div class="footer-links">
+            <a href="support.html" class="footer-link">Support Hub</a>
+            <a href="faq.html" class="footer-link">FAQ</a>
+            <a href="changelog.html" class="footer-link">Updates</a>
+          </div>
+        </div>
+        <div>
+          <h4 class="footer-head">Legal</h4>
+          <div class="footer-links">
+            <a href="privacy.html" class="footer-link">Privacy Policy</a>
+            <a href="terms.html" class="footer-link">Terms of Service</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Astra. All rights reserved.</span>
+        <span>v8.1.0 Quantum</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('nav-astra--scrolled', window.scrollY > 50);
+    });
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.animate-reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

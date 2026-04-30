@@ -75,6 +75,66 @@
       left: 0;
       color: var(--color-primary);
     }
+    .support-card {
+      padding: 32px;
+      min-height: 280px;
+    }
+    .support-card h3 {
+      margin-top: 0;
+      margin-bottom: 16px;
+      font-size: 1.05rem;
+    }
+    .support-card p {
+      color: var(--color-text-dim);
+      line-height: 1.8;
+      margin-bottom: 24px;
+    }
+    .support-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 12px;
+    }
+    .support-list li {
+      position: relative;
+      padding-left: 24px;
+      color: var(--color-text-dim);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+    .support-list li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: var(--color-primary);
+    }
+    .support-guide {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+      margin-top: 48px;
+    }
+    .support-guide .glass-card {
+      padding: 32px;
+    }
+    .support-guide h4 {
+      margin-top: 0;
+      margin-bottom: 18px;
+      font-family: var(--font-heading);
+      font-size: 1rem;
+    }
+    .support-guide p {
+      color: var(--color-text-dim);
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+    .support-guide a {
+      width: 100%;
+    }
+    @media (max-width: 900px) {
+      .support-guide { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -94,6 +154,7 @@
         <a href="docs.html" class="nav-link">Docs</a>
         <a href="changelog.html" class="nav-link">Updates</a>
         <a href="support.html" class="nav-link">Support</a>
+        <a href="staff.html" class="nav-link">Staff</a>
       </div>
     <div class="nav-actions">
       <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands" class="btn-astra btn-astra--outline btn-small">
@@ -118,18 +179,42 @@
   <main class="container page-main">
     
     <div class="support-grid">
-      <div class="glass-card animate-reveal text-center">
+      <div class="glass-card animate-reveal text-center support-card">
         <div class="fs-3rem mb-24">🏢</div>
         <h3 class="font-heading mb-16">SUPPORT SERVER</h3>
-        <p class="text-dim mb-24 fs-085">Join our Discord for help, to report bugs, or to see bot updates.</p>
+        <p>Join our Discord for help, bug reports, and direct updates from the Astra team.</p>
         <a href="https://discord.gg/astra" class="btn-astra btn-astra--primary w-full justify-center">Join Server</a>
       </div>
 
-      <div class="glass-card animate-reveal text-center">
+      <div class="glass-card animate-reveal text-center support-card">
         <div class="fs-3rem mb-24">📜</div>
         <h3 class="font-heading mb-16">FAQ</h3>
-        <p class="text-dim mb-24 fs-085">Quick answers for the most common questions about Astra.</p>
-        <a href="faq.html" class="btn-astra btn-astra--secondary w-full justify-center">Browse FAQ</a>
+        <p>Quick answers to the most common questions about Astra, setup, and bot behavior.</p>
+        <a href="faq.html" class="btn-astra btn-astra--outline w-full justify-center">Browse FAQ</a>
+      </div>
+
+      <div class="glass-card animate-reveal text-center support-card">
+        <div class="fs-3rem mb-24">🛠️</div>
+        <h3 class="font-heading mb-16">Staff Resources</h3>
+        <p>Everything your moderators need to manage Astra safely — from permission setup to command guidance.</p>
+        <a href="staff.html" class="btn-astra btn-astra--outline w-full justify-center">Open Staff Page</a>
+      </div>
+    </div>
+
+    <div class="support-guide animate-reveal">
+      <div class="glass-card">
+        <h4>How to get help fast</h4>
+        <ul class="support-list">
+          <li>Describe the exact command or issue you encountered.</li>
+          <li>Include any error messages or unexpected bot replies.</li>
+          <li>Share the server ID, channel, and time if available.</li>
+          <li>Mention whether the bot has the right permissions.</li>
+        </ul>
+      </div>
+      <div class="glass-card">
+        <h4>Need staff advice?</h4>
+        <p class="text-dim">If your server staff is setting up Astra, our staff page explains the best moderation workflow, ticket setup, and permissions checklist.</p>
+        <a href="staff.html" class="btn-astra btn-astra--primary">Staff Resources</a>
       </div>
     </div>
 
