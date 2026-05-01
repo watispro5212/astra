@@ -1,0 +1,1668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wiki & Glossary — Astra</title>
+  <meta name="description" content="Complete Astra terminology reference. Every term, command category, and system explained in full detail.">
+  <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <style>
+    /* ── WIKI PAGE ───────────────────────────────────────────────── */
+    .wiki-hero {
+      padding: 180px 0 80px;
+      position: relative;
+    }
+    .wiki-hero-glow {
+      position: absolute; top: -100px; right: -200px;
+      width: 600px; height: 600px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(181,23,158,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ── SEARCH ────────────────────────────────────────────────── */
+    .wiki-search-wrap {
+      position: relative;
+      max-width: 640px;
+      margin: 36px 0 0;
+    }
+    .wiki-search {
+      width: 100%;
+      padding: 18px 24px 18px 52px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      color: #fff;
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      outline: none;
+      transition: var(--transition-base);
+    }
+    .wiki-search:focus {
+      border-color: var(--color-primary);
+      background: rgba(0,255,209,0.04);
+      box-shadow: 0 0 0 3px rgba(0,255,209,0.1);
+    }
+    .wiki-search::placeholder { color: var(--color-text-muted); }
+    .wiki-search-icon {
+      position: absolute; left: 18px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--color-text-muted); font-size: 1.1rem;
+      pointer-events: none;
+    }
+    .wiki-search-count {
+      position: absolute; right: 18px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.75rem; color: var(--color-text-muted);
+      font-family: var(--font-mono);
+    }
+
+    /* ── CATEGORY FILTERS ──────────────────────────────────────── */
+    .wiki-filters {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      margin: 40px 0 60px;
+    }
+    .wiki-filter {
+      padding: 8px 20px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--glass-border);
+      background: transparent;
+      color: var(--color-text-muted);
+      font-family: var(--font-sans);
+      font-size: 0.82rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 1px;
+      cursor: pointer; transition: var(--transition-base);
+    }
+    .wiki-filter:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+    .wiki-filter.active {
+      background: rgba(0,255,209,0.12);
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+    .wiki-filter[data-cat="economy"].active   { background: rgba(247,37,133,0.12); border-color: var(--color-accent); color: var(--color-accent); }
+    .wiki-filter[data-cat="leveling"].active  { background: rgba(6,214,160,0.12); border-color: var(--color-success); color: var(--color-success); }
+    .wiki-filter[data-cat="moderation"].active { background: rgba(255,159,28,0.12); border-color: var(--color-warning); color: var(--color-warning); }
+    .wiki-filter[data-cat="ai"].active        { background: rgba(181,23,158,0.12); border-color: var(--color-secondary); color: var(--color-secondary); }
+
+    /* ── CATEGORY SECTIONS ─────────────────────────────────────── */
+    .wiki-category { margin-bottom: 80px; }
+    .wiki-category-header {
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 32px; padding-bottom: 20px;
+      border-bottom: 1px solid var(--glass-border);
+    }
+    .wiki-category-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem;
+    }
+    .wiki-category-icon--economy    { background: rgba(247,37,133,0.12); }
+    .wiki-category-icon--leveling   { background: rgba(6,214,160,0.12); }
+    .wiki-category-icon--moderation { background: rgba(255,159,28,0.12); }
+    .wiki-category-icon--ai         { background: rgba(181,23,158,0.12); }
+    .wiki-category-icon--stocks     { background: rgba(0,255,209,0.12); }
+    .wiki-category-icon--giveaway   { background: rgba(247,37,133,0.12); }
+    .wiki-category-icon--tickets    { background: rgba(0,255,209,0.12); }
+    .wiki-category-icon--welcome    { background: rgba(6,214,160,0.12); }
+    .wiki-category-icon--shop       { background: rgba(181,23,158,0.12); }
+    .wiki-category-icon--discord    { background: rgba(88,101,242,0.15); }
+    .wiki-category-icon--bot        { background: rgba(0,255,209,0.08); }
+
+    .wiki-category-title {
+      font-family: var(--font-heading);
+      font-size: 1.4rem; letter-spacing: 1px;
+    }
+    .wiki-category-count {
+      margin-left: auto;
+      font-size: 0.75rem; color: var(--color-text-muted);
+      font-family: var(--font-mono);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--glass-border);
+      padding: 4px 10px; border-radius: var(--radius-full);
+    }
+
+    /* ── TERM CARDS ────────────────────────────────────────────── */
+    .wiki-terms-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+    .wiki-term-card {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      padding: 28px;
+      transition: var(--transition-base);
+      position: relative; overflow: hidden;
+    }
+    .wiki-term-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0;
+      width: 3px; height: 100%;
+      background: var(--color-primary);
+      opacity: 0;
+      transition: var(--transition-base);
+    }
+    .wiki-term-card:hover {
+      border-color: rgba(0,255,209,0.2);
+      background: rgba(0,255,209,0.02);
+      transform: translateY(-3px);
+    }
+    .wiki-term-card:hover::before { opacity: 1; }
+    .wiki-term-card[data-cat="economy"]::before    { background: var(--color-accent); }
+    .wiki-term-card[data-cat="leveling"]::before   { background: var(--color-success); }
+    .wiki-term-card[data-cat="moderation"]::before { background: var(--color-warning); }
+    .wiki-term-card[data-cat="ai"]::before         { background: var(--color-secondary); }
+
+    .wiki-term-name {
+      font-family: var(--font-heading);
+      font-size: 1rem; letter-spacing: 0.5px;
+      color: #fff; margin-bottom: 6px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .wiki-term-badge {
+      font-size: 0.6rem; padding: 2px 8px;
+      border-radius: 4px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+    .wiki-term-badge--cmd {
+      background: rgba(0,255,209,0.12);
+      color: var(--color-primary);
+      border: 1px solid rgba(0,255,209,0.2);
+    }
+    .wiki-term-badge--concept {
+      background: rgba(255,255,255,0.06);
+      color: var(--color-text-muted);
+      border: 1px solid var(--glass-border);
+    }
+    .wiki-term-badge--new {
+      background: rgba(181,23,158,0.15);
+      color: var(--color-secondary);
+      border: 1px solid rgba(181,23,158,0.3);
+    }
+
+    .wiki-term-short {
+      font-size: 0.78rem; color: var(--color-primary);
+      font-family: var(--font-mono);
+      margin-bottom: 12px;
+      opacity: 0.8;
+    }
+    .wiki-term-desc {
+      font-size: 0.9rem; color: var(--color-text-dim);
+      line-height: 1.75;
+    }
+    .wiki-term-example {
+      margin-top: 14px;
+      padding: 10px 14px;
+      background: rgba(0,0,0,0.25);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem; color: var(--color-primary-light);
+    }
+    .wiki-term-example::before {
+      content: '→ '; opacity: 0.5;
+    }
+    .wiki-term-related {
+      margin-top: 14px;
+      display: flex; flex-wrap: wrap; gap: 6px;
+    }
+    .wiki-term-related-label {
+      font-size: 0.72rem; color: var(--color-text-muted);
+      text-transform: uppercase; letter-spacing: 1px;
+      width: 100%; margin-bottom: 2px;
+    }
+    .wiki-term-related-tag {
+      font-size: 0.75rem; padding: 3px 10px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--glass-border);
+      border-radius: 4px; color: var(--color-text-dim);
+      cursor: pointer; transition: var(--transition-base);
+      text-decoration: none;
+    }
+    .wiki-term-related-tag:hover {
+      color: var(--color-primary);
+      border-color: rgba(0,255,209,0.3);
+    }
+
+    /* ── NO RESULTS ────────────────────────────────────────────── */
+    .wiki-no-results {
+      text-align: center; padding: 80px 40px;
+      color: var(--color-text-muted);
+      display: none;
+    }
+    .wiki-no-results.show { display: block; }
+
+    /* ── QUICK JUMP ────────────────────────────────────────────── */
+    .wiki-jump-bar {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-bottom: 60px;
+    }
+    .wiki-jump-link {
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--glass-border);
+      color: var(--color-text-muted);
+      text-decoration: none;
+      font-size: 0.8rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 1px;
+      transition: var(--transition-base);
+    }
+    .wiki-jump-link:hover {
+      color: var(--color-primary);
+      border-color: rgba(0,255,209,0.3);
+      background: rgba(0,255,209,0.05);
+    }
+
+    /* ── HIDDEN (filter) ───────────────────────────────────────── */
+    .wiki-term-card.hidden { display: none; }
+    .wiki-category.all-hidden { display: none; }
+
+    @media (max-width: 768px) {
+      .wiki-terms-grid { grid-template-columns: 1fr; }
+      .wiki-hero { padding: 140px 0 60px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="astra-mesh"></div>
+  <div class="astra-grid"></div>
+
+  <!-- NAV -->
+  <nav class="nav-astra" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <img src="assets/images/astra-logo.png" alt="Astra" width="32" height="32">
+        ASTRA
+      </a>
+      <div class="nav-links">
+        <a href="features.html" class="nav-link">Features</a>
+        <a href="commands.html" class="nav-link">Commands</a>
+        <a href="docs.html" class="nav-link">Docs</a>
+        <a href="wiki.html" class="nav-link" style="color:#fff;">Wiki</a>
+        <a href="changelog.html" class="nav-link">Updates</a>
+        <a href="support.html" class="nav-link">Support</a>
+        <a href="staff.html" class="nav-link">Staff</a>
+      </div>
+      <div class="nav-actions">
+        <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands" class="btn-astra btn-astra--outline btn-small">Add to Server</a>
+        <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=1&scope=identify+applications.commands" class="btn-astra btn-astra--primary btn-small">Add to Profile</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="wiki-hero">
+    <div class="wiki-hero-glow"></div>
+    <div class="container">
+      <div class="animate-reveal">
+        <div class="hero-eyebrow">
+          <span class="hero-eyebrow-dot"></span>
+          Complete Reference — 80+ Terms Defined
+        </div>
+        <h1 class="h1-astra text-gradient">WIKI &amp; GLOSSARY</h1>
+        <p class="text-dim" style="max-width:620px;margin-top:16px;font-size:1.05rem;line-height:1.8;">
+          Every term, concept, and system used in Astra — explained in full detail.
+          Search below or browse by category to find exactly what you need.
+        </p>
+
+        <!-- Search -->
+        <div class="wiki-search-wrap">
+          <span class="wiki-search-icon">🔍</span>
+          <input type="text" class="wiki-search" id="wikiSearch" placeholder="Search terms… e.g. XP, bank, giveaway" autocomplete="off">
+          <span class="wiki-search-count" id="searchCount"></span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding-bottom:120px;">
+
+    <!-- FILTERS -->
+    <div class="wiki-filters animate-reveal">
+      <button class="wiki-filter active" data-cat="all">All Terms</button>
+      <button class="wiki-filter" data-cat="economy">💰 Economy</button>
+      <button class="wiki-filter" data-cat="leveling">📈 Leveling</button>
+      <button class="wiki-filter" data-cat="moderation">🛡️ Moderation</button>
+      <button class="wiki-filter" data-cat="ai">🤖 AI Assistant</button>
+      <button class="wiki-filter" data-cat="stocks">📊 Stock Market</button>
+      <button class="wiki-filter" data-cat="giveaway">🎉 Giveaways</button>
+      <button class="wiki-filter" data-cat="tickets">🎫 Tickets</button>
+      <button class="wiki-filter" data-cat="welcome">👋 Welcome</button>
+      <button class="wiki-filter" data-cat="shop">🛒 Shop</button>
+      <button class="wiki-filter" data-cat="discord">💬 Discord</button>
+      <button class="wiki-filter" data-cat="bot">⚙️ Bot / Tech</button>
+    </div>
+
+    <!-- QUICK JUMP -->
+    <div class="wiki-jump-bar animate-reveal">
+      <a class="wiki-jump-link" href="#cat-economy">Economy</a>
+      <a class="wiki-jump-link" href="#cat-leveling">Leveling</a>
+      <a class="wiki-jump-link" href="#cat-moderation">Moderation</a>
+      <a class="wiki-jump-link" href="#cat-ai">AI</a>
+      <a class="wiki-jump-link" href="#cat-stocks">Stocks</a>
+      <a class="wiki-jump-link" href="#cat-giveaway">Giveaways</a>
+      <a class="wiki-jump-link" href="#cat-tickets">Tickets</a>
+      <a class="wiki-jump-link" href="#cat-welcome">Welcome</a>
+      <a class="wiki-jump-link" href="#cat-shop">Shop</a>
+      <a class="wiki-jump-link" href="#cat-discord">Discord</a>
+      <a class="wiki-jump-link" href="#cat-bot">Bot / Tech</a>
+    </div>
+
+    <div class="wiki-no-results" id="noResults">
+      <div style="font-size:3rem;margin-bottom:16px;">🔭</div>
+      <div style="font-size:1.1rem;margin-bottom:8px;">No terms found</div>
+      <div style="font-size:0.9rem;">Try a different keyword or clear the search.</div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════
+         ECONOMY
+    ══════════════════════════════════════════════════ -->
+    <section class="wiki-category animate-reveal" id="cat-economy" data-cat="economy">
+      <div class="wiki-category-header">
+        <div class="wiki-category-icon wiki-category-icon--economy">💰</div>
+        <h2 class="wiki-category-title">ECONOMY SYSTEM</h2>
+        <span class="wiki-category-count">17 terms</span>
+      </div>
+      <div class="wiki-terms-grid">
+
+        <div class="wiki-term-card" data-cat="economy" data-name="money currency coins">
+          <div class="wiki-term-name">Money <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">/economy balance</div>
+          <div class="wiki-term-desc">
+            Money is the universal virtual currency in Astra. Every user has their own money balance
+            that is shared across all servers (it is not server-specific). You earn money through daily
+            rewards, working, mining, gambling, and passive income items. Money is used to buy items
+            in the server shop, trade stocks, and participate in the economy.
+          </div>
+          <div class="wiki-term-related">
+            <span class="wiki-term-related-label">See also</span>
+            <a class="wiki-term-related-tag" href="#">Cash</a>
+            <a class="wiki-term-related-tag" href="#">Bank</a>
+            <a class="wiki-term-related-tag" href="#">Balance</a>
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="economy" data-name="balance wallet">
+          <div class="wiki-term-name">Balance <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">/economy balance</div>
+          <div class="wiki-term-desc">
+            Your balance is the total amount of money you own. It is split into two parts:
+            <strong>Cash</strong> (money in your pocket, exposed to robbery) and <strong>Bank</strong>
+            (money deposited safely). The balance command shows both values, your total net worth, and
+            any items with passive income. Your balance is global — the same in every server.
+          </div>
+          <div class="wiki-term-example">/economy balance → shows cash, bank, and total</div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="economy" data-name="cash pocket wallet hand">
+          <div class="wiki-term-name">Cash <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">On-hand money</div>
+          <div class="wiki-term-desc">
+            Cash is money you are carrying "on your person." It is the amount at risk if another user
+            successfully robs you. When you earn money (from daily, work, gambling wins, etc.), it
+            goes into cash by default. You can protect cash by depositing it into your bank. Cash is
+            also what you spend when buying items in the shop.
+          </div>
+          <div class="wiki-term-related">
+            <span class="wiki-term-related-label">See also</span>
+            <a class="wiki-term-related-tag" href="#">Bank</a>
+            <a class="wiki-term-related-tag" href="#">Rob</a>
+            <a class="wiki-term-related-tag" href="#">Deposit</a>
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="economy" data-name="bank safe deposit vault">
+          <div class="wiki-term-name">Bank <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">/economy deposit · /economy withdraw</div>
+          <div class="wiki-term-desc">
+            The bank is a safe storage vault for your money. Money stored in the bank <strong>cannot
+            be stolen</strong> by other users using the rob command. There is no interest or limit on
+            how much you can bank. Use <code>/economy deposit &lt;amount&gt;</code> to move cash to
+            the bank, and <code>/economy withdraw &lt;amount&gt;</code> to take it back out. Strategic
+            banking is important if you play in competitive servers where robbery is common.
+          </div>
+          <div class="wiki-term-example">/economy deposit 5000 → moves 5,000 from cash to bank</div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="economy" data-name="daily reward free login bonus">
+          <div class="wiki-term-name">Daily Reward <span class="wiki-term-badge wiki-term-badge--cmd">Command</span></div>
+          <div class="wiki-term-short">/economy daily · -daily (DMs)</div>
+          <div class="wiki-term-desc">
+            The daily reward lets you claim free money once every 24 hours. The base reward grows
+            larger the longer your <strong>streak</strong> is — claim every day without missing to
+            maximize your earnings. Missing a day resets your streak back to 1. The reward is added
+            directly to your cash. You can use this command in DMs too.
+          </div>
+          <div class="wiki-term-example">/economy daily → claims +2,600 money (🔥 3-day streak)</div>
+          <div class="wiki-term-related">
+            <span class="wiki-term-related-label">See also</span>
+            <a class="wiki-term-related-tag" href="#">Streak</a>
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="economy" data-name="streak daily consecutive chain">
+          <div class="wiki-term-name">Streak <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">Consecutive daily claims</div>
+          <div class="wiki-term-desc">
+            Your streak counts how many consecutive days you have claimed your daily reward without
+            missing a day. A higher streak gives you a larger daily payout — the formula rewards
+            consistent players. If you miss a full 24-hour window from your last claim time, your
+            streak resets to 1. Your current streak is displayed every time you run the daily command.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="economy" data-name="work job earn income">
+          <div class="wiki-term-name">Work <span class="wiki-term-badge wiki-term-badge--cmd">Command</span></div>
+          <div class="wiki-term-short">/economy work</div>
+          <div class="wiki-term-desc">
+            The work command simulates doing a job to earn money. It has a cooldown (typically 1–2
+            hours) so you cannot spam it. Each time you work, you receive a random amount of money
+            within a set range. Working is one of the safest ways to build up your cash balance
+            without risking anything. Results and flavor text vary — it simulates different
+            professions each time.
+          </div>
+          <div class="wiki-term-example">/economy work → earned 1,250 money as a "coder"</div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="economy" data-name="harvest collect passive income farm">
+          <div class="wiki-term-name">Harvest <span class="wiki-term-badge wiki-term-badge--cmd">Command</span></div>
+          <div class="wiki-term-short">/economy harvest</div>
+          <div class="wiki-term-desc">
+            Harvest collects accumulated <strong>passive income</strong> from items you own in the
+            server shop. Items like farms, mines, and businesses generate money over time — but that
+            money sits uncollected until you run harvest. There is a cooldown between harvests. The
+            more passive income items you own, the larger your harvest will be. This makes shopping
+            strategic: buying items that produce recurring income pays off over time.
+          </div>
+          <div class="wiki-term-related">
+            <span class="wiki-term-related-label">See also</span>
+            <a class="wiki-term-related-tag" href="#">Passive Income</a>
+            <a class="wiki-term-related-tag" href="#">Shop</a>
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="economy" data-name="passive income automatic earn">
+          <div class="wiki-term-name">Passive Income <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">Automatic earnings over time</div>
+          <div class="wiki-term-desc">
+            Passive income is money that accumulates automatically from items you have purchased in
+            the shop. You do not need to do anything — the money builds up in the background. To
+            collect it, use <code>/economy harvest</code>. Items with passive income are usually
+            more expensive upfront but pay for themselves over time. The rate at which money
+            accumulates depends on the specific item purchased.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="economy" data-name="rob steal theft crime">
+          <div class="wiki-term-name">Rob <span class="wiki-term-badge wiki-term-badge--cmd">Command</span></div>
+          <div class="wiki-term-short">/economy rob @user</div>
+          <div class="wiki-term-desc">
+            Rob lets you attempt to steal money from another user's <strong>cash</strong> (not their
+            bank). The attempt has a chance to succeed or fail — if it fails, you pay a fine instead.
+            Only cash is at risk; banked money is completely safe. You cannot rob users with very
+            little cash. There is a cooldown between rob attempts. This adds a risk vs. reward
+            element to the economy — keep your cash banked if you don't want to lose it.
+          </div>
+          <div class="wiki-term-example">/economy rob @alice → stole 400 money (or: failed, lost 200)</div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="economy" data-name="gamble bet risk chance">
+          <div class="wiki-term-name">Gamble <span class="wiki-term-badge wiki-term-badge--cmd">Command</span></div>
+          <div class="wiki-term-short">/economy gamble &lt;amount&gt;</div>
+          <div class="wiki-term-desc">
+            The gamble command lets you wager a specified amount of your cash on a random outcome.
+            You can win or lose your bet — the house edge is slight. Gambling is high-risk, high-reward.
+            Only your cash is at risk (not banked money). There is a minimum and maximum bet amount.
+            For a fun experience, pair it with strategic banking to limit your exposure.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="economy" data-name="slots slot machine spin reels">
+          <div class="wiki-term-name">Slots <span class="wiki-term-badge wiki-term-badge--cmd">Command</span></div>
+          <div class="wiki-term-short">/economy slots &lt;bet&gt;</div>
+          <div class="wiki-term-desc">
+            The slot machine mini-game. You place a bet and three spinning reels land on random
+            symbols. Matching all three symbols pays out a big multiplier. Two matching symbols
+            pays a smaller amount. No match means you lose your bet. The payout varies by symbol —
+            rarer symbols pay more. This command has a cooldown between spins.
+          </div>
+          <div class="wiki-term-example">/economy slots 500 → 🍋 🍋 🍋 — WIN! +1,500 money</div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="economy" data-name="coinflip flip coin heads tails double">
+          <div class="wiki-term-name">Coinflip <span class="wiki-term-badge wiki-term-badge--cmd">Command</span></div>
+          <div class="wiki-term-short">/economy coinflip &lt;amount&gt; &lt;heads/tails&gt;</div>
+          <div class="wiki-term-desc">
+            A simple 50/50 bet. You choose heads or tails and wager an amount of cash. If the coin
+            lands on your chosen side, you double your money. If not, you lose your bet. There is no
+            house edge — this is a true 50/50 chance. Great for quick high-risk plays. A cooldown
+            applies between flips.
+          </div>
+          <div class="wiki-term-example">/economy coinflip 1000 heads → tails! lost 1,000 money</div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="economy" data-name="pay send transfer gift">
+          <div class="wiki-term-name">Pay <span class="wiki-term-badge wiki-term-badge--cmd">Command</span></div>
+          <div class="wiki-term-short">/economy pay @user &lt;amount&gt;</div>
+          <div class="wiki-term-desc">
+            The pay command transfers money from your cash to another user's cash. This is how you
+            send money to friends, reward server members, or make purchases in informal trades.
+            You must have enough cash on hand (not banked) to send. There is a minimum amount
+            and the recipient must have their balance initialized (used the bot at least once).
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="economy" data-name="deposit move cash bank safe">
+          <div class="wiki-term-name">Deposit <span class="wiki-term-badge wiki-term-badge--cmd">Command</span></div>
+          <div class="wiki-term-short">/economy deposit &lt;amount|all&gt;</div>
+          <div class="wiki-term-desc">
+            Deposit moves money from your cash into your bank for safe keeping. Once deposited, the
+            money cannot be stolen by other users. Use <code>all</code> as the amount to deposit
+            everything at once. Depositing is instant with no fees. This is the recommended action
+            after earning a large amount of money, especially in servers where rob is active.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="economy" data-name="withdraw take out bank cash">
+          <div class="wiki-term-name">Withdraw <span class="wiki-term-badge wiki-term-badge--cmd">Command</span></div>
+          <div class="wiki-term-short">/economy withdraw &lt;amount|all&gt;</div>
+          <div class="wiki-term-desc">
+            Withdraw moves money from your bank back into your cash. You need cash (not banked money)
+            to buy items, gamble, or pay others. Use <code>all</code> to withdraw everything at once.
+            There are no fees for withdrawing. Remember that withdrawn money is now exposed to robbery.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="economy" data-name="leaderboard ranking top richest">
+          <div class="wiki-term-name">Economy Leaderboard <span class="wiki-term-badge wiki-term-badge--cmd">Command</span></div>
+          <div class="wiki-term-short">/leaderboard economy</div>
+          <div class="wiki-term-desc">
+            The economy leaderboard shows the richest users in the server ranked by their total net
+            worth (cash + bank combined). It is a great way to see who has been playing the most or
+            who has the best investment strategy. The leaderboard is server-specific — only members
+            of the current server are shown.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         LEVELING
+    ══════════════════════════════════════════════════ -->
+    <section class="wiki-category animate-reveal" id="cat-leveling" data-cat="leveling">
+      <div class="wiki-category-header">
+        <div class="wiki-category-icon wiki-category-icon--leveling">📈</div>
+        <h2 class="wiki-category-title">LEVELING SYSTEM</h2>
+        <span class="wiki-category-count">8 terms</span>
+      </div>
+      <div class="wiki-terms-grid">
+
+        <div class="wiki-term-card" data-cat="leveling" data-name="xp experience points earn chat">
+          <div class="wiki-term-name">XP (Experience Points) <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">Earned by chatting in servers</div>
+          <div class="wiki-term-desc">
+            XP (Experience Points) is the currency of the leveling system. You earn XP automatically
+            by sending messages in any server where Astra is present. Each message earns a small
+            random amount of XP. There is an <strong>XP cooldown</strong> to prevent spam abuse —
+            only one batch of XP is granted per message per cooldown window. XP accumulates
+            permanently; it never resets (unless the server admin resets the leaderboard).
+          </div>
+          <div class="wiki-term-related">
+            <span class="wiki-term-related-label">See also</span>
+            <a class="wiki-term-related-tag" href="#">Level</a>
+            <a class="wiki-term-related-tag" href="#">XP Cooldown</a>
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="leveling" data-name="level rank milestone progression">
+          <div class="wiki-term-name">Level <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">Your progression milestone</div>
+          <div class="wiki-term-desc">
+            Your level represents how active you are in a server. As you accumulate XP, you
+            automatically advance to higher levels. The XP required per level increases on a
+            balanced curve — early levels are fast to reach, while higher levels require significantly
+            more activity. Each level-up triggers an announcement in the server (if configured).
+            Some servers give special roles as rewards for reaching certain levels.
+          </div>
+          <div class="wiki-term-example">/leveling rank → Level 15 | 4,200 / 5,000 XP to next level</div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="leveling" data-name="rank card profile level check">
+          <div class="wiki-term-name">Rank Card <span class="wiki-term-badge wiki-term-badge--cmd">Command</span></div>
+          <div class="wiki-term-short">/leveling rank [@user]</div>
+          <div class="wiki-term-desc">
+            The rank card displays your current level, total XP, and a progress bar showing how far
+            you are toward the next level. You can view your own rank or check another user's by
+            mentioning them. The rank card also shows your position on the server leaderboard. It
+            is the primary way to track your leveling progress.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="leveling" data-name="leaderboard top level ranking best">
+          <div class="wiki-term-name">Level Leaderboard <span class="wiki-term-badge wiki-term-badge--cmd">Command</span></div>
+          <div class="wiki-term-short">/leaderboard levels</div>
+          <div class="wiki-term-desc">
+            The level leaderboard ranks all server members from highest to lowest XP. It shows each
+            user's level, total XP, and relative position. The leaderboard is server-specific —
+            your level in one server does not affect your ranking in another. Compete with others
+            by staying active to climb to the top.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="leveling" data-name="xp cooldown anti spam rate limit">
+          <div class="wiki-term-name">XP Cooldown <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">Anti-spam protection for XP</div>
+          <div class="wiki-term-desc">
+            The XP cooldown is a built-in rate limit that prevents users from earning XP by spamming
+            messages. After earning XP from a message, there is a short waiting period (typically
+            ~60 seconds) before the next message can earn XP again. This ensures that XP represents
+            genuine engagement rather than spam. Messages sent during the cooldown window still send
+            normally — they just do not award XP.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="leveling" data-name="role reward unlock automatic assign level">
+          <div class="wiki-term-name">Role Reward <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">Automatic role at a set level</div>
+          <div class="wiki-term-desc">
+            Role rewards are Discord roles that are automatically assigned to a user when they reach
+            a specific level. Server administrators configure which roles are given at which levels
+            using the leveling config commands. Role rewards are a great way to recognize active
+            members with special perks — for example, giving a "Regular" role at level 10 or
+            "Veteran" at level 50. Roles are assigned instantly when the level is reached.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="leveling" data-name="level up announcement message channel">
+          <div class="wiki-term-name">Level-Up Announcement <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">Public notification on level up</div>
+          <div class="wiki-term-desc">
+            When a user reaches a new level, Astra automatically sends a level-up announcement in
+            the server. This message congratulates the user, shows their new level, and tags them
+            so they see the notification. Server admins can configure which channel announcements
+            appear in, or disable them entirely. The announcement can also show any role rewards
+            earned at that level.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="leveling" data-name="leveling config setup admin">
+          <div class="wiki-term-name">Leveling Config <span class="wiki-term-badge wiki-term-badge--cmd">Command</span></div>
+          <div class="wiki-term-short">/leveling_config</div>
+          <div class="wiki-term-desc">
+            The leveling config command is for server administrators only. It allows you to customize
+            how the leveling system works in your server: set the announcement channel, toggle
+            level-up messages on or off, add role rewards for specific levels, and remove existing
+            role rewards. Changes take effect immediately. Requires server administrator permissions.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         MODERATION
+    ══════════════════════════════════════════════════ -->
+    <section class="wiki-category animate-reveal" id="cat-moderation" data-cat="moderation">
+      <div class="wiki-category-header">
+        <div class="wiki-category-icon wiki-category-icon--moderation">🛡️</div>
+        <h2 class="wiki-category-title">MODERATION</h2>
+        <span class="wiki-category-count">9 terms</span>
+      </div>
+      <div class="wiki-terms-grid">
+
+        <div class="wiki-term-card" data-cat="moderation" data-name="ban remove permanent">
+          <div class="wiki-term-name">Ban <span class="wiki-term-badge wiki-term-badge--cmd">Command</span></div>
+          <div class="wiki-term-short">/moderation ban @user [reason]</div>
+          <div class="wiki-term-desc">
+            Banning permanently removes a user from the server and prevents them from rejoining via
+            any invite. The banned user is automatically DMed with the reason (if Astra can reach
+            them). The action is logged in the mod log channel with a case number, moderator name,
+            target user, reason, and timestamp. Bans can be undone with an unban command. Requires
+            the <strong>Ban Members</strong> Discord permission.
+          </div>
+          <div class="wiki-term-related">
+            <span class="wiki-term-related-label">See also</span>
+            <a class="wiki-term-related-tag" href="#">Case</a>
+            <a class="wiki-term-related-tag" href="#">DM Warning</a>
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="moderation" data-name="kick remove rejoin">
+          <div class="wiki-term-name">Kick <span class="wiki-term-badge wiki-term-badge--cmd">Command</span></div>
+          <div class="wiki-term-short">/moderation kick @user [reason]</div>
+          <div class="wiki-term-desc">
+            Kicking removes a user from the server, but unlike a ban, they can rejoin with a valid
+            invite link. It is a softer action — suitable for rule violations that do not warrant
+            a permanent ban. The user receives a DM notification with the reason. The action is
+            logged as a mod case. Requires the <strong>Kick Members</strong> Discord permission.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="moderation" data-name="warn warning infraction strike">
+          <div class="wiki-term-name">Warn <span class="wiki-term-badge wiki-term-badge--cmd">Command</span></div>
+          <div class="wiki-term-short">/moderation warn @user [reason]</div>
+          <div class="wiki-term-desc">
+            A warning is a formal notice given to a user for breaking server rules. The user stays
+            in the server and can continue chatting, but the warning is recorded in Astra's mod
+            history as a case. The warned user receives a DM letting them know they were warned,
+            who warned them, and why. Staff can view a user's full warning history to track repeat
+            offenders. Requires the <strong>Moderate Members</strong> or <strong>Kick Members</strong> permission.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="moderation" data-name="timeout mute silence temporary restrict">
+          <div class="wiki-term-name">Timeout <span class="wiki-term-badge wiki-term-badge--cmd">Command</span></div>
+          <div class="wiki-term-short">/moderation timeout @user &lt;duration&gt; [reason]</div>
+          <div class="wiki-term-desc">
+            A timeout (also called a mute) temporarily prevents a user from sending messages,
+            adding reactions, or joining voice channels for a set duration. It uses Discord's
+            native timeout feature, so it works reliably even without special permission setups.
+            After the duration expires, the user is automatically unmuted. Timeouts are logged as
+            mod cases. Duration can be specified in minutes, hours, or days.
+          </div>
+          <div class="wiki-term-example">/moderation timeout @bob 1h spamming → times out for 1 hour</div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="moderation" data-name="purge delete bulk messages clear">
+          <div class="wiki-term-name">Purge <span class="wiki-term-badge wiki-term-badge--cmd">Command</span></div>
+          <div class="wiki-term-short">/moderation purge &lt;1-100&gt;</div>
+          <div class="wiki-term-desc">
+            Purge bulk-deletes a specified number of recent messages from the current channel (up to
+            100 at once). This is useful for cleaning up spam, inappropriate content, or test
+            messages. Note: Discord only allows bulk deletion of messages up to 14 days old — older
+            messages must be deleted one by one. Requires the <strong>Manage Messages</strong> permission.
+            The deleted message count is confirmed in a temporary reply.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="moderation" data-name="case log record action history">
+          <div class="wiki-term-name">Case <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">Logged moderation record</div>
+          <div class="wiki-term-desc">
+            Every moderation action (warn, kick, ban, timeout) creates a <strong>case</strong> — a
+            permanent logged record of the action. Each case has a unique number and stores: the
+            action type, the target user, the moderator who performed it, the reason given, and the
+            exact timestamp. Cases can be viewed per-user to see their full moderation history. This
+            helps track repeat offenders and provides accountability for staff actions.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="moderation" data-name="dm notification message warned kicked banned">
+          <div class="wiki-term-name">DM Warning <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">Automatic user notification</div>
+          <div class="wiki-term-desc">
+            When a moderation action is taken against a user (warn, kick, ban, timeout), Astra
+            automatically attempts to send them a direct message explaining what happened. The DM
+            includes the action taken, the reason provided by the moderator, and the server name.
+            If the user has DMs disabled or has blocked the bot, the action still completes — the
+            DM failure is noted in the confirmation message to the moderator.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="moderation" data-name="role protection exempt safe moderator">
+          <div class="wiki-term-name">Role Protection <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">Prevent moderating protected roles</div>
+          <div class="wiki-term-desc">
+            Role protection is a safety feature that prevents Astra from performing moderation
+            actions on users who hold certain high-privilege roles (such as server admins or other
+            moderators). This prevents junior staff from accidentally banning senior staff, and
+            protects server ownership hierarchies. The protection is based on Discord's built-in
+            role hierarchy — users with roles above the bot's role cannot be moderated through Astra.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="moderation" data-name="mod log channel audit staff">
+          <div class="wiki-term-name">Mod Log Channel <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">Staff audit trail channel</div>
+          <div class="wiki-term-desc">
+            The mod log channel is a designated Discord channel where Astra posts a detailed embed
+            for every moderation action taken in the server. It creates a transparent audit trail
+            visible to all staff. Server admins can configure which channel to use via
+            <code>/server_setup</code>. The channel should be staff-only to keep moderation records
+            private from regular members.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         AI
+    ══════════════════════════════════════════════════ -->
+    <section class="wiki-category animate-reveal" id="cat-ai" data-cat="ai">
+      <div class="wiki-category-header">
+        <div class="wiki-category-icon wiki-category-icon--ai">🤖</div>
+        <h2 class="wiki-category-title">AI ASSISTANT</h2>
+        <span class="wiki-category-count">6 terms</span>
+      </div>
+      <div class="wiki-terms-grid">
+
+        <div class="wiki-term-card" data-cat="ai" data-name="ai assistant chat bot gemini">
+          <div class="wiki-term-name">AI Assistant <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">Built-in AI chatbot</div>
+          <div class="wiki-term-desc">
+            The AI Assistant is Astra's built-in conversational AI, powered by Google Gemini. You
+            can ask it questions, have natural conversations, get help with homework, brainstorm
+            ideas, and much more. The AI is available 24/7 with no rate limits. It works in server
+            channels via <code>/ai chat</code> and in <strong>direct messages</strong> by simply
+            sending Astra any message — no command needed in DMs.
+          </div>
+          <div class="wiki-term-related">
+            <span class="wiki-term-related-label">See also</span>
+            <a class="wiki-term-related-tag" href="#">Gemini</a>
+            <a class="wiki-term-related-tag" href="#">DM AI</a>
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="ai" data-name="gemini google model language">
+          <div class="wiki-term-name">Gemini <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">Google's AI model powering Astra AI</div>
+          <div class="wiki-term-desc">
+            Gemini is the family of large language models (LLMs) built by Google. Astra uses the
+            free tier of Gemini to power its AI assistant feature. Gemini models are capable of
+            understanding and generating natural language, answering questions across a wide range
+            of topics, summarizing text, writing code, and engaging in multi-turn conversations.
+            The free models are used so the AI feature is available to all users at no cost.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="ai" data-name="ai model choose select change">
+          <div class="wiki-term-name">AI Model <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">The AI "brain" being used</div>
+          <div class="wiki-term-desc">
+            Astra supports multiple Gemini model variants. Different models have different
+            strengths — some are faster, some are smarter, and some are better at specific tasks.
+            You can switch between available free models using the <code>/ai model</code> command.
+            Your model preference is saved per-user. If you do not set a model, Astra uses the
+            default recommended model.
+          </div>
+          <div class="wiki-term-example">/ai model → opens model selection menu</div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="ai" data-name="dm ai direct message private chat">
+          <div class="wiki-term-name">DM AI <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">AI in your direct messages</div>
+          <div class="wiki-term-desc">
+            One of Astra's most unique features is that the AI works in <strong>direct messages</strong>
+            without any commands. Simply open a DM with Astra and send any message — the AI responds
+            automatically. This makes Astra function as a personal AI assistant you can access from
+            anywhere in Discord. No server is required; just you and the bot.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="ai" data-name="ai chat command server channel">
+          <div class="wiki-term-name">/ai chat <span class="wiki-term-badge wiki-term-badge--cmd">Command</span></div>
+          <div class="wiki-term-short">/ai chat &lt;message&gt;</div>
+          <div class="wiki-term-desc">
+            The <code>/ai chat</code> command lets you use the AI assistant in server channels rather
+            than DMs. Type your question or message as the prompt argument and Astra will reply with
+            the AI's response in an embed. The response is visible to everyone in the channel.
+            For private conversations, prefer DMing the bot directly.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="ai" data-name="context conversation history memory">
+          <div class="wiki-term-name">Context <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">The AI's conversation memory</div>
+          <div class="wiki-term-desc">
+            Context refers to the conversation history the AI uses to understand follow-up messages.
+            In Astra's DM AI mode, the AI maintains context across your conversation in a session,
+            allowing you to ask follow-up questions naturally. For example, after asking "What is a
+            black hole?" you can follow up with "How big are they?" and the AI understands you mean
+            black holes. Context may reset between new sessions.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         STOCK MARKET
+    ══════════════════════════════════════════════════ -->
+    <section class="wiki-category animate-reveal" id="cat-stocks" data-cat="stocks">
+      <div class="wiki-category-header">
+        <div class="wiki-category-icon wiki-category-icon--stocks">📊</div>
+        <h2 class="wiki-category-title">STOCK MARKET</h2>
+        <span class="wiki-category-count">7 terms</span>
+      </div>
+      <div class="wiki-terms-grid">
+
+        <div class="wiki-term-card" data-cat="stocks" data-name="stock market trade invest simulation">
+          <div class="wiki-term-name">Stock Market <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">Virtual investment simulation</div>
+          <div class="wiki-term-desc">
+            The Astra Stock Market is a simulated real-time stock trading system. Five fictional
+            companies trade at dynamic prices that move up and down over time, mimicking real market
+            behavior. You use your in-bot money (from the economy system) to buy and sell shares.
+            The goal is to buy low and sell high to grow your wealth. The market runs continuously
+            — prices change whether you are online or not.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="stocks" data-name="stock company share ticker symbol">
+          <div class="wiki-term-name">Stock <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">A tradable virtual company share</div>
+          <div class="wiki-term-desc">
+            A stock represents a share in one of the five fictional companies on the Astra market.
+            Each stock has a ticker symbol, a current price, and a price history. Prices fluctuate
+            based on the simulation algorithm. There is no real money involved — all values are
+            virtual economy money. Buying a stock means purchasing one or more shares at the current
+            market price.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="stocks" data-name="buy purchase shares invest order">
+          <div class="wiki-term-name">Buy <span class="wiki-term-badge wiki-term-badge--cmd">Command</span></div>
+          <div class="wiki-term-short">/stockmarket buy &lt;ticker&gt; &lt;shares&gt;</div>
+          <div class="wiki-term-desc">
+            The buy command purchases a specified number of shares in a stock at the current market
+            price. The total cost (price × shares) is deducted from your cash balance. You must
+            have sufficient cash to complete the purchase. Shares are added to your portfolio
+            immediately at the purchase price, which is used later to calculate your profit or loss.
+          </div>
+          <div class="wiki-term-example">/stockmarket buy NOVA 10 → bought 10 shares at 450 each (cost: 4,500)</div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="stocks" data-name="sell trade exit shares profit loss">
+          <div class="wiki-term-name">Sell <span class="wiki-term-badge wiki-term-badge--cmd">Command</span></div>
+          <div class="wiki-term-short">/stockmarket sell &lt;ticker&gt; &lt;shares&gt;</div>
+          <div class="wiki-term-desc">
+            The sell command sells a specified number of shares you own at the current market price.
+            The proceeds (price × shares) are added to your cash balance. If the current price is
+            higher than your purchase price, you make a profit. If it is lower, you take a loss.
+            You cannot sell more shares than you own. Shares are removed from your portfolio on sale.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="stocks" data-name="portfolio holdings owned investments">
+          <div class="wiki-term-name">Portfolio <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">/stockmarket portfolio</div>
+          <div class="wiki-term-desc">
+            Your portfolio is a summary of all the stocks you currently own. It shows each stock's
+            ticker, the number of shares held, your average purchase price, the current market price,
+            and your unrealized profit or loss for each position. The portfolio command gives you a
+            full snapshot of your investment performance. A smart trader checks their portfolio
+            regularly to decide when to sell.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="stocks" data-name="price curve history market value">
+          <div class="wiki-term-name">Price Curve <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">How a stock's price moves over time</div>
+          <div class="wiki-term-desc">
+            Each stock follows a <strong>price curve</strong> — a pattern of price movement driven
+            by the simulation algorithm. Prices can trend upward (bull run), downward (bear run),
+            or fluctuate sideways. The algorithm uses randomized but realistic market mechanics
+            including volatility, trend momentum, and mean reversion. No stock is guaranteed to rise
+            or fall — studying patterns gives a trading edge.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="stocks" data-name="market prices view check">
+          <div class="wiki-term-name">Market View <span class="wiki-term-badge wiki-term-badge--cmd">Command</span></div>
+          <div class="wiki-term-short">/stockmarket market</div>
+          <div class="wiki-term-desc">
+            The market view command shows the current prices, 24-hour price changes, and trend
+            indicators for all five tradable stocks. Use it to spot opportunities — stocks showing
+            strong upward trends may be worth buying, while those falling sharply might be worth
+            selling. The market updates in real time as the simulation progresses.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         GIVEAWAYS
+    ══════════════════════════════════════════════════ -->
+    <section class="wiki-category animate-reveal" id="cat-giveaway" data-cat="giveaway">
+      <div class="wiki-category-header">
+        <div class="wiki-category-icon wiki-category-icon--giveaway">🎉</div>
+        <h2 class="wiki-category-title">GIVEAWAY ENGINE</h2>
+        <span class="wiki-category-count">6 terms</span>
+      </div>
+      <div class="wiki-terms-grid">
+
+        <div class="wiki-term-card" data-cat="giveaway" data-name="giveaway contest prize raffle">
+          <div class="wiki-term-name">Giveaway <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">/giveaway start</div>
+          <div class="wiki-term-desc">
+            A giveaway is a community contest where one or more winners are randomly selected from
+            everyone who entered. Giveaways run for a set time period. Members enter by clicking a
+            reaction button on the giveaway message. When the timer expires, Astra picks the winners
+            automatically and announces them. Giveaways can be for anything — Discord Nitro, in-game
+            items, server roles, or any other prize the server offers.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="giveaway" data-name="draw pick winner end select random">
+          <div class="wiki-term-name">Draw <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">The winner selection moment</div>
+          <div class="wiki-term-desc">
+            The draw is the moment when Astra randomly selects winner(s) from all entries. It
+            happens automatically when the giveaway timer runs out, or can be triggered early
+            with <code>/giveaway end</code>. The draw uses a cryptographically random selection
+            so every entrant has an equal and fair chance. The winners are announced in the same
+            channel as the original giveaway message.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="giveaway" data-name="winner selected chosen prize">
+          <div class="wiki-term-name">Winner <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">User(s) selected in the draw</div>
+          <div class="wiki-term-desc">
+            A winner is any user who was randomly selected during the giveaway draw. Up to 10 winners
+            can be selected in a single giveaway (configured when creating it). Each winner is
+            mentioned in the announcement message and congratulated. If a winner is found to be
+            ineligible or is a bot account, the giveaway can be rerolled to select a new winner.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="giveaway" data-name="reroll new winner pick again">
+          <div class="wiki-term-name">Reroll <span class="wiki-term-badge wiki-term-badge--cmd">Command</span></div>
+          <div class="wiki-term-short">/giveaway reroll &lt;message-id&gt;</div>
+          <div class="wiki-term-desc">
+            Reroll picks a brand new winner for an already-ended giveaway. This is useful if the
+            original winner did not claim their prize, was found to be a bot/alt account, or
+            otherwise should not receive the prize. The reroll selects a new user from the original
+            entry pool (excluding the previous winner). Only staff with the <strong>Manage Server</strong>
+            permission can use this command.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="giveaway" data-name="entry enter join participate react">
+          <div class="wiki-term-name">Entry <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">Participation in a giveaway</div>
+          <div class="wiki-term-desc">
+            An entry is a single user's participation in a giveaway. Members enter by clicking the
+            🎉 reaction button on the giveaway embed. Each user can only enter once per giveaway.
+            You can un-enter by removing your reaction. Bot accounts are automatically filtered out
+            from the entry list to ensure only real users can win.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="giveaway" data-name="duration time timer length minutes hours days">
+          <div class="wiki-term-name">Duration <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">How long the giveaway runs</div>
+          <div class="wiki-term-desc">
+            The duration is how long the giveaway stays open for entries before the draw happens.
+            Astra supports durations from 1 minute up to 7 days. You specify the duration when
+            creating the giveaway using time notation (e.g., <code>1h</code>, <code>30m</code>,
+            <code>2d</code>). The giveaway embed shows a live countdown to the end time. Longer
+            giveaways attract more entries and build more excitement in the community.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         TICKETS
+    ══════════════════════════════════════════════════ -->
+    <section class="wiki-category animate-reveal" id="cat-tickets" data-cat="tickets">
+      <div class="wiki-category-header">
+        <div class="wiki-category-icon wiki-category-icon--tickets">🎫</div>
+        <h2 class="wiki-category-title">SUPPORT TICKETS</h2>
+        <span class="wiki-category-count">5 terms</span>
+      </div>
+      <div class="wiki-terms-grid">
+
+        <div class="wiki-term-card" data-cat="tickets" data-name="ticket support help channel private">
+          <div class="wiki-term-name">Ticket <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">/ticket open</div>
+          <div class="wiki-term-desc">
+            A ticket is a private channel automatically created for a specific user to communicate
+            with the server's staff. Only the user who opened the ticket and staff members (users
+            with the configured staff role) can see and interact in the channel. Tickets are commonly
+            used for ban appeals, reports, rule questions, or any issue that needs private one-on-one
+            attention. Each user can only have one open ticket at a time.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="tickets" data-name="transcript log save chat history archive">
+          <div class="wiki-term-name">Transcript <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">Saved ticket conversation log</div>
+          <div class="wiki-term-desc">
+            A transcript is a saved copy of all messages exchanged in a ticket channel. When a
+            ticket is closed, Astra can optionally save the entire conversation as a transcript
+            sent to a designated log channel. Transcripts preserve the full context of what was
+            discussed for future reference — useful for reviewing staff conduct, tracking recurring
+            issues, or keeping evidence of rule violations.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="tickets" data-name="staff access role permission moderator">
+          <div class="wiki-term-name">Staff Role <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">Role with ticket access</div>
+          <div class="wiki-term-desc">
+            The staff role is the Discord role configured in Astra's server setup that grants
+            access to all ticket channels. Any member with this role can view, read, and respond
+            in every active ticket. When a new ticket is created, Astra automatically gives the
+            staff role permission to see the channel. This is set up via <code>/server_setup</code>.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="tickets" data-name="close ticket end resolve archive">
+          <div class="wiki-term-name">Close <span class="wiki-term-badge wiki-term-badge--cmd">Command</span></div>
+          <div class="wiki-term-short">/ticket close</div>
+          <div class="wiki-term-desc">
+            Closing a ticket ends the support session and deletes the private channel (after saving
+            a transcript if configured). Either the user or any staff member can close a ticket.
+            A confirmation step prevents accidental closures. After closing, the user can open a
+            new ticket if they need further help. The closed ticket is logged to the ticket-log
+            channel with a summary.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="tickets" data-name="add remove user member ticket access">
+          <div class="wiki-term-name">Add / Remove <span class="wiki-term-badge wiki-term-badge--cmd">Command</span></div>
+          <div class="wiki-term-short">/ticket add @user · /ticket remove @user</div>
+          <div class="wiki-term-desc">
+            Staff can add or remove specific users from an existing ticket channel. This is useful
+            for escalating a ticket to a senior moderator, adding a second staff member for complex
+            issues, or removing someone who was accidentally granted access. The targeted user
+            immediately gains or loses visibility of the ticket channel.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         WELCOME
+    ══════════════════════════════════════════════════ -->
+    <section class="wiki-category animate-reveal" id="cat-welcome" data-cat="welcome">
+      <div class="wiki-category-header">
+        <div class="wiki-category-icon wiki-category-icon--welcome">👋</div>
+        <h2 class="wiki-category-title">WELCOME SYSTEM</h2>
+        <span class="wiki-category-count">5 terms</span>
+      </div>
+      <div class="wiki-terms-grid">
+
+        <div class="wiki-term-card" data-cat="welcome" data-name="welcome message greeting new member join">
+          <div class="wiki-term-name">Welcome Message <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">Auto greeting when someone joins</div>
+          <div class="wiki-term-desc">
+            A welcome message is automatically sent to a designated channel whenever a new member
+            joins the server. The message is fully customizable using template variables like
+            <code>{user}</code> (mentions the new member), <code>{server}</code> (server name),
+            and <code>{membercount}</code> (current member count). This creates a warm, personalized
+            first impression for every new joiner. Configured via <code>/welcome setup</code>.
+          </div>
+          <div class="wiki-term-example">Welcome {user} to {server}! You're member #{membercount}!</div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="welcome" data-name="farewell goodbye leave message member">
+          <div class="wiki-term-name">Farewell Message <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">Auto message when someone leaves</div>
+          <div class="wiki-term-desc">
+            Similar to welcome messages, farewell messages are sent when a member leaves (or is
+            kicked/banned from) the server. They use the same template variable system.
+            Farewell messages are optional and can be enabled or disabled independently of welcome
+            messages. They appear in the same configured welcome channel.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="welcome" data-name="auto role assign join new member automatic">
+          <div class="wiki-term-name">Auto-Role <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">Role given automatically on join</div>
+          <div class="wiki-term-desc">
+            Auto-role automatically assigns a specified Discord role to every new member who joins
+            the server. This is commonly used to give new members a "Member" role that grants basic
+            channel access, or a "New Member" role for verification flows. The role is assigned
+            within seconds of joining. If the role assignment fails (e.g., the role is above Astra's
+            role in the hierarchy), Astra logs the error. Configured in <code>/welcome setup</code>.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="welcome" data-name="welcome channel channel where sent">
+          <div class="wiki-term-name">Welcome Channel <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">Channel where greetings appear</div>
+          <div class="wiki-term-desc">
+            The welcome channel is the Discord text channel where welcome and farewell messages
+            are sent. Typically this is a public channel like <code>#welcome</code> or
+            <code>#general</code> so new members are seen by the whole community. You set the
+            welcome channel when configuring the welcome system. Astra must have permission to
+            send messages in that channel.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="welcome" data-name="welcome test preview check simulate">
+          <div class="wiki-term-name">Welcome Test <span class="wiki-term-badge wiki-term-badge--cmd">Command</span></div>
+          <div class="wiki-term-short">/welcome test</div>
+          <div class="wiki-term-desc">
+            The test command triggers a mock welcome message using your own account as the "new
+            member." This lets you preview exactly how your welcome message will look — including
+            how template variables are replaced — before a real member joins. It is highly
+            recommended to run a test after configuring the welcome system to catch any formatting
+            errors.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         SHOP
+    ══════════════════════════════════════════════════ -->
+    <section class="wiki-category animate-reveal" id="cat-shop" data-cat="shop">
+      <div class="wiki-category-header">
+        <div class="wiki-category-icon wiki-category-icon--shop">🛒</div>
+        <h2 class="wiki-category-title">SERVER SHOP</h2>
+        <span class="wiki-category-count">7 terms</span>
+      </div>
+      <div class="wiki-terms-grid">
+
+        <div class="wiki-term-card" data-cat="shop" data-name="shop store buy items server">
+          <div class="wiki-term-name">Shop <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">/shop view</div>
+          <div class="wiki-term-desc">
+            The shop is a per-server virtual store where members can spend their economy money to
+            purchase items and roles. Each server has its own unique shop configured by the server's
+            administrators. Items can grant roles, provide passive income, give cosmetic badges, or
+            be purely consumable. The shop encourages members to stay active and earn money to
+            spend on meaningful rewards.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="shop" data-name="item purchase buy thing product">
+          <div class="wiki-term-name">Item <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">Something buyable in the shop</div>
+          <div class="wiki-term-desc">
+            An item is any purchasable object in the server shop. Items have a name, description,
+            price, type (role, consumable, passive income), and optionally a quantity limit. When
+            you buy an item, it is added to your inventory and any associated effects (like role
+            grants or passive income) are activated. Admins can add, edit, and remove items using
+            the shop admin commands.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="shop" data-name="role item reward discord rank buy">
+          <div class="wiki-term-name">Role Item <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">Shop item that grants a Discord role</div>
+          <div class="wiki-term-desc">
+            A role item is a shop item that automatically grants the buyer a specific Discord role
+            upon purchase. This is useful for creating paid ranks, exclusive access roles, or
+            cosmetic vanity titles that members can earn through economy activity. The role is
+            assigned instantly when the purchase is confirmed. Admins create role items by linking
+            a shop item to a Discord role during setup.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="shop" data-name="consumable use one time single">
+          <div class="wiki-term-name">Consumable <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">Single-use item</div>
+          <div class="wiki-term-desc">
+            A consumable is an item that can only be used once and is removed from your inventory
+            after use. Examples include energy drinks (that temporarily boost XP gain), boost
+            tokens, or event items. Consumables add a one-time benefit and encourage members to
+            keep buying from the shop. They are distinct from role items (permanent) and passive
+            income items (ongoing).
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="shop" data-name="passive income item produce generate money farm">
+          <div class="wiki-term-name">Passive Income Item <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">Item that generates recurring money</div>
+          <div class="wiki-term-desc">
+            Passive income items are shop purchases that generate money over time, collectible via
+            <code>/economy harvest</code>. Examples include farms, mines, or businesses. Once
+            purchased and added to your inventory, they silently accumulate money in the background.
+            The more of these items you own, the more your harvest yields. They represent a
+            long-term investment strategy in the economy.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="shop" data-name="inventory owned items list bag">
+          <div class="wiki-term-name">Inventory <span class="wiki-term-badge wiki-term-badge--cmd">Command</span></div>
+          <div class="wiki-term-short">/shop inventory</div>
+          <div class="wiki-term-desc">
+            Your inventory is a list of all items you currently own from the server shop. It shows
+            the item name, type, quantity, and any associated effects. Consumable items show how
+            many uses remain. Passive income items show their per-hour income rate. Role items show
+            whether the role is currently applied. Use this command to track what you have purchased.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="shop" data-name="sell back refund return item half price">
+          <div class="wiki-term-name">Sell Back <span class="wiki-term-badge wiki-term-badge--cmd">Command</span></div>
+          <div class="wiki-term-short">/shop sell &lt;item&gt;</div>
+          <div class="wiki-term-desc">
+            You can sell items back to the shop for <strong>50% of their original price</strong>.
+            This gives you a partial refund if you no longer want an item. For role items, selling
+            back removes the associated role as well. The refund is added directly to your cash
+            balance. You cannot sell items for more than you paid — the sell-back price is always
+            exactly half the purchase price.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         DISCORD
+    ══════════════════════════════════════════════════ -->
+    <section class="wiki-category animate-reveal" id="cat-discord" data-cat="discord">
+      <div class="wiki-category-header">
+        <div class="wiki-category-icon wiki-category-icon--discord">💬</div>
+        <h2 class="wiki-category-title">DISCORD TERMS</h2>
+        <span class="wiki-category-count">8 terms</span>
+      </div>
+      <div class="wiki-terms-grid">
+
+        <div class="wiki-term-card" data-cat="discord" data-name="slash command / interaction">
+          <div class="wiki-term-name">Slash Command <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">Commands starting with /</div>
+          <div class="wiki-term-desc">
+            Slash commands are the primary way to interact with Astra. Type <code>/</code> in any
+            Discord chat to see a menu of all available commands with descriptions and parameter
+            hints. Slash commands are native Discord interactions — they are registered directly
+            with Discord and work in any server Astra is in, as well as in DMs. They provide
+            autocomplete, built-in validation, and a clean user interface.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="discord" data-name="prefix command dm - hyphen legacy">
+          <div class="wiki-term-name">Prefix Command <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">Commands starting with -</div>
+          <div class="wiki-term-desc">
+            Prefix commands use a hyphen <code>-</code> as a prefix (e.g., <code>-daily</code>,
+            <code>-balance</code>). They are primarily available in <strong>DMs</strong> since
+            slash commands require a server context. Prefix commands are a legacy style but are
+            maintained for DM accessibility. Type <code>-help</code> in a DM with Astra to see
+            the full list of DM prefix commands.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="discord" data-name="embed rich message box formatted color">
+          <div class="wiki-term-name">Embed <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">Formatted rich message box</div>
+          <div class="wiki-term-desc">
+            An embed is a specially formatted message box that Discord bots can send. Astra uses
+            embeds for all its responses — they have a colored left border (Astra's brand color),
+            a title, description, fields, and sometimes a footer. Embeds make bot responses easy
+            to read and visually distinct from regular chat messages. If Astra lacks the
+            <strong>Embed Links</strong> permission, its responses will be plain text instead.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="discord" data-name="server guild community discord">
+          <div class="wiki-term-name">Server (Guild) <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">A Discord community/guild</div>
+          <div class="wiki-term-desc">
+            In Discord's technical API, a "server" is called a "guild." Astra uses both terms
+            interchangeably. A server is a collection of channels, members, and roles managed by
+            its owner and admins. Astra's features like the shop, leveling leaderboard, giveaways,
+            and tickets are all scoped to individual servers. Your economy balance, however, is
+            global across all servers.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="discord" data-name="permission allow deny role bot">
+          <div class="wiki-term-name">Permission <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">What a user or bot is allowed to do</div>
+          <div class="wiki-term-desc">
+            Permissions control what actions users and bots can perform in a Discord server.
+            Astra requires specific permissions to operate — for example, <strong>Manage Messages</strong>
+            for purge, <strong>Kick Members</strong> for kick, and <strong>Ban Members</strong> for
+            ban. If Astra is missing a required permission, the command will fail and tell you what
+            is needed. When adding Astra to a server, it is recommended to use the official invite
+            link which requests all necessary permissions upfront.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="discord" data-name="role rank color permission group">
+          <div class="wiki-term-name">Role <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">A labeled group with permissions</div>
+          <div class="wiki-term-desc">
+            A Discord role is a named label assigned to members that can grant or restrict
+            permissions, give a color in chat, and group members visibly in the member list.
+            Astra interacts heavily with roles — granting level reward roles, shop role items,
+            auto-roles for new members, and checking staff roles for ticket access. Role positions
+            in the hierarchy matter: Astra can only assign and manage roles that are positioned
+            below its own highest role.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="discord" data-name="channel text voice category room">
+          <div class="wiki-term-name">Channel <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">A room within a Discord server</div>
+          <div class="wiki-term-desc">
+            Channels are the rooms within a Discord server where conversations happen. Text channels
+            support messages, embeds, and commands. Astra creates ticket channels dynamically (one
+            per open ticket) and posts announcements to configured channels (mod log, welcome channel,
+            ticket log). Astra needs <strong>View Channel</strong>, <strong>Send Messages</strong>,
+            and <strong>Embed Links</strong> permissions in any channel it needs to use.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="discord" data-name="dm direct message private inbox">
+          <div class="wiki-term-name">DM (Direct Message) <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">Private chat between you and Astra</div>
+          <div class="wiki-term-desc">
+            A DM (Direct Message) is a private one-on-one conversation between a user and Astra
+            that exists outside any server. In Astra's DM mode, the bot supports economy prefix
+            commands (-daily, -balance, etc.) and the AI assistant responds automatically to any
+            message. This makes Astra useful even when you are not in a server. To start a DM,
+            click on Astra's profile and select "Message."
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         BOT / TECH
+    ══════════════════════════════════════════════════ -->
+    <section class="wiki-category animate-reveal" id="cat-bot" data-cat="bot">
+      <div class="wiki-category-header">
+        <div class="wiki-category-icon wiki-category-icon--bot">⚙️</div>
+        <h2 class="wiki-category-title">BOT &amp; TECH TERMS</h2>
+        <span class="wiki-category-count">7 terms</span>
+      </div>
+      <div class="wiki-terms-grid">
+
+        <div class="wiki-term-card" data-cat="bot" data-name="shard sharding split scale instance">
+          <div class="wiki-term-name">Shard / Sharding <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">How Astra scales to many servers</div>
+          <div class="wiki-term-desc">
+            Sharding is the process of splitting a large Discord bot into multiple processes
+            (shards) so it can handle more servers than a single process allows. Discord requires
+            bots in 2,500+ servers to shard. Astra uses an automatic sharding manager — it launches
+            the correct number of shards based on server count. Each shard handles a subset of
+            servers. Users never notice sharding; it is transparent. Shard 0 also handles global
+            command synchronization.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="bot" data-name="integration profile user app install">
+          <div class="wiki-term-name">User App Integration <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">Add Astra to your profile (not a server)</div>
+          <div class="wiki-term-desc">
+            Discord's "User Apps" feature lets you install Astra directly to your profile rather
+            than a server. Once installed, you can use Astra commands in <strong>any</strong> server
+            you are in — even servers where Astra has not been added. The "Add to Profile" button
+            installs Astra as a user app. This is a different install path from the traditional
+            bot add flow and enables broader personal use.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="bot" data-name="latency ping response time ms speed">
+          <div class="wiki-term-name">Latency / Ping <span class="wiki-term-badge wiki-term-badge--cmd">Command</span></div>
+          <div class="wiki-term-short">/system ping</div>
+          <div class="wiki-term-desc">
+            Latency (ping) measures how long it takes for Astra to communicate with Discord's servers.
+            It is reported in milliseconds (ms). A lower number is better. <code>/system ping</code>
+            shows both the bot's WebSocket latency (the heartbeat connection) and API round-trip
+            time (how long a command takes to complete). High ping (>500ms) may indicate network
+            issues or high server load.
+          </div>
+          <div class="wiki-term-example">/system ping → WebSocket: 48ms | API: 124ms</div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="bot" data-name="uptime online running status health">
+          <div class="wiki-term-name">Uptime <span class="wiki-term-badge wiki-term-badge--cmd">Command</span></div>
+          <div class="wiki-term-short">/system status</div>
+          <div class="wiki-term-desc">
+            Uptime is how long Astra has been continuously running without a restart or crash.
+            The <code>/system status</code> command shows the current uptime, memory usage, CPU
+            load, and shard count. A high uptime indicates a stable, healthy bot. Astra is hosted
+            on Railway for reliable 24/7 operation. Planned restarts (for updates) are the most
+            common cause of uptime resets.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="bot" data-name="database sql sqlite postgres store data">
+          <div class="wiki-term-name">Database <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">Where all user data is stored</div>
+          <div class="wiki-term-desc">
+            Astra stores all persistent data (user balances, levels, mod cases, shop inventories,
+            giveaway entries, etc.) in a database. In development it uses SQLite (a local file);
+            in production it uses PostgreSQL (a robust cloud database via Supabase). The database
+            is the reason your economy balance, level, and mod history persist across restarts and
+            server changes. Data is never stored in memory alone.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="bot" data-name="server setup configuration admin setup wizard">
+          <div class="wiki-term-name">Server Setup <span class="wiki-term-badge wiki-term-badge--cmd">Command</span></div>
+          <div class="wiki-term-short">/server_setup</div>
+          <div class="wiki-term-desc">
+            The server setup command is a configuration wizard for server administrators. It lets you
+            configure all of Astra's per-server settings in one place: set the mod log channel,
+            configure the ticket staff role and category, set the welcome channel and message, and
+            more. It requires <strong>Administrator</strong> permission in the server. A full reset
+            option is also available to clear all server-specific settings.
+          </div>
+        </div>
+
+        <div class="wiki-term-card" data-cat="bot" data-name="version update release current changelog">
+          <div class="wiki-term-name">Version <span class="wiki-term-badge wiki-term-badge--concept">Concept</span></div>
+          <div class="wiki-term-short">Current Astra version: v9.0.0 Quantum</div>
+          <div class="wiki-term-desc">
+            Astra follows semantic versioning (MAJOR.MINOR.PATCH). The current version is
+            <strong>v9.0.0 Quantum</strong>. Each version may include new features (minor/major
+            bumps) or bug fixes and security patches (patch bumps). The version is visible on the
+            website footer and via the <code>/system update</code> command. See the full changelog
+            on the <a href="changelog.html" style="color:var(--color-primary)">Updates page</a>.
+          </div>
+          <div class="wiki-term-example">/system update → v9.0.0 Quantum — April 30, 2026</div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer-astra">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand__logo">
+            <img src="assets/images/astra-logo.png" alt="Astra" width="32" height="32">
+            ASTRA
+          </div>
+          <p class="footer-brand__desc">Free Discord bot for moderation, economy, leveling, and AI — built for every server.</p>
+        </div>
+        <div>
+          <h4 class="footer-head">Product</h4>
+          <div class="footer-links">
+            <a href="features.html" class="footer-link">Features</a>
+            <a href="commands.html" class="footer-link">Commands</a>
+            <a href="docs.html" class="footer-link">Docs</a>
+            <a href="wiki.html" class="footer-link">Wiki</a>
+            <a href="changelog.html" class="footer-link">Updates</a>
+          </div>
+        </div>
+        <div>
+          <h4 class="footer-head">Help</h4>
+          <div class="footer-links">
+            <a href="support.html" class="footer-link">Support</a>
+            <a href="faq.html" class="footer-link">FAQ</a>
+          </div>
+        </div>
+        <div>
+          <h4 class="footer-head">Legal</h4>
+          <div class="footer-links">
+            <a href="privacy.html" class="footer-link">Privacy Policy</a>
+            <a href="terms.html" class="footer-link">Terms of Service</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Astra. All rights reserved.</span>
+        <span>v9.0.0 Quantum</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* ── Navbar ── */
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('nav-astra--scrolled', window.scrollY > 50);
+    });
+
+    /* ── Reveal animation ── */
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.05 });
+    document.querySelectorAll('.animate-reveal').forEach(el => obs.observe(el));
+
+    /* ── Category filters ── */
+    const filters = document.querySelectorAll('.wiki-filter');
+    const cards   = document.querySelectorAll('.wiki-term-card');
+    const cats    = document.querySelectorAll('.wiki-category');
+    const noRes   = document.getElementById('noResults');
+    let currentCat = 'all';
+
+    filters.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filters.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentCat = btn.dataset.cat;
+        applyFilter();
+      });
+    });
+
+    function applyFilter() {
+      const query = document.getElementById('wikiSearch').value.toLowerCase().trim();
+      let visible = 0;
+
+      cards.forEach(card => {
+        const catMatch = currentCat === 'all' || card.dataset.cat === currentCat;
+        const searchMatch = !query || card.dataset.name.includes(query) ||
+          card.textContent.toLowerCase().includes(query);
+        if (catMatch && searchMatch) {
+          card.classList.remove('hidden');
+          visible++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      /* Hide empty category sections */
+      cats.forEach(sec => {
+        const secCat = sec.dataset.cat;
+        const catVisible = currentCat === 'all' || currentCat === secCat;
+        const hasVisible = [...sec.querySelectorAll('.wiki-term-card:not(.hidden)')].length > 0;
+        sec.classList.toggle('all-hidden', !catVisible || !hasVisible);
+      });
+
+      noRes.classList.toggle('show', visible === 0);
+      const countEl = document.getElementById('searchCount');
+      countEl.textContent = query ? `${visible} result${visible !== 1 ? 's' : ''}` : '';
+    }
+
+    /* ── Search ── */
+    document.getElementById('wikiSearch').addEventListener('input', applyFilter);
+  </script>
+</body>
+</html>

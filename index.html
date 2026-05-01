@@ -4,10 +4,360 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Astra — The Discord Bot Built for Everyone</title>
-  <meta name="description" content="Astra is a free Discord bot with moderation, leveling, economy, AI chat, giveaways, stock market, and more.">
+  <meta name="description" content="Astra is a free Discord bot with moderation, leveling, economy, AI chat, giveaways, stock market, and more. Free forever. Works in servers and DMs.">
+  <meta property="og:title" content="Astra — The Discord Bot Built for Everyone">
+  <meta property="og:description" content="Free Discord bot with moderation, leveling, economy, AI chat, giveaways, stock market, and more.">
+  <meta property="og:type" content="website">
   <link rel="icon" type="image/png" href="assets/images/astra-logo.png">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
+  <style>
+    /* ── FLOATING PARTICLES ──────────────────────────────────── */
+    .particles-wrap {
+      position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+    }
+    .particle {
+      position: absolute; border-radius: 50%;
+      animation: particleDrift linear infinite;
+      opacity: 0;
+    }
+    @keyframes particleDrift {
+      0%   { opacity: 0; transform: translateY(0) scale(0); }
+      10%  { opacity: 0.6; }
+      90%  { opacity: 0.3; }
+      100% { opacity: 0; transform: translateY(-100vh) scale(1.5); }
+    }
+
+    /* ── HERO BADGE PILL ──────────────────────────────────────── */
+    .version-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 16px;
+      background: rgba(0,255,209,0.06);
+      border: 1px solid rgba(0,255,209,0.22);
+      border-radius: var(--radius-full);
+      font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 2px;
+      color: var(--color-primary); margin-bottom: 32px;
+      animation: fadeInUp 0.7s ease backwards;
+    }
+    .version-pill-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--color-primary);
+      box-shadow: 0 0 8px var(--color-primary);
+      animation: pulse-glow 1.8s infinite;
+    }
+
+    /* ── HERO STATS ROW ─────────────────────────────────────── */
+    .hero-stat-row {
+      display: flex; flex-wrap: wrap; gap: 32px;
+      margin-top: 56px;
+    }
+    .hero-stat-item {
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .hero-stat-val {
+      font-family: var(--font-heading); font-size: 1.6rem; font-weight: 900;
+      background: var(--grad-astra);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-stat-lbl {
+      font-size: 0.72rem; color: var(--color-text-muted);
+      text-transform: uppercase; letter-spacing: 1.5px;
+    }
+
+    /* ── FEATURE SECTION V2 ─────────────────────────────────── */
+    .features-v2-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      background: var(--glass-border);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .feat-v2-cell {
+      background: var(--color-bg);
+      padding: 44px 36px;
+      transition: background var(--transition-base);
+      position: relative;
+      overflow: hidden;
+    }
+    .feat-v2-cell::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0;
+      width: 0; height: 2px;
+      background: var(--grad-astra);
+      transition: width 0.4s ease;
+    }
+    .feat-v2-cell:hover { background: rgba(0,255,209,0.025); }
+    .feat-v2-cell:hover::after { width: 100%; }
+    .feat-v2-icon { font-size: 2.2rem; margin-bottom: 22px; display: block; }
+    .feat-v2-title {
+      font-family: var(--font-heading); font-size: 0.95rem;
+      color: #fff; margin-bottom: 12px; letter-spacing: 1px;
+    }
+    .feat-v2-desc {
+      font-size: 0.86rem; color: var(--color-text-dim);
+      line-height: 1.65; margin-bottom: 20px;
+    }
+    .feat-v2-bullets {
+      list-style: none; padding: 0; margin: 0;
+      border-top: 1px solid var(--glass-border); padding-top: 18px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .feat-v2-bullet {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.8rem; color: var(--color-text-muted);
+    }
+    .feat-v2-bullet::before {
+      content: '';
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--color-primary);
+      box-shadow: 0 0 6px var(--color-primary);
+      flex-shrink: 0;
+    }
+    .feat-v2-tag {
+      display: inline-block; margin-top: 16px;
+      padding: 3px 10px; border-radius: 4px;
+      font-size: 0.62rem; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 1px;
+      background: rgba(0,255,209,0.08); color: var(--color-primary);
+      border: 1px solid rgba(0,255,209,0.18);
+    }
+    .feat-v2-tag--accent {
+      background: rgba(247,37,133,0.08); color: var(--color-accent);
+      border-color: rgba(247,37,133,0.25);
+    }
+    .feat-v2-tag--secondary {
+      background: rgba(181,23,158,0.1); color: var(--color-secondary);
+      border-color: rgba(181,23,158,0.28);
+    }
+    .feat-v2-tag--success {
+      background: rgba(6,214,160,0.1); color: var(--color-success);
+      border-color: rgba(6,214,160,0.28);
+    }
+
+    /* ── SHOWCASE TABS ─────────────────────────────────────── */
+    .showcase-tabs {
+      display: flex; gap: 4px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      padding: 6px; margin-bottom: 40px;
+      width: fit-content;
+    }
+    .showcase-tab {
+      padding: 10px 22px;
+      border-radius: 10px;
+      border: none; background: transparent;
+      color: var(--color-text-muted);
+      font-family: var(--font-sans); font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; transition: var(--transition-base);
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+    .showcase-tab:hover { color: #fff; }
+    .showcase-tab.active {
+      background: rgba(0,255,209,0.1);
+      color: var(--color-primary);
+      border: 1px solid rgba(0,255,209,0.2);
+    }
+    .showcase-panel { display: none; }
+    .showcase-panel.active { display: grid; }
+
+    /* ── TESTIMONIALS ───────────────────────────────────────── */
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .testimonial-card {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      padding: 32px;
+      transition: var(--transition-base);
+    }
+    .testimonial-card:hover {
+      border-color: rgba(0,255,209,0.2);
+      transform: translateY(-4px);
+    }
+    .testimonial-stars {
+      color: #ffd60a; font-size: 0.9rem;
+      margin-bottom: 16px; letter-spacing: 2px;
+    }
+    .testimonial-text {
+      color: var(--color-text-dim);
+      font-size: 0.9rem; line-height: 1.75;
+      margin-bottom: 24px;
+      font-style: italic;
+    }
+    .testimonial-author {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .testimonial-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--grad-astra);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; font-weight: 700; color: #000;
+      font-family: var(--font-heading);
+      flex-shrink: 0;
+    }
+    .testimonial-name { font-weight: 700; color: #fff; font-size: 0.9rem; }
+    .testimonial-role { font-size: 0.75rem; color: var(--color-text-muted); }
+
+    /* ── COMMUNITY BAND ─────────────────────────────────────── */
+    .community-band {
+      background: linear-gradient(135deg, rgba(0,255,209,0.04) 0%, rgba(181,23,158,0.04) 100%);
+      border-top: 1px solid var(--glass-border);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 80px 0;
+    }
+    .community-grid {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 60px; align-items: center;
+    }
+    .community-links {
+      display: flex; gap: 16px; flex-wrap: wrap; margin-top: 32px;
+    }
+    .community-link {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 12px 24px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--glass-border);
+      background: rgba(255,255,255,0.03);
+      color: var(--color-text-dim);
+      text-decoration: none; font-weight: 600;
+      font-size: 0.88rem; transition: var(--transition-base);
+    }
+    .community-link:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+      background: rgba(0,255,209,0.04);
+    }
+    .community-link--discord {
+      background: rgba(88,101,242,0.08);
+      border-color: rgba(88,101,242,0.3);
+      color: #7289da;
+    }
+    .community-link--discord:hover {
+      background: rgba(88,101,242,0.15);
+      border-color: #7289da;
+      color: #fff;
+    }
+    .community-link--github {
+      background: rgba(255,255,255,0.03);
+      border-color: rgba(255,255,255,0.15);
+      color: var(--color-text-dim);
+    }
+    .community-link--github:hover {
+      background: rgba(255,255,255,0.07);
+      border-color: rgba(255,255,255,0.3);
+      color: #fff;
+    }
+    .community-big-number {
+      font-family: var(--font-heading); font-size: 5rem; font-weight: 900;
+      line-height: 1;
+      background: var(--grad-astra);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .community-big-label {
+      font-size: 0.75rem; color: var(--color-text-muted);
+      text-transform: uppercase; letter-spacing: 2px;
+      margin-top: 8px;
+    }
+
+    /* ── QUICK-START CARDS ───────────────────────────────────── */
+    .quick-start-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+    }
+    .qs-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: 32px 24px;
+      text-align: center;
+      transition: var(--transition-base);
+    }
+    .qs-card:hover {
+      border-color: rgba(0,255,209,0.2);
+      transform: translateY(-6px);
+      background: rgba(0,255,209,0.015);
+    }
+    .qs-number {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: rgba(0,255,209,0.1);
+      border: 1px solid rgba(0,255,209,0.2);
+      color: var(--color-primary);
+      font-family: var(--font-heading); font-weight: 900; font-size: 1.2rem;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+    }
+    .qs-title {
+      font-family: var(--font-heading); font-size: 0.9rem;
+      margin-bottom: 10px; letter-spacing: 0.5px;
+    }
+    .qs-desc {
+      font-size: 0.83rem; color: var(--color-text-dim); line-height: 1.65;
+    }
+    .qs-icon { font-size: 1.8rem; margin-bottom: 16px; display: block; }
+
+    /* ── LATEST UPDATES STRIP ───────────────────────────────── */
+    .updates-strip {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .update-chip {
+      display: flex; align-items: flex-start; gap: 16px;
+      padding: 24px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      transition: var(--transition-base);
+    }
+    .update-chip:hover {
+      border-color: rgba(0,255,209,0.2);
+      background: rgba(0,255,209,0.015);
+    }
+    .update-chip-ver {
+      font-family: var(--font-mono); font-size: 0.72rem;
+      color: var(--color-primary);
+      background: rgba(0,255,209,0.08);
+      border: 1px solid rgba(0,255,209,0.15);
+      border-radius: 6px;
+      padding: 4px 8px; flex-shrink: 0; margin-top: 2px;
+    }
+    .update-chip-title {
+      font-weight: 700; font-size: 0.9rem; margin-bottom: 4px;
+    }
+    .update-chip-date {
+      font-size: 0.75rem; color: var(--color-text-muted); margin-bottom: 8px;
+    }
+    .update-chip-desc {
+      font-size: 0.82rem; color: var(--color-text-dim); line-height: 1.6;
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .features-v2-grid { grid-template-columns: repeat(2, 1fr); }
+      .testimonials-grid { grid-template-columns: 1fr 1fr; }
+      .quick-start-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .features-v2-grid { grid-template-columns: 1fr; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .community-grid { grid-template-columns: 1fr; }
+      .updates-strip { grid-template-columns: 1fr; }
+      .quick-start-grid { grid-template-columns: 1fr 1fr; }
+      .showcase-tabs { overflow-x: auto; }
+    }
+    @media (max-width: 500px) {
+      .quick-start-grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
   <div class="astra-mesh"></div>
@@ -24,6 +374,7 @@
         <a href="features.html" class="nav-link">Features</a>
         <a href="commands.html" class="nav-link">Commands</a>
         <a href="docs.html" class="nav-link">Docs</a>
+        <a href="wiki.html" class="nav-link">Wiki</a>
         <a href="changelog.html" class="nav-link">Updates</a>
         <a href="support.html" class="nav-link">Support</a>
         <a href="staff.html" class="nav-link">Staff</a>
@@ -36,22 +387,24 @@
   </nav>
 
   <!-- HERO -->
-  <header class="hero-wrap">
+  <header class="hero-wrap" style="position:relative;">
+    <div class="particles-wrap" id="particles"></div>
     <div class="hero-glow-a"></div>
     <div class="hero-glow-b"></div>
-    <div class="container">
+    <div class="container" style="position:relative;z-index:2;">
       <div class="animate-reveal">
-        <div class="hero-eyebrow">
-          <span class="hero-eyebrow-dot"></span>
-          v9.0.0 Now Live — Free Forever
+        <div class="version-pill">
+          <span class="version-pill-dot"></span>
+          v9.0.0 Quantum — Now Live · Free Forever
         </div>
         <h1 class="hero-h1">
           <span class="line-dim">The Discord Bot</span>
           <span class="line-bright">Built For<br>Everyone</span>
         </h1>
         <p class="hero-sub">
-          Moderation, leveling, economy, AI chat, giveaways, and a stock market —
+          Moderation, leveling, economy, AI chat, giveaways, and a live stock market —
           all in one free bot that works in servers <em>and</em> DMs.
+          No paywalls. No setup required. Always free.
         </p>
         <div class="hero-cta">
           <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands" class="btn-astra btn-astra--primary">
@@ -60,7 +413,31 @@
           <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&response_type=code&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D1494879804615561238&integration_type=1&scope=identify+applications.commands" class="btn-astra btn-astra--outline">
             Add to Profile 👤
           </a>
-          <a href="features.html" class="btn-astra btn-astra--outline">See Features →</a>
+          <a href="wiki.html" class="btn-astra btn-astra--outline">Read Wiki →</a>
+        </div>
+
+        <!-- Inline stats -->
+        <div class="hero-stat-row">
+          <div class="hero-stat-item">
+            <span class="hero-stat-val">25+</span>
+            <span class="hero-stat-lbl">Slash Commands</span>
+          </div>
+          <div class="hero-stat-item">
+            <span class="hero-stat-val">12</span>
+            <span class="hero-stat-lbl">Feature Systems</span>
+          </div>
+          <div class="hero-stat-item">
+            <span class="hero-stat-val">80+</span>
+            <span class="hero-stat-lbl">Wiki Terms</span>
+          </div>
+          <div class="hero-stat-item">
+            <span class="hero-stat-val">Free</span>
+            <span class="hero-stat-lbl">Always &amp; Forever</span>
+          </div>
+          <div class="hero-stat-item">
+            <span class="hero-stat-val">DM+</span>
+            <span class="hero-stat-lbl">Works Everywhere</span>
+          </div>
         </div>
       </div>
     </div>
@@ -86,109 +463,139 @@
     </div>
   </div>
 
-  <!-- FEATURE GRID -->
+  <!-- FEATURE GRID V2 -->
   <section class="section">
     <div class="container">
       <div class="text-center mb-2xl animate-reveal">
         <span class="hero-badge-text text-secondary">Everything You Need</span>
         <h2 class="h2-astra mt-sm">ALL IN ONE BOT</h2>
-      </div>
-
-      <div class="features-grid animate-reveal">
-        <div class="feat-cell">
-          <span class="feat-icon">🛡️</span>
-          <div class="feat-title">MODERATION</div>
-          <div class="feat-desc">Kick, ban, timeout, warn, purge. Case tracking with full history. DM warnings sent automatically.</div>
-          <span class="feat-tag">Staff Tools</span>
-        </div>
-        <div class="feat-cell">
-          <span class="feat-icon">📈</span>
-          <div class="feat-title">LEVELING</div>
-          <div class="feat-desc">XP earned by chatting with a balanced curve. Level-up announcements, role rewards, leaderboard.</div>
-          <span class="feat-tag">Engagement</span>
-        </div>
-        <div class="feat-cell">
-          <span class="feat-icon">💰</span>
-          <div class="feat-title">ECONOMY</div>
-          <div class="feat-desc">Daily rewards, work, mining, gambling, slots, robbery. Bank money, send it to friends, earn passively.</div>
-          <span class="feat-tag">Fun</span>
-        </div>
-        <div class="feat-cell">
-          <span class="feat-icon">🤖</span>
-          <div class="feat-title">AI ASSISTANT</div>
-          <div class="feat-desc">Chat with AI directly in your DMs. Choose from multiple free models. Always available, no server needed.</div>
-          <span class="feat-tag feat-tag--ai">AI-Powered</span>
-        </div>
-        <div class="feat-cell">
-          <span class="feat-icon">🎉</span>
-          <div class="feat-title">GIVEAWAYS</div>
-          <div class="feat-desc">Create timed giveaways, pick winners automatically, reroll with one command. Up to 10 winners per draw.</div>
-          <span class="feat-tag">Community</span>
-        </div>
-        <div class="feat-cell">
-          <span class="feat-icon">📊</span>
-          <div class="feat-title">STOCK MARKET</div>
-          <div class="feat-desc">5 live-simulated stocks with real price curves. Buy, sell, and track your portfolio with economy money.</div>
-          <span class="feat-tag feat-tag--new">Markets</span>
-        </div>
-        <div class="feat-cell">
-          <span class="feat-icon">🎫</span>
-          <div class="feat-title">SUPPORT TICKETS</div>
-          <div class="feat-desc">Private channels per user. Staff-only access. Add or remove people from tickets with a clean close flow.</div>
-          <span class="feat-tag">Support</span>
-        </div>
-        <div class="feat-cell">
-          <span class="feat-icon">👋</span>
-          <div class="feat-title">WELCOME SYSTEM</div>
-          <div class="feat-desc">Custom welcome and farewell messages. Auto-assign roles on join. Personalize with user and server tags.</div>
-          <span class="feat-tag">Automation</span>
-        </div>
-        <div class="feat-cell">
-          <span class="feat-icon">🛒</span>
-          <div class="feat-title">SERVER SHOP</div>
-          <div class="feat-desc">Per-server item shops. Role rewards, passive income items, consumables. Full admin controls.</div>
-          <span class="feat-tag feat-tag--new">Economy+</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section bg-alt">
-    <div class="container">
-      <div class="text-center mb-2xl animate-reveal">
-        <span class="hero-badge-text text-secondary">Why Astra</span>
-        <h2 class="h2-astra mt-sm">Built for every community</h2>
-        <p class="text-dim max-w-700 mx-auto">
-          Astra is designed to keep your server safe, active, and fun — without premium paywalls or confusing setup. Everything is ready from day one.
+        <p class="text-dim max-w-700 mx-auto" style="margin-top:12px;">
+          Nine powerful systems — all free, all ready from the moment Astra joins your server.
         </p>
       </div>
 
-      <div class="highlight-grid animate-reveal">
-        <div class="highlight-card">
-          <span class="highlight-icon">🚀</span>
-          <h3>Instant setup</h3>
-          <p>No configuration required to start using moderation, economy, giveaways, and AI. Add Astra and begin right away.</p>
+      <div class="features-v2-grid animate-reveal">
+        <div class="feat-v2-cell">
+          <span class="feat-v2-icon">🛡️</span>
+          <div class="feat-v2-title">MODERATION</div>
+          <div class="feat-v2-desc">Keep your server safe with a full suite of tools. Every action is logged with a unique case number.</div>
+          <ul class="feat-v2-bullets">
+            <li class="feat-v2-bullet">Ban, kick, warn, timeout, purge</li>
+            <li class="feat-v2-bullet">Automatic DM notifications</li>
+            <li class="feat-v2-bullet">Full case history per user</li>
+            <li class="feat-v2-bullet">Role hierarchy protection</li>
+          </ul>
+          <span class="feat-v2-tag">Staff Tools</span>
         </div>
-        <div class="highlight-card">
-          <span class="highlight-icon">🧠</span>
-          <h3>Smart automation</h3>
-          <p>Automated moderation, leveling, and server rewards help your community stay engaged while staff stays in control.</p>
+
+        <div class="feat-v2-cell">
+          <span class="feat-v2-icon">📈</span>
+          <div class="feat-v2-title">LEVELING</div>
+          <div class="feat-v2-desc">Members earn XP automatically by chatting. Climb ranks, earn role rewards, compete on leaderboards.</div>
+          <ul class="feat-v2-bullets">
+            <li class="feat-v2-bullet">XP earned by chatting (anti-spam)</li>
+            <li class="feat-v2-bullet">Configurable role rewards per level</li>
+            <li class="feat-v2-bullet">Level-up announcements</li>
+            <li class="feat-v2-bullet">Server-specific leaderboards</li>
+          </ul>
+          <span class="feat-v2-tag feat-v2-tag--success">Engagement</span>
         </div>
-        <div class="highlight-card">
-          <span class="highlight-icon">💬</span>
-          <h3>DM-friendly</h3>
-          <p>Use bot commands and AI chat privately in DMs as well as in server channels. A personal Discord assistant for every user.</p>
+
+        <div class="feat-v2-cell">
+          <span class="feat-v2-icon">💰</span>
+          <div class="feat-v2-title">ECONOMY</div>
+          <div class="feat-v2-desc">Full virtual economy with banking, gambling, work, and passive income. Build wealth over time.</div>
+          <ul class="feat-v2-bullets">
+            <li class="feat-v2-bullet">Daily rewards with streak bonuses</li>
+            <li class="feat-v2-bullet">Work, harvest, rob, gamble, slots</li>
+            <li class="feat-v2-bullet">Bank system (safe from robbery)</li>
+            <li class="feat-v2-bullet">Global balance across all servers</li>
+          </ul>
+          <span class="feat-v2-tag feat-v2-tag--accent">Fun</span>
         </div>
-        <div class="highlight-card">
-          <span class="highlight-icon">💎</span>
-          <h3>Forever free</h3>
-          <p>All core systems are available at no cost. No subscriptions, no premium limits, and no hidden fees.</p>
+
+        <div class="feat-v2-cell">
+          <span class="feat-v2-icon">🤖</span>
+          <div class="feat-v2-title">AI ASSISTANT</div>
+          <div class="feat-v2-desc">Google Gemini AI built into Astra. Chat in DMs without any commands — just send a message.</div>
+          <ul class="feat-v2-bullets">
+            <li class="feat-v2-bullet">Powered by free Google Gemini models</li>
+            <li class="feat-v2-bullet">Works in DMs with no commands needed</li>
+            <li class="feat-v2-bullet">Multiple AI models to choose from</li>
+            <li class="feat-v2-bullet">Available 24/7 with no rate limits</li>
+          </ul>
+          <span class="feat-v2-tag feat-v2-tag--secondary">AI-Powered</span>
+        </div>
+
+        <div class="feat-v2-cell">
+          <span class="feat-v2-icon">🎉</span>
+          <div class="feat-v2-title">GIVEAWAYS</div>
+          <div class="feat-v2-desc">Run community contests in seconds. Winners are picked fairly and automatically at the end time.</div>
+          <ul class="feat-v2-bullets">
+            <li class="feat-v2-bullet">Timed giveaways from 1m to 7d</li>
+            <li class="feat-v2-bullet">Up to 10 winners per draw</li>
+            <li class="feat-v2-bullet">Manual end &amp; reroll support</li>
+            <li class="feat-v2-bullet">Bot/alt account filtering</li>
+          </ul>
+          <span class="feat-v2-tag">Community</span>
+        </div>
+
+        <div class="feat-v2-cell">
+          <span class="feat-v2-icon">📊</span>
+          <div class="feat-v2-title">STOCK MARKET</div>
+          <div class="feat-v2-desc">5 live-simulated stocks with realistic price curves. Trade with your economy money.</div>
+          <ul class="feat-v2-bullets">
+            <li class="feat-v2-bullet">5 tradable stocks, prices update live</li>
+            <li class="feat-v2-bullet">Buy, sell, and track your portfolio</li>
+            <li class="feat-v2-bullet">Realistic bull &amp; bear market cycles</li>
+            <li class="feat-v2-bullet">Trade using economy money</li>
+          </ul>
+          <span class="feat-v2-tag feat-v2-tag--secondary">Markets</span>
+        </div>
+
+        <div class="feat-v2-cell">
+          <span class="feat-v2-icon">🎫</span>
+          <div class="feat-v2-title">SUPPORT TICKETS</div>
+          <div class="feat-v2-desc">Private staff-member channels for support. Transcripts saved on close for a full audit trail.</div>
+          <ul class="feat-v2-bullets">
+            <li class="feat-v2-bullet">Private channel per user</li>
+            <li class="feat-v2-bullet">Automatic staff role access</li>
+            <li class="feat-v2-bullet">Add / remove users mid-ticket</li>
+            <li class="feat-v2-bullet">Transcript saved on close</li>
+          </ul>
+          <span class="feat-v2-tag">Support</span>
+        </div>
+
+        <div class="feat-v2-cell">
+          <span class="feat-v2-icon">👋</span>
+          <div class="feat-v2-title">WELCOME SYSTEM</div>
+          <div class="feat-v2-desc">Greet every new member automatically with personalized messages and auto-assigned roles.</div>
+          <ul class="feat-v2-bullets">
+            <li class="feat-v2-bullet">Fully customizable welcome messages</li>
+            <li class="feat-v2-bullet">Template variables for personalization</li>
+            <li class="feat-v2-bullet">Auto-role on join</li>
+            <li class="feat-v2-bullet">Farewell messages on leave</li>
+          </ul>
+          <span class="feat-v2-tag">Automation</span>
+        </div>
+
+        <div class="feat-v2-cell">
+          <span class="feat-v2-icon">🛒</span>
+          <div class="feat-v2-title">SERVER SHOP</div>
+          <div class="feat-v2-desc">Per-server item store. Members buy roles, earn passive income, and collect unique items.</div>
+          <ul class="feat-v2-bullets">
+            <li class="feat-v2-bullet">Role items, consumables, passive income</li>
+            <li class="feat-v2-bullet">Full admin item management</li>
+            <li class="feat-v2-bullet">Sell-back for 50% refund</li>
+            <li class="feat-v2-bullet">Harvest passive income items</li>
+          </ul>
+          <span class="feat-v2-tag feat-v2-tag--secondary">Economy+</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- DM DEMO -->
+  <!-- DM SHOWCASE + TERMINAL -->
   <section class="section bg-alt">
     <div class="container">
       <div class="grid grid--2 align-center grid--2-gap-lg">
@@ -197,34 +604,86 @@
           <h2 class="h2-astra mt-sm mb-md">USE IT ANYWHERE</h2>
           <p class="text-dim mb-xl">
             Slash commands work in every server Astra is in. Economy, leveling, and AI also work in your
-            <strong>direct messages</strong> — no server needed.
+            <strong>direct messages</strong> — no server needed. Astra is your personal assistant wherever you are in Discord.
           </p>
-          <div class="feature-list">
-            <div class="feature-item">
-              <span class="feature-item__icon">⚡</span>
-              <div>
-                <div class="feature-item__title">Instant slash commands</div>
-                <div class="feature-item__desc">
-                  Type <code class="code-chip">/</code> in any chat to see every available command.
+
+          <!-- Tabs -->
+          <div class="showcase-tabs" id="showTabs">
+            <button class="showcase-tab active" data-tab="economy">Economy</button>
+            <button class="showcase-tab" data-tab="ai">AI Chat</button>
+            <button class="showcase-tab" data-tab="moderation">Moderation</button>
+          </div>
+
+          <div class="feature-list" id="tabContent">
+            <!-- Economy tab -->
+            <div class="showcase-panel active" id="tab-economy" style="display:flex;flex-direction:column;gap:16px;">
+              <div class="feature-item">
+                <span class="feature-item__icon">💰</span>
+                <div>
+                  <div class="feature-item__title">Daily rewards</div>
+                  <div class="feature-item__desc">Claim free money every 24 hours. Streak bonuses for consecutive days.</div>
+                </div>
+              </div>
+              <div class="feature-item">
+                <span class="feature-item__icon">🏦</span>
+                <div>
+                  <div class="feature-item__title">Safe banking</div>
+                  <div class="feature-item__desc">Deposit to your bank so no one can rob you. Withdraw anytime.</div>
+                </div>
+              </div>
+              <div class="feature-item">
+                <span class="feature-item__icon">🎰</span>
+                <div>
+                  <div class="feature-item__title">Gambling mini-games</div>
+                  <div class="feature-item__desc">Gamble, slots, coinflip, rob. High risk, high reward.</div>
                 </div>
               </div>
             </div>
-            <div class="feature-item">
-              <span class="feature-item__icon">💬</span>
-              <div>
-                <div class="feature-item__title">DM prefix commands</div>
-                <div class="feature-item__desc">
-                  Use <code class="code-chip">-help</code> <code class="code-chip">-balance</code>
-                  <code class="code-chip">-daily</code> and more in your DMs.
+            <!-- AI tab -->
+            <div class="showcase-panel" id="tab-ai" style="display:none;flex-direction:column;gap:16px;">
+              <div class="feature-item">
+                <span class="feature-item__icon">🤖</span>
+                <div>
+                  <div class="feature-item__title">No commands in DMs</div>
+                  <div class="feature-item__desc">Just message Astra directly — the AI responds instantly.</div>
+                </div>
+              </div>
+              <div class="feature-item">
+                <span class="feature-item__icon">🧠</span>
+                <div>
+                  <div class="feature-item__title">Multiple Gemini models</div>
+                  <div class="feature-item__desc">Choose from available free Gemini models for different use cases.</div>
+                </div>
+              </div>
+              <div class="feature-item">
+                <span class="feature-item__icon">💬</span>
+                <div>
+                  <div class="feature-item__title">Conversational context</div>
+                  <div class="feature-item__desc">Ask follow-up questions naturally. The AI remembers your conversation.</div>
                 </div>
               </div>
             </div>
-            <div class="feature-item">
-              <span class="feature-item__icon">🤖</span>
-              <div>
-                <div class="feature-item__title">Free AI in DMs</div>
-                <div class="feature-item__desc">
-                  Just send Astra a message — no commands needed. The AI responds instantly.
+            <!-- Moderation tab -->
+            <div class="showcase-panel" id="tab-moderation" style="display:none;flex-direction:column;gap:16px;">
+              <div class="feature-item">
+                <span class="feature-item__icon">⚠️</span>
+                <div>
+                  <div class="feature-item__title">Full case tracking</div>
+                  <div class="feature-item__desc">Every warn, kick, ban, and timeout is logged with a case number.</div>
+                </div>
+              </div>
+              <div class="feature-item">
+                <span class="feature-item__icon">📨</span>
+                <div>
+                  <div class="feature-item__title">Auto DM notifications</div>
+                  <div class="feature-item__desc">Users are automatically DMed with the reason for any action.</div>
+                </div>
+              </div>
+              <div class="feature-item">
+                <span class="feature-item__icon">🗑️</span>
+                <div>
+                  <div class="feature-item__title">Bulk purge (up to 100)</div>
+                  <div class="feature-item__desc">Clean up channels instantly with the purge command.</div>
                 </div>
               </div>
             </div>
@@ -256,7 +715,7 @@
               <div><span class="t-user">You</span> <span class="t-text">— What is a black hole?</span></div>
               <div class="t-embed t-embed--secondary">
                 <div class="t-embed-title t-embed-title--secondary">🤖 Astra AI</div>
-                <div class="t-embed-field">A black hole is a region where gravity is so strong that nothing — not even light — can escape...</div>
+                <div class="t-embed-field">A black hole is a region where gravity is so strong that nothing — not even light — can escape the event horizon...</div>
               </div>
             </div>
           </div>
@@ -265,31 +724,228 @@
     </div>
   </section>
 
+  <!-- WHY ASTRA (pillars) -->
   <section class="section">
     <div class="container">
       <div class="text-center mb-2xl animate-reveal">
-        <span class="hero-badge-text text-accent">Get started</span>
-        <h2 class="h2-astra mt-sm">3 simple steps</h2>
-        <p class="text-dim max-w-700 mx-auto">
-          Invite Astra, explore the commands, and watch your server come alive with moderation, rewards, and AI tools.
+        <span class="hero-badge-text text-secondary">Why Astra</span>
+        <h2 class="h2-astra mt-sm">Built for every community</h2>
+        <p class="text-dim max-w-700 mx-auto" style="margin-top:12px;">
+          Designed to keep your server safe, active, and fun — without premium paywalls or confusing setup.
         </p>
       </div>
 
-      <div class="step-grid animate-reveal">
-        <div class="step-card">
-          <div class="step-number">1</div>
-          <h3>Add Astra to your server</h3>
-          <p>Use the invite button to bring Astra into your community and unlock moderation, economy, and more instantly.</p>
+      <div class="highlight-grid animate-reveal">
+        <div class="highlight-card">
+          <span class="highlight-icon">🚀</span>
+          <h3>Instant setup</h3>
+          <p>No configuration required. Moderation, economy, giveaways, and AI all work the moment Astra joins your server.</p>
         </div>
-        <div class="step-card">
-          <div class="step-number">2</div>
-          <h3>Run /help or -help</h3>
-          <p>Discover every command across moderation, economy, AI, and tickets. The full bot is available from the start.</p>
+        <div class="highlight-card">
+          <span class="highlight-icon">🧠</span>
+          <h3>Smart automation</h3>
+          <p>Automated moderation, leveling, and welcome messages keep your community running — even when staff are offline.</p>
         </div>
-        <div class="step-card">
-          <div class="step-number">3</div>
-          <h3>Grow engagement</h3>
-          <p>Use levels, daily rewards, giveaways, and AI chat to keep members active and excited about your server.</p>
+        <div class="highlight-card">
+          <span class="highlight-icon">💬</span>
+          <h3>DM-friendly</h3>
+          <p>Use economy commands and the AI chatbot privately in DMs as well as in server channels — no server required.</p>
+        </div>
+        <div class="highlight-card">
+          <span class="highlight-icon">💎</span>
+          <h3>Forever free</h3>
+          <p>Every single feature is free. No subscriptions, no premium tiers, no paywalls. The full bot for everyone, always.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section bg-alt">
+    <div class="container">
+      <div class="text-center mb-2xl animate-reveal">
+        <span class="hero-badge-text text-accent">Community Love</span>
+        <h2 class="h2-astra mt-sm">What servers are saying</h2>
+      </div>
+
+      <div class="testimonials-grid animate-reveal">
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"Astra replaced three separate bots we were using. Moderation, leveling, and economy all in one — and completely free. Our server has never been more active."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">Z</div>
+            <div>
+              <div class="testimonial-name">Zach</div>
+              <div class="testimonial-role">Server Owner · Gaming Community</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"The stock market feature is insane. My members spend hours trading and competing on the economy leaderboard. It's brought so much engagement I wasn't expecting."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">M</div>
+            <div>
+              <div class="testimonial-name">Maya</div>
+              <div class="testimonial-role">Admin · Study Community</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"The AI in DMs is genuinely useful — I use it almost daily. The fact that it's built right into the same bot I use for my server is incredibly convenient."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">K</div>
+            <div>
+              <div class="testimonial-name">Kai</div>
+              <div class="testimonial-role">Member · Tech Server</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GET STARTED (4-step) -->
+  <section class="section">
+    <div class="container">
+      <div class="text-center mb-2xl animate-reveal">
+        <span class="hero-badge-text text-accent">Get Started</span>
+        <h2 class="h2-astra mt-sm">Up and running in minutes</h2>
+        <p class="text-dim max-w-700 mx-auto" style="margin-top:12px;">
+          Four steps from zero to a fully-equipped Discord server.
+        </p>
+      </div>
+
+      <div class="quick-start-grid animate-reveal">
+        <div class="qs-card">
+          <span class="qs-icon">🔗</span>
+          <div class="qs-number">1</div>
+          <div class="qs-title">Add Astra</div>
+          <p class="qs-desc">Click "Add to Server" and authorize Astra in your Discord server. Takes less than 30 seconds.</p>
+        </div>
+        <div class="qs-card">
+          <span class="qs-icon">📖</span>
+          <div class="qs-number">2</div>
+          <div class="qs-title">Run /help</div>
+          <p class="qs-desc">Type <code style="background:rgba(0,255,209,0.1);color:var(--color-primary);padding:2px 6px;border-radius:4px;font-family:monospace;">/help</code> to explore every command organized by category.</p>
+        </div>
+        <div class="qs-card">
+          <span class="qs-icon">⚙️</span>
+          <div class="qs-number">3</div>
+          <div class="qs-title">Configure</div>
+          <p class="qs-desc">Use <code style="background:rgba(0,255,209,0.1);color:var(--color-primary);padding:2px 6px;border-radius:4px;font-family:monospace;">/server_setup</code> to set up your mod log, welcome channel, and ticket system.</p>
+        </div>
+        <div class="qs-card">
+          <span class="qs-icon">🎉</span>
+          <div class="qs-number">4</div>
+          <div class="qs-title">Go Live</div>
+          <p class="qs-desc">Run your first giveaway, set up level rewards, and watch your community grow with Astra's tools.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LATEST UPDATES -->
+  <section class="section bg-alt">
+    <div class="container">
+      <div class="text-center mb-2xl animate-reveal">
+        <span class="hero-badge-text text-secondary">Always Improving</span>
+        <h2 class="h2-astra mt-sm">Latest Updates</h2>
+      </div>
+
+      <div class="updates-strip animate-reveal">
+        <div class="update-chip">
+          <span class="update-chip-ver">v9.0.0</span>
+          <div>
+            <div class="update-chip-title">Quantum Release</div>
+            <div class="update-chip-date">April 30, 2026</div>
+            <div class="update-chip-desc">Major version update: security hardening, code quality overhaul, TypeScript fixes, and version synchronization across all systems.</div>
+          </div>
+        </div>
+        <div class="update-chip">
+          <span class="update-chip-ver">v8.0.0</span>
+          <div>
+            <div class="update-chip-title">Big Design Update</div>
+            <div class="update-chip-date">April 27, 2026</div>
+            <div class="update-chip-desc">Complete website redesign with glassmorphism, shop system integration, bot status bar, and a new update timeline layout.</div>
+          </div>
+        </div>
+        <div class="update-chip">
+          <span class="update-chip-ver">v7.2.0</span>
+          <div>
+            <div class="update-chip-title">Economy Expansion</div>
+            <div class="update-chip-date">April 26, 2026</div>
+            <div class="update-chip-desc">New economy commands: harvest, rob, gamble, slots, coinflip. Shop sell-back. Bot monitoring system with /system status.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center" style="margin-top:40px;">
+        <a href="changelog.html" class="btn-astra btn-astra--outline">View Full Changelog →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMMUNITY BAND -->
+  <div class="community-band">
+    <div class="container">
+      <div class="community-grid animate-reveal">
+        <div>
+          <span class="hero-badge-text text-secondary">Join the Community</span>
+          <h2 class="h2-astra mt-sm" style="font-size:2rem;">Connect with Astra</h2>
+          <p class="text-dim" style="max-width:500px;margin-top:12px;line-height:1.8;">
+            Get support, share ideas, report bugs, and follow development.
+            The Astra community is open to everyone — whether you're a server admin or a regular user.
+          </p>
+          <div class="community-links">
+            <a href="support.html" class="community-link community-link--discord">
+              💬 Discord Support
+            </a>
+            <a href="https://github.com/watispro5212/astra" class="community-link community-link--github" target="_blank" rel="noopener">
+              ⭐ GitHub
+            </a>
+            <a href="wiki.html" class="community-link">
+              📖 Read the Wiki
+            </a>
+            <a href="changelog.html" class="community-link">
+              📋 View Changelog
+            </a>
+          </div>
+        </div>
+        <div style="text-align:center;">
+          <div class="community-big-number">v9</div>
+          <div class="community-big-label">Current Version</div>
+          <div style="margin-top:24px;padding:16px 24px;background:rgba(0,255,209,0.05);border:1px solid rgba(0,255,209,0.15);border-radius:12px;">
+            <div style="font-size:0.72rem;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:6px;">Release</div>
+            <div style="font-family:var(--font-mono);color:var(--color-primary);font-size:0.9rem;">Quantum · Apr 30, 2026</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WIKI PROMO -->
+  <section class="section">
+    <div class="container">
+      <div class="glass-card animate-reveal" style="padding:60px;background:linear-gradient(135deg,rgba(0,255,209,0.04) 0%,rgba(181,23,158,0.04) 100%);">
+        <div style="display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;">
+          <div>
+            <span class="hero-badge-text text-secondary">New</span>
+            <h2 class="h2-astra mt-sm mb-md" style="font-size:2.2rem;">Explore the Glossary</h2>
+            <p class="text-dim" style="max-width:600px;line-height:1.8;">
+              Not sure what XP, streak, or passive income means? The Astra Wiki has 80+ terms defined
+              in full detail — from economy concepts to Discord terminology. Searchable, filterable,
+              and always up to date.
+            </p>
+            <div style="margin-top:32px;display:flex;gap:16px;flex-wrap:wrap;">
+              <a href="wiki.html" class="btn-astra btn-astra--primary">Open Wiki →</a>
+              <a href="docs.html" class="btn-astra btn-astra--outline">Full Docs</a>
+            </div>
+          </div>
+          <div style="font-size:6rem;opacity:0.4;">📖</div>
         </div>
       </div>
     </div>
@@ -305,6 +961,7 @@
         <div class="flex-center">
           <a href="https://discord.com/oauth2/authorize?client_id=1494879804615561238&permissions=8&scope=bot+applications.commands" class="btn-astra btn-astra--primary">Add to Server 🚀</a>
           <a href="commands.html" class="btn-astra btn-astra--outline">Browse Commands →</a>
+          <a href="wiki.html" class="btn-astra btn-astra--outline">Read Wiki 📖</a>
         </div>
       </div>
     </div>
@@ -327,6 +984,7 @@
             <a href="features.html" class="footer-link">Features</a>
             <a href="commands.html" class="footer-link">Commands</a>
             <a href="docs.html" class="footer-link">Docs</a>
+            <a href="wiki.html" class="footer-link">Wiki</a>
             <a href="staff.html" class="footer-link">Staff</a>
             <a href="changelog.html" class="footer-link">Updates</a>
           </div>
@@ -336,6 +994,7 @@
           <div class="footer-links">
             <a href="support.html" class="footer-link">Support</a>
             <a href="faq.html" class="footer-link">FAQ</a>
+            <a href="https://github.com/watispro5212/astra" class="footer-link" target="_blank" rel="noopener">GitHub</a>
           </div>
         </div>
         <div>
@@ -354,13 +1013,44 @@
   </footer>
 
   <script>
+    /* ── Navbar ── */
     window.addEventListener('scroll', () => {
       document.getElementById('navbar').classList.toggle('nav-astra--scrolled', window.scrollY > 50);
     });
+
+    /* ── Reveal ── */
     const obs = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.08 });
+    }, { threshold: 0.06 });
     document.querySelectorAll('.animate-reveal').forEach(el => obs.observe(el));
+
+    /* ── Showcase tabs ── */
+    document.querySelectorAll('.showcase-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.showcase-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const tab = btn.dataset.tab;
+        document.querySelectorAll('.showcase-panel').forEach(p => p.style.display = 'none');
+        document.getElementById('tab-' + tab).style.display = 'flex';
+      });
+    });
+
+    /* ── Floating particles ── */
+    const wrap = document.getElementById('particles');
+    for (let i = 0; i < 18; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = Math.random() * 4 + 2;
+      p.style.cssText = `
+        width:${size}px; height:${size}px;
+        left:${Math.random() * 100}%;
+        bottom:${Math.random() * 20}%;
+        background: ${Math.random() > 0.5 ? 'rgba(0,255,209,0.6)' : 'rgba(181,23,158,0.5)'};
+        animation-duration:${Math.random() * 12 + 8}s;
+        animation-delay:${Math.random() * 10}s;
+      `;
+      wrap.appendChild(p);
+    }
   </script>
 </body>
 </html>
