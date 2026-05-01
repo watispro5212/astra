@@ -150,6 +150,20 @@
           </div>
         </section>
 
+        <section id="sharding" class="docs-section animate-reveal">
+          <div class="glass-card">
+            <h2>🛰️ Sharding & Production</h2>
+            <p class="docs-text">Astra now supports automatic multi-shard deployment in production to keep memory usage low and performance high.</p>
+            <div class="docs-code-block">
+              // development (single shard via ts-node)<br>
+              npm run dev<br><br>
+              // production (compiled sharded bot)<br>
+              npm run build && node dist/index.js
+            </div>
+            <p class="docs-text">In production mode, the bot uses the compiled `dist/bot.js` entrypoint and auto-detects the correct shard startup command. Global command sync runs only on the first shard to avoid duplicate API updates.</p>
+          </div>
+        </section>
+
         <section id="ai-assistant" class="docs-section animate-reveal">
           <div class="glass-card">
             <h2>🤖 AI Assistant</h2>

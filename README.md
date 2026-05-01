@@ -38,7 +38,13 @@ Astra is a powerful and easy-to-use Discord bot for moderation, fun, and useful 
 ### 1. Bot Hosting (Railway)
 Astra is optimized for **Railway**. Simply link your repository and add your environment variables (`DISCORD_TOKEN`, `CLIENT_ID`, etc.). The bot will automatically handle global command synchronization on startup.
 
-### 2. Website Hosting
+### 2. Sharding Support
+Astra now supports automatic sharding in production:
+- **Development**: `npm run dev` starts the bot through `ts-node` and uses `bot.ts`.
+- **Production**: `npm run build && node dist/index.js` starts the bot using `dist/bot.js`.
+- **Memory optimization**: only shard 0 runs global command sync, so other shards avoid redundant work.
+
+### 3. Website Hosting
 The Astra website is easy to host on services like GitHub Pages or Render.
 
 ---

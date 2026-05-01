@@ -3,13 +3,19 @@ import { config } from './core/config';
 import logger from './core/logger';
 import * as path from 'path';
 
-process.env.TS_NODE_TRANSPILE_ONLY = 'true';
+const isDev = process.env.NODE_ENV !== 'production';
+const shardFile = path.join(__dirname, isDev ? 'bot.ts' : 'bot.js');
+const execArgv = isDev ? ['-r', 'ts-node/register'] : [];
 
-const manager = new ShardingManager(path.join(__dirname, 'bot.ts'), {
+if (isDev) {
+    process.env.TS_NODE_TRANSPILE_ONLY = 'true';
+}
+
+const manager = new ShardingManager(shardFile, {
     token: config.token,
-    totalShards: 'auto', 
+    totalShards: 'auto',
     respawn: true,
-    execArgv: ['-r', 'ts-node/register']
+    execArgv
 });
 
 manager.on('shardCreate', shard => {

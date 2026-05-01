@@ -138,10 +138,14 @@ export class AstraClient extends Client {
             
             // Always sync globally so commands work in DMs and all servers.
             // In dev, also push to the target guild for instant testing (no 1-hr delay).
-            logger.info('Synchronizing commands globally (DM + server support)...');
-            await this.syncCommands('global');
-            if (config.guildId && (process.env.NODE_ENV !== 'production')) {
-                await this.syncCommands('guild_only');
+            if (!this.shard || this.shard.ids.includes(0)) {
+                logger.info('Synchronizing commands globally (DM + server support) on shard 0...');
+                await this.syncCommands('global');
+                if (config.guildId && (process.env.NODE_ENV !== 'production')) {
+                    await this.syncCommands('guild_only');
+                }
+            } else {
+                logger.info(`Skipping command sync on shard ${this.shard.ids[0]}.`);
             }
 
             // Statuses
