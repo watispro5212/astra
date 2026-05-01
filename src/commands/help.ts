@@ -169,7 +169,6 @@ const CATEGORIES = [
             { name: '`/system update`',  value: 'Show latest bot updates and version information.', inline: false },
             { name: '`/invite`',         value: 'Get the invite link to add Astra to a server or profile.', inline: false },
             { name: '`/blacklist`',      value: 'Manage user blacklists. **Owner only.**', inline: false },
-            { name: '`/dev`',            value: 'Developer diagnostics. **Owner only.**', inline: false },
         ]
     },
 ] as const;
