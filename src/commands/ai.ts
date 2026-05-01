@@ -40,7 +40,7 @@ const command: Command = {
             const model = AI_MODELS.find(m => m.id === modelId);
 
             if (!success) {
-                return interaction.reply({ content: '❌ **Error**: Failed to update your AI model choice.', ephemeral: true });
+                return interaction.reply({ content: '❌ **Error**: Failed to update your AI model choice.', flags: [MessageFlags.Ephemeral] });
             }
 
             const embed = new EmbedBuilder()

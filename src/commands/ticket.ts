@@ -101,7 +101,7 @@ const command: Command = {
                 interaction.channelId
             );
             if (!ticket) {
-                await interaction.reply({ content: '❌ This is not an active ticket channel.', ephemeral: true });
+                await interaction.reply({ content: '❌ This is not an active ticket channel.', flags: [MessageFlags.Ephemeral] });
                 return;
             }
 
@@ -127,7 +127,7 @@ const command: Command = {
                 interaction.channelId
             );
             if (!ticket) {
-                await interaction.reply({ content: '❌ This is not an active ticket channel.', ephemeral: true });
+                await interaction.reply({ content: '❌ This is not an active ticket channel.', flags: [MessageFlags.Ephemeral] });
                 return;
             }
             const user = interaction.options.getUser('user')!;
@@ -145,7 +145,7 @@ const command: Command = {
                 interaction.channelId
             );
             if (!ticket) {
-                await interaction.reply({ content: '❌ This is not an active ticket channel.', ephemeral: true });
+                await interaction.reply({ content: '❌ This is not an active ticket channel.', flags: [MessageFlags.Ephemeral] });
                 return;
             }
             const user = interaction.options.getUser('user')!;

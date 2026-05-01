@@ -177,9 +177,9 @@ const command: Command = {
 
         // ── SETXP ─────────────────────────────────────────────────────────
         } else if (sub === 'setxp') {
-            if (!guild) return interaction.reply({ content: '❌ Server only.', ephemeral: true });
+            if (!guild) return interaction.reply({ content: '❌ Server only.', flags: [MessageFlags.Ephemeral] });
             if (!interaction.memberPermissions?.has(PermissionFlagsBits.Administrator)) {
-                return interaction.reply({ content: '❌ You need Administrator to use this.', ephemeral: true });
+                return interaction.reply({ content: '❌ You need Administrator to use this.', flags: [MessageFlags.Ephemeral] });
             }
 
             const target = interaction.options.getUser('user')!;
@@ -203,9 +203,9 @@ const command: Command = {
 
         // ── SETLEVEL ──────────────────────────────────────────────────────
         } else if (sub === 'setlevel') {
-            if (!guild) return interaction.reply({ content: '❌ Server only.', ephemeral: true });
+            if (!guild) return interaction.reply({ content: '❌ Server only.', flags: [MessageFlags.Ephemeral] });
             if (!interaction.memberPermissions?.has(PermissionFlagsBits.Administrator)) {
-                return interaction.reply({ content: '❌ You need Administrator to use this.', ephemeral: true });
+                return interaction.reply({ content: '❌ You need Administrator to use this.', flags: [MessageFlags.Ephemeral] });
             }
 
             const target = interaction.options.getUser('user')!;
@@ -229,9 +229,9 @@ const command: Command = {
 
         // ── RESET ─────────────────────────────────────────────────────────
         } else if (sub === 'reset') {
-            if (!guild) return interaction.reply({ content: '❌ Server only.', ephemeral: true });
+            if (!guild) return interaction.reply({ content: '❌ Server only.', flags: [MessageFlags.Ephemeral] });
             if (!interaction.memberPermissions?.has(PermissionFlagsBits.Administrator)) {
-                return interaction.reply({ content: '❌ You need Administrator to use this.', ephemeral: true });
+                return interaction.reply({ content: '❌ You need Administrator to use this.', flags: [MessageFlags.Ephemeral] });
             }
 
             const target = interaction.options.getUser('user')!;

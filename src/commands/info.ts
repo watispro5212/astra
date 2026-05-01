@@ -160,7 +160,7 @@ const command: Command = {
         // ── USER ───────────────────────────────────────────────────────────────
         } else if (subcommand === 'user') {
             if (!guild) {
-                return interaction.reply({ content: '❌ This subcommand only works in a server.', ephemeral: true });
+                return interaction.reply({ content: '❌ This subcommand only works in a server.', flags: [MessageFlags.Ephemeral] });
             }
             await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
             const user   = interaction.options.getUser('target') || interaction.user;
@@ -198,7 +198,7 @@ const command: Command = {
         // ── SERVER ─────────────────────────────────────────────────────────────
         } else if (subcommand === 'server') {
             if (!guild) {
-                return interaction.reply({ content: '❌ This subcommand only works in a server.', ephemeral: true });
+                return interaction.reply({ content: '❌ This subcommand only works in a server.', flags: [MessageFlags.Ephemeral] });
             }
             await interaction.deferReply();
             const owner    = await guild.fetchOwner();
@@ -229,7 +229,7 @@ const command: Command = {
         // ── ROLE ───────────────────────────────────────────────────────────────
         } else if (subcommand === 'role') {
             if (!guild) {
-                return interaction.reply({ content: '❌ This subcommand only works in a server.', ephemeral: true });
+                return interaction.reply({ content: '❌ This subcommand only works in a server.', flags: [MessageFlags.Ephemeral] });
             }
             await interaction.deferReply();
             const role = interaction.options.getRole('role') as Role;

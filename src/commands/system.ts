@@ -147,10 +147,10 @@ const command: Command = {
         // ── SERVERS ───────────────────────────────────────────────────────────
         } else if (subcommand === 'servers') {
             if (interaction.user.id !== config.ownerId) {
-                return interaction.reply({ content: '❌ Access Denied: You need to be the Bot Owner.', ephemeral: true });
+                return interaction.reply({ content: '❌ Access Denied: You need to be the Bot Owner.', flags: [MessageFlags.Ephemeral] });
             }
 
-            await interaction.deferReply({ ephemeral: true });
+            await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
             const guilds = interaction.client.guilds.cache;
             const totalMembers = guilds.reduce((a, g) => a + (g.memberCount || 0), 0);
 
@@ -176,11 +176,11 @@ const command: Command = {
         // ── ALERT ─────────────────────────────────────────────────────────────
         } else if (subcommand === 'alert') {
             if (interaction.user.id !== config.ownerId) {
-                return interaction.reply({ content: '❌ Access Denied: You need to be the Bot Owner.', ephemeral: true });
+                return interaction.reply({ content: '❌ Access Denied: You need to be the Bot Owner.', flags: [MessageFlags.Ephemeral] });
             }
 
             const message = interaction.options.getString('message')!;
-            await interaction.deferReply({ ephemeral: true });
+            await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
             let successCount = 0;
             const alertEmbed = new EmbedBuilder()

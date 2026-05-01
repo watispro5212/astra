@@ -95,7 +95,7 @@ const command: Command = {
         // ── ADMIN ─────────────────────────────────────────────────────────────
         if (group === 'admin') {
             if (!interaction.memberPermissions?.has(PermissionFlagsBits.Administrator)) {
-                return interaction.reply({ content: '❌ **ACCESS DENIED**: You need to be an Admin.', ephemeral: true });
+                return interaction.reply({ content: '❌ **ACCESS DENIED**: You need to be an Admin.', flags: [MessageFlags.Ephemeral] });
             }
 
             if (subcommand === 'add') {
@@ -119,7 +119,7 @@ const command: Command = {
             if (subcommand === 'remove') {
                 const id = interaction.options.getInteger('id')!;
                 const item = await db.fetchOne('SELECT name FROM shop_items WHERE id = ? AND guild_id = ?', id, guildId);
-                if (!item) return interaction.reply({ content: '❌ Item not found.', ephemeral: true });
+                if (!item) return interaction.reply({ content: '❌ Item not found.', flags: [MessageFlags.Ephemeral] });
 
                 await db.execute('DELETE FROM shop_items WHERE id = ? AND guild_id = ?', id, guildId);
                 return interaction.reply({ content: `✅ Item **${item.name}** (ID: \`${id}\`) has been removed.`, flags: [MessageFlags.Ephemeral] });
@@ -128,7 +128,7 @@ const command: Command = {
             if (subcommand === 'edit') {
                 const id = interaction.options.getInteger('id')!;
                 const item = await db.fetchOne('SELECT * FROM shop_items WHERE id = ? AND guild_id = ?', id, guildId);
-                if (!item) return interaction.reply({ content: '❌ Item not found.', ephemeral: true });
+                if (!item) return interaction.reply({ content: '❌ Item not found.', flags: [MessageFlags.Ephemeral] });
 
                 const newPrice = interaction.options.getInteger('price') ?? item.price;
                 const newStock = interaction.options.getInteger('stock') ?? item.stock;

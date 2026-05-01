@@ -8,7 +8,8 @@ import {
     Routes,
     EmbedBuilder,
     Options,
-    GuildMember
+    GuildMember,
+    MessageFlags
 } from 'discord.js';
 import { config } from './core/config';
 import logger from './core/logger';
@@ -118,6 +119,20 @@ export class AstraClient extends Client {
     }
 
     private registerEvents() {
+        this.on(Events.Error, async (error) => {
+            logger.error(`Discord client error: ${error}`);
+            StatusService.sendError(error).catch(() => {});
+        });
+
+        this.on(Events.ShardError, async (error, shardId) => {
+            logger.error(`Shard ${shardId} error: ${error}`);
+            StatusService.sendError(error).catch(() => {});
+        });
+
+        this.on(Events.ShardDisconnect, (closeEvent, shardId) => {
+            logger.warn(`Shard ${shardId} disconnected: ${closeEvent.code} ${closeEvent.reason}`);
+        });
+
         this.once(Events.ClientReady, async (c) => {
             logger.info(`Astra Online: Logged in as ${c.user.tag}`);
             
@@ -500,7 +515,7 @@ export class AstraClient extends Client {
 
                 // Owner Check
                 if (command.ownerOnly && interaction.user.id !== config.ownerId) {
-                    return interaction.reply({ content: '❌ Only my developer can use this command.', ephemeral: true });
+                    return interaction.reply({ content: '❌ Only my developer can use this command.', flags: [MessageFlags.Ephemeral] });
                 }
 
                 try {
@@ -530,7 +545,7 @@ export class AstraClient extends Client {
                         if (interaction.replied || interaction.deferred) {
                             await interaction.editReply({ embeds: [errorEmbed] });
                         } else {
-                            await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
+                            await interaction.reply({ embeds: [errorEmbed], flags: [MessageFlags.Ephemeral] });
                         }
                     } catch (replyError) {
                         logger.error(`Failed to send error response: ${replyError}`);

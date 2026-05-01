@@ -93,7 +93,7 @@ const command: Command = {
         // ── CONFIG ────────────────────────────────────────────────────────
         if (group === 'config') {
             if (!interaction.memberPermissions?.has(PermissionFlagsBits.Administrator)) {
-                return interaction.reply({ content: '❌ You need Administrator to change settings.', ephemeral: true });
+                return interaction.reply({ content: '❌ You need Administrator to change settings.', flags: [MessageFlags.Ephemeral] });
             }
             if (sub === 'log-channel') {
                 const channel = interaction.options.getChannel('channel')!;
@@ -275,7 +275,7 @@ const command: Command = {
             const num  = interaction.options.getInteger('number')!;
             const data = await ModerationService.getCase(guild.id, num);
 
-            if (!data) return interaction.reply({ content: `❌ Case #${num} not found.`, ephemeral: true });
+            if (!data) return interaction.reply({ content: `❌ Case #${num} not found.`, flags: [MessageFlags.Ephemeral] });
 
             const embed = new EmbedBuilder()
                 .setColor(THEME.PRIMARY)
@@ -323,21 +323,21 @@ const command: Command = {
             const note = interaction.options.getString('note')!;
 
             const data = await ModerationService.getCase(guild.id, num);
-            if (!data) return interaction.reply({ content: `❌ Case #${num} not found.`, ephemeral: true });
+            if (!data) return interaction.reply({ content: `❌ Case #${num} not found.`, flags: [MessageFlags.Ephemeral] });
 
             await ModerationService.addNote(guild.id, num, note);
-            return interaction.reply({ content: `📝 Note added to Case #${num}.`, ephemeral: true });
+            return interaction.reply({ content: `📝 Note added to Case #${num}.`, flags: [MessageFlags.Ephemeral] });
 
         // ── CLOSE ─────────────────────────────────────────────────────────
         } else if (sub === 'close') {
             const num  = interaction.options.getInteger('case')!;
 
             const data = await ModerationService.getCase(guild.id, num);
-            if (!data) return interaction.reply({ content: `❌ Case #${num} not found.`, ephemeral: true });
-            if (data.case_status === 'closed') return interaction.reply({ content: `❌ Case #${num} is already closed.`, ephemeral: true });
+            if (!data) return interaction.reply({ content: `❌ Case #${num} not found.`, flags: [MessageFlags.Ephemeral] });
+            if (data.case_status === 'closed') return interaction.reply({ content: `❌ Case #${num} is already closed.`, flags: [MessageFlags.Ephemeral] });
 
             await ModerationService.closeCase(guild.id, num);
-            return interaction.reply({ content: `✅ Case #${num} has been closed.`, ephemeral: true });
+            return interaction.reply({ content: `✅ Case #${num} has been closed.`, flags: [MessageFlags.Ephemeral] });
         }
     }
 };
