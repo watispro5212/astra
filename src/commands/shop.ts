@@ -8,6 +8,7 @@ import {
 import { Command } from '../types';
 import { db } from '../core/database';
 import logger from '../core/logger';
+import { footerText } from '../core/constants';
 
 const SELL_REFUND_RATE = 0.50; // 50% refund on sell-back
 
@@ -150,7 +151,7 @@ const command: Command = {
                             { name: '📦 Stock',  value: `\`${newStock === -1 ? '∞' : newStock}\``,       inline: true },
                             { name: '📊 Money Rate',  value: `\`${newRate > 0 ? `${newRate} money/hr` : 'None'}\``, inline: true }
                         )
-                        .setFooter({ text: `Astra Shop` })],
+                        .setFooter({ text: footerText('Shop') })],
                     flags: [MessageFlags.Ephemeral]
                 });
             }
@@ -169,7 +170,7 @@ const command: Command = {
             const embed = new EmbedBuilder()
                 .setTitle(`🛒 BOT SHOP — ${interaction.guild!.name}`)
                 .setColor(0xf1c40f)
-                .setFooter({ text: `${items.length} item(s) available • Astra Shop` })
+                .setFooter({ text: footerText('Shop') })
                 .setTimestamp();
 
             if (items.length === 0) {
@@ -270,7 +271,7 @@ const command: Command = {
                         { name: '💸 Spent',         value: `\`-${item.price.toLocaleString()} money\``, inline: true },
                         { name: '💳 New Balance',    value: `\`${(after?.balance ?? 0).toLocaleString()} money\``, inline: true }
                     )
-                    .setFooter({ text: `Astra Shop` })]
+                    .setFooter({ text: footerText('Shop') })]
             });
 
         // ── SELL ──────────────────────────────────────────────────────────────
@@ -323,7 +324,7 @@ const command: Command = {
                         { name: '💰 Refund',      value: `\`+${refund.toLocaleString()} money\``, inline: true },
                         { name: '💳 New Balance', value: `\`${(after?.balance ?? 0).toLocaleString()} money\``, inline: true }
                     )
-                    .setFooter({ text: `Sell price is half of what you paid. • Astra Shop` })]
+                    .setFooter({ text: footerText('Shop') })]
             });
 
         // ── INVENTORY ─────────────────────────────────────────────────────────

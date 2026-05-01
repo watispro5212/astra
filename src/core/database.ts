@@ -227,7 +227,7 @@ class DatabaseManager {
             }
         }
 
-        logger.info("📡 Astra Database: Ready to go! (v8.1.0)");
+        logger.info("📡 Astra Database: Ready to go! (v9.0.0)");
     }
 
     async execute(query: string, ...params: any[]): Promise<{ rows: any[], count: number }> {

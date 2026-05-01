@@ -1,7 +1,7 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, MessageFlags } from 'discord.js';
 import { Command } from '../types';
 import { db } from '../core/database';
-import { THEME } from '../core/constants';
+import { THEME, footerText } from '../core/constants';
 import logger from '../core/logger';
 
 const CREATE_COST = 50000;
@@ -78,7 +78,7 @@ const command: Command = {
                         { name: '💰 Cost', value: `\`${CREATE_COST.toLocaleString()} money\``, inline: true },
                         { name: '👑 Owner', value: `<@${userId}>`, inline: true }
                     )
-                    .setFooter({ text: 'Astra Groups' })
+                    .setFooter({ text: footerText('Syndicate') })
                     .setTimestamp()] });
             } catch (err) {
                 logger.error(`Syndicate create error: ${err}`);
@@ -111,7 +111,7 @@ const command: Command = {
                     { name: '💰 Group Bank',  value: `\`${(syn.bank ?? 0).toLocaleString()} money\``, inline: true },
                     { name: '🎖️ Your Role',  value: `\`${member.role.toUpperCase()}\``, inline: true },
                 )
-                .setFooter({ text: 'Astra Groups' })
+                .setFooter({ text: footerText('Syndicate') })
                 .setTimestamp()] });
 
         // ── DEPOSIT ───────────────────────────────────────────────────────

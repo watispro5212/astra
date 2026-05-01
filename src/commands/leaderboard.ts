@@ -1,7 +1,7 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, MessageFlags } from 'discord.js';
 import { Command } from '../types';
 import { db } from '../core/database';
-import { THEME, VERSION, PROTOCOL } from '../core/constants';
+import { THEME, VERSION, PROTOCOL, footerText } from '../core/constants';
 
 const medals = ['🥇', '🥈', '🥉'];
 const rank = (i: number) => medals[i] ?? `**${i + 1}.**`;
@@ -58,7 +58,7 @@ const command: Command = {
                     .setTitle(`📊 SECTOR LEADERBOARD: ${interaction.guild!.name.toUpperCase()}`)
                     .setColor(THEME.PRIMARY)
                     .setDescription(lines.length > 0 ? lines.join('\n') : 'No intelligence data recorded for this sector yet.')
-                    .setFooter({ text: `Astra Intelligence System • ${VERSION} ${PROTOCOL}` })
+                    .setFooter({ text: footerText('Server Leaderboard') })
                     .setTimestamp()]
             });
 
@@ -79,7 +79,7 @@ const command: Command = {
                     .setTitle('🌎 GLOBAL NETWORK RANKINGS')
                     .setColor(THEME.ACCENT)
                     .setDescription(lines.length > 0 ? lines.join('\n') : 'No global network data found.')
-                    .setFooter({ text: `Astra Global Intelligence • ${VERSION} ${PROTOCOL}` })
+                    .setFooter({ text: footerText('Global Leaderboard') })
                     .setTimestamp()]
             });
 
@@ -100,7 +100,7 @@ const command: Command = {
                     .setTitle('💰 GLOBAL FISCAL LEADERBOARD')
                     .setColor(0x2ecc71)
                     .setDescription(lines.length > 0 ? lines.join('\n') : 'No fiscal data found.')
-                    .setFooter({ text: `Astra Fiscal Network • ${VERSION} ${PROTOCOL}` })
+                    .setFooter({ text: footerText('Wealth Leaderboard') })
                     .setTimestamp()]
             });
         }

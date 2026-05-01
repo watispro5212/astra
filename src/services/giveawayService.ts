@@ -36,10 +36,14 @@ export class GiveawayService {
                     }
 
                     const embed = new EmbedBuilder()
-                        .setColor(0x2ecc71)
-                        .setTitle('🎉 Giveaway Ended')
-                        .setDescription(`**Prize:** ${giveaway.prize}\n**Winner(s):** ${mentions}`)
-                        .setFooter({ text: `Astra Giveaway Engine • ${VERSION}` })
+                        .setColor(0x06D6A0)
+                        .setTitle('🎉 Giveaway Ended!')
+                        .setDescription(
+                            `> **${giveaway.prize}**\n\n` +
+                            `🏆 **Winner${giveaway.winners !== 1 ? 's' : ''}:** ${mentions}\n\n` +
+                            `Congratulations! 🎊`
+                        )
+                        .setFooter({ text: `Astra ${VERSION} Nova • Giveaway` })
                         .setTimestamp();
 
                     await channel.send({ content: winnerIds ? mentions : undefined, embeds: [embed] });

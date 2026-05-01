@@ -152,4 +152,4 @@
 - [ ] **The Rules**: Post the rules from **Section 1** in `#📜 rules`.
 
 ---
-*Guide Version: 8.0.1*
+*Guide Version: 9.0.0*

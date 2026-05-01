@@ -2,7 +2,7 @@ import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, Message
 import { Command } from '../types';
 import { db } from '../core/database';
 import { StockMarketService, STOCKS } from '../services/stockMarketService';
-import { THEME, VERSION, PROTOCOL } from '../core/constants';
+import { THEME, VERSION, PROTOCOL, footerText } from '../core/constants';
 
 const QUANTUM_CYAN = 0x00d4ff;
 
@@ -84,7 +84,7 @@ const command: Command = {
                 });
             }
 
-            embed.setFooter({ text: `Astra Stock Market • ${VERSION} ${PROTOCOL}` }).setTimestamp();
+            embed.setFooter({ text: footerText('Stock Market') }).setTimestamp();
             await interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'buy') {
@@ -121,7 +121,7 @@ const command: Command = {
                     { name: '💰 Price Each', value: `\`${price.toLocaleString()} cr\``, inline: true },
                     { name: '💳 Total Cost', value: `\`${cost.toLocaleString()} cr\``, inline: true }
                 )
-                .setFooter({ text: `Astra Stock Market • ${VERSION} ${PROTOCOL}` })
+                .setFooter({ text: footerText('Stock Market') })
                 .setTimestamp();
 
             await interaction.editReply({ embeds: [embed] });
@@ -157,7 +157,7 @@ const command: Command = {
                     { name: '💰 Sale Price', value: `\`${price.toLocaleString()} cr\``, inline: true },
                     { name: '📈 Profit/Loss', value: `\`${profit >= 0 ? '+' : ''}${profit.toLocaleString()} cr (${profitPct.toFixed(2)}%)\``, inline: true }
                 )
-                .setFooter({ text: `Astra Stock Market • ${VERSION} ${PROTOCOL}` })
+                .setFooter({ text: footerText('Stock Market') })
                 .setTimestamp();
 
             await interaction.editReply({ embeds: [embed] });
@@ -206,7 +206,7 @@ const command: Command = {
                 { name: '🚀 TOTAL NET WORTH', value: `\`${netWorth.toLocaleString()} cr\``, inline: false }
             );
 
-            embed.setFooter({ text: `Astra Stock Market • ${VERSION} ${PROTOCOL}` }).setTimestamp();
+            embed.setFooter({ text: footerText('Stock Market') }).setTimestamp();
             await interaction.editReply({ embeds: [embed] });
         }
     }

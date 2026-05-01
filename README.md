@@ -56,4 +56,4 @@ The Astra website is easy to host on services like GitHub Pages or Render.
 - **License**: Astra is private software. You may not redistribute or sell it without permission.
 - **Privacy**: We store very little user data (User ID, XP, Balance) just to make the bot features work.
 - **Security**: Built with security in mind to keep your server safe.
-- **Version**: v8.1.0 (April 30, 2026)
+- **Version**: v9.0.0 (April 30, 2026)

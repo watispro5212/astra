@@ -1,7 +1,7 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, MessageFlags } from 'discord.js';
 import { Command } from '../types';
 import { db } from '../core/database';
-import { THEME } from '../core/constants';
+import { THEME, footerText } from '../core/constants';
 import { config } from '../core/config';
 
 const command: Command = {

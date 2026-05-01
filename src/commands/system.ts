@@ -10,7 +10,7 @@ import { Command } from '../types';
 import { config } from '../core/config';
 import { db } from '../core/database';
 import { StatusService } from '../services/statusService';
-import { THEME } from '../core/constants';
+import { THEME, VERSION, footerText } from '../core/constants';
 import logger from '../core/logger';
 import os from 'os';
 
@@ -39,6 +39,10 @@ const command: Command = {
             sub.setName('alert')
                .setDescription('⚠️ Send a message to all servers (Owner Only).')
                .addStringOption(opt => opt.setName('message').setDescription('The message to send').setRequired(true))
+        )
+        .addSubcommand(sub =>
+            sub.setName('update')
+               .setDescription('📋 Show the latest bot updates and version info.')
         ),
 
     async execute(interaction: ChatInputCommandInteraction) {
@@ -114,7 +118,7 @@ const command: Command = {
                     { name: '🔋 Resident Set',    value: `\`${rss.toFixed(0)}MB\``,                              inline: true },
                     { name: '🖥️ Host',            value: `\`${os.hostname()} • ${os.type()}\``,                inline: true },
                 )
-                .setFooter({ text: `Astra Bot` })
+                .setFooter({ text: footerText('Astra') })
                 .setTimestamp();
 
             return interaction.editReply({ embeds: [embed] });
@@ -135,7 +139,7 @@ const command: Command = {
                     { name: '🔌 WebSocket',  value: `${wsLabel}\n\`${ws}ms\``,    inline: true },
                     { name: '📡 API Speed',  value: `${rttLabel}\n\`${rtt}ms\``,  inline: true },
                 )
-                .setFooter({ text: `Astra Speed Test` })
+                .setFooter({ text: footerText('Ping') })
                 .setTimestamp();
 
             return interaction.editReply({ content: '', embeds: [embed] });
@@ -164,7 +168,7 @@ const command: Command = {
                     { name: '📊 Total Servers',    value: `\`${guilds.size}\``,                     inline: true },
                     { name: '👥 Total Users',      value: `\`${totalMembers.toLocaleString()}\``,    inline: true },
                 )
-                .setFooter({ text: `Top 15 servers by members` })
+                .setFooter({ text: footerText('Servers') })
                 .setTimestamp();
 
             return interaction.editReply({ embeds: [embed] });
@@ -184,7 +188,7 @@ const command: Command = {
                 .setTitle('⚠️ MESSAGE FROM THE BOT')
                 .setDescription(message)
                 .setThumbnail(interaction.client.user?.displayAvatarURL() ?? null)
-                .setFooter({ text: `Official message from Astra` })
+                .setFooter({ text: footerText('Alert') })
                 .setTimestamp();
 
             for (const guild of interaction.client.guilds.cache.values()) {
@@ -208,6 +212,36 @@ const command: Command = {
             }
 
             return interaction.editReply({ content: `✅ Message sent. Reached **${successCount}** of **${interaction.client.guilds.cache.size}** servers.` });
+
+        // ── UPDATE ────────────────────────────────────────────────────────────
+        } else if (subcommand === 'update') {
+            const embed = new EmbedBuilder()
+                .setColor(THEME.PRIMARY)
+                .setTitle(`🚀 Astra ${VERSION} — Latest Updates`)
+                .setDescription('**Major Version 9.0.0** — April 30, 2026\n\n' +
+                    '🎯 **Major Improvements**\n' +
+                    '• Version bump to 9.0.0 reflecting significant improvements\n' +
+                    '• Comprehensive code review and optimization across all modules\n' +
+                    '• Enhanced security measures and dependency updates\n' +
+                    '• Optimized bot performance and reduced resource usage\n\n' +
+                    '🔧 **Technical Enhancements**\n' +
+                    '• Fixed 7 security vulnerabilities in dependencies\n' +
+                    '• Resolved TypeScript compilation errors\n' +
+                    '• Improved type safety throughout the codebase\n' +
+                    '• Updated documentation and version consistency\n\n' +
+                    '📚 **Documentation Updates**\n' +
+                    '• Updated README, security policy, and license\n' +
+                    '• Synchronized version numbers across all files\n' +
+                    '• Enhanced website with current version information')
+                .addFields(
+                    { name: '📦 Current Version', value: `\`${VERSION}\``, inline: true },
+                    { name: '📅 Release Date', value: 'April 30, 2026', inline: true },
+                    { name: '🔗 Changelog', value: '[View Full Changelog](https://watispro5212.github.io/astra/changelog.html)', inline: false }
+                )
+                .setFooter({ text: footerText('Updates') })
+                .setTimestamp();
+
+            return interaction.reply({ embeds: [embed] });
         }
     }
 };

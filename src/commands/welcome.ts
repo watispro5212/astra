@@ -8,6 +8,7 @@ import {
 } from 'discord.js';
 import { Command } from '../types';
 import { db } from '../core/database';
+import { footerText } from '../core/constants';
 
 const command: Command = {
     data: new SlashCommandBuilder()
@@ -133,7 +134,7 @@ const command: Command = {
                 .setTitle('👋 New Member Joined')
                 .setDescription(text)
                 .setThumbnail(interaction.user.displayAvatarURL())
-                .setFooter({ text: 'Astra Welcome System' })
+                .setFooter({ text: footerText('Welcome') })
                 .setTimestamp();
             await (channel as any).send({ embeds: [embed] });
             await interaction.editReply({ content: '✅ Test welcome message sent!' });
@@ -150,7 +151,7 @@ const command: Command = {
                     { name: 'Welcome Message', value: cfg?.message ?? '*Default*', inline: false },
                     { name: 'Farewell Message', value: cfg?.farewell_message ?? '*Default*', inline: false }
                 )
-                .setFooter({ text: 'Astra Welcome System' })
+                .setFooter({ text: footerText('Welcome') })
                 .setTimestamp()] });
         }
     }

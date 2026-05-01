@@ -8,6 +8,7 @@ import {
     MessageFlags
 } from 'discord.js';
 import { Command } from '../types';
+import { footerText } from '../core/constants';
 import { db } from '../core/database';
 
 const command: Command = {
@@ -88,7 +89,7 @@ const command: Command = {
                 .setTitle('🎫 Support Ticket Opened')
                 .setDescription(`Hello <@${interaction.user.id}>! A staff member will assist you shortly.\n\n**Issue:** ${reason}`)
                 .addFields({ name: 'Available Commands', value: '`/ticket close` — Close this ticket\n`/ticket add <user>` — Add a user\n`/ticket remove <user>` — Remove a user' })
-                .setFooter({ text: 'Astra Support' })
+                .setFooter({ text: footerText('Tickets') })
                 .setTimestamp();
 
             await channel.send({ content: `<@${interaction.user.id}>`, embeds: [embed] });

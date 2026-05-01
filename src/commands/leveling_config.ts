@@ -8,6 +8,7 @@ import {
 } from 'discord.js';
 import { Command } from '../types';
 import { db } from '../core/database';
+import { footerText } from '../core/constants';
 
 const command: Command = {
     data: new SlashCommandBuilder()
@@ -50,7 +51,7 @@ const command: Command = {
                 .setColor(0x2ecc71)
                 .setTitle('📡 TRANSMISSION FREQUENCY UPDATED')
                 .setDescription(`Level-Up reports will now be synchronized to <#${channel.id}>.`)
-                .setFooter({ text: 'Astra Matrix Core' });
+                .setFooter({ text: footerText('Leveling Config') });
 
             await interaction.reply({ embeds: [embed], flags: [MessageFlags.Ephemeral] });
 
@@ -65,7 +66,7 @@ const command: Command = {
                 .setColor(0x2ecc71)
                 .setTitle('🎖️ MILESTONE BIND SUCCESS')
                 .setDescription(`Members reaching **Level ${level}** will now be authorized for the <@&${role.id}> role.`)
-                .setFooter({ text: 'Astra Intelligence Matrix' });
+                .setFooter({ text: footerText('Leveling Config') });
 
             await interaction.reply({ embeds: [embed], flags: [MessageFlags.Ephemeral] });
 
@@ -78,7 +79,7 @@ const command: Command = {
                 .setColor(0xe74c3c)
                 .setTitle('❌ MILESTONE DECOMMISSIONED')
                 .setDescription(`The reward for **Level ${level}** has been purged from the matrix.`)
-                .setFooter({ text: 'Astra Matrix Core' });
+                .setFooter({ text: footerText('Leveling Config') });
 
             await interaction.reply({ embeds: [embed], flags: [MessageFlags.Ephemeral] });
 
@@ -101,7 +102,7 @@ const command: Command = {
                 embed.addFields({ name: '🏆 MILESTONE REWARDS', value: '*No rewards bound to current matrix.*' });
             }
 
-            embed.setFooter({ text: `Astra Leveling Config` })
+            embed.setFooter({ text: footerText('Leveling Config') })
                 .setTimestamp();
 
             await interaction.reply({ embeds: [embed] });

@@ -8,7 +8,7 @@ import {
 } from 'discord.js';
 import { Command } from '../types';
 import * as os from 'os';
-import { THEME, VERSION } from '../core/constants';
+import { THEME, VERSION, footerText } from '../core/constants';
 
 const command: Command = {
     data: new SlashCommandBuilder()
@@ -98,7 +98,7 @@ const command: Command = {
                         inline: false
                     },
                 )
-                .setFooter({ text: `Astra ${VERSION} • Use / to see all commands` })
+                .setFooter({ text: footerText('Help') })
                 .setTimestamp();
 
             return interaction.editReply({ embeds: [embed] });
@@ -136,7 +136,7 @@ const command: Command = {
                     { name: '📊 Memory',     value: `\`\`\`ansi\n[1;36m[${memBar}] ${memPct}%[0m\`\`\``, inline: false },
                     { name: '🤖 Version',    value: versionInfo,    inline: false },
                 )
-                .setFooter({ text: `Astra is online.` })
+                .setFooter({ text: footerText('Stats') })
                 .setTimestamp();
 
             return interaction.editReply({ embeds: [embed] });
@@ -152,7 +152,7 @@ const command: Command = {
                 .setTitle(`🖼️ ${user.username.toUpperCase()}'S AVATAR`)
                 .setImage(avatarUrl)
                 .setDescription(`[🔗 Open full size](${avatarUrl})`)
-                .setFooter({ text: `Astra Bot` })
+                .setFooter({ text: footerText('Astra') })
                 .setTimestamp();
 
             return interaction.editReply({ embeds: [embed] });
@@ -192,7 +192,7 @@ const command: Command = {
                 );
             }
 
-            embed.setFooter({ text: `Astra Bot` }).setTimestamp();
+            embed.setFooter({ text: footerText('Astra') }).setTimestamp();
             return interaction.editReply({ embeds: [embed] });
 
         // ── SERVER ─────────────────────────────────────────────────────────────
@@ -221,7 +221,7 @@ const command: Command = {
                     { name: '📐 Channels',    value: `\`\`\`Text : ${textChs}\nVoice: ${voiceChs}\nCats : ${catChs}\`\`\``, inline: true },
                     { name: '✨ Server Level', value: `\`\`\`Boosts: ${guild.premiumSubscriptionCount || 0}\nLevel : ${guild.premiumTier}\nVerify: ${guild.verificationLevel}\`\`\``, inline: true },
                 )
-                .setFooter({ text: `Astra Server Info` })
+                .setFooter({ text: footerText('Server') })
                 .setTimestamp();
 
             return interaction.editReply({ embeds: [embed] });
@@ -258,7 +258,7 @@ const command: Command = {
                     { name: '🤖 Bot Role',    value: `\`${role.managed ? 'Yes' : 'No'}\``,             inline: true },
                     { name: '🔑 Permissions', value: `\`\`\`${perms}\`\`\``,                           inline: false },
                 )
-                .setFooter({ text: `Astra Bot` })
+                .setFooter({ text: footerText('Astra') })
                 .setTimestamp();
 
             return interaction.editReply({ embeds: [embed] });

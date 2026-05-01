@@ -13,7 +13,7 @@
 If you discover a security vulnerability within Astra, please do not disclose it publicly.
 Instead, report it directly to the developer/owner via the [Support Server](https://discord.gg/NZ5Gr7eqE8) or through GitHub.
 
-## Security Philosophy (v8.1.0 Quantum)
+## Security Philosophy (v9.0.0 Quantum)
 
 Astra is designed to be safe, clean, and secure for all communities:
 - **Staff Commands are Private:** Administrative commands and destructive actions (ban, kick, purge) are restricted by Discord's default role integrations and are invisible to regular members.

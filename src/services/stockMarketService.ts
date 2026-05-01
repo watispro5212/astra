@@ -1,5 +1,5 @@
 /**
- * ASTRA STOCK MARKET SERVICE v8.1.0
+ * ASTRA STOCK MARKET SERVICE v9.0.0
  * Fun financial simulation for the Astra community.
  */
 

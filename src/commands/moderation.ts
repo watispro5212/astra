@@ -9,7 +9,7 @@ import {
 } from 'discord.js';
 import { ModerationService } from '../services/moderationService';
 import { Command } from '../types';
-import { THEME } from '../core/constants';
+import { THEME, footerText } from '../core/constants';
 
 const command: Command = {
     data: new SlashCommandBuilder()
@@ -102,7 +102,7 @@ const command: Command = {
                     .setColor(THEME.SUCCESS)
                     .setTitle('✅ LOG CHANNEL SET')
                     .setDescription(`Moderation actions will now be logged in <#${channel.id}>.`)
-                    .setFooter({ text: 'Astra Moderation' })], flags: [MessageFlags.Ephemeral] });
+                    .setFooter({ text: footerText('Moderation') })], flags: [MessageFlags.Ephemeral] });
             }
         }
 

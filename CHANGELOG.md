@@ -3,6 +3,23 @@
 All notable changes to Astra are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [9.0.0] — April 30, 2026
+
+### 🚀 Major Version Update
+
+- **Version Bump** — Major version update to 9.0.0 reflecting significant improvements and stability enhancements
+- **Code Quality** — Comprehensive code review and optimization across all modules
+- **Security Hardening** — Enhanced security measures and dependency updates
+- **Performance Improvements** — Optimized bot performance and reduced resource usage
+- **TypeScript Fixes** — Resolved compilation errors and improved type safety
+- **Import Corrections** — Fixed missing imports for footerText function across command modules
+- **Documentation Updates** — Updated README, security policy, and license for current version
+- **Version Synchronization** — Consistent version numbering across all files and documentation
+- **Website Updates** — Updated all website pages with current version information
+- **System Command Enhancement** — Added new `/system update` command to display version information and changelog
+
+---
+
 ## [8.1.0] — April 30, 2026
 
 ### 🔧 Technical Improvements & Security

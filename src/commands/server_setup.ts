@@ -1,5 +1,6 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, PermissionFlagsBits, EmbedBuilder, ChannelType, PermissionsBitField, OverwriteResolvable, TextChannel, MessageFlags } from 'discord.js';
 import logger from '../core/logger';
+import { footerText } from '../core/constants';
 
 const TARGET_GUILD_ID = '1494909279159980192';
 
@@ -34,7 +35,7 @@ export default {
                 ? '⚠️ **RESET MODE**: Deleting all channels and roles to start fresh...' 
                 : '🔄 **UPDATE MODE**: Creating missing channels and roles...')
             .setColor(isReset ? 0xe74c3c : 0x3498db)
-            .setFooter({ text: 'Astra Setup Tool' })
+            .setFooter({ text: footerText('Server Setup') })
             .setTimestamp();
 
         await interaction.editReply({ embeds: [startEmbed] });
@@ -258,7 +259,7 @@ export default {
             .setDescription(`The server has been set up! All channels and roles are ready to go.`)
             .setColor(0x2ecc71)
             .setThumbnail(interaction.client.user?.displayAvatarURL()!)
-            .setFooter({ text: 'Astra Setup Tool' })
+            .setFooter({ text: footerText('Server Setup') })
             .setTimestamp();
 
         await interaction.editReply({ embeds: [successEmbed] });
@@ -290,7 +291,7 @@ export default {
                     name: '🏆 LEVEL REWARDS', 
                     value: '• `👑 LVL 200`: King of the server\n• `🎖️ LVL 150`: Grand Master\n• `🏆 LVL 100`: Expert Member\n• `🥇 LVL 75`: Pro Member\n• `🥇 LVL 50`: Veteran Member\n• `🥈 LVL 25`: Senior Member\n• `🥈 LVL 15`: Advanced Member\n• `🥉 LVL 10`: Standard Member\n• `🎖️ LVL 5`: Junior Member\n• `🎖️ LVL 1`: New Member' 
                 })
-                .setFooter({ text: 'Astra Server Roles' })
+                .setFooter({ text: footerText('Server Setup') })
                 .setTimestamp();
 
             await infoChannel.send({ embeds: [roleEmbed] });
@@ -310,7 +311,7 @@ export default {
                     { name: '🎮 Mudae / Dank Memer', value: 'Fun games for your members.' },
                     { name: '🛡️ Wick Bot', value: 'Extra protection against raids and nukes.' }
                 )
-                .setFooter({ text: 'Astra Recommendations' })
+                .setFooter({ text: footerText('Server Setup') })
                 .setTimestamp();
 
             await owner.send({ embeds: [briefingEmbed] }).catch(() => logger.warn('Failed to send briefing to owner.'));

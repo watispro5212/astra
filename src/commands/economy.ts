@@ -1,7 +1,7 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, MessageFlags } from 'discord.js';
 import { Command } from '../types';
 import { db } from '../core/database';
-import { THEME } from '../core/constants';
+import { THEME, footerText } from '../core/constants';
 
 const WORK_COOLDOWN_MS = 3600000;  // 1 hour
 const MINE_COOLDOWN_MS = 1800000;  // 30 mins
@@ -133,7 +133,7 @@ const command: Command = {
                     .setColor(THEME.DANGER)
                     .setTitle('🚨 WAIT A BIT')
                     .setDescription(`You can get more money in **${formatCooldown(timeLeft)}**.`)
-                    .setFooter({ text: `Astra Money` });
+                    .setFooter({ text: footerText('Economy') });
                 return interaction.editReply({ embeds: [embed] });
             }
 
@@ -156,14 +156,22 @@ const command: Command = {
 
             const embed = new EmbedBuilder()
                 .setColor(THEME.SUCCESS)
-                .setTitle('💰 DAILY MONEY RECEIVED')
-                .setDescription(`You got your daily money. You have a **${streak} day streak**!`)
-                .addFields(
-                    { name: '📈 Amount', value: `\`${DAILY_AMOUNT.toLocaleString()} money\``, inline: true },
-                    { name: '🔥 Streak Bonus', value: `\`+${streakBonus.toLocaleString()} money\``, inline: true },
-                    { name: '💳 New Balance', value: `\`${(after?.balance ?? totalDaily).toLocaleString()} money\``, inline: true }
+                .setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL() })
+                .setTitle('💰 Daily Claimed!')
+                .setDescription(
+                    `You collected your daily reward${streak > 1 ? ` and kept your **${streak}-day streak** going!` : '!'}` +
+                    (streak >= 7  ? '\n🌟 **Week streak!** Keep it up!' :
+                     streak >= 3  ? '\n🔥 **Hot streak!**' : '')
                 )
-                .setFooter({ text: `Astra Money` });
+                .addFields(
+                    { name: '📦 Base',         value: `\`${DAILY_AMOUNT.toLocaleString()}\``,    inline: true },
+                    { name: '🔥 Streak Bonus', value: `\`+${streakBonus.toLocaleString()}\``,    inline: true },
+                    { name: '💳 New Balance',  value: `\`${(after?.balance ?? totalDaily).toLocaleString()}\``, inline: true },
+                    { name: '📅 Come back',    value: `<t:${Math.floor((Date.now() + 86400000) / 1000)}:R>`, inline: true },
+                    { name: '🗓️ Day Streak',   value: `\`${streak} day${streak !== 1 ? 's' : ''}\``, inline: true },
+                )
+                .setFooter({ text: footerText('Daily') })
+                .setTimestamp();
             return interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'work') {
@@ -177,7 +185,7 @@ const command: Command = {
                     .setColor(THEME.DANGER)
                     .setTitle('🚨 NOT READY YET')
                     .setDescription(`You can work again in **${formatCooldown(timeLeft)}**.\nTake a break!`)
-                    .setFooter({ text: `Astra Work` });
+                    .setFooter({ text: footerText('Work') });
                 return interaction.editReply({ embeds: [embed] });
             }
 
@@ -198,7 +206,7 @@ const command: Command = {
                     { name: '💰 Money Earned', value: `\`+${earned.toLocaleString()} money\``, inline: true },
                     { name: '💳 New Balance', value: `\`${(after?.balance ?? earned).toLocaleString()} money\``, inline: true }
                 )
-                .setFooter({ text: 'Good job!' });
+                .setFooter({ text: footerText('Economy') });
             return interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'mine') {
@@ -212,7 +220,7 @@ const command: Command = {
                     .setColor(THEME.DANGER)
                     .setTitle('🚨 MINING NOT READY')
                     .setDescription(`The tools are cooling down. Ready in **${formatCooldown(timeLeft)}**.`)
-                    .setFooter({ text: `Astra Mining` });
+                    .setFooter({ text: footerText('Mining') });
                 return interaction.editReply({ embeds: [embed] });
             }
 
@@ -238,7 +246,7 @@ const command: Command = {
                     { name: success ? '💰 Found' : '🔧 Repair Cost', value: `\`${success ? '+' : ''}${yieldAmount.toLocaleString()} money\``, inline: true },
                     { name: '💳 New Balance', value: `\`${(after?.balance ?? 0).toLocaleString()} money\``, inline: true }
                 )
-                .setFooter({ text: `Astra Mining` });
+                .setFooter({ text: footerText('Mining') });
             return interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'harvest') {
@@ -293,7 +301,7 @@ const command: Command = {
                     { name: '💰 Total Collected', value: `\`+${totalHarvest.toLocaleString()} money\``, inline: true },
                     { name: '💳 New Balance', value: `\`${(after?.balance ?? 0).toLocaleString()} money\``, inline: true }
                 )
-                .setFooter({ text: `Astra Money` });
+                .setFooter({ text: footerText('Economy') });
             return interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'rob') {
@@ -311,7 +319,7 @@ const command: Command = {
                     .setColor(THEME.DANGER)
                     .setTitle('🚨 CAN\'T ROB YET')
                     .setDescription(`The police are watching. Wait **${formatCooldown(timeLeft)}**.`)
-                    .setFooter({ text: `Astra Robbing` });
+                    .setFooter({ text: footerText('Rob') });
                 return interaction.editReply({ embeds: [embed] });
             }
 
@@ -342,7 +350,7 @@ const command: Command = {
                         { name: '💰 Stolen', value: `\`+${stolen.toLocaleString()} money\``, inline: true },
                         { name: '💳 Balance', value: `\`${(after?.balance ?? 0).toLocaleString()} money\``, inline: true }
                     )
-                    .setFooter({ text: 'Astra Robbing' });
+                    .setFooter({ text: footerText('Rob') });
                 return interaction.editReply({ embeds: [embed] });
             } else {
                 const robberBalance = robberData?.balance ?? 0;
@@ -358,7 +366,7 @@ const command: Command = {
                         { name: '🔧 Fine', value: `\`-${fine.toLocaleString()} money\``, inline: true },
                         { name: '💳 Balance', value: `\`${(after?.balance ?? 0).toLocaleString()} money\``, inline: true }
                     )
-                    .setFooter({ text: 'Don\'t get caught next time!' });
+                    .setFooter({ text: footerText('Rob') });
                 return interaction.editReply({ embeds: [embed] });
             }
 
@@ -386,7 +394,7 @@ const command: Command = {
                     { name: win ? '💰 Gain' : '💸 Loss', value: `\`${win ? '+' : ''}${delta.toLocaleString()} money\``, inline: true },
                     { name: '💳 Balance', value: `\`${(after?.balance ?? 0).toLocaleString()} money\``, inline: true }
                 )
-                .setFooter({ text: `Astra Gambling` });
+                .setFooter({ text: footerText('Gambling') });
             return interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'slots') {
@@ -426,7 +434,7 @@ const command: Command = {
                     { name: net >= 0 ? '💰 Net Gain' : '💸 Net Loss', value: `\`${net >= 0 ? '+' : ''}${net.toLocaleString()} money\``, inline: true },
                     { name: '💳 Balance', value: `\`${(after?.balance ?? 0).toLocaleString()} money\``, inline: true }
                 )
-                .setFooter({ text: `Astra Casino` });
+                .setFooter({ text: footerText('Casino') });
             return interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'coinflip') {
@@ -454,7 +462,7 @@ const command: Command = {
                     { name: win ? '💰 Gained' : '💸 Lost', value: `\`${win ? '+' : '-'}${amount.toLocaleString()} money\``, inline: true },
                     { name: '💳 New Balance', value: `\`${(after?.balance ?? 0).toLocaleString()} money\``, inline: true }
                 )
-                .setFooter({ text: `Fair 50/50` });
+                .setFooter({ text: footerText('Coinflip') });
             return interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'balance') {
@@ -472,7 +480,7 @@ const command: Command = {
                     { name: '🏦 Bank Balance',  value: `\`${vault.toLocaleString()} money\``,  inline: true },
                     { name: '💼 Total Money',   value: `\`${(liquid + vault).toLocaleString()} money\``, inline: true }
                 )
-                .setFooter({ text: `Astra Money Info` });
+                .setFooter({ text: footerText('Balance') });
             return interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'pay') {
@@ -493,7 +501,7 @@ const command: Command = {
                 .setColor(THEME.SUCCESS)
                 .setTitle('💸 MONEY SENT')
                 .setDescription(`You sent **${amount.toLocaleString()} money** to **${target.username}**.`)
-                .setFooter({ text: `Transaction confirmed` });
+                .setFooter({ text: footerText('Transfer') });
             return interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'leaderboard') {
@@ -511,7 +519,7 @@ const command: Command = {
                 .setColor(THEME.WARNING)
                 .setTitle('🏆 RICHEST MEMBERS')
                 .setDescription(lines.join('\n'))
-                .setFooter({ text: `Astra Bot` });
+                .setFooter({ text: footerText('Economy') });
             return interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'stats') {
@@ -530,7 +538,7 @@ const command: Command = {
                     { name: '🔥 Daily Streak',   value: `\`${data?.daily_streak ?? 0} days\``,   inline: true },
                     { name: '⭐ Level',           value: `\`${data?.level ?? 0}\``,              inline: true },
                 )
-                .setFooter({ text: `Astra Bot` });
+                .setFooter({ text: footerText('Economy') });
             return interaction.editReply({ embeds: [embed] });
 
         } else if (subcommand === 'bank') {
@@ -548,7 +556,7 @@ const command: Command = {
                     .setColor(THEME.SUCCESS)
                     .setTitle('🏦 MONEY DEPOSITED')
                     .setDescription(`Put **${amount.toLocaleString()} money** in the bank.`)
-                    .setFooter({ text: 'Money in the bank is safe from stealing.' });
+                    .setFooter({ text: footerText('Bank') });
                 return interaction.editReply({ embeds: [embed] });
             } else {
                 if (vault < amount) return interaction.editReply({ content: `❌ You don't have enough money in the bank.` });
@@ -557,7 +565,7 @@ const command: Command = {
                     .setColor(THEME.PRIMARY)
                     .setTitle('🏦 MONEY WITHDRAWN')
                     .setDescription(`Took **${amount.toLocaleString()} money** out of the bank.`)
-                    .setFooter({ text: `Astra Bank` });
+                    .setFooter({ text: footerText('Bank') });
                 return interaction.editReply({ embeds: [embed] });
             }
         }

@@ -11,5 +11,11 @@ export const THEME = {
     DANGER: 0xFF0054,    // Astra Red
     INFO: 0x4361EE       // Astra Blue
 };
-export const VERSION  = 'v8.1.0';
-export const PROTOCOL = 'Quantum';
+export const VERSION  = 'v9.0.0';
+export const CODENAME = 'Nova';
+export const PROTOCOL = 'Nova';
+
+/** Consistent embed footer for any category */
+export function footerText(category: string): string {
+    return `Astra ${VERSION} ${CODENAME} • ${category}`;
+}

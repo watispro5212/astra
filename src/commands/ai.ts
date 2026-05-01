@@ -1,7 +1,7 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, MessageFlags } from 'discord.js';
 import { Command } from '../types';
 import { AI_MODELS, AIService } from '../services/aiService';
-import { THEME, VERSION } from '../core/constants';
+import { THEME, VERSION, footerText } from '../core/constants';
 import { config } from '../core/config';
 
 const command: Command = {
@@ -51,7 +51,7 @@ const command: Command = {
                     { name: '🧠 Model ID', value: `\`${modelId}\``, inline: true },
                     { name: '⚡ What it does', value: model?.description || 'N/A', inline: true }
                 )
-                .setFooter({ text: `Astra AI Settings` })
+                .setFooter({ text: footerText('AI') })
                 .setTimestamp();
 
             await interaction.reply({ embeds: [embed], flags: [MessageFlags.Ephemeral] });
@@ -71,7 +71,7 @@ const command: Command = {
                 });
             }
 
-            embed.setFooter({ text: `Astra AI Settings` }).setTimestamp();
+            embed.setFooter({ text: footerText('AI') }).setTimestamp();
             await interaction.reply({ embeds: [embed], flags: [MessageFlags.Ephemeral] });
 
         } else if (subcommand === 'status') {
