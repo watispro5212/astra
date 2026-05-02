@@ -102,7 +102,7 @@ export class AstraClient extends Client {
 
             if (stat.isDirectory()) {
                 await this.loadCommands(filePath);
-            } else if (file.endsWith('.ts') || file.endsWith('.js')) {
+            } else if ((file === 'astra.ts' || file === 'astra.js') && (file.endsWith('.ts') || file.endsWith('.js'))) {
                 try {
                     const commandModule = require(filePath);
                     const command: Command = commandModule.default || commandModule;
@@ -150,8 +150,7 @@ export class AstraClient extends Client {
 
             // Statuses
             const statuses = [
-                () => ({ name: `v${VERSION} | /info help`, type: 0 }),
-                () => ({ name: `${c.guilds.cache.size} Servers`, type: 3 }),
+                    () => ({ name: `v${VERSION} | /astra info help`, type: 0 }),
                 () => ({ name: `${c.users.cache.size} People`, type: 2 }),
                 () => ({ name: `Helping Everyone`, type: 1 })
             ];

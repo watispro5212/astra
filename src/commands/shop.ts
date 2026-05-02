@@ -88,9 +88,14 @@ const command: Command = {
         ),
 
     async execute(interaction: ChatInputCommandInteraction) {
-        const subcommand = interaction.options.getSubcommand();
-        const group = interaction.options.getSubcommandGroup();
+        let subcommand = interaction.options.getSubcommand();
+        let group = interaction.options.getSubcommandGroup();
         const guildId = interaction.guildId!;
+
+        if (group === 'shop' && subcommand.startsWith('admin-')) {
+            group = 'admin';
+            subcommand = subcommand.replace(/^admin-/, '');
+        }
 
         // ── ADMIN ─────────────────────────────────────────────────────────────
         if (group === 'admin') {

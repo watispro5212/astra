@@ -55,46 +55,46 @@ const command: Command = {
                 .setColor(THEME.PRIMARY)
                 .setTitle('📡 ASTRA COMMAND LIST')
                 .setThumbnail(interaction.client.user?.displayAvatarURL()!)
-                .setDescription(`All commands use \`/\`. Most work in **DMs** too!\nType \`/\` in any chat to see the full list.`)
+                .setDescription('All commands now use `/astra` as the unified entry point. Most work in **DMs** too!\nType `/astra info help` in any chat to see the full list.')
                 .addFields(
                     {
                         name: '💰 Economy',
-                        value: '`/economy daily` `work` `mine` `gamble` `slots` `coinflip` `rob` `balance` `pay` `bank` `harvest`',
+                        value: '`/astra economy daily` `work` `mine` `gamble` `slots` `coinflip` `rob` `balance` `pay` `bank` `harvest`',
                         inline: false
                     },
                     {
                         name: '📈 Leveling',
-                        value: '`/leveling rank` `leaderboard`',
+                        value: '`/astra leveling rank` `leaderboard`',
                         inline: false
                     },
                     {
                         name: '🛡️ Moderation',
-                        value: '`/mod warn` `kick` `ban` `timeout` `purge` `history` `case`',
+                        value: '`/astra mod warn` `kick` `ban` `timeout` `purge` `history` `case`',
                         inline: false
                     },
                     {
                         name: '📊 Stock Market',
-                        value: '`/stockmarket market` `buy` `sell` `portfolio`',
+                        value: '`/astra stockmarket market` `buy` `sell` `portfolio`',
                         inline: false
                     },
                     {
                         name: '🛒 Shop',
-                        value: '`/shop view` `buy` `inventory`',
+                        value: '`/astra shop view` `buy` `inventory`',
                         inline: false
                     },
                     {
                         name: '🎉 Community',
-                        value: '`/giveaway start` `end` `reroll` — `/ticket create` `close` — `/welcome setup`',
+                        value: '`/astra giveaway start` `end` `reroll` — `/astra ticket create` `close` — `/astra welcome setup`',
                         inline: false
                     },
                     {
                         name: '🤖 AI Assistant (DM-native)',
-                        value: '`/ai model` `status` `info` — or just **DM me anything!**',
+                        value: '`/astra ai model` `status` `info` — or just **DM me anything!**',
                         inline: false
                     },
                     {
                         name: '⚙️ Utility & Info',
-                        value: '`/profile` `help` `/utility remind` `poll` `/system status` `ping`',
+                        value: '`/astra profile` `info help` `/astra utility remind` `poll` `/astra system status` `ping`',
                         inline: false
                     },
                 )

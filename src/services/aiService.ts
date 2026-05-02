@@ -11,6 +11,8 @@ export const AI_MODELS = [
     { id: 'qwen/qwen3-next-80b-a3b-instruct:free', name: 'Qwen 3',   description: 'High-performance large model.' },
 ];
 
+export const DEFAULT_AI_MODEL = 'tencent/hy3-preview:free';
+
 // Fallback model rotation when the user's chosen model is rate-limited upstream
 const FALLBACK_ORDER = [
     'tencent/hy3-preview:free',
@@ -141,6 +143,14 @@ export class AIService {
             'INSERT INTO user_ai_settings (user_id, system_prompt) VALUES (?, ?) ON CONFLICT(user_id) DO UPDATE SET system_prompt = ?',
             userId, customPrompt, customPrompt
         );
+    }
+
+    public static async getUserSettings(userId: string): Promise<{ selected_model?: string; system_prompt?: string } | null> {
+        return db.fetchOne('SELECT selected_model, system_prompt FROM user_ai_settings WHERE user_id = ?', userId);
+    }
+
+    public static async resetUserSettings(userId: string): Promise<void> {
+        await db.execute('DELETE FROM user_ai_settings WHERE user_id = ?', userId);
     }
 
     public static async checkKeys(): Promise<{ index: number; status: 'ACTIVE' | 'ERROR' | 'QUOTA'; message: string }[]> {

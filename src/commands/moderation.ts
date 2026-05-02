@@ -86,9 +86,14 @@ const command: Command = {
         ),
 
     async execute(interaction: ChatInputCommandInteraction) {
-        const sub   = interaction.options.getSubcommand();
-        const group = interaction.options.getSubcommandGroup(false);
+        let sub   = interaction.options.getSubcommand();
+        let group = interaction.options.getSubcommandGroup(false);
         const guild = interaction.guild!;
+
+        if (group === 'mod' && sub.startsWith('config-')) {
+            group = 'config';
+            sub = sub.replace(/^config-/, '');
+        }
 
         // ── CONFIG ────────────────────────────────────────────────────────
         if (group === 'config') {
