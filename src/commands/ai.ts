@@ -114,7 +114,7 @@ const command: Command = {
                 });
             }
 
-            if (!interaction.isDMInteraction?.()) {
+            if (!interaction.inRawGuild()) {
                 return interaction.reply({ 
                     content: '❌ **Owner commands only work in DMs.** Open a DM with me and try again.', 
                     flags: [MessageFlags.Ephemeral] 
