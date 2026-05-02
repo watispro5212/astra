@@ -28,6 +28,16 @@ const command: Command = {
         .addSubcommand(sub =>
             sub.setName('status')
                .setDescription('📡 Check if the AI is working.')
+        )
+        .addSubcommand(sub =>
+            sub.setName('owner')
+               .setDescription('👑 Owner-only: Set a custom system prompt (DM only).')
+               .addStringOption(opt =>
+                   opt.setName('prompt')
+                      .setDescription('Custom system prompt for your AI.')
+                      .setRequired(true)
+                      .setMaxLength(2000)
+               )
         ),
 
     async execute(interaction: ChatInputCommandInteraction) {
@@ -95,6 +105,36 @@ const command: Command = {
             }
 
             await interaction.editReply({ embeds: [embed] });
+        } else if (subcommand === 'owner') {
+            // Owner-only feature - DM only
+            if (userId !== config.ownerId) {
+                return interaction.reply({ 
+                    content: '❌ **This command is owner-only.**', 
+                    flags: [MessageFlags.Ephemeral] 
+                });
+            }
+
+            if (!interaction.isDMInteraction?.()) {
+                return interaction.reply({ 
+                    content: '❌ **Owner commands only work in DMs.** Open a DM with me and try again.', 
+                    flags: [MessageFlags.Ephemeral] 
+                });
+            }
+
+            const customPrompt = interaction.options.getString('prompt')!;
+            await AIService.setCustomSystemPrompt(userId, customPrompt);
+
+            const embed = new EmbedBuilder()
+                .setColor(THEME.SUCCESS)
+                .setTitle('👑 CUSTOM AI PROMPT SET')
+                .setDescription('Your AI will now use your custom system prompt.')
+                .addFields(
+                    { name: '📝 Prompt Preview', value: customPrompt.substring(0, 1024), inline: false }
+                )
+                .setFooter({ text: footerText('AI') })
+                .setTimestamp();
+
+            await interaction.reply({ embeds: [embed], flags: [MessageFlags.Ephemeral] });
         }
     }
 };

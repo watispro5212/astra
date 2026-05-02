@@ -6,6 +6,9 @@ export const AI_MODELS = [
     { id: 'tencent/hy3-preview:free',        name: 'Astra Smart',  description: 'Great for general questions and help.' },
     { id: 'minimax/minimax-m2.5:free',        name: 'Astra Fast',   description: 'Very fast — best for quick answers.' },
     { id: 'google/gemma-4-26b-a4b-it:free',   name: 'Astra Expert', description: 'Best for complex problems and logic.' },
+    { id: 'z-ai/glm-4.5-air:free',            name: 'GLM 4.5 Air',  description: 'Fast and efficient multilingual model.' },
+    { id: 'openrouter/owl-alpha',             name: 'Owl Alpha',    description: 'Advanced reasoning and analysis.' },
+    { id: 'qwen/qwen3-next-80b-a3b-instruct:free', name: 'Qwen 3',   description: 'High-performance large model.' },
 ];
 
 // Fallback model rotation when the user's chosen model is rate-limited upstream
@@ -13,9 +16,9 @@ const FALLBACK_ORDER = [
     'tencent/hy3-preview:free',
     'minimax/minimax-m2.5:free',
     'google/gemma-4-26b-a4b-it:free',
-    'meta-llama/llama-3.2-3b-instruct:free',
-    'microsoft/phi-3-mini-128k-instruct:free',
-    'qwen/qwen-2-7b-instruct:free',
+    'z-ai/glm-4.5-air:free',
+    'openrouter/owl-alpha',
+    'qwen/qwen3-next-80b-a3b-instruct:free',
 ];
 
 const SYSTEM_PROMPT = `You are Astra, a friendly and helpful AI assistant built into a Discord bot. You are warm, concise, and easy to talk to. Keep responses under 1800 characters unless the user specifically asks for a long explanation. You help with questions, advice, fun conversations, and general knowledge. You work in Discord DMs.`;
@@ -131,6 +134,13 @@ export class AIService {
             userId, modelId, modelId
         );
         return true;
+    }
+
+    public static async setCustomSystemPrompt(userId: string, customPrompt: string): Promise<void> {
+        await db.execute(
+            'INSERT INTO user_ai_settings (user_id, system_prompt) VALUES (?, ?) ON CONFLICT(user_id) DO UPDATE SET system_prompt = ?',
+            userId, customPrompt, customPrompt
+        );
     }
 
     public static async checkKeys(): Promise<{ index: number; status: 'ACTIVE' | 'ERROR' | 'QUOTA'; message: string }[]> {

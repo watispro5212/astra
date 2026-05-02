@@ -134,6 +134,49 @@
 
 ---
 
+## 🤖 7. RECOMMENDED SUPPORT SERVER BOTS
+*Add these bots to help manage support, moderation, onboarding, and tickets.*
+
+### Carl-bot
+- **Use for**: auto roles, moderation, reaction roles, custom commands, and logging.
+- **Configure**:
+  - Enable **Auto Roles** for `Verified` or `Support Seeker` on join.
+  - Create **Reaction Roles** for announcement, news, and test roles.
+  - Set up **Moderation logs** for bans, kicks, mutes, and message deletions.
+  - Add **Custom commands** for quick support links like `/support` or `#🎫 open-a-ticket`.
+
+### Dyno
+- **Use for**: moderation, automod, join/leave announcements, and server logs.
+- **Configure**:
+  - Turn on **Automod** for swear filter, spam, mass mentions, and invite blocking.
+  - Set up **Welcome/Goodbye messages** in `#👋 welcome`.
+  - Enable **Moderation logging** to a private staff log channel.
+  - Use **Custom commands** for server rules, FAQ, and support channel guidance.
+
+### Ticket Tool (or similar ticket bot)
+- **Use for**: support tickets, private staff help, and issue tracking.
+- **Configure**:
+  - Add a ticket creation panel in `#🎫 open-a-ticket`.
+  - Use categories like `Support`, `Bug Report`, `Appeal`, and `Partner Request`.
+  - Set **staff roles** so moderators and support staff can access new tickets.
+  - Add **automatic ticket closing** with a confirmation button.
+
+### Apollo
+- **Use for**: event scheduling, polls, and community announcements.
+- **Configure**:
+  - Create events for Q&A sessions, bot updates, and testing nights.
+  - Use polls for feature requests, release feedback, and community voting.
+  - Announce events in `#📢 announcements` or `#🚀 updates`.
+
+### YAGPDB
+- **Use for**: advanced moderation, custom role assignment, and automation.
+- **Configure**:
+  - Use **Auto moderation** for filters Discord or Dyno might miss.
+  - Set up **Custom commands** for helpful server shortcuts.
+  - Use **Role commands** or **reaction roles** for self-assignable roles.
+
+---
+
 ## ✅ FINAL CHECKLIST
 *Do these things after setting up your server.*
 
